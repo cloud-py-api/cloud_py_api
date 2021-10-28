@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<info xmlns:xsi= "http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="https://apps.nextcloud.com/schema/apps/info.xsd">
+	<id>cloud_py_api</id>
+	<name>Cloud Python API</name>
+	<summary>Nextcloud Python API (Framework)</summary>
+	<description>
+	<![CDATA[
+Nextcloud Python API Framework
+	]]>
+	</description>
+	<version>0.1.0</version>
+	<licence>agpl</licence>
+	<author mail="andrey18106x@gmail.com" homepage="https://github.com/andrey18106">Andrey Borysenko</author>
+	<author mail="bigcat88@icloud.com" homepage="https://github.com/bigcat88">Alexander Piskun</author>
+	<namespace>Cloud_Py_API</namespace>
+	<documentation>
+		<admin>https://github.com/bigcat88/cloud_py_api/wiki</admin>
+	</documentation>
+	<category>tools</category>
+	<website>https://github.com/bigcat88/cloud_py_api</website>
+	<bugs>https://github.com/bigcat88/cloud_py_api/issues</bugs>
+	<repository type="git">https://github.com/bigcat88/cloud_py_api</repository>
+	<dependencies>
+		<nextcloud min-version="21" max-version="22" />
+		<php min-version="7.3" />
+	</dependencies>
+	<settings>
+		<admin>OCA\Cloud_Py_API\Settings\AdminSettings</admin>
+		<admin-section>OCA\Cloud_Py_API\Settings\AdminSection</admin-section>
+	</settings>
+</info>
