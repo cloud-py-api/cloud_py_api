@@ -1,19 +1,51 @@
 syntax = "proto3";
 
-message Initialize {
-  string ModulePath = 1;
-  string ModuleName = 2;
-  string EP_File = 3;
-  string EP_Function = 4;
-  repeated string args = 5;
-  message ConfigOptions {
-    int32 LogLvl = 1;
-    string DataFolder = 2;
-  }
-  ConfigOptions config = 6;
+/*
+Read request = Client sends only msgId(see ReadRequest) and server will reply with full message answer.
+Write request = Client send full message and server process it, and reply if message type need that.
+
+Client must send TaskStatus + TaskExit messages before exit.
+If server wants gracefully shutdown it must reply with GetState.bStop = True and wait for clients TaskStatus/TaskExit.
+If there is no time for that, server must close pipe/socket and after client detect broken pipe/connection it must stop.
+*/
+
+message ReadRequest {                     //This client sends this to get data from server.
+  int32 msgId = 1;
 }
 
-message InitializationResult {
-  int32 Status = 1;
-  string ErrDescription = 2;
+message InitTask {                        //Reply from server for request with msgId = 1.
+  int32 msgId = 1;                        //InitTask.msgId = 1
+  string AppPath = 2;                     //Path to target app directory, to be executed.
+  repeated string args = 6;               //Optional arguments to pass to target python app's module.
+  message ConfigOptions {
+    int32 LogLvl = 1;                     //0-4 , level logs from NC documentation.
+    string DataFolder = 2;                //Path to NC data folder.
+  }
+  ConfigOptions config = 7;
 }
+
+message TaskStatus {                      //Write request to set Task Status. No reply.
+  int32 msgId = 1;                        //TaskStatus.msgId = 2
+  int32 Status = 2;                       //Status of task.
+  string ErrDescription = 8;              //Optional error, if any. Valid only when Status is non success.
+}
+
+message TaskExit {                        //Write request. No reply. Server must close pipe/socket after this message.
+  int32 msgId = 1;                        //TaskExit.msgId = 3
+  string msgText = 8;                     //Optional text, for exit action. Ignored in most cases.
+}
+
+message Log {                             //Write request. No reply.
+  int32 msgId = 1;                        //TaskExit.msgId = 3
+  int32 flags = 2;                        //Reserved.
+  string sModule = 3;                     //What module logs belongs to.
+  repeated string Content = 4;            //One or more strings to put to log.
+}
+
+message GetState {                        //Reply from server for request with msgId = 5. Client send it every 10 sec.
+  int32 msgId = 1;                        //GetState.msgId = 5
+  bool bStop = 2;                         //If true client must gracefully stop it's work.
+  //? Something else?
+}
+
+
