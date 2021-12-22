@@ -1,4 +1,4 @@
- syntax = "proto3";
+syntax = "proto3";
 
 message Initialize {
   string ModulePath = 1;
@@ -7,7 +7,7 @@ message Initialize {
   string EP_Function = 4;
   repeated string args = 5;
   message ConfigOptions {
-    string LogLvl = 1;
+    int32 LogLvl = 1;
     string DataFolder = 2;
   }
   ConfigOptions config = 6;
