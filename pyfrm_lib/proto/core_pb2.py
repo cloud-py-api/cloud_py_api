@@ -14,42 +14,138 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\ncore.proto\"\xc8\x01\n\nInitialize\x12\x12\n\nModulePath\x18\x01 \x01(\t\x12\x12\n\nModuleName\x18\x02 \x01(\t\x12\x0f\n\x07\x45P_File\x18\x03 \x01(\t\x12\x13\n\x0b\x45P_Function\x18\x04 \x01(\t\x12\x0c\n\x04\x61rgs\x18\x05 \x03(\t\x12)\n\x06\x63onfig\x18\x06 \x01(\x0b\x32\x19.Initialize.ConfigOptions\x1a\x33\n\rConfigOptions\x12\x0e\n\x06LogLvl\x18\x01 \x01(\x05\x12\x12\n\nDataFolder\x18\x02 \x01(\t\">\n\x14InitializationResult\x12\x0e\n\x06Status\x18\x01 \x01(\x05\x12\x16\n\x0e\x45rrDescription\x18\x02 \x01(\tb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\ncore.proto\"\xa0\x01\n\x07Request\x12 \n\x05\x43lass\x18\x01 \x01(\x0e\x32\x11.Request.msgClass\"s\n\x08msgClass\x12\r\n\tINIT_TASK\x10\x00\x12\x0f\n\x0bTASK_STATUS\x10\x01\x12\r\n\tTASK_EXIT\x10\x02\x12\r\n\tGET_STATE\x10\x03\x12\x07\n\x03LOG\x10\x04\x12\x14\n\x10GET_FILE_CONTENT\x10\x05\x12\n\n\x06SELECT\x10\x06\"\x96\x01\n\x08InitTask\x12\r\n\x05msgId\x18\x01 \x01(\x05\x12\x0f\n\x07\x41ppPath\x18\x02 \x01(\t\x12\x0c\n\x04\x61rgs\x18\x06 \x03(\t\x12\'\n\x06\x63onfig\x18\x07 \x01(\x0b\x32\x17.InitTask.ConfigOptions\x1a\x33\n\rConfigOptions\x12\x0e\n\x06LogLvl\x18\x01 \x01(\x05\x12\x12\n\nDataFolder\x18\x02 \x01(\t\"C\n\nTaskStatus\x12\r\n\x05msgId\x18\x01 \x01(\x05\x12\x0e\n\x06Status\x18\x02 \x01(\x05\x12\x16\n\x0e\x45rrDescription\x18\x08 \x01(\t\"*\n\x08TaskExit\x12\r\n\x05msgId\x18\x01 \x01(\x05\x12\x0f\n\x07msgText\x18\x08 \x01(\t\"(\n\x08GetState\x12\r\n\x05msgId\x18\x01 \x01(\x05\x12\r\n\x05\x62Stop\x18\x02 \x01(\x08\"E\n\x03Log\x12\r\n\x05msgId\x18\x01 \x01(\x05\x12\r\n\x05\x66lags\x18\x02 \x01(\x05\x12\x0f\n\x07sModule\x18\x03 \x01(\t\x12\x0f\n\x07\x43ontent\x18\x04 \x03(\t\"h\n\x0eGetFileContent\x12\r\n\x05msgId\x18\x01 \x01(\x05\x12\x0e\n\x06UserID\x18\x02 \x01(\t\x12\x0e\n\x06\x46ileId\x18\x03 \x01(\t\x12\x12\n\nResultCode\x18\x04 \x01(\x03\x12\x13\n\x0b\x46ileContent\x18\x05 \x01(\x0c\"\x8f\x03\n\x06Select\x12\r\n\x05msgId\x18\x01 \x01(\x05\x12\x0c\n\x04what\x18\x02 \x03(\t\x12\x0c\n\x04\x66rom\x18\x03 \x01(\t\x12\x12\n\nfrom_alias\x18\x04 \x01(\t\x12\x1f\n\x05joins\x18\x05 \x03(\x0b\x32\x10.Select.JoinType\x12\"\n\x07whereas\x18\x06 \x03(\x0b\x32\x11.Select.WhereExpr\x12\x0f\n\x07GroupBy\x18\x07 \x03(\t\x12#\n\x07havings\x18\x08 \x03(\x0b\x32\x12.Select.HavingExpr\x12\x0f\n\x07OrderBy\x18\t \x03(\t\x1a[\n\x08JoinType\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x11\n\tfromAlias\x18\x02 \x01(\t\x12\x0c\n\x04join\x18\x03 \x01(\t\x12\r\n\x05\x61lias\x18\x04 \x01(\t\x12\x11\n\tcondition\x18\x05 \x01(\t\x1a-\n\tWhereExpr\x12\x0c\n\x04type\x18\x01 \x01(\t\x12\x12\n\nexpression\x18\x02 \x01(\t\x1a.\n\nHavingExpr\x12\x0c\n\x04type\x18\x01 \x01(\t\x12\x12\n\nexpression\x18\x02 \x01(\tb\x06proto3')
 
 
 
-_INITIALIZE = DESCRIPTOR.message_types_by_name['Initialize']
-_INITIALIZE_CONFIGOPTIONS = _INITIALIZE.nested_types_by_name['ConfigOptions']
-_INITIALIZATIONRESULT = DESCRIPTOR.message_types_by_name['InitializationResult']
-Initialize = _reflection.GeneratedProtocolMessageType('Initialize', (_message.Message,), {
+_REQUEST = DESCRIPTOR.message_types_by_name['Request']
+_INITTASK = DESCRIPTOR.message_types_by_name['InitTask']
+_INITTASK_CONFIGOPTIONS = _INITTASK.nested_types_by_name['ConfigOptions']
+_TASKSTATUS = DESCRIPTOR.message_types_by_name['TaskStatus']
+_TASKEXIT = DESCRIPTOR.message_types_by_name['TaskExit']
+_GETSTATE = DESCRIPTOR.message_types_by_name['GetState']
+_LOG = DESCRIPTOR.message_types_by_name['Log']
+_GETFILECONTENT = DESCRIPTOR.message_types_by_name['GetFileContent']
+_SELECT = DESCRIPTOR.message_types_by_name['Select']
+_SELECT_JOINTYPE = _SELECT.nested_types_by_name['JoinType']
+_SELECT_WHEREEXPR = _SELECT.nested_types_by_name['WhereExpr']
+_SELECT_HAVINGEXPR = _SELECT.nested_types_by_name['HavingExpr']
+_REQUEST_MSGCLASS = _REQUEST.enum_types_by_name['msgClass']
+Request = _reflection.GeneratedProtocolMessageType('Request', (_message.Message,), {
+  'DESCRIPTOR' : _REQUEST,
+  '__module__' : 'core_pb2'
+  # @@protoc_insertion_point(class_scope:Request)
+  })
+_sym_db.RegisterMessage(Request)
+
+InitTask = _reflection.GeneratedProtocolMessageType('InitTask', (_message.Message,), {
 
   'ConfigOptions' : _reflection.GeneratedProtocolMessageType('ConfigOptions', (_message.Message,), {
-    'DESCRIPTOR' : _INITIALIZE_CONFIGOPTIONS,
+    'DESCRIPTOR' : _INITTASK_CONFIGOPTIONS,
     '__module__' : 'core_pb2'
-    # @@protoc_insertion_point(class_scope:Initialize.ConfigOptions)
+    # @@protoc_insertion_point(class_scope:InitTask.ConfigOptions)
     })
   ,
-  'DESCRIPTOR' : _INITIALIZE,
+  'DESCRIPTOR' : _INITTASK,
   '__module__' : 'core_pb2'
-  # @@protoc_insertion_point(class_scope:Initialize)
+  # @@protoc_insertion_point(class_scope:InitTask)
   })
-_sym_db.RegisterMessage(Initialize)
-_sym_db.RegisterMessage(Initialize.ConfigOptions)
+_sym_db.RegisterMessage(InitTask)
+_sym_db.RegisterMessage(InitTask.ConfigOptions)
 
-InitializationResult = _reflection.GeneratedProtocolMessageType('InitializationResult', (_message.Message,), {
-  'DESCRIPTOR' : _INITIALIZATIONRESULT,
+TaskStatus = _reflection.GeneratedProtocolMessageType('TaskStatus', (_message.Message,), {
+  'DESCRIPTOR' : _TASKSTATUS,
   '__module__' : 'core_pb2'
-  # @@protoc_insertion_point(class_scope:InitializationResult)
+  # @@protoc_insertion_point(class_scope:TaskStatus)
   })
-_sym_db.RegisterMessage(InitializationResult)
+_sym_db.RegisterMessage(TaskStatus)
+
+TaskExit = _reflection.GeneratedProtocolMessageType('TaskExit', (_message.Message,), {
+  'DESCRIPTOR' : _TASKEXIT,
+  '__module__' : 'core_pb2'
+  # @@protoc_insertion_point(class_scope:TaskExit)
+  })
+_sym_db.RegisterMessage(TaskExit)
+
+GetState = _reflection.GeneratedProtocolMessageType('GetState', (_message.Message,), {
+  'DESCRIPTOR' : _GETSTATE,
+  '__module__' : 'core_pb2'
+  # @@protoc_insertion_point(class_scope:GetState)
+  })
+_sym_db.RegisterMessage(GetState)
+
+Log = _reflection.GeneratedProtocolMessageType('Log', (_message.Message,), {
+  'DESCRIPTOR' : _LOG,
+  '__module__' : 'core_pb2'
+  # @@protoc_insertion_point(class_scope:Log)
+  })
+_sym_db.RegisterMessage(Log)
+
+GetFileContent = _reflection.GeneratedProtocolMessageType('GetFileContent', (_message.Message,), {
+  'DESCRIPTOR' : _GETFILECONTENT,
+  '__module__' : 'core_pb2'
+  # @@protoc_insertion_point(class_scope:GetFileContent)
+  })
+_sym_db.RegisterMessage(GetFileContent)
+
+Select = _reflection.GeneratedProtocolMessageType('Select', (_message.Message,), {
+
+  'JoinType' : _reflection.GeneratedProtocolMessageType('JoinType', (_message.Message,), {
+    'DESCRIPTOR' : _SELECT_JOINTYPE,
+    '__module__' : 'core_pb2'
+    # @@protoc_insertion_point(class_scope:Select.JoinType)
+    })
+  ,
+
+  'WhereExpr' : _reflection.GeneratedProtocolMessageType('WhereExpr', (_message.Message,), {
+    'DESCRIPTOR' : _SELECT_WHEREEXPR,
+    '__module__' : 'core_pb2'
+    # @@protoc_insertion_point(class_scope:Select.WhereExpr)
+    })
+  ,
+
+  'HavingExpr' : _reflection.GeneratedProtocolMessageType('HavingExpr', (_message.Message,), {
+    'DESCRIPTOR' : _SELECT_HAVINGEXPR,
+    '__module__' : 'core_pb2'
+    # @@protoc_insertion_point(class_scope:Select.HavingExpr)
+    })
+  ,
+  'DESCRIPTOR' : _SELECT,
+  '__module__' : 'core_pb2'
+  # @@protoc_insertion_point(class_scope:Select)
+  })
+_sym_db.RegisterMessage(Select)
+_sym_db.RegisterMessage(Select.JoinType)
+_sym_db.RegisterMessage(Select.WhereExpr)
+_sym_db.RegisterMessage(Select.HavingExpr)
 
 if _descriptor._USE_C_DESCRIPTORS == False:
 
   DESCRIPTOR._options = None
-  _INITIALIZE._serialized_start=15
-  _INITIALIZE._serialized_end=215
-  _INITIALIZE_CONFIGOPTIONS._serialized_start=164
-  _INITIALIZE_CONFIGOPTIONS._serialized_end=215
-  _INITIALIZATIONRESULT._serialized_start=217
-  _INITIALIZATIONRESULT._serialized_end=279
+  _REQUEST._serialized_start=15
+  _REQUEST._serialized_end=175
+  _REQUEST_MSGCLASS._serialized_start=60
+  _REQUEST_MSGCLASS._serialized_end=175
+  _INITTASK._serialized_start=178
+  _INITTASK._serialized_end=328
+  _INITTASK_CONFIGOPTIONS._serialized_start=277
+  _INITTASK_CONFIGOPTIONS._serialized_end=328
+  _TASKSTATUS._serialized_start=330
+  _TASKSTATUS._serialized_end=397
+  _TASKEXIT._serialized_start=399
+  _TASKEXIT._serialized_end=441
+  _GETSTATE._serialized_start=443
+  _GETSTATE._serialized_end=483
+  _LOG._serialized_start=485
+  _LOG._serialized_end=554
+  _GETFILECONTENT._serialized_start=556
+  _GETFILECONTENT._serialized_end=660
+  _SELECT._serialized_start=663
+  _SELECT._serialized_end=1062
+  _SELECT_JOINTYPE._serialized_start=876
+  _SELECT_JOINTYPE._serialized_end=967
+  _SELECT_WHEREEXPR._serialized_start=969
+  _SELECT_WHEREEXPR._serialized_end=1014
+  _SELECT_HAVINGEXPR._serialized_start=1016
+  _SELECT_HAVINGEXPR._serialized_end=1062
 # @@protoc_insertion_point(module_scope)
