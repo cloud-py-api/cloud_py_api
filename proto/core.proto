@@ -36,16 +36,24 @@ message TaskExit {                        //Write request. No reply. Server must
 }
 
 message Log {                             //Write request. No reply.
-  int32 msgId = 1;                        //TaskExit.msgId = 3
+  int32 msgId = 1;                        //Log.msgId = 4
   int32 flags = 2;                        //Reserved.
   string sModule = 3;                     //What module logs belongs to.
   repeated string Content = 4;            //One or more strings to put to log.
 }
 
 message GetState {                        //Reply from server for request with msgId = 5. Client send it every 10 sec.
-  int32 msgId = 1;                        //GetState.msgId = 5
+  int32 msgId = 1;                        //GetState.msgId = 6
   bool bStop = 2;                         //If true client must gracefully stop it's work.
   //? Something else?
 }
 
+message GetFileContent {                  //Request for file.
+  int32 msgId = 1;                        //GetState.msgId = 8
+  string UserID = 2;
+  string FileId = 3;
+  int64 ResultCode = 4;                   //Present only in reply from server.
+  bytes FileContent = 5;                  //Present only in reply from server and if ResultCode is success.
+}
 
+// message
