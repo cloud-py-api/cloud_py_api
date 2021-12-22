@@ -49,11 +49,29 @@ message GetState {                        //Reply from server for request with m
 }
 
 message GetFileContent {                  //Request for file.
-  int32 msgId = 1;                        //GetState.msgId = 8
+  int32 msgId = 1;                        //GetFileContent.msgId = 8
   string UserID = 2;
   string FileId = 3;
   int64 ResultCode = 4;                   //Present only in reply from server.
   bytes FileContent = 5;                  //Present only in reply from server and if ResultCode is success.
 }
 
-// message
+message Select {
+  int32 msgId = 1;                        //Select.msgId = 10
+  repeated string what = 2;               //alias or filed name.
+  string from = 3;
+  string from_alias = 4;
+  message JoinType {
+    string name = 1;                      //join, innerJoin, leftJoin, rightJoin.
+    string fromAlias = 2;
+    string join = 3;
+    string alias = 4;
+    string condition = 5;
+  }
+  repeated JoinType joins = 5;
+  message WhereExp {
+    string type = 1;                       //where, andWhere, orWhere
+    string expression = 2;
+  }
+  repeated WhereExp whereas = 6;
+}
