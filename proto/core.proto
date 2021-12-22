@@ -69,9 +69,16 @@ message Select {
     string condition = 5;
   }
   repeated JoinType joins = 5;
-  message WhereExp {
+  message WhereExpr {
     string type = 1;                       //where, andWhere, orWhere
     string expression = 2;
   }
-  repeated WhereExp whereas = 6;
+  repeated WhereExpr whereas = 6;
+  repeated string GroupBy = 7;
+  message HavingExpr {
+    string type = 1;                       //having, andHaving, orHaving
+    string expression = 2;
+  }
+  repeated HavingExpr havings = 8;
+  repeated string OrderBy = 9;
 }
