@@ -1,7 +1,7 @@
 syntax = "proto3";
 
 /*
-Read request = Client sends only msgId(see ReadRequest) and server will reply with full message answer.
+Read request = Client sends only msgClass(see Request) and server will reply with full message answer.
 Write request = Client send full message and server process it, and reply if message type need that.
 
 Client must send TaskStatus + TaskExit messages before exit.
@@ -14,9 +14,10 @@ enum msgClass {
     TASK_STATUS = 1;
     TASK_EXIT = 2;
     GET_STATE = 3;
-    LOG = 4;
-    GET_FILE_CONTENT = 5;
-    SELECT = 6;
+    OPEN_CHANNEL = 4;                     //Reserved for future addon for multithreading requests.
+    LOG = 5;
+    GET_FILE_CONTENT = 6;
+    SELECT = 7;
 }
 
 message Request {                         //This client sends this to get data from server.
@@ -51,6 +52,11 @@ message GetState {                        //Reply from server for request with m
   //? Something else?
 }
 
+message OpenChannel {                     //Request from client to open additional communication channel.
+  msgClass msgId = 1;                     //msgClass.OPEN_CHANNEL
+  //Not Implemented.
+}
+4
 message Log {                             //Write request. No reply.
   msgClass msgId = 1;                     //msgClass.LOG
   int32 flags = 2;                        //Reserved.
@@ -66,7 +72,7 @@ message GetFileContent {                  //Read\Write request for file.
   bytes FileContent = 5;                  //Present only in reply from server and if ResultCode is success.
 }
 
-message Select {
+message Select {                          //Reply for this message - TODO!
   msgClass msgId = 1;                     //msgClass.SELECT
   repeated string what = 2;               //aliases or filed names.
   string from = 3;
@@ -91,6 +97,8 @@ message Select {
   }
   repeated HavingExpr havings = 8;
   repeated string OrderBy = 9;
+  int64 MaxResult = 10;
+  int64 FirstResult = 11;
 }
 
 
