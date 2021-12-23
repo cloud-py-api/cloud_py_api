@@ -3,7 +3,6 @@ Transport layer of communication between php and python.
 """
 
 import sys
-from pyfrm_lib.helpers import print_err
 
 
 # @copyright Copyright (c) 2022 Andrey Borysenko <andrey18106x@gmail.com>
@@ -35,9 +34,9 @@ class InterCom:
         X bytes - google proto data.
 
     Return False for get_msg, send_msg if error or communication channel was closed.
-    error field in that case will contain `ClosedPipe`, `BrokenPipe` or OS text error.
+    `error` field in that case will contain `ClosedPipe`, `BrokenPipe` or OS text error.
     Client must stop it work and shutdown itself if main channel for communication with server was lost.
-    When True returned for get_msg, message itself(proto data) will be in InterCom.proto_data.
+    When True returned for get_msg, message itself(proto data) will be in `proto_data`.
     """
     proto_data: bytes
     error: str
@@ -52,10 +51,10 @@ class InterCom:
         self.error = ''
         self.proto_data = b''
         try:
-            packet_size = self._read_nbytes(self._PACKET_SIZE)
+            packet_size = self._read(self._PACKET_SIZE)
             if len(packet_size) == self._PACKET_SIZE:
                 packet_data_size = int.from_bytes(packet_size, byteorder='big', signed=False)
-                self.proto_data = self._read_nbytes(packet_data_size)
+                self.proto_data = self._read(packet_data_size)
                 if len(self.proto_data) == packet_data_size:
                     return True
             self.error = 'ClosedPipe'
@@ -69,25 +68,26 @@ class InterCom:
         self.error = ''
         packet_size = len(data).to_bytes(self._PACKET_SIZE, byteorder='big', signed=False)
         try:
-            if self._process is None:
-                a = sys.stdout.buffer.write(packet_size)
-                print_err(f'w_a(1)={a}')
-                b = sys.stdout.buffer.write(data)
-                print_err(f'w_b(1)={b}')
-            else:
-                a = self._process.stdin.write(packet_size)
-                print_err(f'w_a(2)={a}')
-                b = self._process.stdin.write(data)
-                print_err(f'w_b(2)={b}')
-            return True
+            if self._write(packet_size):
+                if self._write(data):
+                    return True
+            self.error = 'ClosedPipe'
+            return False
         except BrokenPipeError:
             self.error = 'BrokenPipe'
         except OSError as exc:
             self.error = exc.strerror
         return False
 
-    def _read_nbytes(self, nbytes: int) -> bytes:
+    def _read(self, n: int) -> bytes:
         if self._process is None:
-            return sys.stdin.buffer.read(nbytes)
+            return sys.stdin.buffer.read(n)
         else:
-            return self._process.stdout.read(nbytes)
+            return self._process.stdout.read(n)
+
+    def _write(self, data: bytes) -> bool:
+        if self._process is None:
+            written = sys.stdout.buffer.write(data)
+        else:
+            written = self._process.stdin.write(data)
+        return True if written == len(data) else False
