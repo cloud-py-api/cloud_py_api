@@ -31,43 +31,65 @@ from t_helpers import run_python_script
 
 
 class TestCloudPP(InterCom):
-    init_send: bool = False
-    init_ok: bool = False
+    req = Request()
+    reply: bytes
+    task_status: int = -1
+    task_error: str = ''
 
     def __init__(self, process=None):
         super().__init__(process)
 
     def process_msgs(self, infinite: bool = True):
         while True:
-            self.get()
-            req = Request()
-            req.ParseFromString(self.proto_data)
-            msg_id = req.Class
-            print(f'Process request with id = {msg_id}')
+            if not self.get_msg():
+                print(f'Server: get_msg fails, error:{self.error}')
+                break
+            self.reply = b''
+            self.req.ParseFromString(self.proto_data)
+            msg_id = self.req.classId
+            print(f'Server: Process request with id = {msg_id}')
             if msg_id == INIT_TASK:
                 self.process_init_task()
+            elif msg_id == TASK_STATUS:
+                self.process_task_status()
+            elif msg_id == TASK_EXIT:
+                self.process_task_exit()
+            elif msg_id == GET_STATE:
+                self.process_get_state()
+            elif msg_id == LOG:
+                self.process_log()
+            elif msg_id == GET_FILE_CONTENT:
+                self.process_get_file_content()
+            elif msg_id == SELECT:
+                self.process_select()
             else:
-                raise 'Unknown request id.'
+                raise KeyError('Unknown request id.')
+            if len(self.reply):
+                if not self.send_msg(self.reply):
+                    print(f'Server: send_msg fails, error:{self.error}')
+                    break
             if not infinite:
                 break
 
     def process_init_task(self):
         init_data = InitTask()
-        init_data.msgId = INIT_TASK
+        init_data.classId = INIT_TASK
         init_data.AppPath = 'PathToTargetApp'
         init_data.args.append('ArgN1')
         init_data.args.append('ArgN2')
         init_data.config.LogLvl = 0
         init_data.config.DataFolder = '/var/www/nextcloud/data'
-        self.send(init_data.SerializeToString())
+        self.reply = init_data.SerializeToString()
 
-    def get(self) -> None:
-        if not self.get_msg():
-            raise f'get_msg fails, error:{self.error}'
-
-    def send(self, data: bytes) -> None:
-        if not self.send_msg(data):
-            raise f'send_msg fails, error:{self.error}'
+    def process_task_status(self):
+        new_status = TaskStatus()
+        new_status.ParseFromString(self.proto_data)
+        if self.task_status != new_status.st_code:
+            print(f'Server: pyfrm status changed from {self.task_status} to {new_status.st_code}')
+        if self.task_error != new_status.errDescription:
+            print(f'Server: pyfrm error changed from `{self.task_error}` to `{new_status.errDescription}`')
+        self.task_status = new_status.st_code
+        self.task_error = new_status.errDescription
 
 
 if __name__ == '__main__':

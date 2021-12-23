@@ -7,6 +7,7 @@ import signal
 import sys
 from pyfrm_lib.helpers import print_err
 from pyfrm_lib.pp_proto import CloudPP
+from pyfrm_lib.proto.core_pb2 import taskStatus
 
 
 # @copyright Copyright (c) 2022 Andrey Borysenko <andrey18106x@gmail.com>
@@ -43,6 +44,5 @@ if __name__ == '__main__':
     # slog(LogLvl.DEBUG, 'cpa_core', f'Started with pid={os.getpid()}')
     cloud = CloudPP()
     cloud.get_init_task()
-    # sys.stdin.close()
-    # sys.stdout.close()
+    cloud.set_status(taskStatus.ST_IN_PROGRESS, 'ignored!')
     sys.exit(0)

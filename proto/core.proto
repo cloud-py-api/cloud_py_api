@@ -22,11 +22,11 @@ enum msgClass {
 }
 
 message Request {                         //This client sends this to get data from server.
-  msgClass Class = 1;
+  msgClass classId = 1;
 }
 
 message InitTask {                        //Reply from server for request with msgId = 1.
-  msgClass msgId = 1;                     //msgClass.INIT_TASK
+  msgClass classId = 1;                   //msgClass.INIT_TASK
   string AppPath = 2;                     //Path to target app directory, to be executed.
   repeated string args = 6;               //Optional arguments to pass to target python app's module.
   message ConfigOptions {
@@ -44,36 +44,36 @@ enum taskStatus {
 }
 
 message TaskStatus {                      //Write request to set Task Status. No reply.
-  msgClass msgId = 1;                     //TaskStatus.TASK_STATUS
+  msgClass classId = 1;                   //TaskStatus.TASK_STATUS
   taskStatus st_code = 2;                 //Status code of a task.
-  string ErrDescription = 8;              //Optional error, if any. Valid only when Status is non success/in_progress.
+  string errDescription = 8;              //Optional error, if any. Valid only when Status is non success/in_progress.
 }
 
 message TaskExit {                        //Write request. No reply. Server must close pipe/socket after this message.
-  msgClass msgId = 1;                     //msgClass.TASK_EXIT
+  msgClass classId = 1;                   //msgClass.TASK_EXIT
   string msgText = 8;                     //Optional text, for exit action. Ignored in most cases.
 }
 
 message GetState {                        //Reply from server for request with msgId = 5. Client send it every 10 sec.
-  msgClass msgId = 1;                     //msgClass.GET_STATE
+  msgClass classId = 1;                   //msgClass.GET_STATE
   bool bStop = 2;                         //If true client must gracefully stop it's work.
   //? Something else?
 }
 
 message OpenChannel {                     //Request from client to open additional communication channel.
-  msgClass msgId = 1;                     //msgClass.OPEN_CHANNEL
+  msgClass classId = 1;                   //msgClass.OPEN_CHANNEL
   //Not Implemented.
 }
 
 message Log {                             //Write request. No reply.
-  msgClass msgId = 1;                     //msgClass.LOG
+  msgClass classId = 1;                   //msgClass.LOG
   int32 flags = 2;                        //Reserved.
   string sModule = 3;                     //What module logs belongs to.
   repeated string Content = 4;            //One or more strings to put to log.
 }
 
 message GetFileContent {                  //Read\Write request for file.
-  msgClass msgId = 1;                     //msgClass.GET_FILE_CONTENT
+  msgClass classId = 1;                   //msgClass.GET_FILE_CONTENT
   string UserID = 2;
   string FileId = 3;
   int64 ResultCode = 4;                   //Present only in reply from server.
@@ -81,7 +81,7 @@ message GetFileContent {                  //Read\Write request for file.
 }
 
 message Select {                          //Reply for this message - TODO!
-  msgClass msgId = 1;                     //msgClass.SELECT
+  msgClass classId = 1;                   //msgClass.SELECT
   repeated string what = 2;               //aliases or filed names.
   string from = 3;
   string from_alias = 4;

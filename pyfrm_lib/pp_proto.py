@@ -5,6 +5,7 @@ Wrappers around `protobuf` for communication between php cli module and python. 
 from enum import Enum
 from pyfrm_lib.pp_transport import InterCom
 from pyfrm_lib.proto.core_pb2 import *
+from pyfrm_lib.helpers import print_err
 
 
 # @copyright Copyright (c) 2022 Andrey Borysenko <andrey18106x@gmail.com>
@@ -50,11 +51,23 @@ class CloudPP(InterCom):
 
     def get_init_task(self) -> bool:
         req = Request()
-        req.Class = INIT_TASK
-        if not self.send_msg(req.SerializeToString()):
-            raise "TODO"
+        req.classId = INIT_TASK
+        if self.send_msg(req.SerializeToString()):
+            print_err(f'Send request for init failed. {self.error}')
+            return False
         if not self.get_msg():
-            raise "TODO"
+            print_err(f'Receive init data failed. {self.error}')
+            return False
         self.init_data = InitTask()
         self.init_data.ParseFromString(self.proto_data)
+        return True
+
+    def set_status(self, status: taskStatus, error: str = '') -> bool:
+        req = TaskStatus()
+        req.classId = TASK_STATUS
+        req.st_code = status
+        req.errDescription = error
+        if self.send_msg(req.SerializeToString()):
+            print_err(f'Send status failed. {self.error}')
+            return False
         return True
