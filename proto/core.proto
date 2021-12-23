@@ -36,10 +36,17 @@ message InitTask {                        //Reply from server for request with m
   ConfigOptions config = 7;
 }
 
+enum taskStatus {
+    ST_SUCCESS = 0;
+    ST_IN_PROGRESS = 1;
+    ST_INIT_ERROR = 2;
+    ST_EXCEPTION = 3;
+}
+
 message TaskStatus {                      //Write request to set Task Status. No reply.
   msgClass msgId = 1;                     //TaskStatus.TASK_STATUS
-  int32 Status = 2;                       //Status of task.
-  string ErrDescription = 8;              //Optional error, if any. Valid only when Status is non success.
+  taskStatus st_code = 2;                 //Status code of a task.
+  string ErrDescription = 8;              //Optional error, if any. Valid only when Status is non success/in_progress.
 }
 
 message TaskExit {                        //Write request. No reply. Server must close pipe/socket after this message.

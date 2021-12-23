@@ -15,10 +15,12 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\ncore.proto\"#\n\x07Request\x12\x18\n\x05\x43lass\x18\x01 \x01(\x0e\x32\t.msgClass\"\xa1\x01\n\x08InitTask\x12\x18\n\x05msgId\x18\x01 \x01(\x0e\x32\t.msgClass\x12\x0f\n\x07\x41ppPath\x18\x02 \x01(\t\x12\x0c\n\x04\x61rgs\x18\x06 \x03(\t\x12\'\n\x06\x63onfig\x18\x07 \x01(\x0b\x32\x17.InitTask.ConfigOptions\x1a\x33\n\rConfigOptions\x12\x0e\n\x06LogLvl\x18\x01 \x01(\x05\x12\x12\n\nDataFolder\x18\x02 \x01(\t\"N\n\nTaskStatus\x12\x18\n\x05msgId\x18\x01 \x01(\x0e\x32\t.msgClass\x12\x0e\n\x06Status\x18\x02 \x01(\x05\x12\x16\n\x0e\x45rrDescription\x18\x08 \x01(\t\"5\n\x08TaskExit\x12\x18\n\x05msgId\x18\x01 \x01(\x0e\x32\t.msgClass\x12\x0f\n\x07msgText\x18\x08 \x01(\t\"3\n\x08GetState\x12\x18\n\x05msgId\x18\x01 \x01(\x0e\x32\t.msgClass\x12\r\n\x05\x62Stop\x18\x02 \x01(\x08\"\'\n\x0bOpenChannel\x12\x18\n\x05msgId\x18\x01 \x01(\x0e\x32\t.msgClass\"P\n\x03Log\x12\x18\n\x05msgId\x18\x01 \x01(\x0e\x32\t.msgClass\x12\r\n\x05\x66lags\x18\x02 \x01(\x05\x12\x0f\n\x07sModule\x18\x03 \x01(\t\x12\x0f\n\x07\x43ontent\x18\x04 \x03(\t\"s\n\x0eGetFileContent\x12\x18\n\x05msgId\x18\x01 \x01(\x0e\x32\t.msgClass\x12\x0e\n\x06UserID\x18\x02 \x01(\t\x12\x0e\n\x06\x46ileId\x18\x03 \x01(\t\x12\x12\n\nResultCode\x18\x04 \x01(\x03\x12\x13\n\x0b\x46ileContent\x18\x05 \x01(\x0c\"\xc2\x03\n\x06Select\x12\x18\n\x05msgId\x18\x01 \x01(\x0e\x32\t.msgClass\x12\x0c\n\x04what\x18\x02 \x03(\t\x12\x0c\n\x04\x66rom\x18\x03 \x01(\t\x12\x12\n\nfrom_alias\x18\x04 \x01(\t\x12\x1f\n\x05joins\x18\x05 \x03(\x0b\x32\x10.Select.JoinType\x12\"\n\x07whereas\x18\x06 \x03(\x0b\x32\x11.Select.WhereExpr\x12\x0f\n\x07GroupBy\x18\x07 \x03(\t\x12#\n\x07havings\x18\x08 \x03(\x0b\x32\x12.Select.HavingExpr\x12\x0f\n\x07OrderBy\x18\t \x03(\t\x12\x11\n\tMaxResult\x18\n \x01(\x03\x12\x13\n\x0b\x46irstResult\x18\x0b \x01(\x03\x1a[\n\x08JoinType\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x11\n\tfromAlias\x18\x02 \x01(\t\x12\x0c\n\x04join\x18\x03 \x01(\t\x12\r\n\x05\x61lias\x18\x04 \x01(\t\x12\x11\n\tcondition\x18\x05 \x01(\t\x1a-\n\tWhereExpr\x12\x0c\n\x04type\x18\x01 \x01(\t\x12\x12\n\nexpression\x18\x02 \x01(\t\x1a.\n\nHavingExpr\x12\x0c\n\x04type\x18\x01 \x01(\t\x12\x12\n\nexpression\x18\x02 \x01(\t*\x93\x01\n\x08msgClass\x12\x0c\n\x08RESERVED\x10\x00\x12\r\n\tINIT_TASK\x10\x01\x12\x0f\n\x0bTASK_STATUS\x10\x02\x12\r\n\tTASK_EXIT\x10\x03\x12\r\n\tGET_STATE\x10\x04\x12\x10\n\x0cOPEN_CHANNEL\x10\x05\x12\x07\n\x03LOG\x10\x06\x12\x14\n\x10GET_FILE_CONTENT\x10\x07\x12\n\n\x06SELECT\x10\x08\x62\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\ncore.proto\"#\n\x07Request\x12\x18\n\x05\x43lass\x18\x01 \x01(\x0e\x32\t.msgClass\"\xa1\x01\n\x08InitTask\x12\x18\n\x05msgId\x18\x01 \x01(\x0e\x32\t.msgClass\x12\x0f\n\x07\x41ppPath\x18\x02 \x01(\t\x12\x0c\n\x04\x61rgs\x18\x06 \x03(\t\x12\'\n\x06\x63onfig\x18\x07 \x01(\x0b\x32\x17.InitTask.ConfigOptions\x1a\x33\n\rConfigOptions\x12\x0e\n\x06LogLvl\x18\x01 \x01(\x05\x12\x12\n\nDataFolder\x18\x02 \x01(\t\"\\\n\nTaskStatus\x12\x18\n\x05msgId\x18\x01 \x01(\x0e\x32\t.msgClass\x12\x1c\n\x07st_code\x18\x02 \x01(\x0e\x32\x0b.taskStatus\x12\x16\n\x0e\x45rrDescription\x18\x08 \x01(\t\"5\n\x08TaskExit\x12\x18\n\x05msgId\x18\x01 \x01(\x0e\x32\t.msgClass\x12\x0f\n\x07msgText\x18\x08 \x01(\t\"3\n\x08GetState\x12\x18\n\x05msgId\x18\x01 \x01(\x0e\x32\t.msgClass\x12\r\n\x05\x62Stop\x18\x02 \x01(\x08\"\'\n\x0bOpenChannel\x12\x18\n\x05msgId\x18\x01 \x01(\x0e\x32\t.msgClass\"P\n\x03Log\x12\x18\n\x05msgId\x18\x01 \x01(\x0e\x32\t.msgClass\x12\r\n\x05\x66lags\x18\x02 \x01(\x05\x12\x0f\n\x07sModule\x18\x03 \x01(\t\x12\x0f\n\x07\x43ontent\x18\x04 \x03(\t\"s\n\x0eGetFileContent\x12\x18\n\x05msgId\x18\x01 \x01(\x0e\x32\t.msgClass\x12\x0e\n\x06UserID\x18\x02 \x01(\t\x12\x0e\n\x06\x46ileId\x18\x03 \x01(\t\x12\x12\n\nResultCode\x18\x04 \x01(\x03\x12\x13\n\x0b\x46ileContent\x18\x05 \x01(\x0c\"\xc2\x03\n\x06Select\x12\x18\n\x05msgId\x18\x01 \x01(\x0e\x32\t.msgClass\x12\x0c\n\x04what\x18\x02 \x03(\t\x12\x0c\n\x04\x66rom\x18\x03 \x01(\t\x12\x12\n\nfrom_alias\x18\x04 \x01(\t\x12\x1f\n\x05joins\x18\x05 \x03(\x0b\x32\x10.Select.JoinType\x12\"\n\x07whereas\x18\x06 \x03(\x0b\x32\x11.Select.WhereExpr\x12\x0f\n\x07GroupBy\x18\x07 \x03(\t\x12#\n\x07havings\x18\x08 \x03(\x0b\x32\x12.Select.HavingExpr\x12\x0f\n\x07OrderBy\x18\t \x03(\t\x12\x11\n\tMaxResult\x18\n \x01(\x03\x12\x13\n\x0b\x46irstResult\x18\x0b \x01(\x03\x1a[\n\x08JoinType\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x11\n\tfromAlias\x18\x02 \x01(\t\x12\x0c\n\x04join\x18\x03 \x01(\t\x12\r\n\x05\x61lias\x18\x04 \x01(\t\x12\x11\n\tcondition\x18\x05 \x01(\t\x1a-\n\tWhereExpr\x12\x0c\n\x04type\x18\x01 \x01(\t\x12\x12\n\nexpression\x18\x02 \x01(\t\x1a.\n\nHavingExpr\x12\x0c\n\x04type\x18\x01 \x01(\t\x12\x12\n\nexpression\x18\x02 \x01(\t*\x93\x01\n\x08msgClass\x12\x0c\n\x08RESERVED\x10\x00\x12\r\n\tINIT_TASK\x10\x01\x12\x0f\n\x0bTASK_STATUS\x10\x02\x12\r\n\tTASK_EXIT\x10\x03\x12\r\n\tGET_STATE\x10\x04\x12\x10\n\x0cOPEN_CHANNEL\x10\x05\x12\x07\n\x03LOG\x10\x06\x12\x14\n\x10GET_FILE_CONTENT\x10\x07\x12\n\n\x06SELECT\x10\x08*U\n\ntaskStatus\x12\x0e\n\nST_SUCCESS\x10\x00\x12\x12\n\x0eST_IN_PROGRESS\x10\x01\x12\x11\n\rST_INIT_ERROR\x10\x02\x12\x10\n\x0cST_EXCEPTION\x10\x03\x62\x06proto3')
 
 _MSGCLASS = DESCRIPTOR.enum_types_by_name['msgClass']
 msgClass = enum_type_wrapper.EnumTypeWrapper(_MSGCLASS)
+_TASKSTATUS = DESCRIPTOR.enum_types_by_name['taskStatus']
+taskStatus = enum_type_wrapper.EnumTypeWrapper(_TASKSTATUS)
 RESERVED = 0
 INIT_TASK = 1
 TASK_STATUS = 2
@@ -28,6 +30,10 @@ OPEN_CHANNEL = 5
 LOG = 6
 GET_FILE_CONTENT = 7
 SELECT = 8
+ST_SUCCESS = 0
+ST_IN_PROGRESS = 1
+ST_INIT_ERROR = 2
+ST_EXCEPTION = 3
 
 
 _REQUEST = DESCRIPTOR.message_types_by_name['Request']
@@ -141,8 +147,10 @@ _sym_db.RegisterMessage(Select.HavingExpr)
 if _descriptor._USE_C_DESCRIPTORS == False:
 
   DESCRIPTOR._options = None
-  _MSGCLASS._serialized_start=1097
-  _MSGCLASS._serialized_end=1244
+  _MSGCLASS._serialized_start=1111
+  _MSGCLASS._serialized_end=1258
+  _TASKSTATUS._serialized_start=1260
+  _TASKSTATUS._serialized_end=1345
   _REQUEST._serialized_start=14
   _REQUEST._serialized_end=49
   _INITTASK._serialized_start=52
@@ -150,23 +158,23 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _INITTASK_CONFIGOPTIONS._serialized_start=162
   _INITTASK_CONFIGOPTIONS._serialized_end=213
   _TASKSTATUS._serialized_start=215
-  _TASKSTATUS._serialized_end=293
-  _TASKEXIT._serialized_start=295
-  _TASKEXIT._serialized_end=348
-  _GETSTATE._serialized_start=350
-  _GETSTATE._serialized_end=401
-  _OPENCHANNEL._serialized_start=403
-  _OPENCHANNEL._serialized_end=442
-  _LOG._serialized_start=444
-  _LOG._serialized_end=524
-  _GETFILECONTENT._serialized_start=526
-  _GETFILECONTENT._serialized_end=641
-  _SELECT._serialized_start=644
-  _SELECT._serialized_end=1094
-  _SELECT_JOINTYPE._serialized_start=908
-  _SELECT_JOINTYPE._serialized_end=999
-  _SELECT_WHEREEXPR._serialized_start=1001
-  _SELECT_WHEREEXPR._serialized_end=1046
-  _SELECT_HAVINGEXPR._serialized_start=1048
-  _SELECT_HAVINGEXPR._serialized_end=1094
+  _TASKSTATUS._serialized_end=307
+  _TASKEXIT._serialized_start=309
+  _TASKEXIT._serialized_end=362
+  _GETSTATE._serialized_start=364
+  _GETSTATE._serialized_end=415
+  _OPENCHANNEL._serialized_start=417
+  _OPENCHANNEL._serialized_end=456
+  _LOG._serialized_start=458
+  _LOG._serialized_end=538
+  _GETFILECONTENT._serialized_start=540
+  _GETFILECONTENT._serialized_end=655
+  _SELECT._serialized_start=658
+  _SELECT._serialized_end=1108
+  _SELECT_JOINTYPE._serialized_start=922
+  _SELECT_JOINTYPE._serialized_end=1013
+  _SELECT_WHEREEXPR._serialized_start=1015
+  _SELECT_WHEREEXPR._serialized_end=1060
+  _SELECT_HAVINGEXPR._serialized_start=1062
+  _SELECT_HAVINGEXPR._serialized_end=1108
 # @@protoc_insertion_point(module_scope)

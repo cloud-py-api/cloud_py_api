@@ -2,8 +2,6 @@
 Wrappers around `protobuf` for communication between php cli module and python. Works on top of transport layer.
 """
 
-import sys
-from typing import AnyStr, Union
 from enum import Enum
 from pyfrm_lib.pp_transport import InterCom
 from pyfrm_lib.proto.core_pb2 import *
