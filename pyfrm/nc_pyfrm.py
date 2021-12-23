@@ -45,4 +45,6 @@ if __name__ == '__main__':
     cloud = CloudPP()
     cloud.get_init_task()
     cloud.set_status(taskStatus.ST_IN_PROGRESS, 'ignored!')
+    cloud.set_status(taskStatus.ST_SUCCESS)
+    cloud.exit('bye bye')
     sys.exit(0)

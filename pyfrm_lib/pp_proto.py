@@ -71,3 +71,10 @@ class CloudPP(InterCom):
             print_err(f'Send status failed. {self.error}')
             return False
         return True
+
+    def exit(self, msg: str = '') -> None:
+        req = TaskExit()
+        req.classId = TASK_EXIT
+        req.msgText = msg
+        if self.send_msg(req.SerializeToString()):
+            print_err(f'Send exit failed. {self.error}')
