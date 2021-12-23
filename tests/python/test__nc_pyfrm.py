@@ -4,7 +4,7 @@ Run nc_pyfrm and send Initialize, read reply and debug logs, and close pipe to t
 
 import sys
 from pyfrm_lib.pp_transport import InterCom
-from pyfrm_lib.proto.core_pb2 import Initialize, InitializationResult
+from pyfrm_lib.proto.core_pb2 import *
 from t_helpers import run_python_script
 
 
@@ -31,35 +31,48 @@ from t_helpers import run_python_script
 
 
 class TestCloudPP(InterCom):
-    init_data = None
+    init_send: bool = False
+    init_ok: bool = False
 
     def __init__(self, process=None):
         super().__init__(process)
 
-    def process_init_msg(self) -> bool:
-        init_data = Initialize()
-        init_data.ModulePath = 'ThisIsModulePath'
-        init_data.ModuleName = 'ThisIsModuleName'
-        init_data.EP_File = 'ThisIsFileWithEP'
-        init_data.EP_Function = 'This func we will call'
-        init_data.config.LogLvl = 0
-        init_data.config.DataFolder = '/var/www/nextcloud/data'
+    def process_msgs(self, infinite: bool = True):
+        while True:
+            self.get()
+            req = Request()
+            req.ParseFromString(self.proto_data)
+            msg_id = req.Class
+            print(f'Process request with id = {msg_id}')
+            if msg_id == INIT_TASK:
+                self.process_init_task()
+            else:
+                raise 'Unknown request id.'
+            if not infinite:
+                break
+
+    def process_init_task(self):
+        init_data = InitTask()
+        init_data.msgId = INIT_TASK
+        init_data.AppPath = 'PathToTargetApp'
         init_data.args.append('ArgN1')
         init_data.args.append('ArgN2')
-        if not self.send_msg(init_data.SerializeToString()):
-            raise f'send_msg fails, error:{self.error}'
+        init_data.config.LogLvl = 0
+        init_data.config.DataFolder = '/var/www/nextcloud/data'
+        self.send(init_data.SerializeToString())
+
+    def get(self) -> None:
         if not self.get_msg():
             raise f'get_msg fails, error:{self.error}'
-        reply = InitializationResult()
-        reply.ParseFromString(self.packet_data)
-        print(f'Status:{reply.Status}')
-        print(f'ErrDescription:{reply.ErrDescription}')
-        return True
+
+    def send(self, data: bytes) -> None:
+        if not self.send_msg(data):
+            raise f'send_msg fails, error:{self.error}'
 
 
 if __name__ == '__main__':
     p_obj = run_python_script('pyfrm/nc_pyfrm.py')
     cloud = TestCloudPP(p_obj)
-    cloud.process_init_msg()
+    cloud.process_msgs(infinite=True)
     p_obj.wait()
     sys.exit(0)

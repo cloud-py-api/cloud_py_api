@@ -3,8 +3,6 @@ Different functions to make code more readable and smaller.
 """
 
 import sys
-import os
-from subprocess import PIPE, Popen
 
 
 # @copyright Copyright (c) 2022 Andrey Borysenko <andrey18106x@gmail.com>
@@ -29,8 +27,5 @@ from subprocess import PIPE, Popen
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-def run_python_script(python_script_path):
-    fd = os.open('errors.log', os.O_WRONLY + os.O_CREAT + os.O_TRUNC)
-    process = Popen([sys.executable, python_script_path], bufsize=0, stdin=PIPE, stdout=PIPE, stderr=fd, text=False)
-    os.close(fd)
-    return process
+def print_err(*args, **kwargs):
+    print(*args, file=sys.stderr, **kwargs)

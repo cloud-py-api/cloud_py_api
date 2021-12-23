@@ -6,7 +6,7 @@ import sys
 from typing import AnyStr, Union
 from enum import Enum
 from pyfrm_lib.pp_transport import InterCom
-from pyfrm_lib.proto.core_pb2 import Initialize, InitializationResult
+from pyfrm_lib.proto.core_pb2 import *
 
 
 # @copyright Copyright (c) 2022 Andrey Borysenko <andrey18106x@gmail.com>
@@ -50,14 +50,13 @@ class CloudPP(InterCom):
     def __init__(self, process=None):
         super().__init__(process)
 
-    def process_init_msg(self) -> bool:
+    def get_init_task(self) -> bool:
+        req = Request()
+        req.Class = INIT_TASK
+        if not self.send_msg(req.SerializeToString()):
+            raise "TODO"
         if not self.get_msg():
             raise "TODO"
-        self.init_data = Initialize()
-        self.init_data.ParseFromString(self.packet_data)
-        reply = InitializationResult()
-        reply.Status = 0
-        reply.ErrDescription = 'TEST'
-        if not self.send_msg(reply.SerializeToString()):
-            raise "TODO"
+        self.init_data = InitTask()
+        self.init_data.ParseFromString(self.proto_data)
         return True

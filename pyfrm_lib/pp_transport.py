@@ -3,7 +3,7 @@ Transport layer of communication between php and python.
 """
 
 import sys
-from typing import Union
+from pyfrm_lib.helpers import print_err
 
 
 # @copyright Copyright (c) 2022 Andrey Borysenko <andrey18106x@gmail.com>
@@ -29,30 +29,36 @@ from typing import Union
 
 
 class InterCom:
-    packet_len: int
-    packet_data: bytes
+    """Class representing both server(for tests) and client.
+        Packet struct:
+        8 bytes - size of packet(_PACKET_SIZE), not including this field. Currently it is sizeof(X).
+        X bytes - google proto data.
+
+    Return False for get_msg, send_msg if error or communication channel was closed.
+    error field in that case will contain `ClosedPipe`, `BrokenPipe` or OS text error.
+    Client must stop it work and shutdown itself if main channel for communication with server was lost.
+    When True returned for get_msg, message itself(proto data) will be in InterCom.proto_data.
+    """
+    proto_data: bytes
     error: str
     _process = None
+    _PACKET_SIZE = 8
 
     def __init__(self, process=None):
-        self._init_v()
         if process is not None:
             self._process = process
 
     def get_msg(self) -> bool:
-        self._init_v()
+        self.error = ''
+        self.proto_data = b''
         try:
-            _packet_size: bytes = b''
-            while len(_packet_size) < 8:
-                new_data = self._read_nbytes(8 - len(_packet_size))
-                if new_data is not None:
-                    _packet_size += new_data
-            self.packet_len = int.from_bytes(_packet_size, byteorder='big', signed=False)
-            while self.packet_len - len(self.packet_data) > 0:
-                new_data = self._read_nbytes(self.packet_len - len(self.packet_data))
-                if new_data is not None:
-                    self.packet_data += new_data
-            return True
+            packet_size = self._read_nbytes(self._PACKET_SIZE)
+            if len(packet_size) == self._PACKET_SIZE:
+                packet_data_size = int.from_bytes(packet_size, byteorder='big', signed=False)
+                self.proto_data = self._read_nbytes(packet_data_size)
+                if len(self.proto_data) == packet_data_size:
+                    return True
+            self.error = 'ClosedPipe'
         except BrokenPipeError:
             self.error = 'BrokenPipe'
         except OSError as exc:
@@ -60,14 +66,19 @@ class InterCom:
         return False
 
     def send_msg(self, data: bytes) -> bool:
-        packet_size = len(data).to_bytes(8, byteorder='big', signed=False)
+        self.error = ''
+        packet_size = len(data).to_bytes(self._PACKET_SIZE, byteorder='big', signed=False)
         try:
             if self._process is None:
-                sys.stdout.buffer.write(packet_size)
-                sys.stdout.buffer.write(data)
+                a = sys.stdout.buffer.write(packet_size)
+                print_err(f'w_a(1)={a}')
+                b = sys.stdout.buffer.write(data)
+                print_err(f'w_b(1)={b}')
             else:
-                self._process.stdin.write(packet_size)
-                self._process.stdin.write(data)
+                a = self._process.stdin.write(packet_size)
+                print_err(f'w_a(2)={a}')
+                b = self._process.stdin.write(data)
+                print_err(f'w_b(2)={b}')
             return True
         except BrokenPipeError:
             self.error = 'BrokenPipe'
@@ -75,12 +86,7 @@ class InterCom:
             self.error = exc.strerror
         return False
 
-    def _init_v(self):
-        self.packet_len = 0
-        self.packet_data = b''
-        self.error = ''
-
-    def _read_nbytes(self, nbytes: int) -> Union[bytes, None]:
+    def _read_nbytes(self, nbytes: int) -> bytes:
         if self._process is None:
             return sys.stdin.buffer.read(nbytes)
         else:

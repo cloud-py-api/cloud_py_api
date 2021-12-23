@@ -10,14 +10,15 @@ If there is no time for that, server must close pipe/socket and after client det
 */
 
 enum msgClass {
-    INIT_TASK = 0;
-    TASK_STATUS = 1;
-    TASK_EXIT = 2;
-    GET_STATE = 3;
-    OPEN_CHANNEL = 4;                     //Reserved for future addon for multithreading requests.
-    LOG = 5;
-    GET_FILE_CONTENT = 6;
-    SELECT = 7;
+    RESERVED = 0;
+    INIT_TASK = 1;
+    TASK_STATUS = 2;
+    TASK_EXIT = 3;
+    GET_STATE = 4;
+    OPEN_CHANNEL = 5;                     //Reserved for future addon for multithreading requests.
+    LOG = 6;
+    GET_FILE_CONTENT = 7;
+    SELECT = 8;
 }
 
 message Request {                         //This client sends this to get data from server.
@@ -56,7 +57,7 @@ message OpenChannel {                     //Request from client to open addition
   msgClass msgId = 1;                     //msgClass.OPEN_CHANNEL
   //Not Implemented.
 }
-4
+
 message Log {                             //Write request. No reply.
   msgClass msgId = 1;                     //msgClass.LOG
   int32 flags = 2;                        //Reserved.
