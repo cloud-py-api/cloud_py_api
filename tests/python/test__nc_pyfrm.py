@@ -35,13 +35,12 @@ class TestCloudPP(InterCom):
     reply: bytes
     task_status: int = -1
     task_error: str = ''
-    process_next: bool
+    stop_msg_cycle: bool = False
 
     def __init__(self, process=None):
         super().__init__(process)
 
-    def process_msgs(self, infinite: bool = True):
-        self.process_next = infinite
+    def process_msgs(self, n_count: int = -1):
         while True:
             if not self.get_msg():
                 print(f'Server: get_msg fails, error:{self.error}')
@@ -70,8 +69,12 @@ class TestCloudPP(InterCom):
                 if not self.send_msg(self.reply):
                     print(f'Server: send_msg fails, error:{self.error}')
                     break
-            if not self.process_next:
+            if self.stop_msg_cycle:
                 break
+            if n_count != -1:
+                n_count -= 1
+                if not n_count:
+                    break
 
     def process_init_task(self):
         init_data = InitTask()
@@ -97,12 +100,12 @@ class TestCloudPP(InterCom):
         exit_status = TaskExit()
         exit_status.ParseFromString(self.proto_data)
         print(f'Server: pyfrm exited. OptMessage:`{exit_status.msgText}`')
-        self.process_next = False
+        self.stop_msg_cycle = True
 
 
 if __name__ == '__main__':
     p_obj = run_python_script('pyfrm/nc_pyfrm.py')
     cloud = TestCloudPP(p_obj)
-    cloud.process_msgs(infinite=True)
+    cloud.process_msgs(n_count=-1)
     p_obj.wait()
     sys.exit(0)

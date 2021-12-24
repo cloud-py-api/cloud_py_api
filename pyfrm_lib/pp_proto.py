@@ -52,7 +52,7 @@ class CloudPP(InterCom):
     def get_init_task(self) -> bool:
         req = Request()
         req.classId = INIT_TASK
-        if self.send_msg(req.SerializeToString()):
+        if not self.send_msg(req.SerializeToString()):
             print_err(f'Send request for init failed. {self.error}')
             return False
         if not self.get_msg():
@@ -67,7 +67,7 @@ class CloudPP(InterCom):
         req.classId = TASK_STATUS
         req.st_code = status
         req.errDescription = error
-        if self.send_msg(req.SerializeToString()):
+        if not self.send_msg(req.SerializeToString()):
             print_err(f'Send status failed. {self.error}')
             return False
         return True
@@ -76,5 +76,5 @@ class CloudPP(InterCom):
         req = TaskExit()
         req.classId = TASK_EXIT
         req.msgText = msg
-        if self.send_msg(req.SerializeToString()):
+        if not self.send_msg(req.SerializeToString()):
             print_err(f'Send exit failed. {self.error}')
