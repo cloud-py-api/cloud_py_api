@@ -45,36 +45,65 @@ def slog(log_level: LogLvl, app_name: str, *args, **kwargs):
 
 class CloudPP(InterCom):
     init_data = None
+    _req = None
+    _exit_done: bool = False
 
     def __init__(self, process=None):
         super().__init__(process)
+        if not self._get_init_task():
+            raise RuntimeError('Cannot establish connect with server.')
 
-    def get_init_task(self) -> bool:
-        req = Request()
-        req.classId = INIT_TASK
-        if not self.send_msg(req.SerializeToString()):
-            print_err(f'Send request for init failed. {self.error}')
+    def __del__(self):
+        if not self._exit_done:
+            self.exit()
+
+    def _get_init_task(self) -> bool:
+        self._req = Request()
+        self._req.classId = INIT_TASK
+        if not self._send():
             return False
-        if not self.get_msg():
-            print_err(f'Receive init data failed. {self.error}')
+        if not self._get():
             return False
         self.init_data = InitTask()
         self.init_data.ParseFromString(self.proto_data)
         return True
 
     def set_status(self, status: taskStatus, error: str = '') -> bool:
-        req = TaskStatus()
-        req.classId = TASK_STATUS
-        req.st_code = status
-        req.errDescription = error
-        if not self.send_msg(req.SerializeToString()):
-            print_err(f'Send status failed. {self.error}')
+        self._req = TaskStatus()
+        self._req.classId = TASK_STATUS
+        self._req.st_code = status
+        self._req.errDescription = error
+        return self._send()
+
+    def exit(self, msg: str = '') -> None:
+        self._exit_done = True
+        self._req = TaskExit()
+        self._req.classId = TASK_EXIT
+        self._req.msgText = msg
+        self._send()
+
+    def log(self, log_lvl: int, mod_name: str, content: list) -> None:
+        if content is None:
+            raise ValueError('no log content')
+        if self.init_data.config.LogLvl <= log_lvl:
+            self._req = Log()
+            self._req.classId = LOG
+            self._req.sModule = mod_name if mod_name is not None else ''
+            for elem in content:
+                self._req.Content.append(elem)
+            self._send()
+
+    def _get(self) -> bool:
+        if not self.get_msg():
+            req_id = self._req.classId if self._req.classId is not None else -1
+            print_err(f'Receive reply for {req_id} failed. {self.error}')
             return False
         return True
 
-    def exit(self, msg: str = '') -> None:
-        req = TaskExit()
-        req.classId = TASK_EXIT
-        req.msgText = msg
-        if not self.send_msg(req.SerializeToString()):
-            print_err(f'Send exit failed. {self.error}')
+    def _send(self) -> bool:
+        if self._req is None:
+            raise ValueError('[DEBUG]:No request.')
+        if self.send_msg(self._req.SerializeToString()):
+            return True
+        print_err(f'Send {self._req.classId} failed. {self.error}')
+        return False

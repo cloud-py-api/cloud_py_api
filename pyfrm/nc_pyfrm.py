@@ -42,10 +42,11 @@ if __name__ == '__main__':
     for sig in [signal.SIGINT, signal.SIGQUIT, signal.SIGTERM, signal.SIGHUP]:
         signal.signal(sig, signal_handler)
     # slog(LogLvl.DEBUG, 'cpa_core', f'Started with pid={os.getpid()}')
-    cloud = CloudPP()
-    cloud.get_init_task()
+    try:
+        cloud = CloudPP()
+    except RuntimeError:
+        sys.exit(1)
+    cloud.log(0, 'TEST', ['string1', 'string2'])
     cloud.set_status(taskStatus.ST_IN_PROGRESS, 'ignored!')
-    #
     cloud.set_status(taskStatus.ST_SUCCESS)
-    cloud.exit('bye bye')
     sys.exit(0)

@@ -33,9 +33,9 @@ from t_helpers import run_python_script
 class TestCloudPP(InterCom):
     req = Request()
     reply: bytes
-    task_status: int = -1
-    task_error: str = ''
-    stop_msg_cycle: bool = False
+    task_status: int = -1                           # in php this will be in DB
+    task_error: str = ''                            # this field will be in DB too.
+    stop_msg_cycle: bool = False                    # this is only to make code beautiful and for tests.
 
     def __init__(self, process=None):
         super().__init__(process)
@@ -101,6 +101,13 @@ class TestCloudPP(InterCom):
         exit_status.ParseFromString(self.proto_data)
         print(f'Server: pyfrm exited. OptMessage:`{exit_status.msgText}`')
         self.stop_msg_cycle = True
+
+    def process_log(self):
+        log_data = Log()
+        log_data.ParseFromString(self.proto_data)
+        mod_name = log_data.sModule if len(log_data.sModule) else 'Unknown'
+        for record in log_data.Content:
+            print(f'Client: {mod_name}:{record}')
 
 
 if __name__ == '__main__':

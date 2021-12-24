@@ -1,5 +1,5 @@
 """
-Different functions to make code more readable and smaller.
+Different functions to make tests code more readable and smaller.
 """
 
 import sys
@@ -30,6 +30,7 @@ from subprocess import PIPE, Popen
 
 
 def run_python_script(python_script_path):
+    """Run python client with stderr to file"""
     fd = os.open('errors.log', os.O_WRONLY + os.O_CREAT + os.O_TRUNC)
     process = Popen([sys.executable, python_script_path], bufsize=0, stdin=PIPE, stdout=PIPE, stderr=fd, text=False)
     os.close(fd)
