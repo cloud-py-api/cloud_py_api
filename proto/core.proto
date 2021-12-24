@@ -47,9 +47,11 @@ message InitTask {                        //Reply from server for request with m
 
 enum taskStatus {
     ST_SUCCESS = 0;
-    ST_IN_PROGRESS = 1;
-    ST_INIT_ERROR = 2;
-    ST_EXCEPTION = 3;
+    ST_IN_PROGRESS = 1;                   //pyfrm init done, running target app
+    ST_INIT_ERROR = 2;                    //pyfrm cannot init target app
+    ST_EXCEPTION = 3;                     //unexpected exception occurred
+    ST_ERROR = 4;                         //target app return error status
+    ST_UNKNOWN = 5;                       //default task state at start
 }
 
 message TaskStatus {                      //Write request to set Task Status. No reply.

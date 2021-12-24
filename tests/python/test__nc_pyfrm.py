@@ -33,9 +33,9 @@ from t_helpers import run_python_script
 class TestCloudPP(InterCom):
     req = Request()
     reply: bytes
-    task_status: int = -1                           # in php this will be in DB
-    task_error: str = ''                            # this field will be in DB too.
-    stop_msg_cycle: bool = False                    # this is only to make code beautiful and for tests.
+    task_status: taskStatus = taskStatus.ST_UNKNOWN     # in php this will be in DB
+    task_error: str = ''                                # this field will be in DB too.
+    stop_msg_cycle: bool = False                        # this is only to make code beautiful and for tests.
 
     def __init__(self, process=None):
         super().__init__(process)
@@ -48,7 +48,7 @@ class TestCloudPP(InterCom):
             self.reply = b''
             self.req.ParseFromString(self.proto_data)
             msg_id = self.req.classId
-            print(f'Server: Process request with id = {msg_id}')
+            print(f'Server: Process {msgClass.Name(msg_id)} request.')
             if msg_id == msgClass.INIT_TASK:
                 self.process_init_task()
             elif msg_id == msgClass.TASK_STATUS:
@@ -90,7 +90,8 @@ class TestCloudPP(InterCom):
         new_status = TaskStatus()
         new_status.ParseFromString(self.proto_data)
         if self.task_status != new_status.st_code:
-            print(f'Server: pyfrm status changed from {self.task_status} to {new_status.st_code}')
+            print(f'Server: pyfrm status changed from '
+                  f'{taskStatus.Name(self.task_status)} to {taskStatus.Name(new_status.st_code)}')
         if self.task_error != new_status.errDescription:
             print(f'Server: pyfrm error changed from `{self.task_error}` to `{new_status.errDescription}`')
         self.task_status = new_status.st_code
