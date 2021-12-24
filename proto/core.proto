@@ -21,6 +21,15 @@ enum msgClass {
     SELECT = 8;
 }
 
+/* docs.nextcloud.com/server/latest/admin_manual/configuration_server/logging_configuration.html#log-level */
+enum LogLvl {
+    DEBUG = 0;
+    INFO = 1;
+    WARN = 2;
+    ERROR = 3;
+    FATAL = 4;
+}
+
 message Request {                         //This client sends this to get data from server.
   msgClass classId = 1;
 }
@@ -30,7 +39,7 @@ message InitTask {                        //Reply from server for request with m
   string AppPath = 2;                     //Path to target app directory, to be executed.
   repeated string args = 6;               //Optional arguments to pass to target python app's module.
   message ConfigOptions {
-    int32 LogLvl = 1;                     //0-4 , level logs from NC documentation.
+    LogLvl log_lvl = 1;                   //0-4 , level logs from NC documentation.
     string DataFolder = 2;                //Path to NC data folder.
   }
   ConfigOptions config = 7;
@@ -67,7 +76,7 @@ message OpenChannel {                     //Request from client to open addition
 
 message Log {                             //Write request. No reply.
   msgClass classId = 1;                   //msgClass.LOG
-  int32 flags = 2;                        //Reserved.
+  LogLvl log_lvl = 2;
   string sModule = 3;                     //What module logs belongs to.
   repeated string Content = 4;            //One or more strings to put to log.
 }

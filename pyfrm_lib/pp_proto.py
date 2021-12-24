@@ -30,18 +30,8 @@ from pyfrm_lib.helpers import print_err
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-class LogLvl(Enum):
-    """Possible log level values."""
-    DEBUG = 0
-    INFO = 1
-    WARN = 2
-    ERROR = 3
-    FATAL = 4
-
-
-def slog(log_level: LogLvl, app_name: str, *args, **kwargs):
-    print(f'log_level={log_level}, app_name={app_name}', *args, **kwargs)
-
+# def slog(log_level: LogLvl, app_name: str, *args, **kwargs):
+#     print(f'log_level={log_level}, app_name={app_name}', *args, **kwargs)
 
 class CloudPP(InterCom):
     init_data = None
@@ -59,7 +49,7 @@ class CloudPP(InterCom):
 
     def _get_init_task(self) -> bool:
         self._req = Request()
-        self._req.classId = INIT_TASK
+        self._req.classId = msgClass.INIT_TASK
         if not self._send():
             return False
         if not self._get():
@@ -70,7 +60,7 @@ class CloudPP(InterCom):
 
     def set_status(self, status: taskStatus, error: str = '') -> bool:
         self._req = TaskStatus()
-        self._req.classId = TASK_STATUS
+        self._req.classId = msgClass.TASK_STATUS
         self._req.st_code = status
         self._req.errDescription = error
         return self._send()
@@ -78,16 +68,17 @@ class CloudPP(InterCom):
     def exit(self, msg: str = '') -> None:
         self._exit_done = True
         self._req = TaskExit()
-        self._req.classId = TASK_EXIT
+        self._req.classId = msgClass.TASK_EXIT
         self._req.msgText = msg
         self._send()
 
     def log(self, log_lvl: int, mod_name: str, content: list) -> None:
         if content is None:
             raise ValueError('no log content')
-        if self.init_data.config.LogLvl <= log_lvl:
+        if self.init_data.config.log_lvl <= log_lvl:
             self._req = Log()
-            self._req.classId = LOG
+            self._req.classId = msgClass.LOG
+            self._req.log_lvl = log_lvl
             self._req.sModule = mod_name if mod_name is not None else ''
             for elem in content:
                 self._req.Content.append(elem)

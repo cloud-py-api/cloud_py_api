@@ -49,19 +49,19 @@ class TestCloudPP(InterCom):
             self.req.ParseFromString(self.proto_data)
             msg_id = self.req.classId
             print(f'Server: Process request with id = {msg_id}')
-            if msg_id == INIT_TASK:
+            if msg_id == msgClass.INIT_TASK:
                 self.process_init_task()
-            elif msg_id == TASK_STATUS:
+            elif msg_id == msgClass.TASK_STATUS:
                 self.process_task_status()
-            elif msg_id == TASK_EXIT:
+            elif msg_id == msgClass.TASK_EXIT:
                 self.process_task_exit()
-            elif msg_id == GET_STATE:
+            elif msg_id == msgClass.GET_STATE:
                 self.process_get_state()
-            elif msg_id == LOG:
+            elif msg_id == msgClass.LOG:
                 self.process_log()
-            elif msg_id == GET_FILE_CONTENT:
+            elif msg_id == msgClass.GET_FILE_CONTENT:
                 self.process_get_file_content()
-            elif msg_id == SELECT:
+            elif msg_id == msgClass.SELECT:
                 self.process_select()
             else:
                 raise KeyError('Unknown request id.')
@@ -78,11 +78,11 @@ class TestCloudPP(InterCom):
 
     def process_init_task(self):
         init_data = InitTask()
-        init_data.classId = INIT_TASK
+        init_data.classId = msgClass.INIT_TASK
         init_data.AppPath = 'PathToTargetApp'
         init_data.args.append('ArgN1')
         init_data.args.append('ArgN2')
-        init_data.config.LogLvl = 0
+        init_data.config.log_lvl = LogLvl.DEBUG
         init_data.config.DataFolder = '/var/www/nextcloud/data'
         self.reply = init_data.SerializeToString()
 
@@ -107,7 +107,7 @@ class TestCloudPP(InterCom):
         log_data.ParseFromString(self.proto_data)
         mod_name = log_data.sModule if len(log_data.sModule) else 'Unknown'
         for record in log_data.Content:
-            print(f'Client: {mod_name}:{record}')
+            print(f'Client: {mod_name}:{log_data.log_lvl}:{record}')
 
 
 if __name__ == '__main__':
