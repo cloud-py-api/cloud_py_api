@@ -2,7 +2,11 @@
 Wrappers around `protobuf` for communication between php cli module and python. Works on top of transport layer.
 """
 
-from enum import Enum
+import os
+import signal
+import time
+from typing import Union
+from threading import Event, Thread, Lock
 from pyfrm_lib.pp_transport import InterCom
 from pyfrm_lib.proto.core_pb2 import *
 from pyfrm_lib.helpers import print_err
@@ -30,21 +34,30 @@ from pyfrm_lib.helpers import print_err
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-# def slog(log_level: LogLvl, app_name: str, *args, **kwargs):
-#     print(f'log_level={log_level}, app_name={app_name}', *args, **kwargs)
+_STATE_INTERVAL = 4.5
+
+
+def _signal_exit():
+    time.sleep(0.8)
+    os.kill(os.getpid(), signal.SIGTERM)
+
 
 class CloudPP(InterCom):
     init_data = None
     _req = None
-    _exit_done: bool = False
+    _exit_sent: bool = False
+    _thread = None
+    _exit_event = Event()
+    _comm_lock = Lock()
 
     def __init__(self, process=None):
         super().__init__(process)
         if not self._get_init_task():
             raise RuntimeError('Cannot establish connect with server.')
+        self._create_background_thread()
 
     def __del__(self):
-        if not self._exit_done:
+        if not self._exit_sent:
             self.exit()
 
     def _get_init_task(self) -> bool:
@@ -59,30 +72,37 @@ class CloudPP(InterCom):
         return True
 
     def set_status(self, status: taskStatus, error: str = '') -> bool:
-        self._req = TaskStatus()
-        self._req.classId = msgClass.TASK_STATUS
-        self._req.st_code = status
-        self._req.errDescription = error
-        return self._send()
+        with self._comm_lock:
+            self._req = TaskStatus()
+            self._req.classId = msgClass.TASK_STATUS
+            self._req.st_code = status
+            self._req.errDescription = error
+            return self._send()
 
     def exit(self, msg: str = '') -> None:
-        self._exit_done = True
+        self._exit_sent = True
+        self._exit_event.set()
+        self._thread.join(timeout=1.0)
         self._req = TaskExit()
         self._req.classId = msgClass.TASK_EXIT
         self._req.msgText = msg
         self._send()
 
-    def log(self, log_lvl: int, mod_name: str, content: list) -> None:
+    def log(self, log_lvl: int, mod_name: str, content: Union[str, list]) -> None:
         if content is None:
             raise ValueError('no log content')
         if self.init_data.config.log_lvl <= log_lvl:
-            self._req = Log()
-            self._req.classId = msgClass.LOG
-            self._req.log_lvl = log_lvl
-            self._req.sModule = mod_name if mod_name is not None else ''
-            for elem in content:
-                self._req.Content.append(elem)
-            self._send()
+            with self._comm_lock:
+                self._req = Log()
+                self._req.classId = msgClass.LOG
+                self._req.log_lvl = log_lvl
+                self._req.sModule = mod_name if mod_name is not None else ''
+                if isinstance(content, str):
+                    self._req.Content.append(content)
+                else:
+                    for elem in content:
+                        self._req.Content.append(elem)
+                self._send()
 
     def _get(self) -> bool:
         if not self.get_msg():
@@ -98,3 +118,32 @@ class CloudPP(InterCom):
             return True
         print_err(f'Send {self._req.classId} failed. {self.error}')
         return False
+
+    def _background_thread(self):
+        while True:
+            if self._exit_event.wait(timeout=float(_STATE_INTERVAL)):
+                break
+            with self._comm_lock:
+                if self._exit_event.is_set():
+                    break
+                _get_state = Request()
+                _get_state.classId = msgClass.GET_STATE
+                if not self.send_msg(_get_state.SerializeToString()):
+                    print_err('Cant request state. Exit.')
+                    self._exit_event.set()
+                    break
+                reply, err = self._get_msg_to_buf()
+                if err:
+                    print_err('Cant receive state. Exit.')
+                    self._exit_event.set()
+                    break
+                new_state = GetState()
+                new_state.ParseFromString(reply)
+                if new_state.bStop:
+                    self._exit_event.set()
+                    Thread(target=_signal_exit, daemon=True).start()
+                    break
+
+    def _create_background_thread(self):
+        self._thread = Thread(target=self._background_thread, daemon=True)
+        self._thread.start()

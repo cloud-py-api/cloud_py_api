@@ -36,6 +36,7 @@ class TestCloudPP(InterCom):
     task_status: taskStatus = taskStatus.ST_UNKNOWN     # in php this will be in DB
     task_error: str = ''                                # this field will be in DB too.
     stop_msg_cycle: bool = False                        # this is only to make code beautiful and for tests.
+    states_updates_before_exit: int = 5                 # for tests, count of states replies before signal to exit.
 
     def __init__(self, process=None):
         super().__init__(process)
@@ -82,7 +83,7 @@ class TestCloudPP(InterCom):
         init_data.AppPath = 'PathToTargetApp'
         init_data.args.append('ArgN1')
         init_data.args.append('ArgN2')
-        init_data.config.log_lvl = LogLvl.DEBUG
+        init_data.config.log_lvl = logLvl.DEBUG
         init_data.config.DataFolder = '/var/www/nextcloud/data'
         self.reply = init_data.SerializeToString()
 
@@ -103,12 +104,19 @@ class TestCloudPP(InterCom):
         print(f'Server: pyfrm exited. OptMessage:`{exit_status.msgText}`')
         self.stop_msg_cycle = True
 
+    def process_get_state(self):
+        self.states_updates_before_exit -= 1
+        task_state = GetState()
+        task_state.classId = msgClass.GET_STATE
+        task_state.bStop = True if self.states_updates_before_exit == 0 else False
+        self.reply = task_state.SerializeToString()
+
     def process_log(self):
         log_data = Log()
         log_data.ParseFromString(self.proto_data)
         mod_name = log_data.sModule if len(log_data.sModule) else 'Unknown'
         for record in log_data.Content:
-            print(f'Client: {mod_name}:{log_data.log_lvl}:{record}')
+            print(f'Client: {mod_name} : {logLvl.Name(log_data.log_lvl)} : {record}')
 
 
 if __name__ == '__main__':

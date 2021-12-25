@@ -48,20 +48,9 @@ class InterCom:
             self._process = process
 
     def get_msg(self) -> bool:
-        self.error = ''
-        self.proto_data = b''
-        try:
-            packet_size = self._read(self._PACKET_SIZE)
-            if len(packet_size) == self._PACKET_SIZE:
-                packet_data_size = int.from_bytes(packet_size, byteorder='big', signed=False)
-                self.proto_data = self._read(packet_data_size)
-                if len(self.proto_data) == packet_data_size:
-                    return True
-            self.error = 'ClosedPipe'
-        except BrokenPipeError:
-            self.error = 'BrokenPipe'
-        except OSError as exc:
-            self.error = exc.strerror
+        self.proto_data, self.error = self._get_msg_to_buf()
+        if not self.error:
+            return True
         return False
 
     def send_msg(self, data: bytes) -> bool:
@@ -91,3 +80,19 @@ class InterCom:
         else:
             written = self._process.stdin.write(data)
         return True if written == len(data) else False
+
+    def _get_msg_to_buf(self) -> [bytes, str]:
+        _error = ''
+        try:
+            packet_size = self._read(self._PACKET_SIZE)
+            if len(packet_size) == self._PACKET_SIZE:
+                packet_data_size = int.from_bytes(packet_size, byteorder='big', signed=False)
+                _proto_data = self._read(packet_data_size)
+                if len(_proto_data) == packet_data_size:
+                    return _proto_data, ''
+            _error = 'ClosedPipe'
+        except BrokenPipeError:
+            _error = 'BrokenPipe'
+        except OSError as exc:
+            _error = exc.strerror
+        return b'', _error

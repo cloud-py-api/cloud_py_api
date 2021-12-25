@@ -3,11 +3,12 @@ Entry point for NC Python Framework module.
 """
 
 import os
+import time
 import signal
 import sys
 from pyfrm_lib.helpers import print_err
 from pyfrm_lib.pp_proto import CloudPP
-from pyfrm_lib.proto.core_pb2 import taskStatus
+from pyfrm_lib.proto.core_pb2 import taskStatus, logLvl
 
 
 # @copyright Copyright (c) 2022 Andrey Borysenko <andrey18106x@gmail.com>
@@ -41,12 +42,13 @@ def signal_handler(signum=None, _frame=None):
 if __name__ == '__main__':
     for sig in [signal.SIGINT, signal.SIGQUIT, signal.SIGTERM, signal.SIGHUP]:
         signal.signal(sig, signal_handler)
-    # slog(LogLvl.DEBUG, 'cpa_core', f'Started with pid={os.getpid()}')
     try:
         cloud = CloudPP()
     except RuntimeError:
         sys.exit(1)
-    cloud.log(0, 'TEST', ['string1', 'string2'])
+    cloud.log(logLvl.DEBUG, 'cpa_core', f'Started with pid={os.getpid()}')
+    cloud.log(logLvl.DEBUG, 'TEST', ['string1', 'string2'])
     cloud.set_status(taskStatus.ST_IN_PROGRESS, 'ignored!')
     cloud.set_status(taskStatus.ST_SUCCESS)
+    time.sleep(50)
     sys.exit(0)

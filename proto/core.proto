@@ -22,7 +22,7 @@ enum msgClass {
 }
 
 /* docs.nextcloud.com/server/latest/admin_manual/configuration_server/logging_configuration.html#log-level */
-enum LogLvl {
+enum logLvl {
     DEBUG = 0;
     INFO = 1;
     WARN = 2;
@@ -39,7 +39,7 @@ message InitTask {                        //Reply from server for request with m
   string AppPath = 2;                     //Path to target app directory, to be executed.
   repeated string args = 6;               //Optional arguments to pass to target python app's module.
   message ConfigOptions {
-    LogLvl log_lvl = 1;                   //0-4 , level logs from NC documentation.
+    logLvl log_lvl = 1;                   //0-4 , level logs from NC documentation.
     string DataFolder = 2;                //Path to NC data folder.
   }
   ConfigOptions config = 7;
@@ -65,7 +65,7 @@ message TaskExit {                        //Write request. No reply. Server must
   string msgText = 8;                     //Optional text, for exit action. Ignored in most cases.
 }
 
-message GetState {                        //Reply from server for request with msgId = 5. Client send it every 10 sec.
+message GetState {                        //Reply from server for request of state. Client send it every 5 sec.
   msgClass classId = 1;                   //msgClass.GET_STATE
   bool bStop = 2;                         //If true client must gracefully stop it's work.
   //? Something else?
@@ -78,7 +78,7 @@ message OpenChannel {                     //Request from client to open addition
 
 message Log {                             //Write request. No reply.
   msgClass classId = 1;                   //msgClass.LOG
-  LogLvl log_lvl = 2;
+  logLvl log_lvl = 2;
   string sModule = 3;                     //What module logs belongs to.
   repeated string Content = 4;            //One or more strings to put to log.
 }
@@ -116,8 +116,6 @@ message Select {                          //Reply for this message - TODO!
   }
   repeated HavingExpr havings = 8;
   repeated string OrderBy = 9;
-  int64 MaxResult = 10;
+  int64 MaxResults = 10;
   int64 FirstResult = 11;
 }
-
-
