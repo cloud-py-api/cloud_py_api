@@ -17,8 +17,17 @@ enum msgClass {
     GET_STATE = 4;
     OPEN_CHANNEL = 5;                     //Reserved for future addon for multithreading requests.
     LOG = 6;
-    GET_FILE_CONTENT = 7;
-    SELECT = 8;
+
+    GET_FILE_CONTENT = 7;    //readFile?
+    CREATE_FILE = 8;         //writeFile?
+                              //listFiles ?
+                              //FindFiles ?
+                              //DeleteFile ?
+                              //MoveFile ?
+    SELECT = 9;
+    INSERT = 10;
+    UPDATE = 11;
+    DELETE = 12;
 }
 
 /* docs.nextcloud.com/server/latest/admin_manual/configuration_server/logging_configuration.html#log-level */
@@ -86,7 +95,7 @@ message Log {                             //Write request. No reply.
 message GetFileContent {                  //Read\Write request for file.
   msgClass classId = 1;                   //msgClass.GET_FILE_CONTENT
   string UserID = 2;
-  string FileId = 3;
+  string FileID = 3;
   int64 ResultCode = 4;                   //Present only in reply from server.
   bytes FileContent = 5;                  //Present only in reply from server and if ResultCode is success.
 }

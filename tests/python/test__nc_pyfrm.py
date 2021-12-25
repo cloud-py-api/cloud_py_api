@@ -36,7 +36,7 @@ class TestCloudPP(InterCom):
     task_status: taskStatus = taskStatus.ST_UNKNOWN     # in php this will be in DB
     task_error: str = ''                                # this field will be in DB too.
     stop_msg_cycle: bool = False                        # this is only to make code beautiful and for tests.
-    states_updates_before_exit: int = 5                 # for tests, count of states replies before signal to exit.
+    states_updates_before_exit: int = 15                # for tests, count of states replies before signal to exit.
 
     def __init__(self, process=None):
         super().__init__(process)
@@ -117,6 +117,12 @@ class TestCloudPP(InterCom):
         mod_name = log_data.sModule if len(log_data.sModule) else 'Unknown'
         for record in log_data.Content:
             print(f'Client: {mod_name} : {logLvl.Name(log_data.log_lvl)} : {record}')
+
+    def process_get_file_content(self):
+        get_file = GetFileContent()
+        get_file.ParseFromString(self.proto_data)
+        print(f'Server: request for file with userID={get_file.UserID} and fileID={get_file.FileID}.')
+        # for tests: send random data as reply for userID=1. for userID=2 send error, no such file.
 
 
 if __name__ == '__main__':
