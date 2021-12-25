@@ -17,17 +17,19 @@ enum msgClass {
     GET_STATE = 4;
     OPEN_CHANNEL = 5;                     //Reserved for future addon for multithreading requests.
     LOG = 6;
-
-    GET_FILE_CONTENT = 7;    //readFile?
-    CREATE_FILE = 8;         //writeFile?
-                              //listFiles ?
-                              //FindFiles ?
-                              //DeleteFile ?
-                              //MoveFile ?
+                              //NOT_PERMITTED, LOCKED, NOT_FOUND, IO_ERROR
+                              //FileInfo
+    GET_FILE_CONTENT = 7;     //READ_FILE ->
+    CREATE_FILE = 8;          //CREATE_FILE
+                              //writeFile?  WRITE_FILE . NOT_PERMITTED
+                              //listFiles ? getDirectoryListing
+                              //DeleteFile
+                              //MoveFile src , dest , rmvOriginal -> copyFromStorage
     SELECT = 9;
-    INSERT = 10;
-    UPDATE = 11;
-    DELETE = 12;
+    CURSOR = 10;
+    INSERT = 11;
+    UPDATE = 12;
+    DELETE = 13;
 }
 
 /* docs.nextcloud.com/server/latest/admin_manual/configuration_server/logging_configuration.html#log-level */
@@ -127,4 +129,24 @@ message Select {                          //Reply for this message - TODO!
   repeated string OrderBy = 9;
   int64 MaxResults = 10;
   int64 FirstResult = 11;
+}
+
+message SelectResult {
+  msgClass classId = 1;                     //msgClass.SELECT
+  int64 rowcount = 2;
+  string error = 3;
+  int64 handle = 4;                         //valid if only rowcount > 0.
+}
+
+enum CursorMode {
+    FETCH = 0;
+    FETCH_ALL = 1;
+    CLOSE = 2;
+}
+
+message Cursor {
+  msgClass classId = 1;                     //msgClass.CURSOR
+  CursorMode cmd = 2;
+  repeated string columnName = 3;
+  repeated bytes columnData = 4;
 }
