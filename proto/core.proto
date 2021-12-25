@@ -17,19 +17,18 @@ enum msgClass {
     GET_STATE = 4;
     OPEN_CHANNEL = 5;                     //Reserved for future addon for multithreading requests.
     LOG = 6;
-                              //NOT_PERMITTED, LOCKED, NOT_FOUND, IO_ERROR
-                              //FileInfo
-    GET_FILE_CONTENT = 7;     //READ_FILE ->
-    CREATE_FILE = 8;          //CREATE_FILE
-                              //writeFile?  WRITE_FILE . NOT_PERMITTED
-                              //listFiles ? getDirectoryListing
-                              //DeleteFile
-                              //MoveFile src , dest , rmvOriginal -> copyFromStorage
-    SELECT = 9;
-    CURSOR = 10;
-    INSERT = 11;
-    UPDATE = 12;
-    DELETE = 13;
+    GET_FILE_INFO = 7;                    //FileInfo ?
+    READ_FILE = 8;
+    CREATE_FILE = 9;
+    WRITE_FILE = 10;
+    DELETE_FILE = 11;
+    MOVE_FILE = 12;                       //rmvOriginal flag something like -> copyFromStorage
+    GET_DIRECTORY_LISTING = 13;           //getDirectoryListing
+    SELECT = 14;
+    CURSOR = 15;
+    INSERT = 16;
+    UPDATE = 17;
+    DELETE = 18;
 }
 
 /* docs.nextcloud.com/server/latest/admin_manual/configuration_server/logging_configuration.html#log-level */
@@ -47,11 +46,11 @@ message Request {                         //This client sends this to get data f
 
 message InitTask {                        //Reply from server for request with msgId = 1.
   msgClass classId = 1;                   //msgClass.INIT_TASK
-  string AppPath = 2;                     //Path to target app directory, to be executed.
+  string appPath = 2;                     //Path to target app directory, to be executed.
   repeated string args = 6;               //Optional arguments to pass to target python app's module.
   message ConfigOptions {
     logLvl log_lvl = 1;                   //0-4 , level logs from NC documentation.
-    string DataFolder = 2;                //Path to NC data folder.
+    string dataFolder = 2;                //Path to NC data folder.
   }
   ConfigOptions config = 7;
 }
@@ -79,7 +78,6 @@ message TaskExit {                        //Write request. No reply. Server must
 message GetState {                        //Reply from server for request of state. Client send it every 5 sec.
   msgClass classId = 1;                   //msgClass.GET_STATE
   bool bStop = 2;                         //If true client must gracefully stop it's work.
-  //? Something else?
 }
 
 message OpenChannel {                     //Request from client to open additional communication channel.
@@ -91,22 +89,36 @@ message Log {                             //Write request. No reply.
   msgClass classId = 1;                   //msgClass.LOG
   logLvl log_lvl = 2;
   string sModule = 3;                     //What module logs belongs to.
-  repeated string Content = 4;            //One or more strings to put to log.
+  repeated string content = 4;            //One or more strings to put to log.
+}
+
+/* FS messages start */
+
+enum FsResultCode {
+    NO_ERROR = 0;
+    NOT_PERMITTED = 1;
+    LOCKED = 2;
+    NOT_FOUND = 3;
+    IO_ERROR = 4;
 }
 
 message GetFileContent {                  //Read\Write request for file.
   msgClass classId = 1;                   //msgClass.GET_FILE_CONTENT
-  string UserID = 2;
-  string FileID = 3;
-  int64 ResultCode = 4;                   //Present only in reply from server.
-  bytes FileContent = 5;                  //Present only in reply from server and if ResultCode is success.
+  string userID = 2;
+  string fileID = 3;
+  FsResultCode resCode = 4;               //Present only in reply from server.
+  bytes fileContent = 5;                  //Present only in reply from server and if ResultCode is success.
 }
 
-message Select {                          //Reply for this message - TODO!
+/* FS messages end */
+
+/* DB messages start */
+
+message Select {                          //Reply for this message -> SelectResult
   msgClass classId = 1;                   //msgClass.SELECT
   repeated string what = 2;               //aliases or filed names.
   string from = 3;
-  string from_alias = 4;
+  string fromAlias = 4;
   message JoinType {
     string name = 1;                      //join, innerJoin, leftJoin, rightJoin.
     string fromAlias = 2;
@@ -120,25 +132,25 @@ message Select {                          //Reply for this message - TODO!
     string expression = 2;
   }
   repeated WhereExpr whereas = 6;
-  repeated string GroupBy = 7;
+  repeated string groupBy = 7;
   message HavingExpr {
     string type = 1;                       //having, andHaving, orHaving
     string expression = 2;
   }
   repeated HavingExpr havings = 8;
-  repeated string OrderBy = 9;
-  int64 MaxResults = 10;
-  int64 FirstResult = 11;
+  repeated string orderBy = 9;
+  int64 maxResults = 10;
+  int64 firstResult = 11;
 }
 
 message SelectResult {
   msgClass classId = 1;                     //msgClass.SELECT
-  int64 rowcount = 2;
+  int64 rowCount = 2;
   string error = 3;
   int64 handle = 4;                         //valid if only rowcount > 0.
 }
 
-enum CursorMode {
+enum CursorCmd {
     FETCH = 0;
     FETCH_ALL = 1;
     CLOSE = 2;
@@ -146,7 +158,11 @@ enum CursorMode {
 
 message Cursor {
   msgClass classId = 1;                     //msgClass.CURSOR
-  CursorMode cmd = 2;
-  repeated string columnName = 3;
-  repeated bytes columnData = 4;
+  int64 handle = 2;
+  CursorCmd cmd = 3;
+  string error = 4;
+  repeated string columnName = 5;           //present only in reply
+  repeated bytes columnData = 6;            //present only in reply
 }
+
+/* DB messages end */
