@@ -66,12 +66,12 @@ enum taskStatus {
 message TaskStatus {                      //Write request to set Task Status. No reply.
   msgClass classId = 1;                   //TaskStatus.TASK_STATUS
   taskStatus st_code = 2;                 //Status code of a task.
-  string errDescription = 8;              //Optional error, if any. Valid only when Status is non success/in_progress.
+  string errDescription = 3;              //Optional error, if any. Valid only when Status is non success/in_progress.
 }
 
 message TaskExit {                        //Write request. No reply. Server must close pipe/socket after this message.
   msgClass classId = 1;                   //msgClass.TASK_EXIT
-  string msgText = 8;                     //Optional text, for exit action. Ignored in most cases.
+  string msgText = 2;                     //Optional text, for exit action. Ignored in most cases.
 }
 
 message GetState {                        //Reply from server for request of state. Client send it every 5 sec.
@@ -113,6 +113,11 @@ message GetFileContent {                  //Read\Write request for file.
 
 /* DB messages start */
 
+message WhereExpr {                       //struct for `where` part.
+  string type = 1;                        //where, andWhere, orWhere
+  string expression = 2;
+}
+
 message Select {                          //Reply for this message -> SelectResult
   msgClass classId = 1;                   //msgClass.SELECT
   repeated string what = 2;               //aliases or filed names.
@@ -126,10 +131,6 @@ message Select {                          //Reply for this message -> SelectResu
     string condition = 5;
   }
   repeated JoinType joins = 5;
-  message WhereExpr {
-    string type = 1;                       //where, andWhere, orWhere
-    string expression = 2;
-  }
   repeated WhereExpr whereas = 6;
   repeated string groupBy = 7;
   message HavingExpr {
@@ -161,7 +162,7 @@ message Cursor {
   CursorCmd cmd = 3;
   string error = 4;
   repeated string columnName = 5;           //present only in reply
-  repeated bytes columnData = 6;            //present only in reply
+  repeated bytes columnData = 6;            //present only in reply : TODO: here, null inside will break all reply...
 }
 
 enum ExecuteDbType {
@@ -173,7 +174,9 @@ enum ExecuteDbType {
 message ExecuteStatement {
   msgClass classId = 1;                     //msgClass.EXEC_STATEMENT
   ExecuteDbType type = 2;
-  //TODO
+  repeated string what = 3;                 //aliases or filed names.
+  //TODO: values
+  repeated WhereExpr whereas = 6;
 }
 
 message ExecuteStatementReply {
