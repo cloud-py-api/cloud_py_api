@@ -23,7 +23,7 @@ enum msgClass {
     WRITE_FILE = 10;
     DELETE_FILE = 11;
     MOVE_FILE = 12;                       //rmvOriginal flag something like -> copyFromStorage
-    GET_DIRECTORY_LISTING = 13;           //getDirectoryListing
+    GET_DIR_LISTING = 13;                 //getDirectoryListing
     SELECT = 14;
     CURSOR = 15;
     INSERT = 16;
@@ -163,6 +163,23 @@ message Cursor {
   string error = 4;
   repeated string columnName = 5;           //present only in reply
   repeated bytes columnData = 6;            //present only in reply
+}
+
+message Insert {
+  msgClass classId = 1;                     //msgClass.INSERT
+  //TODO
+}
+
+message Update {
+  msgClass classId = 1;                     //msgClass.UPDATE
+  //TODO
+}
+
+message Delete {
+  msgClass classId = 1;                     //msgClass.DELETE
+  //TODO
+  //what
+  //conditions
 }
 
 /* DB messages end */
