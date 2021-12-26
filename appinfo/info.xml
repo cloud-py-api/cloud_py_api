@@ -22,8 +22,8 @@ Nextcloud Python API Framework
 	<bugs>https://github.com/bigcat88/cloud_py_api/issues</bugs>
 	<repository type="git">https://github.com/bigcat88/cloud_py_api</repository>
 	<dependencies>
-		<nextcloud min-version="21" max-version="22" />
-		<php min-version="7.3" />
+		<nextcloud min-version="21" max-version="24" />
+		<php min-version="7.3" min-int-size="64" />
 	</dependencies>
 	<settings>
 		<admin>OCA\Cloud_Py_API\Settings\AdminSettings</admin>

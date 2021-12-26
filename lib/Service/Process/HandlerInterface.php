@@ -26,26 +26,28 @@ declare(strict_types=1);
  *
  */
 
-namespace OCA\Cloud_Py_API\AppInfo;
+namespace OCA\Cloud_Py_API\Service\Process;
 
-use OCP\AppFramework\App;
-use OCP\AppFramework\Bootstrap\IBootContext;
-use OCP\AppFramework\Bootstrap\IBootstrap;
-use OCP\AppFramework\Bootstrap\IRegistrationContext;
+interface HandlerInterface {
 
+	/**
+	 * @param string $errorString
+	 * @param Process $process (use close function to close the process)
+	 * @return Process
+	 */
+	public function processReadStdErr(string $errorString, Process $process): Process;
 
-class Application extends App implements IBootstrap {
-	public const APP_ID = 'cloud_py_api';
+	/**
+	 * @param string $outputString
+	 * @param Process $process  (use close function to close the process)
+	 * @return Process
+	 */
+	public function processReadStdOut(string $outputString, Process $process): Process;
 
-	public function __construct() {
-		parent::__construct(self::APP_ID);
-		// TODO: Register event handlers (SyncAppConfig)
-	}
-
-	public function register(IRegistrationContext $context): void {
-	}
-
-	public function boot(IBootContext $context): void {
-	}
+	/**
+	 * @param Process $process
+	 * @return string|null (null to close the StdIn resource)
+	 */
+	public function processWriteStdIn(Process $process):?string;
 
 }

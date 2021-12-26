@@ -26,26 +26,47 @@ declare(strict_types=1);
  *
  */
 
-namespace OCA\Cloud_Py_API\AppInfo;
+namespace OCA\Cloud_Py_API\Db;
 
-use OCP\AppFramework\App;
-use OCP\AppFramework\Bootstrap\IBootContext;
-use OCP\AppFramework\Bootstrap\IBootstrap;
-use OCP\AppFramework\Bootstrap\IRegistrationContext;
+use JsonSerializable;
+use OCP\AppFramework\Db\Entity;
 
 
-class Application extends App implements IBootstrap {
-	public const APP_ID = 'cloud_py_api';
+/**
+ * Class App
+ *
+ * @package OCA\Cloud_Py_API\Db
+ *
+ * @method string getAppId()
+ * @method string getToken()
+ * @method void setAppId(string $appId)
+ * @method void setToken(string $token)
+ */
+class App extends Entity implements JsonSerializable {
 
-	public function __construct() {
-		parent::__construct(self::APP_ID);
-		// TODO: Register event handlers (SyncAppConfig)
+	protected $appId;
+	protected $token;
+
+	/**
+	 * @param array $params
+	 */
+	public function __construct(array $params = []) {
+		if (isset($params['id'])) {
+			$this->setId($params['id']);
+		}
+		if (isset($params['app_id'])) {
+			$this->setAppId($params['app_id']);
+		}
+		if (isset($params['token'])) {
+			$this->setToken($params['token']);
+		}
 	}
 
-	public function register(IRegistrationContext $context): void {
+	public function jsonSerialize(): array {
+		return [
+			'id' => $this->getId(),
+			'app_id' => $this->getAppId(),
+			'token' => $this->getToken()
+		];
 	}
-
-	public function boot(IBootContext $context): void {
-	}
-
 }

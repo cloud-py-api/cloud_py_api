@@ -26,26 +26,11 @@ declare(strict_types=1);
  *
  */
 
-namespace OCA\Cloud_Py_API\AppInfo;
+namespace OCA\Cloud_Py_API\Service;
 
-use OCP\AppFramework\App;
-use OCP\AppFramework\Bootstrap\IBootContext;
-use OCP\AppFramework\Bootstrap\IBootstrap;
-use OCP\AppFramework\Bootstrap\IRegistrationContext;
+use OCA\Cloud_Py_API\Service\Process\Process;
 
 
-class Application extends App implements IBootstrap {
-	public const APP_ID = 'cloud_py_api';
-
-	public function __construct() {
-		parent::__construct(self::APP_ID);
-		// TODO: Register event handlers (SyncAppConfig)
-	}
-
-	public function register(IRegistrationContext $context): void {
-	}
-
-	public function boot(IBootContext $context): void {
-	}
-
+class DependenciesService {
+	// TODO: Dependencies Service for syncing python packages with Database
 }

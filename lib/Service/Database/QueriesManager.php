@@ -26,26 +26,40 @@ declare(strict_types=1);
  *
  */
 
-namespace OCA\Cloud_Py_API\AppInfo;
-
-use OCP\AppFramework\App;
-use OCP\AppFramework\Bootstrap\IBootContext;
-use OCP\AppFramework\Bootstrap\IBootstrap;
-use OCP\AppFramework\Bootstrap\IRegistrationContext;
+namespace OCA\Cloud_Py_API\Service\Database;
 
 
-class Application extends App implements IBootstrap {
-	public const APP_ID = 'cloud_py_api';
+/**
+ * Queries manager for saving database queries results in runtime for multiple processes
+ */
+class QueriesManager {
 
-	public function __construct() {
-		parent::__construct(self::APP_ID);
-		// TODO: Register event handlers (SyncAppConfig)
+	/**
+	 * Queries in work.
+	 */
+	public static $queries = array();
+
+	public static function getQueryResult(string $query_id) {
+		if (isset(self::$queries[$query_id])) {
+			return self::$queries[$query_id];
+		}
 	}
 
-	public function register(IRegistrationContext $context): void {
+	public static function setQueryResult(string $query_id, mixed $query_result) {
+		if (!isset(self::$queries[$query_id])) {
+			self::$queries[$query_id] = $query_result;
+		}
 	}
 
-	public function boot(IBootContext $context): void {
+	public static function removeQueryResult(string $query_id): bool {
+		if (isset(self::$queries[$query_id])) {
+			$queryIndex = array_search($query_id, array_keys(self::$queries));
+			if ($queryIndex !== false) {
+				array_splice(self::$queries, $queryIndex, 1);
+				return true;
+			}
+		}
+		return false;
 	}
 
 }

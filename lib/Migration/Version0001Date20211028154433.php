@@ -32,6 +32,8 @@ use OCP\DB\ISchemaWrapper;
 use OCP\Migration\SimpleMigrationStep;
 use OCP\Migration\IOutput;
 
+use OCA\Cloud_Py_API\AppInfo\Application;
+
 
 class Version0001Date20211028154433 extends SimpleMigrationStep {
 
@@ -45,8 +47,8 @@ class Version0001Date20211028154433 extends SimpleMigrationStep {
 		/** @var ISchemaWrapper $schema */
 		$schema = $schemaClosure();
 
-		if (!$schema->hasTable('py_api_settings')) {
-			$table = $schema->createTable('py_api_settings');
+		if (!$schema->hasTable(Application::APP_ID . '_settings')) {
+			$table = $schema->createTable(Application::APP_ID . '_settings');
 
 			$table->addColumn('id', 'integer', [
 				'autoincrement' => true,
@@ -63,13 +65,82 @@ class Version0001Date20211028154433 extends SimpleMigrationStep {
 				'notnull' => true,
 				'default' => ""
 			]);
+			$table->addColumn('title', 'string', [
+				'notnull' => true,
+				'default' => ""
+			]);
 			$table->addColumn('description', 'string', [
+				'notnull' => true,
+				'default' => ""
+			]);
+			$table->addColumn('help_url', 'string', [
 				'notnull' => true,
 				'default' => ""
 			]);
 
 			$table->setPrimaryKey(['id']);
 			$table->addIndex(['name'], 'py_api_setting__index');
+		}
+
+		if (!$schema->hasTable(Application::APP_ID . '_apps')) {
+			$table = $schema->createTable(Application::APP_ID . '_apps');
+
+			$table->addColumn('id', 'integer', [
+				'autoincrement' => true,
+				'notnull' => true
+			]);
+			$table->addColumn('app_id', 'string', [
+				'notnull' => true,
+				'default' => ""
+			]);
+			$table->addColumn('token', 'string', [
+				'notnull' => true,
+				'default' => ""
+			]);
+
+			$table->setPrimaryKey(['id']);
+			$table->addIndex(['app_id'], 'py_api_app_id__index');
+		}
+
+		if (!$schema->hasTable(Application::APP_ID . '_packages')) {
+			$table = $schema->createTable(Application::APP_ID . '_packages');
+
+			$table->addColumn('id', 'bigint', [
+				'autoincrement' => true,
+				'notnull' => true
+			]);
+			$table->addColumn('app_id', 'string', [
+				'notnull' => true,
+				'default' => ''
+			]);
+			$table->addColumn('name', 'string', [
+				'notnull' => true,
+				'default' => ''
+			]);
+			$table->addColumn('source', 'string', [
+				'notnull' => true,
+				'default' => ''
+			]);
+			$table->addColumn('location', 'string', [
+				'notnull' => true,
+				'default' => ''
+			]);
+			$table->addColumn('version', 'string', [
+				'notnull' => true,
+				'default' => ''
+			]);
+			$table->addColumn('installed_time', 'bigint', [
+				'notnull' => true,
+				'default' => 0
+			]);
+			$table->addColumn('status', 'string', [
+				'notnull' => true,
+				'default' => ''
+			]);
+
+			$table->setPrimaryKey(['id']);
+			$table->addIndex(['app_id'], 'py_api_apps_id__index');
+			$table->addIndex(['name'], 'py_api_p_name__index');
 		}
 
 		return $schema;

@@ -26,26 +26,26 @@ declare(strict_types=1);
  *
  */
 
-namespace OCA\Cloud_Py_API\AppInfo;
+namespace OCA\MediaDC\Controller;
 
-use OCP\AppFramework\App;
-use OCP\AppFramework\Bootstrap\IBootContext;
-use OCP\AppFramework\Bootstrap\IBootstrap;
-use OCP\AppFramework\Bootstrap\IRegistrationContext;
+use OCP\IRequest;
+use OCP\AppFramework\Controller;
+use OCP\AppFramework\Http;
+use OCP\AppFramework\Http\JSONResponse;
+
+use OCA\Cloud_Py_API\AppInfo\Application;
+use OCA\Cloud_Py_API\Service\PythonService;
 
 
-class Application extends App implements IBootstrap {
-	public const APP_ID = 'cloud_py_api';
+class SettingsController extends Controller {
 
-	public function __construct() {
-		parent::__construct(self::APP_ID);
-		// TODO: Register event handlers (SyncAppConfig)
-	}
+	/** @var SettingsService */
+	private $service;
 
-	public function register(IRegistrationContext $context): void {
-	}
+	public function __construct(IRequest $request, PythonService $service) {
+		parent::__construct(Application::APP_ID, $request);
 
-	public function boot(IBootContext $context): void {
+		$this->service = $service;
 	}
 
 }
