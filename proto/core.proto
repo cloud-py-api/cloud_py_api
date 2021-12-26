@@ -1,33 +1,32 @@
 syntax = "proto3";
 
 /*
-Read request = Client sends only msgClass(see Request) and server will reply with full message answer.
-Write request = Client send full message and server process it, and reply if message type need that.
+All communications messages send by client, server only reply on them.
 
 Client must send TaskStatus + TaskExit messages before exit.
-If server wants gracefully shutdown it must reply with GetState.bStop = True and wait for clients TaskStatus/TaskExit.
-If there is no time for that, server must close pipe/socket and after client detect broken pipe/connection it must stop.
+Gracefully shutdown: server reply with GetState.bStop = True and wait for clients TaskStatus/TaskExit.
+Immediately shutdown: server closes pipe/sock.
+Remark: Both client and server part, must stop work after communication channel become broken.
 */
 
 enum msgClass {
     RESERVED = 0;
-    INIT_TASK = 1;
+    TASK_INIT = 1;
     TASK_STATUS = 2;
     TASK_EXIT = 3;
-    GET_STATE = 4;
-    OPEN_CHANNEL = 5;                     //Reserved for future addon for multithreading requests.
-    LOG = 6;
-    GET_FILE_INFO = 7;                    //FileInfo ?
-    READ_FILE = 8;
-    CREATE_FILE = 9;
-    WRITE_FILE = 10;
-    DELETE_FILE = 11;
-    MOVE_FILE = 12;                       //rmvOriginal flag something like -> copyFromStorage
-    GET_DIR_LISTING = 13;                 //getDirectoryListing
-    SELECT = 14;
-    CURSOR = 15;
-    EXEC_STATEMENT = 16;                  //Insert/Update/Delete
-    EXEC_STATEMENT_REPLY = 17;
+    TASK_GET_STATE = 4;
+    TASK_LOG = 5;
+    OPEN_CHANNEL = 6;                     //Reserved for future addon for multithreading requests.
+    FS_LIST = 7;                          //getDirectoryListing
+    FS_GET_INFO = 8;                      //FileInfo ?
+    FS_READ = 9;
+    FS_CREATE = 10;
+    FS_WRITE = 11;
+    FS_DELETE = 12;
+    FS_MOVE = 13;                         //rmvOriginal flag something like -> copyFromStorage
+    DB_SELECT = 14;
+    DB_CURSOR = 15;
+    DB_EXEC = 16;                         //Insert/Update/Delete
 }
 
 /* docs.nextcloud.com/server/latest/admin_manual/configuration_server/logging_configuration.html#log-level */
@@ -39,19 +38,19 @@ enum logLvl {
     FATAL = 4;
 }
 
-message Request {                         //This client sends this to get data from server.
+message Request {                         //Client sends this to server.
   msgClass classId = 1;
 }
 
-message InitTask {                        //Reply from server for request with msgId = 1.
-  msgClass classId = 1;                   //msgClass.INIT_TASK
+message TaskInitReply {
+  msgClass classId = 1;                   //msgClass.TASK_INIT
   string appPath = 2;                     //Path to target app directory, to be executed.
   repeated string args = 6;               //Optional arguments to pass to target python app's module.
-  message ConfigOptions {
+  message cfgOptions {
     logLvl log_lvl = 1;                   //0-4 , level logs from NC documentation.
     string dataFolder = 2;                //Path to NC data folder.
   }
-  ConfigOptions config = 7;
+  cfgOptions config = 7;
 }
 
 enum taskStatus {
@@ -63,20 +62,27 @@ enum taskStatus {
     ST_UNKNOWN = 5;                       //default task state at start
 }
 
-message TaskStatus {                      //Write request to set Task Status. No reply.
+message TaskStatus {                      //No reply.
   msgClass classId = 1;                   //TaskStatus.TASK_STATUS
   taskStatus st_code = 2;                 //Status code of a task.
-  string errDescription = 3;              //Optional error, if any. Valid only when Status is non success/in_progress.
+  string error = 3;                       //Optional error, if any. Valid only when Status is non success/in_progress.
 }
 
-message TaskExit {                        //Write request. No reply. Server must close pipe/socket after this message.
+message TaskExit {                        //No reply. Server must close pipe/socket after this message.
   msgClass classId = 1;                   //msgClass.TASK_EXIT
   string msgText = 2;                     //Optional text, for exit action. Ignored in most cases.
 }
 
-message GetState {                        //Reply from server for request of state. Client send it every 5 sec.
-  msgClass classId = 1;                   //msgClass.GET_STATE
+message TaskGetStateReply {               //Reply for TASK_GET_STATE. Client send it every ~5 sec.
+  msgClass classId = 1;                   //msgClass.TASK_GET_STATE
   bool bStop = 2;                         //If true client must gracefully stop it's work.
+}
+
+message TaskLog {                         //No reply.
+  msgClass classId = 1;                   //msgClass.TASK_LOG
+  logLvl log_lvl = 2;
+  string sModule = 3;                     //What module logs belongs to.
+  repeated string content = 4;            //One or more strings to put to log.
 }
 
 message OpenChannel {                     //Request from client to open additional communication channel.
@@ -84,16 +90,14 @@ message OpenChannel {                     //Request from client to open addition
   //Not Implemented.
 }
 
-message Log {                             //Write request. No reply.
-  msgClass classId = 1;                   //msgClass.LOG
-  logLvl log_lvl = 2;
-  string sModule = 3;                     //What module logs belongs to.
-  repeated string content = 4;            //One or more strings to put to log.
+message OpenChannelReply {                //Reply to client on request to open channel.
+  msgClass classId = 1;                   //msgClass.OPEN_CHANNEL
+  //Not Implemented.
 }
 
 /* FS messages start */
 
-enum FsResultCode {
+enum fsResultCode {
     NO_ERROR = 0;
     NOT_PERMITTED = 1;
     LOCKED = 2;
@@ -101,86 +105,144 @@ enum FsResultCode {
     IO_ERROR = 4;
 }
 
-message GetFileContent {                  //Read\Write request for file.
-  msgClass classId = 1;                   //msgClass.GET_FILE_CONTENT
+message FsList {
+  msgClass classId = 1;                   //msgClass.FS_LIST
+  //TODO
+}
+
+message FsListReply {
+  msgClass classId = 1;                   //msgClass.FS_LIST
+  //TODO
+}
+
+message FsGetInfo {
+  msgClass classId = 1;                   //msgClass.FS_GET_INFO
+  //TODO
+}
+
+message FsGetInfoReply {
+  msgClass classId = 1;                   //msgClass.FS_GET_INFO
+  //TODO
+}
+
+message FsRead {
+  msgClass classId = 1;                   //msgClass.FS_READ
   string userID = 2;
   string fileID = 3;
-  FsResultCode resCode = 4;               //Present only in reply from server.
-  bytes fileContent = 5;                  //Present only in reply from server and if ResultCode is success.
+}
+
+message FsReadReply {
+  msgClass classId = 1;                   //msgClass.FS_READ
+  fsResultCode resCode = 2;
+  bool bNotLast = 3;                      //If answer don't fit in one reply, this will be True.
+  bytes fileContent = 4;                  //Present only if resCode is NO_ERROR.
+}
+
+message FsCreate {                        //Reply for this FsReply message.
+  msgClass classId = 1;                   //msgClass.FS_CREATE
+  //TODO
+}
+
+message FsWrite {                         //Reply for this FsReply message.
+  msgClass classId = 1;                   //msgClass.FS_WRITE
+  //TODO
+}
+
+message FsDelete {                        //Reply for this FsReply message.
+  msgClass classId = 1;                   //msgClass.FS_DELETE
+  //TODO
+}
+
+message FsMove {                          //Reply for this FsReply message.
+  msgClass classId = 1;                   //msgClass.FS_MOVE
+  //TODO
+}
+
+message FsReply {
+  msgClass classId = 1;                   //msgClass.(FS_CREATE || FS_WRITE || FS_DELETE || FS_MOVE)
+  fsResultCode resCode = 2;
 }
 
 /* FS messages end */
 
 /* DB messages start */
 
-message WhereExpr {                       //struct for `where` part.
+message whereExpr {                       //struct for `where` part.
   string type = 1;                        //where, andWhere, orWhere
   string expression = 2;
 }
 
-message Select {                          //Reply for this message -> SelectResult
-  msgClass classId = 1;                   //msgClass.SELECT
+message DbSelect {
+  msgClass classId = 1;                   //msgClass.DB_SELECT
   repeated string what = 2;               //aliases or filed names.
   string from = 3;
   string fromAlias = 4;
-  message JoinType {
+  message joinType {
     string name = 1;                      //join, innerJoin, leftJoin, rightJoin.
     string fromAlias = 2;
     string join = 3;
     string alias = 4;
     string condition = 5;
   }
-  repeated JoinType joins = 5;
-  repeated WhereExpr whereas = 6;
+  repeated joinType joins = 5;
+  repeated whereExpr whereas = 6;
   repeated string groupBy = 7;
-  message HavingExpr {
+  message havingExpr {
     string type = 1;                       //having, andHaving, orHaving
     string expression = 2;
   }
-  repeated HavingExpr havings = 8;
+  repeated havingExpr havings = 8;
   repeated string orderBy = 9;
   int64 maxResults = 10;
   int64 firstResult = 11;
 }
 
-message SelectResult {
-  msgClass classId = 1;                     //msgClass.SELECT
+message DbSelectReply {
+  msgClass classId = 1;                     //msgClass.DB_SELECT
   int64 rowCount = 2;
   string error = 3;
   int64 handle = 4;                         //valid if only rowcount > 0.
 }
 
-enum CursorCmd {
+enum dbCursorCmd {
     FETCH = 0;
     FETCH_ALL = 1;
     CLOSE = 2;
 }
 
-message Cursor {
-  msgClass classId = 1;                     //msgClass.CURSOR
+message DbCursor {
+  msgClass classId = 1;                     //msgClass.DB_CURSOR
   int64 handle = 2;
-  CursorCmd cmd = 3;
-  string error = 4;
-  repeated string columnName = 5;           //present only in reply
-  repeated bytes columnData = 6;            //present only in reply : TODO: here, null inside will break all reply...
+  dbCursorCmd cmd = 3;
 }
 
-enum ExecuteDbType {
+message DbCursorReply {
+  msgClass classId = 1;                     //msgClass.DB_CURSOR
+  string error = 2;
+  repeated string columnsName = 3;
+  message columnData {
+    bool bPresent = 1;                      //if result is NULL for that column raw, then this is True.
+    bytes data = 2;                         //present if result fir column raw is not NULL.
+  }
+  repeated columnData columnsData = 4;
+}
+
+enum dbExecType {
     INSERT = 0;
     UPDATE = 1;
     DELETE = 2;
 }
 
-message ExecuteStatement {
-  msgClass classId = 1;                     //msgClass.EXEC_STATEMENT
-  ExecuteDbType type = 2;
+message DbExec {
+  msgClass classId = 1;                     //msgClass.DB_EXEC
+  dbExecType type = 2;
   repeated string what = 3;                 //aliases or filed names.
   //TODO: values
-  repeated WhereExpr whereas = 6;
+  repeated whereExpr whereas = 6;
 }
 
-message ExecuteStatementReply {
-  msgClass classId = 1;                     //msgClass.EXEC_STATEMENT_REPLY
+message DbExecReply {
+  msgClass classId = 1;                     //msgClass.DB_EXEC
   int64 nAffectedRows = 2;
   string error = 3;
 }
