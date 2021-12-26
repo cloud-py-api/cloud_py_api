@@ -26,9 +26,8 @@ enum msgClass {
     GET_DIR_LISTING = 13;                 //getDirectoryListing
     SELECT = 14;
     CURSOR = 15;
-    INSERT = 16;
-    UPDATE = 17;
-    DELETE = 18;
+    EXEC_STATEMENT = 16;                  //Insert/Update/Delete
+    EXEC_STATEMENT_REPLY = 17;
 }
 
 /* docs.nextcloud.com/server/latest/admin_manual/configuration_server/logging_configuration.html#log-level */
@@ -165,21 +164,22 @@ message Cursor {
   repeated bytes columnData = 6;            //present only in reply
 }
 
-message Insert {
-  msgClass classId = 1;                     //msgClass.INSERT
+enum ExecuteDbType {
+    INSERT = 0;
+    UPDATE = 1;
+    DELETE = 2;
+}
+
+message ExecuteStatement {
+  msgClass classId = 1;                     //msgClass.EXEC_STATEMENT
+  ExecuteDbType type = 2;
   //TODO
 }
 
-message Update {
-  msgClass classId = 1;                     //msgClass.UPDATE
-  //TODO
-}
-
-message Delete {
-  msgClass classId = 1;                     //msgClass.DELETE
-  //TODO
-  //what
-  //conditions
+message ExecuteStatementReply {
+  msgClass classId = 1;                     //msgClass.EXEC_STATEMENT_REPLY
+  int64 nAffectedRows = 2;
+  string error = 3;
 }
 
 /* DB messages end */
