@@ -7,11 +7,11 @@ use Google\Protobuf\Internal\RepeatedField;
 use Google\Protobuf\Internal\GPBUtil;
 
 /**
- *Request from client to open additional communication channel.
+ *Reply to client on request to open channel.
  *
- * Generated from protobuf message <code>OpenChannel</code>
+ * Generated from protobuf message <code>OpenChannelReply</code>
  */
-class OpenChannel extends \Google\Protobuf\Internal\Message
+class OpenChannelReply extends \Google\Protobuf\Internal\Message
 {
     /**
      *msgClass.OPEN_CHANNEL

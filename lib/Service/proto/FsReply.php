@@ -7,18 +7,20 @@ use Google\Protobuf\Internal\RepeatedField;
 use Google\Protobuf\Internal\GPBUtil;
 
 /**
- *Request from client to open additional communication channel.
- *
- * Generated from protobuf message <code>OpenChannel</code>
+ * Generated from protobuf message <code>FsReply</code>
  */
-class OpenChannel extends \Google\Protobuf\Internal\Message
+class FsReply extends \Google\Protobuf\Internal\Message
 {
     /**
-     *msgClass.OPEN_CHANNEL
+     *msgClass.(FS_CREATE || FS_WRITE || FS_DELETE || FS_MOVE)
      *
      * Generated from protobuf field <code>.msgClass classId = 1;</code>
      */
     protected $classId = 0;
+    /**
+     * Generated from protobuf field <code>.fsResultCode resCode = 2;</code>
+     */
+    protected $resCode = 0;
 
     /**
      * Constructor.
@@ -27,7 +29,8 @@ class OpenChannel extends \Google\Protobuf\Internal\Message
      *     Optional. Data for populating the Message object.
      *
      *     @type int $classId
-     *          msgClass.OPEN_CHANNEL
+     *          msgClass.(FS_CREATE || FS_WRITE || FS_DELETE || FS_MOVE)
+     *     @type int $resCode
      * }
      */
     public function __construct($data = NULL) {
@@ -36,7 +39,7 @@ class OpenChannel extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     *msgClass.OPEN_CHANNEL
+     *msgClass.(FS_CREATE || FS_WRITE || FS_DELETE || FS_MOVE)
      *
      * Generated from protobuf field <code>.msgClass classId = 1;</code>
      * @return int
@@ -47,7 +50,7 @@ class OpenChannel extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     *msgClass.OPEN_CHANNEL
+     *msgClass.(FS_CREATE || FS_WRITE || FS_DELETE || FS_MOVE)
      *
      * Generated from protobuf field <code>.msgClass classId = 1;</code>
      * @param int $var
@@ -57,6 +60,28 @@ class OpenChannel extends \Google\Protobuf\Internal\Message
     {
         GPBUtil::checkEnum($var, \msgClass::class);
         $this->classId = $var;
+
+        return $this;
+    }
+
+    /**
+     * Generated from protobuf field <code>.fsResultCode resCode = 2;</code>
+     * @return int
+     */
+    public function getResCode()
+    {
+        return $this->resCode;
+    }
+
+    /**
+     * Generated from protobuf field <code>.fsResultCode resCode = 2;</code>
+     * @param int $var
+     * @return $this
+     */
+    public function setResCode($var)
+    {
+        GPBUtil::checkEnum($var, \fsResultCode::class);
+        $this->resCode = $var;
 
         return $this;
     }

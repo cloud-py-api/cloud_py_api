@@ -7,24 +7,24 @@ use Google\Protobuf\Internal\RepeatedField;
 use Google\Protobuf\Internal\GPBUtil;
 
 /**
- *No reply. Server must close pipe/socket after this message.
- *
- * Generated from protobuf message <code>TaskExit</code>
+ * Generated from protobuf message <code>DbExecReply</code>
  */
-class TaskExit extends \Google\Protobuf\Internal\Message
+class DbExecReply extends \Google\Protobuf\Internal\Message
 {
     /**
-     *msgClass.TASK_EXIT
+     *msgClass.DB_EXEC
      *
      * Generated from protobuf field <code>.msgClass classId = 1;</code>
      */
     protected $classId = 0;
     /**
-     *Optional text, for exit action. Ignored in most cases.
-     *
-     * Generated from protobuf field <code>string msgText = 2;</code>
+     * Generated from protobuf field <code>int64 nAffectedRows = 2;</code>
      */
-    protected $msgText = '';
+    protected $nAffectedRows = 0;
+    /**
+     * Generated from protobuf field <code>string error = 3;</code>
+     */
+    protected $error = '';
 
     /**
      * Constructor.
@@ -33,9 +33,9 @@ class TaskExit extends \Google\Protobuf\Internal\Message
      *     Optional. Data for populating the Message object.
      *
      *     @type int $classId
-     *          msgClass.TASK_EXIT
-     *     @type string $msgText
-     *          Optional text, for exit action. Ignored in most cases.
+     *          msgClass.DB_EXEC
+     *     @type int|string $nAffectedRows
+     *     @type string $error
      * }
      */
     public function __construct($data = NULL) {
@@ -44,7 +44,7 @@ class TaskExit extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     *msgClass.TASK_EXIT
+     *msgClass.DB_EXEC
      *
      * Generated from protobuf field <code>.msgClass classId = 1;</code>
      * @return int
@@ -55,7 +55,7 @@ class TaskExit extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     *msgClass.TASK_EXIT
+     *msgClass.DB_EXEC
      *
      * Generated from protobuf field <code>.msgClass classId = 1;</code>
      * @param int $var
@@ -70,27 +70,45 @@ class TaskExit extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     *Optional text, for exit action. Ignored in most cases.
-     *
-     * Generated from protobuf field <code>string msgText = 2;</code>
-     * @return string
+     * Generated from protobuf field <code>int64 nAffectedRows = 2;</code>
+     * @return int|string
      */
-    public function getMsgText()
+    public function getNAffectedRows()
     {
-        return $this->msgText;
+        return $this->nAffectedRows;
     }
 
     /**
-     *Optional text, for exit action. Ignored in most cases.
-     *
-     * Generated from protobuf field <code>string msgText = 2;</code>
+     * Generated from protobuf field <code>int64 nAffectedRows = 2;</code>
+     * @param int|string $var
+     * @return $this
+     */
+    public function setNAffectedRows($var)
+    {
+        GPBUtil::checkInt64($var);
+        $this->nAffectedRows = $var;
+
+        return $this;
+    }
+
+    /**
+     * Generated from protobuf field <code>string error = 3;</code>
+     * @return string
+     */
+    public function getError()
+    {
+        return $this->error;
+    }
+
+    /**
+     * Generated from protobuf field <code>string error = 3;</code>
      * @param string $var
      * @return $this
      */
-    public function setMsgText($var)
+    public function setError($var)
     {
         GPBUtil::checkString($var, True);
-        $this->msgText = $var;
+        $this->error = $var;
 
         return $this;
     }

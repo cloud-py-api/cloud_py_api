@@ -7,14 +7,12 @@ use Google\Protobuf\Internal\RepeatedField;
 use Google\Protobuf\Internal\GPBUtil;
 
 /**
- *Request from client to open additional communication channel.
- *
- * Generated from protobuf message <code>OpenChannel</code>
+ * Generated from protobuf message <code>FsGetInfo</code>
  */
-class OpenChannel extends \Google\Protobuf\Internal\Message
+class FsGetInfo extends \Google\Protobuf\Internal\Message
 {
     /**
-     *msgClass.OPEN_CHANNEL
+     *msgClass.FS_GET_INFO
      *
      * Generated from protobuf field <code>.msgClass classId = 1;</code>
      */
@@ -27,7 +25,7 @@ class OpenChannel extends \Google\Protobuf\Internal\Message
      *     Optional. Data for populating the Message object.
      *
      *     @type int $classId
-     *          msgClass.OPEN_CHANNEL
+     *          msgClass.FS_GET_INFO
      * }
      */
     public function __construct($data = NULL) {
@@ -36,7 +34,7 @@ class OpenChannel extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     *msgClass.OPEN_CHANNEL
+     *msgClass.FS_GET_INFO
      *
      * Generated from protobuf field <code>.msgClass classId = 1;</code>
      * @return int
@@ -47,7 +45,7 @@ class OpenChannel extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     *msgClass.OPEN_CHANNEL
+     *msgClass.FS_GET_INFO
      *
      * Generated from protobuf field <code>.msgClass classId = 1;</code>
      * @param int $var
