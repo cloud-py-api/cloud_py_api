@@ -39,9 +39,7 @@ def signal_handler(signum=None, _frame=None):
     sys.exit(0)
 
 
-if __name__ == '__main__':
-    for sig in [signal.SIGINT, signal.SIGQUIT, signal.SIGTERM, signal.SIGHUP]:
-        signal.signal(sig, signal_handler)
+def true_main():
     try:
         cloud = CloudPP()
     except RuntimeError:
@@ -50,5 +48,11 @@ if __name__ == '__main__':
     cloud.log(logLvl.DEBUG, 'TEST', ['string1', 'string2'])
     cloud.set_status(taskStatus.ST_IN_PROGRESS, 'ignored!')
     cloud.set_status(taskStatus.ST_SUCCESS)
-    time.sleep(50)
+    time.sleep(10)
+
+
+if __name__ == '__main__':
+    for sig in [signal.SIGINT, signal.SIGQUIT, signal.SIGTERM, signal.SIGHUP]:
+        signal.signal(sig, signal_handler)
+    true_main()
     sys.exit(0)

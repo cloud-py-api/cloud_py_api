@@ -52,22 +52,22 @@ class CloudPP(InterCom):
 
     def __init__(self, process=None):
         super().__init__(process)
-        if not self._get_init_task():
+        if not self._get_task_init():
             raise RuntimeError('Cannot establish connect with server.')
-        self._create_background_thread()
+        self._create_background_thread()   # destructor don't called due to this...
 
     def __del__(self):
         if not self._exit_sent:
             self.exit()
 
-    def _get_init_task(self) -> bool:
+    def _get_task_init(self) -> bool:
         self._req = Request()
-        self._req.classId = msgClass.INIT_TASK
+        self._req.classId = msgClass.TASK_INIT
         if not self._send():
             return False
         if not self._get():
             return False
-        self.init_data = InitTask()
+        self.init_data = TaskInitReply()
         self.init_data.ParseFromString(self.proto_data)
         return True
 
@@ -76,7 +76,7 @@ class CloudPP(InterCom):
             self._req = TaskStatus()
             self._req.classId = msgClass.TASK_STATUS
             self._req.st_code = status
-            self._req.errDescription = error
+            self._req.error = error
             return self._send()
 
     def exit(self, msg: str = '') -> None:
@@ -93,15 +93,15 @@ class CloudPP(InterCom):
             raise ValueError('no log content')
         if self.init_data.config.log_lvl <= log_lvl:
             with self._comm_lock:
-                self._req = Log()
-                self._req.classId = msgClass.LOG
+                self._req = TaskLog()
+                self._req.classId = msgClass.TASK_LOG
                 self._req.log_lvl = log_lvl
                 self._req.sModule = mod_name if mod_name is not None else ''
                 if isinstance(content, str):
-                    self._req.Content.append(content)
+                    self._req.content.append(content)
                 else:
                     for elem in content:
-                        self._req.Content.append(elem)
+                        self._req.content.append(elem)
                 self._send()
 
     def _get(self) -> bool:
@@ -127,7 +127,7 @@ class CloudPP(InterCom):
                 if self._exit_event.is_set():
                     break
                 _get_state = Request()
-                _get_state.classId = msgClass.GET_STATE
+                _get_state.classId = msgClass.TASK_GET_STATE
                 if not self.send_msg(_get_state.SerializeToString()):
                     print_err('Cant request state. Exit.')
                     self._exit_event.set()
@@ -137,7 +137,7 @@ class CloudPP(InterCom):
                     print_err('Cant receive state. Exit.')
                     self._exit_event.set()
                     break
-                new_state = GetState()
+                new_state = TaskGetStateReply()
                 new_state.ParseFromString(reply)
                 if new_state.bStop:
                     self._exit_event.set()

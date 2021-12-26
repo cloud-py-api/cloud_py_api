@@ -4,7 +4,7 @@ syntax = "proto3";
 All communications messages send by client, server only reply on them.
 
 Client must send TaskStatus + TaskExit messages before exit.
-Gracefully shutdown: server reply with GetState.bStop = True and wait for clients TaskStatus/TaskExit.
+Gracefully shutdown: server reply with TASK_GET_STATE.bStop = True and wait for clients TaskStatus/TaskExit.
 Immediately shutdown: server closes pipe/sock.
 Remark: Both client and server part, must stop work after communication channel become broken.
 */
@@ -138,22 +138,22 @@ message FsReadReply {
   bytes fileContent = 4;                  //Present only if resCode is NO_ERROR.
 }
 
-message FsCreate {                        //Reply for this FsReply message.
+message FsCreate {                        //Reply for this is a FsReply message.
   msgClass classId = 1;                   //msgClass.FS_CREATE
   //TODO
 }
 
-message FsWrite {                         //Reply for this FsReply message.
+message FsWrite {                         //Reply for this is a FsReply message.
   msgClass classId = 1;                   //msgClass.FS_WRITE
   //TODO
 }
 
-message FsDelete {                        //Reply for this FsReply message.
+message FsDelete {                        //Reply for this is a FsReply message.
   msgClass classId = 1;                   //msgClass.FS_DELETE
   //TODO
 }
 
-message FsMove {                          //Reply for this FsReply message.
+message FsMove {                          //Reply for this is a FsReply message.
   msgClass classId = 1;                   //msgClass.FS_MOVE
   //TODO
 }

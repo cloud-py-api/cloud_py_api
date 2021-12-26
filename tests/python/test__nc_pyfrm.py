@@ -50,20 +50,36 @@ class TestCloudPP(InterCom):
             self.req.ParseFromString(self.proto_data)
             msg_id = self.req.classId
             print(f'Server: Process {msgClass.Name(msg_id)} request.')
-            if msg_id == msgClass.INIT_TASK:
-                self.process_init_task()
+            if msg_id == msgClass.TASK_INIT:
+                self.process_task_init()
             elif msg_id == msgClass.TASK_STATUS:
                 self.process_task_status()
             elif msg_id == msgClass.TASK_EXIT:
                 self.process_task_exit()
-            elif msg_id == msgClass.GET_STATE:
-                self.process_get_state()
-            elif msg_id == msgClass.LOG:
-                self.process_log()
-            elif msg_id == msgClass.GET_FILE_CONTENT:
-                self.process_get_file_content()
-            elif msg_id == msgClass.SELECT:
-                self.process_select()
+            elif msg_id == msgClass.TASK_GET_STATE:
+                self.process_task_get_state()
+            elif msg_id == msgClass.TASK_LOG:
+                self.process_task_log()
+            elif msg_id == msgClass.FS_LIST:
+                self.process_fs_list()
+            elif msg_id == msgClass.FS_GET_INFO:
+                self.process_fs_get_info()
+            elif msg_id == msgClass.FS_READ:
+                self.process_fs_read()
+            elif msg_id == msgClass.FS_CREATE:
+                self.process_fs_create()
+            elif msg_id == msgClass.FS_WRITE:
+                self.process_fs_write()
+            elif msg_id == msgClass.FS_DELETE:
+                self.process_fs_delete()
+            elif msg_id == msgClass.FS_MOVE:
+                self.process_fs_move()
+            elif msg_id == msgClass.DB_SELECT:
+                self.process_db_select()
+            elif msg_id == msgClass.DB_CURSOR:
+                self.process_db_cursor()
+            elif msg_id == msgClass.DB_EXEC:
+                self.process_db_exec()
             else:
                 raise KeyError('Unknown request id.')
             if len(self.reply):
@@ -77,14 +93,14 @@ class TestCloudPP(InterCom):
                 if not n_count:
                     break
 
-    def process_init_task(self):
-        init_data = InitTask()
-        init_data.classId = msgClass.INIT_TASK
-        init_data.AppPath = 'PathToTargetApp'
+    def process_task_init(self):
+        init_data = TaskInitReply()
+        init_data.classId = msgClass.TASK_INIT
+        init_data.appPath = 'PathToTargetApp'
         init_data.args.append('ArgN1')
         init_data.args.append('ArgN2')
         init_data.config.log_lvl = logLvl.DEBUG
-        init_data.config.DataFolder = '/var/www/nextcloud/data'
+        init_data.config.dataFolder = '/var/www/nextcloud/data'
         self.reply = init_data.SerializeToString()
 
     def process_task_status(self):
@@ -93,10 +109,10 @@ class TestCloudPP(InterCom):
         if self.task_status != new_status.st_code:
             print(f'Server: pyfrm status changed from '
                   f'{taskStatus.Name(self.task_status)} to {taskStatus.Name(new_status.st_code)}')
-        if self.task_error != new_status.errDescription:
-            print(f'Server: pyfrm error changed from `{self.task_error}` to `{new_status.errDescription}`')
+        if self.task_error != new_status.error:
+            print(f'Server: pyfrm error changed from `{self.task_error}` to `{new_status.error}`')
         self.task_status = new_status.st_code
-        self.task_error = new_status.errDescription
+        self.task_error = new_status.error
 
     def process_task_exit(self):
         exit_status = TaskExit()
@@ -104,25 +120,54 @@ class TestCloudPP(InterCom):
         print(f'Server: pyfrm exited. OptMessage:`{exit_status.msgText}`')
         self.stop_msg_cycle = True
 
-    def process_get_state(self):
+    def process_task_get_state(self):
         self.states_updates_before_exit -= 1
-        task_state = GetState()
-        task_state.classId = msgClass.GET_STATE
-        task_state.bStop = True if self.states_updates_before_exit == 0 else False
-        self.reply = task_state.SerializeToString()
+        task_state_reply = TaskGetStateReply()
+        task_state_reply.classId = msgClass.TASK_GET_STATE
+        task_state_reply.bStop = True if self.states_updates_before_exit == 0 else False
+        if task_state_reply.bStop:
+            print(f'Server: send bStop == True.')
+        self.reply = task_state_reply.SerializeToString()
 
-    def process_log(self):
-        log_data = Log()
+    def process_task_log(self):
+        log_data = TaskLog()
         log_data.ParseFromString(self.proto_data)
         mod_name = log_data.sModule if len(log_data.sModule) else 'Unknown'
-        for record in log_data.Content:
+        for record in log_data.content:
             print(f'Client: {mod_name} : {logLvl.Name(log_data.log_lvl)} : {record}')
 
-    def process_get_file_content(self):
-        get_file = GetFileContent()
-        get_file.ParseFromString(self.proto_data)
-        print(f'Server: request for file with userID={get_file.UserID} and fileID={get_file.FileID}.')
+    def process_fs_list(self):
+        pass
+
+    def process_fs_get_info(self):
+        pass
+
+    def process_fs_read(self):
+        fs_read_req = FsRead()
+        fs_read_req.ParseFromString(self.proto_data)
+        print(f'Server: request for file with userID={fs_read_req.UserID} and fileID={fs_read_req.FileID}.')
         # for tests: send random data as reply for userID=1. for userID=2 send error, no such file.
+
+    def process_fs_create(self):
+        pass
+
+    def process_fs_write(self):
+        pass
+
+    def process_fs_delete(self):
+        pass
+
+    def process_fs_move(self):
+        pass
+
+    def process_db_select(self):
+        pass
+
+    def process_db_cursor(self):
+        pass
+
+    def process_db_exec(self):
+        pass
 
 
 if __name__ == '__main__':
