@@ -94,7 +94,7 @@ class Setting extends Entity implements JsonSerializable {
 			'display_name' => $this->getDisplayName(),
 			'title' => $this->getTitle(),
 			'description' => $this->getDescription(),
-			'helpUrl' => $this->getHelpUrl()
+			'help_url' => $this->getHelpUrl()
 		];
 	}
 }

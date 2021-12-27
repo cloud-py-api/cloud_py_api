@@ -28,17 +28,25 @@ declare(strict_types=1);
 
 namespace OCA\Cloud_Py_API\Event;
 
+use JsonSerializable;
 use OCP\EventDispatcher\Event;
 
 
-class SyncAppConfig extends Event {
+class SyncAppConfigEvent extends Event implements JsonSerializable {
 
-	public function __construct($params = [])
-	{
+	private $params;
+
+	public function __construct($params = []) {
 		parent::__construct();
-
+		$this->params = $params;
 		// TODO: Event for synchronization of cloud_py_api config
 		// TODO: Construct params (sender app_id, sender app config)
+	}
+
+	public function jsonSerialize(): array {
+		return [
+			'params' => $this->params
+		];
 	}
 
 }

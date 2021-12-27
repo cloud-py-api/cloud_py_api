@@ -33,13 +33,13 @@ use OCP\IDBConnection;
 use OCP\AppFramework\Db\QBMapper;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 
-use OCA\MediaDC\AppInfo\Application;
+use OCA\Cloud_Py_API\AppInfo\Application;
 
 
-class SettingMapper extends QBMapper {
+class AppMapper extends QBMapper {
 
 	public function __construct(IDBConnection $db) {
-		parent::__construct($db, Application::APP_ID . '_settings');
+		parent::__construct($db, Application::APP_ID . '_apps');
 	}
 
 	/**
@@ -73,13 +73,13 @@ class SettingMapper extends QBMapper {
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException if more than one result
 	 */
-	public function findByName(String $name): Entity {
+	public function findByAppId(String $appId): Entity {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->select('*')
 			->from($this->tableName)
 			->where(
-				$qb->expr()->eq('name', $qb->createNamedParameter($name, IQueryBuilder::PARAM_STR))
+				$qb->expr()->eq('app_id', $qb->createNamedParameter($appId, IQueryBuilder::PARAM_STR))
 			);
 
 		return $this->findEntity($qb);

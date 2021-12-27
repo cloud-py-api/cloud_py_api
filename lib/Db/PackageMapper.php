@@ -33,13 +33,13 @@ use OCP\IDBConnection;
 use OCP\AppFramework\Db\QBMapper;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 
-use OCA\MediaDC\AppInfo\Application;
+use OCA\Cloud_Py_API\AppInfo\Application;
 
 
-class AppsMapper extends QBMapper {
+class PackageMapper extends QBMapper {
 
 	public function __construct(IDBConnection $db) {
-		parent::__construct($db, Application::APP_ID . '_apps');
+		parent::__construct($db, Application::APP_ID . '_packages');
 	}
 
 	/**
@@ -73,7 +73,7 @@ class AppsMapper extends QBMapper {
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException if more than one result
 	 */
-	public function findByAppId(String $appId): Entity {
+	public function findAllByAppId(String $appId): array {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->select('*')
@@ -82,7 +82,7 @@ class AppsMapper extends QBMapper {
 				$qb->expr()->eq('app_id', $qb->createNamedParameter($appId, IQueryBuilder::PARAM_STR))
 			);
 
-		return $this->findEntity($qb);
+		return $this->findEntities($qb);
 	}
 
 }

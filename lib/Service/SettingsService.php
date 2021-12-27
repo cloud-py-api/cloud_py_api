@@ -28,10 +28,11 @@ declare(strict_types=1);
 
 namespace OCA\Cloud_Py_API\Service;
 
-use OCA\Cloud_Py_API\Db\Setting;
-use OCA\Cloud_Py_API\Db\SettingMapper;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
+
+use OCA\Cloud_Py_API\Db\Setting;
+use OCA\Cloud_Py_API\Db\SettingMapper;
 
 
 class SettingsService {
@@ -106,7 +107,7 @@ class SettingsService {
 				'displayName' => $setting['display_name'],
 				'title' => $setting['title'],
 				'description' => $setting['description'],
-                'helpUrl' => $setting['help_url']
+				'helpUrl' => $setting['help_url']
 			]));
 			return [
 				'success' => true,

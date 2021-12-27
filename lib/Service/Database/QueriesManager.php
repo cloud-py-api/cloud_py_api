@@ -37,18 +37,32 @@ class QueriesManager {
 	/**
 	 * Queries in work.
 	 */
-	public static $queries = array();
+	private $queries = array();
 
 	public static function getQueryResult(string $query_id) {
 		if (isset(self::$queries[$query_id])) {
 			return self::$queries[$query_id];
 		}
+		return null;
 	}
 
-	public static function setQueryResult(string $query_id, mixed $query_result) {
-		if (!isset(self::$queries[$query_id])) {
-			self::$queries[$query_id] = $query_result;
+	/**
+	 * Saves exectued query result for further usage
+	 * 
+	 * @param string $query SQL query string
+	 * 
+	 * @param mixed $query_result Exectued SQL query results (array, string, int, null)
+	 * 
+	 * @return string|null Returns $queryId - generated unique id based on query string, 
+	 * or null if such instance already exists
+	 */
+	public static function setQueryResult(string $query, mixed $query_result) {
+		$queryId = sha1($query . time());
+		if (!isset(self::$queries[$queryId])) {
+			self::$queries[$queryId] = $query_result;
+			return $queryId;
 		}
+		return null;
 	}
 
 	public static function removeQueryResult(string $query_id): bool {

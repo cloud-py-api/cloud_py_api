@@ -29,4 +29,12 @@ Nextcloud Python API Framework
 		<admin>OCA\Cloud_Py_API\Settings\AdminSettings</admin>
 		<admin-section>OCA\Cloud_Py_API\Settings\AdminSection</admin-section>
 	</settings>
+	<repair-steps>
+		<install>
+			<step>OCA\Cloud_Py_API\Migration\AppDataInitializationStep</step>
+		</install>
+		<pre-migration>
+			<step>OCA\Cloud_Py_API\Migration\AppUpdateStep</step>
+		</pre-migration>
+	</repair-steps>
 </info>

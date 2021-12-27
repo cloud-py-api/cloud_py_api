@@ -1,0 +1,12 @@
+{
+    "settings": [
+        {
+            "name": "appdata_path",
+            "value": "appdata_nc-instance-id",
+            "displayName": "Path to folder for packages",
+            "title": "App data path",
+            "description": "Path to appdata folder of current nextcloud instance",
+            "helpUrl": "https://github.com/bigcat88/cloud_py_api/wiki"
+        }
+    ]
+}

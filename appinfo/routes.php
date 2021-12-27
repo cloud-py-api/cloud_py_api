@@ -24,6 +24,13 @@
 
 return [
 	'routes' => [
-		
+		// SETTINGS API
+		['name' => 'settings#index', 'url' => '/api/v1/settings', 'verb' => 'GET'],
+
+		// APPS API
+		['name' => 'api#apps', 'url' => '/api/v1/apps', 'verb' => 'GET'],
+
+		// PACKAGES API
+		['name' => 'api#packages', 'url' => '/api/v1/packages', 'verb' => 'GET'],
 	]
 ];

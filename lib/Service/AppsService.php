@@ -26,26 +26,23 @@ declare(strict_types=1);
  *
  */
 
-namespace OCA\Cloud_Py_API\Controller;
+namespace OCA\Cloud_Py_API\Service;
 
-use OCP\IRequest;
-use OCP\AppFramework\Controller;
-use OCP\AppFramework\Http;
-use OCP\AppFramework\Http\JSONResponse;
-
-use OCA\Cloud_Py_API\AppInfo\Application;
-use OCA\Cloud_Py_API\Service\PythonService;
+use OCA\Cloud_Py_API\Db\AppMapper;
 
 
-class PythonController extends Controller {
+class AppsService {
 
-	/** @var SettingsService */
-	private $service;
+	/** @var AppMapper */
+	private $mapper;
 
-	public function __construct(IRequest $request, PythonService $service) {
-		parent::__construct(Application::APP_ID, $request);
+	public function __construct(AppMapper $appMapper)
+	{
+		$this->mapper = $appMapper;
+	}
 
-		$this->service = $service;
+	public function getApps() {
+		return $this->mapper->findAll();
 	}
 
 }

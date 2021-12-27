@@ -26,26 +26,32 @@ declare(strict_types=1);
  *
  */
 
-namespace OCA\Cloud_Py_API\Controller;
+namespace OCA\Cloud_Py_API\Migration;
 
-use OCP\IRequest;
-use OCP\AppFramework\Controller;
-use OCP\AppFramework\Http;
-use OCP\AppFramework\Http\JSONResponse;
-
-use OCA\Cloud_Py_API\AppInfo\Application;
-use OCA\Cloud_Py_API\Service\PythonService;
+use OCA\Cloud_Py_API\Event\SyncAppConfigEvent;
+use OCP\EventDispatcher\IEventDispatcher;
+use OCP\Migration\IOutput;
+use OCP\Migration\IRepairStep;
 
 
-class PythonController extends Controller {
+class AppUpdateStep implements IRepairStep {
 
-	/** @var SettingsService */
-	private $service;
+	/** @var IEventDispatcher */
+	private $eventDispatcher;
 
-	public function __construct(IRequest $request, PythonService $service) {
-		parent::__construct(Application::APP_ID, $request);
+	public function __construct(IEventDispatcher $eventDispatcher) {
+		$this->eventDispatcher = $eventDispatcher;
+	}
 
-		$this->service = $service;
+	public function getName(): string {
+		return "Cloud_Py_API apps configs synchronization";
+	}
+
+	public function run(IOutput $output) {
+		$output->startProgress(1);
+		$this->eventDispatcher->dispatchTyped(new SyncAppConfigEvent(['apps_id' => ['cloud_py_api']]));
+		$output->advance(1);
+		$output->finishProgress();
 	}
 
 }

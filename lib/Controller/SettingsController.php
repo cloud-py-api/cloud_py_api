@@ -26,7 +26,7 @@ declare(strict_types=1);
  *
  */
 
-namespace OCA\MediaDC\Controller;
+namespace OCA\Cloud_Py_API\Controller;
 
 use OCP\IRequest;
 use OCP\AppFramework\Controller;

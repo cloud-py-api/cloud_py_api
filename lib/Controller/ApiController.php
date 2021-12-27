@@ -26,7 +26,7 @@ declare(strict_types=1);
  *
  */
 
-namespace OCA\MediaDC\Controller;
+namespace OCA\Cloud_Py_API\Controller;
 
 use OCP\IRequest;
 use OCP\AppFramework\Controller;
@@ -34,12 +34,44 @@ use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\JSONResponse;
 
 use OCA\Cloud_Py_API\AppInfo\Application;
+use OCA\Cloud_Py_API\Service\AppsService;
+use OCA\Cloud_Py_API\Service\PackagesService;
 
 
-class SettingsController extends Controller {
+class ApiController extends Controller {
 
-	public function __construct(IRequest $request) {
+	/** @var AppsService */
+	private $appsService;
+
+	/** @var PackagesService */
+	private $packagesService;
+
+	public function __construct(IRequest $request, AppsService $appsService, PackagesService $packagesService) {
 		parent::__construct(Application::APP_ID, $request);
+
+		$this->appsService = $appsService;
+		$this->packagesService = $packagesService;
 	}
+
+	/**
+	 * @NoAdminRequired
+	 * @NoCSRFRequired
+	 * 
+	 * @return JSONResponse array of all settings
+	 */
+	public function apps() {
+		return new JSONResponse($this->appsService->getApps(), Http::STATUS_OK);
+	}
+
+	/**
+	 * @NoAdminRequired
+	 * @NoCSRFRequired
+	 * 
+	 * @return JSONResponse array of all settings
+	 */
+	public function packages() {
+		return new JSONResponse($this->packagesService->getPackages(), Http::STATUS_OK);
+	}
+
 
 }
