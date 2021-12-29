@@ -30,7 +30,7 @@ namespace OCA\Cloud_Py_API\Migration;
 
 use OCA\Cloud_Py_API\AppInfo\Application;
 use OCA\Cloud_Py_API\Db\Setting;
-use OCA\Cloud_Py_API\Db\SettingsMapper;
+use OCA\Cloud_Py_API\Db\SettingMapper;
 use OCP\IConfig;
 use OCP\Migration\IOutput;
 use OCP\Migration\IRepairStep;
@@ -39,13 +39,13 @@ use OCP\Migration\IRepairStep;
 class AppDataInitializationStep implements IRepairStep {
 
 	/** @var SettingsMapper */
-	private $settingsMapper;
+	private $settingMapper;
 
 	/** @var IConfig */
 	private $config;
 
-	public function __construct(SettingsMapper $settingsMapper, IConfig $config) {
-		$this->settingsMapper = $settingsMapper;
+	public function __construct(SettingMapper $settingMapper, IConfig $config) {
+		$this->settingMapper = $settingMapper;
 		$this->config = $config;
 	}
 
@@ -58,10 +58,10 @@ class AppDataInitializationStep implements IRepairStep {
 		$data_file = $this->getCustomAppsDirectory() . Application::APP_ID . "/lib/Migration/data/app_data_Version0001Date20211028154433.json";
 		$app_data = json_decode(file_get_contents($data_file), true);
 
-		if (count($this->settingsMapper->findAll()) === 0) {
+		if (count($this->settingMapper->findAll()) === 0) {
 			if (isset($app_data['settings'])) {
 				foreach ($app_data['settings'] as $setting) {
-					$this->settingsMapper->insert(new Setting([
+					$this->settingMapper->insert(new Setting([
 						'name' => $setting['name'],
 						'value' => is_array($setting['value']) ? json_encode($setting['value']) : str_replace('\\', '', json_encode($setting['value'])),
 						'displayName' => $setting['displayName'],

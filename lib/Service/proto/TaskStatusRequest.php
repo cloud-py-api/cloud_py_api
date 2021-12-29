@@ -9,26 +9,20 @@ use Google\Protobuf\Internal\GPBUtil;
 /**
  *No reply.
  *
- * Generated from protobuf message <code>TaskStatus</code>
+ * Generated from protobuf message <code>TaskStatusRequest</code>
  */
-class TaskStatus extends \Google\Protobuf\Internal\Message
+class TaskStatusRequest extends \Google\Protobuf\Internal\Message
 {
-    /**
-     *TaskStatus.TASK_STATUS
-     *
-     * Generated from protobuf field <code>.msgClass classId = 1;</code>
-     */
-    protected $classId = 0;
     /**
      *Status code of a task.
      *
-     * Generated from protobuf field <code>.taskStatus st_code = 2;</code>
+     * Generated from protobuf field <code>.taskStatus st_code = 1;</code>
      */
     protected $st_code = 0;
     /**
      *Optional error, if any. Valid only when Status is non success/in_progress.
      *
-     * Generated from protobuf field <code>string error = 3;</code>
+     * Generated from protobuf field <code>string error = 2;</code>
      */
     protected $error = '';
 
@@ -38,8 +32,6 @@ class TaskStatus extends \Google\Protobuf\Internal\Message
      * @param array $data {
      *     Optional. Data for populating the Message object.
      *
-     *     @type int $classId
-     *          TaskStatus.TASK_STATUS
      *     @type int $st_code
      *          Status code of a task.
      *     @type string $error
@@ -52,35 +44,9 @@ class TaskStatus extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     *TaskStatus.TASK_STATUS
-     *
-     * Generated from protobuf field <code>.msgClass classId = 1;</code>
-     * @return int
-     */
-    public function getClassId()
-    {
-        return $this->classId;
-    }
-
-    /**
-     *TaskStatus.TASK_STATUS
-     *
-     * Generated from protobuf field <code>.msgClass classId = 1;</code>
-     * @param int $var
-     * @return $this
-     */
-    public function setClassId($var)
-    {
-        GPBUtil::checkEnum($var, \msgClass::class);
-        $this->classId = $var;
-
-        return $this;
-    }
-
-    /**
      *Status code of a task.
      *
-     * Generated from protobuf field <code>.taskStatus st_code = 2;</code>
+     * Generated from protobuf field <code>.taskStatus st_code = 1;</code>
      * @return int
      */
     public function getStCode()
@@ -91,7 +57,7 @@ class TaskStatus extends \Google\Protobuf\Internal\Message
     /**
      *Status code of a task.
      *
-     * Generated from protobuf field <code>.taskStatus st_code = 2;</code>
+     * Generated from protobuf field <code>.taskStatus st_code = 1;</code>
      * @param int $var
      * @return $this
      */
@@ -106,7 +72,7 @@ class TaskStatus extends \Google\Protobuf\Internal\Message
     /**
      *Optional error, if any. Valid only when Status is non success/in_progress.
      *
-     * Generated from protobuf field <code>string error = 3;</code>
+     * Generated from protobuf field <code>string error = 2;</code>
      * @return string
      */
     public function getError()
@@ -117,7 +83,7 @@ class TaskStatus extends \Google\Protobuf\Internal\Message
     /**
      *Optional error, if any. Valid only when Status is non success/in_progress.
      *
-     * Generated from protobuf field <code>string error = 3;</code>
+     * Generated from protobuf field <code>string error = 2;</code>
      * @param string $var
      * @return $this
      */

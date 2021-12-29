@@ -7,17 +7,17 @@ use Google\Protobuf\Internal\RepeatedField;
 use Google\Protobuf\Internal\GPBUtil;
 
 /**
- * Generated from protobuf message <code>FsReadReply</code>
+ *Reply for this is a FsReply message.
+ *
+ * Generated from protobuf message <code>FsWriteRequest</code>
  */
-class FsReadReply extends \Google\Protobuf\Internal\Message
+class FsWriteRequest extends \Google\Protobuf\Internal\Message
 {
     /**
-     * Generated from protobuf field <code>.fsResultCode resCode = 1;</code>
+     * Generated from protobuf field <code>.fsId fileId = 1;</code>
      */
-    protected $resCode = 0;
+    protected $fileId = null;
     /**
-     *Present only if resCode is NO_ERROR.
-     *
      * Generated from protobuf field <code>bytes content = 2;</code>
      */
     protected $content = '';
@@ -28,9 +28,8 @@ class FsReadReply extends \Google\Protobuf\Internal\Message
      * @param array $data {
      *     Optional. Data for populating the Message object.
      *
-     *     @type int $resCode
+     *     @type \fsId $fileId
      *     @type string $content
-     *          Present only if resCode is NO_ERROR.
      * }
      */
     public function __construct($data = NULL) {
@@ -39,30 +38,38 @@ class FsReadReply extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     * Generated from protobuf field <code>.fsResultCode resCode = 1;</code>
-     * @return int
+     * Generated from protobuf field <code>.fsId fileId = 1;</code>
+     * @return \fsId|null
      */
-    public function getResCode()
+    public function getFileId()
     {
-        return $this->resCode;
+        return $this->fileId;
+    }
+
+    public function hasFileId()
+    {
+        return isset($this->fileId);
+    }
+
+    public function clearFileId()
+    {
+        unset($this->fileId);
     }
 
     /**
-     * Generated from protobuf field <code>.fsResultCode resCode = 1;</code>
-     * @param int $var
+     * Generated from protobuf field <code>.fsId fileId = 1;</code>
+     * @param \fsId $var
      * @return $this
      */
-    public function setResCode($var)
+    public function setFileId($var)
     {
-        GPBUtil::checkEnum($var, \fsResultCode::class);
-        $this->resCode = $var;
+        GPBUtil::checkMessage($var, \fsId::class);
+        $this->fileId = $var;
 
         return $this;
     }
 
     /**
-     *Present only if resCode is NO_ERROR.
-     *
      * Generated from protobuf field <code>bytes content = 2;</code>
      * @return string
      */
@@ -72,8 +79,6 @@ class FsReadReply extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     *Present only if resCode is NO_ERROR.
-     *
      * Generated from protobuf field <code>bytes content = 2;</code>
      * @param string $var
      * @return $this

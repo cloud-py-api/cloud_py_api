@@ -9,30 +9,24 @@ use Google\Protobuf\Internal\GPBUtil;
 /**
  *No reply.
  *
- * Generated from protobuf message <code>TaskLog</code>
+ * Generated from protobuf message <code>TaskLogRequest</code>
  */
-class TaskLog extends \Google\Protobuf\Internal\Message
+class TaskLogRequest extends \Google\Protobuf\Internal\Message
 {
     /**
-     *msgClass.TASK_LOG
-     *
-     * Generated from protobuf field <code>.msgClass classId = 1;</code>
-     */
-    protected $classId = 0;
-    /**
-     * Generated from protobuf field <code>.logLvl log_lvl = 2;</code>
+     * Generated from protobuf field <code>.logLvl log_lvl = 1;</code>
      */
     protected $log_lvl = 0;
     /**
      *What module logs belongs to.
      *
-     * Generated from protobuf field <code>string sModule = 3;</code>
+     * Generated from protobuf field <code>string module = 2;</code>
      */
-    protected $sModule = '';
+    protected $module = '';
     /**
      *One or more strings to put to log.
      *
-     * Generated from protobuf field <code>repeated string content = 4;</code>
+     * Generated from protobuf field <code>repeated string content = 3;</code>
      */
     private $content;
 
@@ -42,10 +36,8 @@ class TaskLog extends \Google\Protobuf\Internal\Message
      * @param array $data {
      *     Optional. Data for populating the Message object.
      *
-     *     @type int $classId
-     *          msgClass.TASK_LOG
      *     @type int $log_lvl
-     *     @type string $sModule
+     *     @type string $module
      *          What module logs belongs to.
      *     @type string[]|\Google\Protobuf\Internal\RepeatedField $content
      *          One or more strings to put to log.
@@ -57,33 +49,7 @@ class TaskLog extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     *msgClass.TASK_LOG
-     *
-     * Generated from protobuf field <code>.msgClass classId = 1;</code>
-     * @return int
-     */
-    public function getClassId()
-    {
-        return $this->classId;
-    }
-
-    /**
-     *msgClass.TASK_LOG
-     *
-     * Generated from protobuf field <code>.msgClass classId = 1;</code>
-     * @param int $var
-     * @return $this
-     */
-    public function setClassId($var)
-    {
-        GPBUtil::checkEnum($var, \msgClass::class);
-        $this->classId = $var;
-
-        return $this;
-    }
-
-    /**
-     * Generated from protobuf field <code>.logLvl log_lvl = 2;</code>
+     * Generated from protobuf field <code>.logLvl log_lvl = 1;</code>
      * @return int
      */
     public function getLogLvl()
@@ -92,7 +58,7 @@ class TaskLog extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     * Generated from protobuf field <code>.logLvl log_lvl = 2;</code>
+     * Generated from protobuf field <code>.logLvl log_lvl = 1;</code>
      * @param int $var
      * @return $this
      */
@@ -107,25 +73,25 @@ class TaskLog extends \Google\Protobuf\Internal\Message
     /**
      *What module logs belongs to.
      *
-     * Generated from protobuf field <code>string sModule = 3;</code>
+     * Generated from protobuf field <code>string module = 2;</code>
      * @return string
      */
-    public function getSModule()
+    public function getModule()
     {
-        return $this->sModule;
+        return $this->module;
     }
 
     /**
      *What module logs belongs to.
      *
-     * Generated from protobuf field <code>string sModule = 3;</code>
+     * Generated from protobuf field <code>string module = 2;</code>
      * @param string $var
      * @return $this
      */
-    public function setSModule($var)
+    public function setModule($var)
     {
         GPBUtil::checkString($var, True);
-        $this->sModule = $var;
+        $this->module = $var;
 
         return $this;
     }
@@ -133,7 +99,7 @@ class TaskLog extends \Google\Protobuf\Internal\Message
     /**
      *One or more strings to put to log.
      *
-     * Generated from protobuf field <code>repeated string content = 4;</code>
+     * Generated from protobuf field <code>repeated string content = 3;</code>
      * @return \Google\Protobuf\Internal\RepeatedField
      */
     public function getContent()
@@ -144,7 +110,7 @@ class TaskLog extends \Google\Protobuf\Internal\Message
     /**
      *One or more strings to put to log.
      *
-     * Generated from protobuf field <code>repeated string content = 4;</code>
+     * Generated from protobuf field <code>repeated string content = 3;</code>
      * @param string[]|\Google\Protobuf\Internal\RepeatedField $var
      * @return $this
      */
