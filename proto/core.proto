@@ -84,6 +84,8 @@ message FsListReply {
 }
 
 message FsGetInfoRequest {
+  string userID = 1;
+  string dirID = 2;
   //TODO
 }
 
@@ -98,23 +100,33 @@ message FsReadRequest {
 
 message FsReadReply {
   fsResultCode resCode = 1;
-  bytes fileContent = 2;                  //Present only if resCode is NO_ERROR.
+  bytes content = 2;                      //Present only if resCode is NO_ERROR.
 }
 
 message FsCreateRequest {                 //Reply for this is a FsReply message.
-  //TODO
+  string userID = 1;
+  string fileID = 2;
+  string name = 3;
+  bool is_file = 4;
+  bytes content = 5;
 }
 
 message FsWriteRequest {                  //Reply for this is a FsReply message.
-  //TODO
+  string userID = 1;
+  string fileID = 2;
+  bytes content = 3;
 }
 
 message FsDeleteRequest {                 //Reply for this is a FsReply message.
-  //TODO
+  string userID = 1;
+  string fileID = 2;
 }
 
 message FsMoveRequest {                   //Reply for this is a FsReply message.
-  //TODO
+  string userID = 1;
+  string fileID = 2;
+  string targetPath = 3;                  //absolute path relative to MP.
+  bool bCopy = 4;
 }
 
 message FsReply {
@@ -131,7 +143,7 @@ message whereExpr {                       //struct for `where` part.
 }
 
 message str_alias {
-  string value = 1;
+  string name = 1;
   string alias = 2;
 }
 
@@ -191,7 +203,7 @@ message DbExecRequest {
       DELETE = 2;
   }
   rType type = 1;
-  repeated string table_name = 2;           //aliases or filed names.
+  string table_name = 2;
   repeated string columns = 3;
   repeated bytes values = 4;
   repeated whereExpr whereas = 5;
