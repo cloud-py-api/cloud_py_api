@@ -130,10 +130,14 @@ message whereExpr {                       //struct for `where` part.
   string expression = 2;
 }
 
+message str_alias {
+  string value = 1;
+  string alias = 2;
+}
+
 message DbSelectRequest {
-  repeated string what = 1;               //aliases or filed names.
-  string from = 2;
-  string fromAlias = 3;
+  repeated str_alias columns = 1;         //aliases or filed names.
+  repeated str_alias from = 2;
   message joinType {
     string name = 1;                      //join, innerJoin, leftJoin, rightJoin.
     string fromAlias = 2;
@@ -141,17 +145,17 @@ message DbSelectRequest {
     string alias = 4;
     string condition = 5;
   }
-  repeated joinType joins = 4;
-  repeated whereExpr whereas = 5;
-  repeated string groupBy = 6;
+  repeated joinType joins = 3;
+  repeated whereExpr whereas = 4;
+  repeated string groupBy = 5;
   message havingExpr {
-    string type = 1;                       //having, andHaving, orHaving
+    string type = 1;                      //having, andHaving, orHaving
     string expression = 2;
   }
-  repeated havingExpr havings = 7;
-  repeated string orderBy = 8;
-  int64 maxResults = 9;
-  int64 firstResult = 10;
+  repeated havingExpr havings = 6;
+  repeated string orderBy = 7;
+  int64 maxResults = 8;
+  int64 firstResult = 9;
 }
 
 message DbSelectReply {
@@ -187,9 +191,10 @@ message DbExecRequest {
       DELETE = 2;
   }
   rType type = 1;
-  repeated string what = 2;                 //aliases or filed names.
-  //TODO: values
-  repeated whereExpr whereas = 6;
+  repeated string table_name = 2;           //aliases or filed names.
+  repeated string columns = 3;
+  repeated bytes values = 4;
+  repeated whereExpr whereas = 5;
 }
 
 message DbExecReply {
