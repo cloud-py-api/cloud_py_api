@@ -74,28 +74,46 @@ enum fsResultCode {
     IO_ERROR = 4;
 }
 
-message FsListRequest {
-  string userID = 1;
-  string dirID = 2;
-}
-
-message FsListReply {
-  //TODO
+message fsId {
+  string userId = 1;
+  string fileId = 2;
 }
 
 message FsGetInfoRequest {
-  string userID = 1;
-  string dirID = 2;
-  //TODO
+  fsId fileId = 1;
 }
 
 message FsGetInfoReply {
-  //TODO
+  int64 fileId = 1;
+  string mimetype = 2;
+  string name = 3;
+  string internal_path = 4;
+  string abs_path = 5;
+  int64 size = 6;
+  bool is_dir = 7;
+  int64 permissions = 8;
+  int64 mtime = 9;
+  string checksum = 10;
+  bool encrypted = 11;
+  string etag = 12;
+  /*
+  storage
+  mountpoint
+  ownerId
+  ownerName?
+  */
+}
+
+message FsListRequest {
+  fsId dirId = 1;
+}
+
+message FsListReply {
+  repeated FsGetInfoReply nodes = 1;
 }
 
 message FsReadRequest {
-  string userID = 1;
-  string fileID = 2;
+  fsId fileId = 1;
 }
 
 message FsReadReply {
@@ -104,29 +122,25 @@ message FsReadReply {
 }
 
 message FsCreateRequest {                 //Reply for this is a FsReply message.
-  string userID = 1;
-  string fileID = 2;
-  string name = 3;
-  bool is_file = 4;
-  bytes content = 5;
+  fsId parentDirId = 1;
+  string name = 2;
+  bool is_file = 3;
+  bytes content = 4;
 }
 
 message FsWriteRequest {                  //Reply for this is a FsReply message.
-  string userID = 1;
-  string fileID = 2;
-  bytes content = 3;
+  fsId fileId = 1;
+  bytes content = 2;
 }
 
 message FsDeleteRequest {                 //Reply for this is a FsReply message.
-  string userID = 1;
-  string fileID = 2;
+  fsId fileId = 1;
 }
 
 message FsMoveRequest {                   //Reply for this is a FsReply message.
-  string userID = 1;
-  string fileID = 2;
-  string targetPath = 3;                  //absolute path relative to MP.
-  bool bCopy = 4;
+  fsId fileId = 1;
+  string targetPath = 2;                  //absolute path relative to MP.
+  bool bCopy = 3;
 }
 
 message FsReply {
@@ -222,13 +236,13 @@ service CloudPyApiCore {
   rpc TaskExit (TaskExitRequest) returns (Empty) {}
   rpc TaskState (Empty) returns (TaskStateReply) {}
   rpc TaskLog (TaskLogRequest) returns (Empty) {}
+  rpc FsGetInfo (FsListRequest) returns (FsListReply) {}
   rpc FsList (FsListRequest) returns (FsListReply) {}
-  rpc FsGetInfo (FsListRequest) returns (FsListReply) {}      //FileInfo ?
   rpc FsRead (FsReadRequest) returns (stream FsReadReply) {}
   rpc FsCreate (FsCreateRequest) returns (FsReply) {}
   rpc FsWrite (stream FsWriteRequest) returns (FsReply) {}
   rpc FsDelete (FsDeleteRequest) returns (FsReply) {}
-  rpc FsMove (FsMoveRequest) returns (FsReply) {}             //rmvOriginal flag something like -> copyFromStorage
+  rpc FsMove (FsMoveRequest) returns (FsReply) {}
   rpc DbSelect (DbSelectRequest) returns (DbSelectReply) {}
   rpc DbCursor (DbCursorRequest) returns (DbCursorReply) {}
   rpc DbExec (DbExecRequest) returns (DbExecReply) {}
