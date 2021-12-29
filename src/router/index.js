@@ -1,12 +1,11 @@
-<?php
 /**
- * @copyright 2021 Andrey Borysenko <andrey18106x@gmail.com>
- * 
- * @copyright 2021 Alexander Piskun <bigcat88@icloud.com>
+ * @copyright Copyright (c) 2021 Andrey Borysenko <andrey18106x@gmail.com>
  *
- * @author 2021 Andrey Borysenko <andrey18106x@gmail.com>
+ * @copyright Copyright (c) 2021 Alexander Piskun <bigcat88@icloud.com>
  *
- * @license GNU AGPL version 3 or any later version
+ * @author Andrey Borysenko <andrey18106x@gmail.com>
+ *
+ * @license AGPL-3.0-or-later
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -23,8 +22,23 @@
  *
  */
 
-script(\OCA\Cloud_Py_API\AppInfo\Application::APP_ID, 'cloud_py_api-main');
+import { generateUrl } from '@nextcloud/router'
+import Router from 'vue-router'
+import Vue from 'vue'
 
-?>
+const Configuration = () => import('../views/Configuration')
 
-<div id="cloud_py_api-admin-settings"></div>
+Vue.use(Router)
+
+export default new Router({
+	mode: 'history',
+	base: generateUrl('/apps/cloud_py_api', ''),
+	linkActiveClass: 'active',
+	routes: [
+		{
+			path: '/',
+			component: Configuration,
+			name: 'configuration',
+		},
+	],
+})

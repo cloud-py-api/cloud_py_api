@@ -5,6 +5,9 @@ const webpackConfig = require('@nextcloud/webpack-vue-config')
 const BabelLoaderExcludeNodeModulesExcept = require('babel-loader-exclude-node-modules-except')
 
 const config = {
+	entry: {
+		configuration: path.resolve(path.join('src', 'main-configuration.js')),
+	},
 	module: {
 		rules: [
 			{

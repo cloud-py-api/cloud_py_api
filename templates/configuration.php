@@ -23,8 +23,8 @@
  *
  */
 
-script(\OCA\Cloud_Py_API\AppInfo\Application::APP_ID, 'cloud_py_api-main');
+script(\OCA\Cloud_Py_API\AppInfo\Application::APP_ID, 'cloud_py_api-configuration');
 
 ?>
 
-<div id="cloud_py_api-admin-settings"></div>
+<div id="content"></div>

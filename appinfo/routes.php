@@ -24,6 +24,10 @@
 
 return [
 	'routes' => [
+		// PAGES
+		['name' => 'page#configuration', 'url' => '/', 'verb' => 'GET'],
+		['name' => 'page#configuration', 'url' => '/configuration', 'verb' => 'GET', 'postfix' => 'configuration'],
+
 		// SETTINGS API
 		['name' => 'settings#index', 'url' => '/api/v1/settings', 'verb' => 'GET'],
 

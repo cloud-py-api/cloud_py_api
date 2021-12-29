@@ -1,12 +1,11 @@
-<?php
 /**
- * @copyright 2021 Andrey Borysenko <andrey18106x@gmail.com>
- * 
- * @copyright 2021 Alexander Piskun <bigcat88@icloud.com>
+ * @copyright Copyright (c) 2021 Andrey Borysenko <andrey18106x@gmail.com>
  *
- * @author 2021 Andrey Borysenko <andrey18106x@gmail.com>
+ * @copyright Copyright (c) 2021 Alexander Piskun <bigcat88@icloud.com>
  *
- * @license GNU AGPL version 3 or any later version
+ * @author Andrey Borysenko <andrey18106x@gmail.com>
+ *
+ * @license AGPL-3.0-or-later
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -23,8 +22,17 @@
  *
  */
 
-script(\OCA\Cloud_Py_API\AppInfo\Application::APP_ID, 'cloud_py_api-main');
+import Vue from 'vue'
+import Vuex, { Store } from 'vuex'
 
-?>
+import settings from './settings'
 
-<div id="cloud_py_api-admin-settings"></div>
+Vue.use(Vuex)
+
+export default new Store({
+	modules: {
+		settings,
+	},
+
+	strict: process.env.NODE_ENV !== 'production',
+})

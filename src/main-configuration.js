@@ -24,18 +24,27 @@
 
 import { generateFilePath } from '@nextcloud/router'
 import { getRequestToken } from '@nextcloud/auth'
+import { sync } from 'vuex-router-sync'
 import Nextcloudl10n from './mixins/Nextcludl10n'
-
 import Vue from 'vue'
-import AdminSettings from './components/settings/AdminSettings'
+
+import CloudPyAPI from './CloudPyAPI'
+import router from './router'
 import store from './store'
 
 // eslint-disable-next-line
 __webpack_nonce__ = btoa(getRequestToken())
+
 // eslint-disable-next-line
 __webpack_public_path__ = generateFilePath('cloud_py_api', '', 'js/')
 
+sync(store, router)
+
 Vue.mixin(Nextcloudl10n)
 
-const View = Vue.extend(AdminSettings)
-new View({ store }).$mount('#cloud_py_api-admin-settings')
+export default new Vue({
+	el: '#content',
+	router,
+	store,
+	render: h => h(CloudPyAPI),
+})
