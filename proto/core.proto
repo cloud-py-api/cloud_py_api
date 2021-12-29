@@ -84,24 +84,22 @@ message FsGetInfoRequest {
 }
 
 message FsGetInfoReply {
-  int64 fileId = 1;
-  string mimetype = 2;
-  string name = 3;
-  string internal_path = 4;
-  string abs_path = 5;
-  int64 size = 6;
-  bool is_dir = 7;
-  int64 permissions = 8;
-  int64 mtime = 9;
-  string checksum = 10;
-  bool encrypted = 11;
-  string etag = 12;
-  /*
-  storage
-  mountpoint
-  ownerId
-  ownerName?
-  */
+  fsId fileId = 1;
+  bool is_dir = 2;
+  bool is_local = 3;
+  string mimetype = 4;
+  string name = 5;
+  string internal_path = 6;
+  string abs_path = 7;
+  int64 size = 8;
+  int64 permissions = 9;
+  int64 mtime = 10;
+  string checksum = 11;
+  bool encrypted = 12;
+  string etag = 13;
+  string ownerName = 14;
+  int64 storageId = 15;
+  int64 mountId = 16;
 }
 
 message FsListRequest {
