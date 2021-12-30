@@ -226,11 +226,26 @@ message DbExecReply {
 
 /* DB messages end */
 
-service SrvCloudPyApiCore {
+/* Next two messages are for server->client command background thread */
+
+message ServerCommand {
+  enum cmd_id {
+      TASK_NOTHING = 0;
+      TASK_STOP = 1;
+  }
+  cmd_id id = 1;
+}
+
+message CommandResult {
+  bool ok = 1;
+}
+
+service CloudPyApiCore {
   rpc TaskInit (Empty) returns (TaskInitReply) {}
   rpc TaskStatus (TaskSetStatusRequest) returns (Empty) {}
   rpc TaskExit (TaskExitRequest) returns (Empty) {}
   rpc TaskLog (TaskLogRequest) returns (Empty) {}
+  rpc TaskStop (stream ServerCommand) returns (stream CommandResult) {}
   rpc FsGetInfo (FsListRequest) returns (FsListReply) {}
   rpc FsList (FsListRequest) returns (FsListReply) {}
   rpc FsRead (FsReadRequest) returns (stream FsReadReply) {}
@@ -241,19 +256,4 @@ service SrvCloudPyApiCore {
   rpc DbSelect (DbSelectRequest) returns (DbSelectReply) {}
   rpc DbCursor (DbCursorRequest) returns (DbCursorReply) {}
   rpc DbExec (DbExecRequest) returns (DbExecReply) {}
-}
-
-message ServerCommand {
-  enum cmd_id {
-      TASK_NOTHING = 0;
-      TASK_STOP = 1;
-  }
-}
-
-message CommandResult {
-  bool ok = 1;
-}
-
-service ClientCloudPyApiCore {
-  rpc TaskStop (stream ServerCommand) returns (stream CommandResult) {}
 }
