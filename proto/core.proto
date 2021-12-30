@@ -1,5 +1,7 @@
 syntax = "proto3";
 
+package Cloud_Py_API;
+
 /*
 All communications messages send by client, server only reply on them.
 
