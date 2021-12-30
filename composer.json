@@ -22,6 +22,7 @@
 		"christophwurst/nextcloud_testing": "^0.12.4"
 	},
 	"require": {
-		"google/protobuf": "^3.19"
+		"google/protobuf": "^3.19",
+		"grpc/grpc": "^1.42"
 	}
 }
