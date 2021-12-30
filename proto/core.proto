@@ -40,7 +40,7 @@ message TaskInitReply {
   message cfgOptions {
     logLvl log_lvl = 1;                   //0-4 , level logs from NC documentation.
     string dataFolder = 2;                //Path to NC data folder.
-    string frameworkAppDataFolder = 3;    //Path to target folder of app inside framework app data.
+    string frameworkAppData = 3;          //Path to target folder of app inside framework app data.
   }
   cfgOptions config = 4;
 }
