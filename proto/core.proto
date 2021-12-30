@@ -236,16 +236,12 @@ message ServerCommand {
   cmd_id id = 1;
 }
 
-message CommandResult {
-  bool ok = 1;
-}
-
 service CloudPyApiCore {
   rpc TaskInit (Empty) returns (TaskInitReply) {}
   rpc TaskStatus (TaskSetStatusRequest) returns (Empty) {}
   rpc TaskExit (TaskExitRequest) returns (Empty) {}
   rpc TaskLog (TaskLogRequest) returns (Empty) {}
-  rpc TaskStop (stream ServerCommand) returns (stream CommandResult) {}
+  rpc TaskProcessCmd (stream Empty) returns (stream ServerCommand) {}
   rpc FsGetInfo (FsListRequest) returns (FsListReply) {}
   rpc FsList (FsListRequest) returns (FsListReply) {}
   rpc FsRead (FsReadRequest) returns (stream FsReadReply) {}
