@@ -45,17 +45,13 @@ message TaskInitReply {
   cfgOptions config = 4;
 }
 
-message TaskStatusRequest {               //No reply.
+message TaskSetStatusRequest {            //No reply.
   taskStatus st_code = 1;                 //Status code of a task.
   string error = 2;                       //Optional error, if any. Valid only when Status is non success/in_progress.
 }
 
 message TaskExitRequest {                 //No reply. Server must close pipe/socket after this message.
   string result = 1;                      //Result of task, if any.
-}
-
-message TaskStateReply {                  //Reply for TaskState. Client send it every ~5 sec.
-  bool stop = 1;                          //If true client must gracefully stop it's work.
 }
 
 message TaskLogRequest {                  //No reply.
@@ -230,11 +226,10 @@ message DbExecReply {
 
 /* DB messages end */
 
-service CloudPyApiCore {
+service SrvCloudPyApiCore {
   rpc TaskInit (Empty) returns (TaskInitReply) {}
-  rpc TaskStatus (TaskStatusRequest) returns (Empty) {}
+  rpc TaskStatus (TaskSetStatusRequest) returns (Empty) {}
   rpc TaskExit (TaskExitRequest) returns (Empty) {}
-  rpc TaskState (Empty) returns (TaskStateReply) {}
   rpc TaskLog (TaskLogRequest) returns (Empty) {}
   rpc FsGetInfo (FsListRequest) returns (FsListReply) {}
   rpc FsList (FsListRequest) returns (FsListReply) {}
@@ -246,4 +241,19 @@ service CloudPyApiCore {
   rpc DbSelect (DbSelectRequest) returns (DbSelectReply) {}
   rpc DbCursor (DbCursorRequest) returns (DbCursorReply) {}
   rpc DbExec (DbExecRequest) returns (DbExecReply) {}
+}
+
+message ServerCommand {
+  enum cmd_id {
+      TASK_NOTHING = 0;
+      TASK_STOP = 1;
+  }
+}
+
+message CommandResult {
+  bool ok = 1;
+}
+
+service ClientCloudPyApiCore {
+  rpc TaskStop (stream ServerCommand) returns (stream CommandResult) {}
 }
