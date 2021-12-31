@@ -5,7 +5,8 @@ from subprocess import PIPE, Popen, TimeoutExpired
 from concurrent import futures
 
 import grpc
-from core_pb2 import *
+from core_pb2 import taskStatus, logLvl, Empty, \
+    ServerCommand, TaskInitReply
 import core_pb2_grpc as core_pb2_grpc
 
 
@@ -132,6 +133,8 @@ if __name__ == '__main__':
                     break
                 if not servicer.connection_alive:
                     break
+        else:
+            print('Server: timeout, client did not connected')
     server.stop(grace=0.5)
     try:
         p_obj.wait(timeout=3.0)
