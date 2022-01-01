@@ -20,7 +20,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\ncore.proto\x12\x0c\x43loud_Py_API\"\x07\n\x05\x45mpty\"\xdc\x01\n\rTaskInitReply\x12\x10\n\x08\x66ilePath\x18\x01 \x01(\t\x12\x10\n\x08\x66uncName\x18\x02 \x01(\t\x12\x0c\n\x04\x61rgs\x18\x03 \x03(\t\x12\x36\n\x06\x63onfig\x18\x04 \x01(\x0b\x32&.Cloud_Py_API.TaskInitReply.cfgOptions\x1a\x61\n\ncfgOptions\x12%\n\x07log_lvl\x18\x01 \x01(\x0e\x32\x14.Cloud_Py_API.logLvl\x12\x12\n\ndataFolder\x18\x02 \x01(\t\x12\x18\n\x10\x66rameworkAppData\x18\x03 \x01(\t\"P\n\x14TaskSetStatusRequest\x12)\n\x07st_code\x18\x01 \x01(\x0e\x32\x18.Cloud_Py_API.taskStatus\x12\r\n\x05\x65rror\x18\x02 \x01(\t\"!\n\x0fTaskExitRequest\x12\x0e\n\x06result\x18\x01 \x01(\t\"X\n\x0eTaskLogRequest\x12%\n\x07log_lvl\x18\x01 \x01(\x0e\x32\x14.Cloud_Py_API.logLvl\x12\x0e\n\x06module\x18\x02 \x01(\t\x12\x0f\n\x07\x63ontent\x18\x03 \x03(\t\"&\n\x04\x66sId\x12\x0e\n\x06userId\x18\x01 \x01(\t\x12\x0e\n\x06\x66ileId\x18\x02 \x01(\t\"6\n\x10\x46sGetInfoRequest\x12\"\n\x06\x66ileId\x18\x01 \x01(\x0b\x32\x12.Cloud_Py_API.fsId\"\xbb\x02\n\x0e\x46sGetInfoReply\x12\"\n\x06\x66ileId\x18\x01 \x01(\x0b\x32\x12.Cloud_Py_API.fsId\x12\x0e\n\x06is_dir\x18\x02 \x01(\x08\x12\x10\n\x08is_local\x18\x03 \x01(\x08\x12\x10\n\x08mimetype\x18\x04 \x01(\t\x12\x0c\n\x04name\x18\x05 \x01(\t\x12\x15\n\rinternal_path\x18\x06 \x01(\t\x12\x10\n\x08\x61\x62s_path\x18\x07 \x01(\t\x12\x0c\n\x04size\x18\x08 \x01(\x03\x12\x13\n\x0bpermissions\x18\t \x01(\x03\x12\r\n\x05mtime\x18\n \x01(\x03\x12\x10\n\x08\x63hecksum\x18\x0b \x01(\t\x12\x11\n\tencrypted\x18\x0c \x01(\x08\x12\x0c\n\x04\x65tag\x18\r \x01(\t\x12\x11\n\townerName\x18\x0e \x01(\t\x12\x11\n\tstorageId\x18\x0f \x01(\x03\x12\x0f\n\x07mountId\x18\x10 \x01(\x03\"2\n\rFsListRequest\x12!\n\x05\x64irId\x18\x01 \x01(\x0b\x32\x12.Cloud_Py_API.fsId\":\n\x0b\x46sListReply\x12+\n\x05nodes\x18\x01 \x03(\x0b\x32\x1c.Cloud_Py_API.FsGetInfoReply\"3\n\rFsReadRequest\x12\"\n\x06\x66ileId\x18\x01 \x01(\x0b\x32\x12.Cloud_Py_API.fsId\"K\n\x0b\x46sReadReply\x12+\n\x07resCode\x18\x01 \x01(\x0e\x32\x1a.Cloud_Py_API.fsResultCode\x12\x0f\n\x07\x63ontent\x18\x02 \x01(\x0c\"j\n\x0f\x46sCreateRequest\x12\'\n\x0bparentDirId\x18\x01 \x01(\x0b\x32\x12.Cloud_Py_API.fsId\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x0f\n\x07is_file\x18\x03 \x01(\x08\x12\x0f\n\x07\x63ontent\x18\x04 \x01(\x0c\"E\n\x0e\x46sWriteRequest\x12\"\n\x06\x66ileId\x18\x01 \x01(\x0b\x32\x12.Cloud_Py_API.fsId\x12\x0f\n\x07\x63ontent\x18\x02 \x01(\x0c\"5\n\x0f\x46sDeleteRequest\x12\"\n\x06\x66ileId\x18\x01 \x01(\x0b\x32\x12.Cloud_Py_API.fsId\"V\n\rFsMoveRequest\x12\"\n\x06\x66ileId\x18\x01 \x01(\x0b\x32\x12.Cloud_Py_API.fsId\x12\x12\n\ntargetPath\x18\x02 \x01(\t\x12\r\n\x05\x62\x43opy\x18\x03 \x01(\x08\"6\n\x07\x46sReply\x12+\n\x07resCode\x18\x01 \x01(\x0e\x32\x1a.Cloud_Py_API.fsResultCode\"-\n\twhereExpr\x12\x0c\n\x04type\x18\x01 \x01(\t\x12\x12\n\nexpression\x18\x02 \x01(\t\"(\n\tstr_alias\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\r\n\x05\x61lias\x18\x02 \x01(\t\"\xd6\x03\n\x0f\x44\x62SelectRequest\x12(\n\x07\x63olumns\x18\x01 \x03(\x0b\x32\x17.Cloud_Py_API.str_alias\x12%\n\x04\x66rom\x18\x02 \x03(\x0b\x32\x17.Cloud_Py_API.str_alias\x12\x35\n\x05joins\x18\x03 \x03(\x0b\x32&.Cloud_Py_API.DbSelectRequest.joinType\x12(\n\x07whereas\x18\x04 \x03(\x0b\x32\x17.Cloud_Py_API.whereExpr\x12\x0f\n\x07groupBy\x18\x05 \x03(\t\x12\x39\n\x07havings\x18\x06 \x03(\x0b\x32(.Cloud_Py_API.DbSelectRequest.havingExpr\x12\x0f\n\x07orderBy\x18\x07 \x03(\t\x12\x12\n\nmaxResults\x18\x08 \x01(\x03\x12\x13\n\x0b\x66irstResult\x18\t \x01(\x03\x1a[\n\x08joinType\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x11\n\tfromAlias\x18\x02 \x01(\t\x12\x0c\n\x04join\x18\x03 \x01(\t\x12\r\n\x05\x61lias\x18\x04 \x01(\t\x12\x11\n\tcondition\x18\x05 \x01(\t\x1a.\n\nhavingExpr\x12\x0c\n\x04type\x18\x01 \x01(\t\x12\x12\n\nexpression\x18\x02 \x01(\t\"@\n\rDbSelectReply\x12\x10\n\x08rowCount\x18\x01 \x01(\x03\x12\r\n\x05\x65rror\x18\x02 \x01(\t\x12\x0e\n\x06handle\x18\x03 \x01(\x03\"\x7f\n\x0f\x44\x62\x43ursorRequest\x12/\n\x03\x63md\x18\x01 \x01(\x0e\x32\".Cloud_Py_API.DbCursorRequest.cCmd\x12\x0e\n\x06handle\x18\x02 \x01(\x03\"+\n\x04\x63\x43md\x12\t\n\x05\x46\x45TCH\x10\x00\x12\r\n\tFETCH_ALL\x10\x01\x12\t\n\x05\x43LOSE\x10\x02\"\x9e\x01\n\rDbCursorReply\x12\r\n\x05\x65rror\x18\x01 \x01(\t\x12\x13\n\x0b\x63olumnsName\x18\x02 \x03(\t\x12;\n\x0b\x63olumnsData\x18\x03 \x03(\x0b\x32&.Cloud_Py_API.DbCursorReply.columnData\x1a,\n\ncolumnData\x12\x10\n\x08\x62Present\x18\x01 \x01(\x08\x12\x0c\n\x04\x64\x61ta\x18\x02 \x01(\x0c\"\xcc\x01\n\rDbExecRequest\x12/\n\x04type\x18\x01 \x01(\x0e\x32!.Cloud_Py_API.DbExecRequest.rType\x12\x12\n\ntable_name\x18\x02 \x01(\t\x12\x0f\n\x07\x63olumns\x18\x03 \x03(\t\x12\x0e\n\x06values\x18\x04 \x03(\x0c\x12(\n\x07whereas\x18\x05 \x03(\x0b\x32\x17.Cloud_Py_API.whereExpr\"+\n\x05rType\x12\n\n\x06INSERT\x10\x00\x12\n\n\x06UPDATE\x10\x01\x12\n\n\x06\x44\x45LETE\x10\x02\"3\n\x0b\x44\x62\x45xecReply\x12\x15\n\rnAffectedRows\x18\x01 \x01(\x03\x12\r\n\x05\x65rror\x18\x02 \x01(\t\"j\n\rServerCommand\x12.\n\x02id\x18\x01 \x01(\x0e\x32\".Cloud_Py_API.ServerCommand.cmd_id\")\n\x06\x63md_id\x12\x10\n\x0cTASK_NOTHING\x10\x00\x12\r\n\tTASK_STOP\x10\x01*=\n\x06logLvl\x12\t\n\x05\x44\x45\x42UG\x10\x00\x12\x08\n\x04INFO\x10\x01\x12\x08\n\x04WARN\x10\x02\x12\t\n\x05\x45RROR\x10\x03\x12\t\n\x05\x46\x41TAL\x10\x04*s\n\ntaskStatus\x12\x0e\n\nST_SUCCESS\x10\x00\x12\x12\n\x0eST_IN_PROGRESS\x10\x01\x12\x11\n\rST_INIT_ERROR\x10\x02\x12\x10\n\x0cST_EXCEPTION\x10\x03\x12\x0c\n\x08ST_ERROR\x10\x04\x12\x0e\n\nST_UNKNOWN\x10\x05*X\n\x0c\x66sResultCode\x12\x0c\n\x08NO_ERROR\x10\x00\x12\x11\n\rNOT_PERMITTED\x10\x01\x12\n\n\x06LOCKED\x10\x02\x12\r\n\tNOT_FOUND\x10\x03\x12\x0c\n\x08IO_ERROR\x10\x04\x32\x93\x08\n\x0e\x43loudPyApiCore\x12>\n\x08TaskInit\x12\x13.Cloud_Py_API.Empty\x1a\x1b.Cloud_Py_API.TaskInitReply\"\x00\x12G\n\nTaskStatus\x12\".Cloud_Py_API.TaskSetStatusRequest\x1a\x13.Cloud_Py_API.Empty\"\x00\x12@\n\x08TaskExit\x12\x1d.Cloud_Py_API.TaskExitRequest\x1a\x13.Cloud_Py_API.Empty\"\x00\x12>\n\x07TaskLog\x12\x1c.Cloud_Py_API.TaskLogRequest\x1a\x13.Cloud_Py_API.Empty\"\x00\x12\x41\n\tCmdStream\x12\x13.Cloud_Py_API.Empty\x1a\x1b.Cloud_Py_API.ServerCommand\"\x00\x30\x01\x12\x45\n\tFsGetInfo\x12\x1b.Cloud_Py_API.FsListRequest\x1a\x19.Cloud_Py_API.FsListReply\"\x00\x12\x42\n\x06\x46sList\x12\x1b.Cloud_Py_API.FsListRequest\x1a\x19.Cloud_Py_API.FsListReply\"\x00\x12\x44\n\x06\x46sRead\x12\x1b.Cloud_Py_API.FsReadRequest\x1a\x19.Cloud_Py_API.FsReadReply\"\x00\x30\x01\x12\x42\n\x08\x46sCreate\x12\x1d.Cloud_Py_API.FsCreateRequest\x1a\x15.Cloud_Py_API.FsReply\"\x00\x12\x42\n\x07\x46sWrite\x12\x1c.Cloud_Py_API.FsWriteRequest\x1a\x15.Cloud_Py_API.FsReply\"\x00(\x01\x12\x42\n\x08\x46sDelete\x12\x1d.Cloud_Py_API.FsDeleteRequest\x1a\x15.Cloud_Py_API.FsReply\"\x00\x12>\n\x06\x46sMove\x12\x1b.Cloud_Py_API.FsMoveRequest\x1a\x15.Cloud_Py_API.FsReply\"\x00\x12H\n\x08\x44\x62Select\x12\x1d.Cloud_Py_API.DbSelectRequest\x1a\x1b.Cloud_Py_API.DbSelectReply\"\x00\x12H\n\x08\x44\x62\x43ursor\x12\x1d.Cloud_Py_API.DbCursorRequest\x1a\x1b.Cloud_Py_API.DbCursorReply\"\x00\x12\x42\n\x06\x44\x62\x45xec\x12\x1b.Cloud_Py_API.DbExecRequest\x1a\x19.Cloud_Py_API.DbExecReply\"\x00\x62\x06proto3'
+  serialized_pb=b'\n\ncore.proto\x12\x0c\x43loud_Py_API\"\x07\n\x05\x45mpty\"\xfd\x01\n\rTaskInitReply\x12\x0f\n\x07\x61ppName\x18\x01 \x01(\t\x12\x0f\n\x07modName\x18\x02 \x01(\t\x12\x0f\n\x07modPath\x18\x03 \x01(\t\x12\x10\n\x08\x66uncName\x18\x04 \x01(\t\x12\x0c\n\x04\x61rgs\x18\x05 \x03(\t\x12\x36\n\x06\x63onfig\x18\x06 \x01(\x0b\x32&.Cloud_Py_API.TaskInitReply.cfgOptions\x1a\x61\n\ncfgOptions\x12%\n\x07log_lvl\x18\x01 \x01(\x0e\x32\x14.Cloud_Py_API.logLvl\x12\x12\n\ndataFolder\x18\x02 \x01(\t\x12\x18\n\x10\x66rameworkAppData\x18\x03 \x01(\t\"P\n\x14TaskSetStatusRequest\x12)\n\x07st_code\x18\x01 \x01(\x0e\x32\x18.Cloud_Py_API.taskStatus\x12\r\n\x05\x65rror\x18\x02 \x01(\t\"!\n\x0fTaskExitRequest\x12\x0e\n\x06result\x18\x01 \x01(\t\"X\n\x0eTaskLogRequest\x12%\n\x07log_lvl\x18\x01 \x01(\x0e\x32\x14.Cloud_Py_API.logLvl\x12\x0e\n\x06module\x18\x02 \x01(\t\x12\x0f\n\x07\x63ontent\x18\x03 \x03(\t\"&\n\x04\x66sId\x12\x0e\n\x06userId\x18\x01 \x01(\t\x12\x0e\n\x06\x66ileId\x18\x02 \x01(\t\"6\n\x10\x46sGetInfoRequest\x12\"\n\x06\x66ileId\x18\x01 \x01(\x0b\x32\x12.Cloud_Py_API.fsId\"\xbb\x02\n\x0e\x46sGetInfoReply\x12\"\n\x06\x66ileId\x18\x01 \x01(\x0b\x32\x12.Cloud_Py_API.fsId\x12\x0e\n\x06is_dir\x18\x02 \x01(\x08\x12\x10\n\x08is_local\x18\x03 \x01(\x08\x12\x10\n\x08mimetype\x18\x04 \x01(\t\x12\x0c\n\x04name\x18\x05 \x01(\t\x12\x15\n\rinternal_path\x18\x06 \x01(\t\x12\x10\n\x08\x61\x62s_path\x18\x07 \x01(\t\x12\x0c\n\x04size\x18\x08 \x01(\x03\x12\x13\n\x0bpermissions\x18\t \x01(\x03\x12\r\n\x05mtime\x18\n \x01(\x03\x12\x10\n\x08\x63hecksum\x18\x0b \x01(\t\x12\x11\n\tencrypted\x18\x0c \x01(\x08\x12\x0c\n\x04\x65tag\x18\r \x01(\t\x12\x11\n\townerName\x18\x0e \x01(\t\x12\x11\n\tstorageId\x18\x0f \x01(\x03\x12\x0f\n\x07mountId\x18\x10 \x01(\x03\"2\n\rFsListRequest\x12!\n\x05\x64irId\x18\x01 \x01(\x0b\x32\x12.Cloud_Py_API.fsId\":\n\x0b\x46sListReply\x12+\n\x05nodes\x18\x01 \x03(\x0b\x32\x1c.Cloud_Py_API.FsGetInfoReply\"3\n\rFsReadRequest\x12\"\n\x06\x66ileId\x18\x01 \x01(\x0b\x32\x12.Cloud_Py_API.fsId\"K\n\x0b\x46sReadReply\x12+\n\x07resCode\x18\x01 \x01(\x0e\x32\x1a.Cloud_Py_API.fsResultCode\x12\x0f\n\x07\x63ontent\x18\x02 \x01(\x0c\"j\n\x0f\x46sCreateRequest\x12\'\n\x0bparentDirId\x18\x01 \x01(\x0b\x32\x12.Cloud_Py_API.fsId\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x0f\n\x07is_file\x18\x03 \x01(\x08\x12\x0f\n\x07\x63ontent\x18\x04 \x01(\x0c\"E\n\x0e\x46sWriteRequest\x12\"\n\x06\x66ileId\x18\x01 \x01(\x0b\x32\x12.Cloud_Py_API.fsId\x12\x0f\n\x07\x63ontent\x18\x02 \x01(\x0c\"5\n\x0f\x46sDeleteRequest\x12\"\n\x06\x66ileId\x18\x01 \x01(\x0b\x32\x12.Cloud_Py_API.fsId\"V\n\rFsMoveRequest\x12\"\n\x06\x66ileId\x18\x01 \x01(\x0b\x32\x12.Cloud_Py_API.fsId\x12\x12\n\ntargetPath\x18\x02 \x01(\t\x12\r\n\x05\x62\x43opy\x18\x03 \x01(\x08\"6\n\x07\x46sReply\x12+\n\x07resCode\x18\x01 \x01(\x0e\x32\x1a.Cloud_Py_API.fsResultCode\"-\n\twhereExpr\x12\x0c\n\x04type\x18\x01 \x01(\t\x12\x12\n\nexpression\x18\x02 \x01(\t\"(\n\tstr_alias\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\r\n\x05\x61lias\x18\x02 \x01(\t\"\xd6\x03\n\x0f\x44\x62SelectRequest\x12(\n\x07\x63olumns\x18\x01 \x03(\x0b\x32\x17.Cloud_Py_API.str_alias\x12%\n\x04\x66rom\x18\x02 \x03(\x0b\x32\x17.Cloud_Py_API.str_alias\x12\x35\n\x05joins\x18\x03 \x03(\x0b\x32&.Cloud_Py_API.DbSelectRequest.joinType\x12(\n\x07whereas\x18\x04 \x03(\x0b\x32\x17.Cloud_Py_API.whereExpr\x12\x0f\n\x07groupBy\x18\x05 \x03(\t\x12\x39\n\x07havings\x18\x06 \x03(\x0b\x32(.Cloud_Py_API.DbSelectRequest.havingExpr\x12\x0f\n\x07orderBy\x18\x07 \x03(\t\x12\x12\n\nmaxResults\x18\x08 \x01(\x03\x12\x13\n\x0b\x66irstResult\x18\t \x01(\x03\x1a[\n\x08joinType\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x11\n\tfromAlias\x18\x02 \x01(\t\x12\x0c\n\x04join\x18\x03 \x01(\t\x12\r\n\x05\x61lias\x18\x04 \x01(\t\x12\x11\n\tcondition\x18\x05 \x01(\t\x1a.\n\nhavingExpr\x12\x0c\n\x04type\x18\x01 \x01(\t\x12\x12\n\nexpression\x18\x02 \x01(\t\"@\n\rDbSelectReply\x12\x10\n\x08rowCount\x18\x01 \x01(\x03\x12\r\n\x05\x65rror\x18\x02 \x01(\t\x12\x0e\n\x06handle\x18\x03 \x01(\x03\"\x7f\n\x0f\x44\x62\x43ursorRequest\x12/\n\x03\x63md\x18\x01 \x01(\x0e\x32\".Cloud_Py_API.DbCursorRequest.cCmd\x12\x0e\n\x06handle\x18\x02 \x01(\x03\"+\n\x04\x63\x43md\x12\t\n\x05\x46\x45TCH\x10\x00\x12\r\n\tFETCH_ALL\x10\x01\x12\t\n\x05\x43LOSE\x10\x02\"\x9e\x01\n\rDbCursorReply\x12\r\n\x05\x65rror\x18\x01 \x01(\t\x12\x13\n\x0b\x63olumnsName\x18\x02 \x03(\t\x12;\n\x0b\x63olumnsData\x18\x03 \x03(\x0b\x32&.Cloud_Py_API.DbCursorReply.columnData\x1a,\n\ncolumnData\x12\x10\n\x08\x62Present\x18\x01 \x01(\x08\x12\x0c\n\x04\x64\x61ta\x18\x02 \x01(\x0c\"\xcc\x01\n\rDbExecRequest\x12/\n\x04type\x18\x01 \x01(\x0e\x32!.Cloud_Py_API.DbExecRequest.rType\x12\x12\n\ntable_name\x18\x02 \x01(\t\x12\x0f\n\x07\x63olumns\x18\x03 \x03(\t\x12\x0e\n\x06values\x18\x04 \x03(\x0c\x12(\n\x07whereas\x18\x05 \x03(\x0b\x32\x17.Cloud_Py_API.whereExpr\"+\n\x05rType\x12\n\n\x06INSERT\x10\x00\x12\n\n\x06UPDATE\x10\x01\x12\n\n\x06\x44\x45LETE\x10\x02\"3\n\x0b\x44\x62\x45xecReply\x12\x15\n\rnAffectedRows\x18\x01 \x01(\x03\x12\r\n\x05\x65rror\x18\x02 \x01(\t\"j\n\rServerCommand\x12.\n\x02id\x18\x01 \x01(\x0e\x32\".Cloud_Py_API.ServerCommand.cmd_id\")\n\x06\x63md_id\x12\x10\n\x0cTASK_NOTHING\x10\x00\x12\r\n\tTASK_STOP\x10\x01*=\n\x06logLvl\x12\t\n\x05\x44\x45\x42UG\x10\x00\x12\x08\n\x04INFO\x10\x01\x12\x08\n\x04WARN\x10\x02\x12\t\n\x05\x45RROR\x10\x03\x12\t\n\x05\x46\x41TAL\x10\x04*s\n\ntaskStatus\x12\x0e\n\nST_SUCCESS\x10\x00\x12\x12\n\x0eST_IN_PROGRESS\x10\x01\x12\x11\n\rST_INIT_ERROR\x10\x02\x12\x10\n\x0cST_EXCEPTION\x10\x03\x12\x0c\n\x08ST_ERROR\x10\x04\x12\x0e\n\nST_UNKNOWN\x10\x05*X\n\x0c\x66sResultCode\x12\x0c\n\x08NO_ERROR\x10\x00\x12\x11\n\rNOT_PERMITTED\x10\x01\x12\n\n\x06LOCKED\x10\x02\x12\r\n\tNOT_FOUND\x10\x03\x12\x0c\n\x08IO_ERROR\x10\x04\x32\x93\x08\n\x0e\x43loudPyApiCore\x12>\n\x08TaskInit\x12\x13.Cloud_Py_API.Empty\x1a\x1b.Cloud_Py_API.TaskInitReply\"\x00\x12G\n\nTaskStatus\x12\".Cloud_Py_API.TaskSetStatusRequest\x1a\x13.Cloud_Py_API.Empty\"\x00\x12@\n\x08TaskExit\x12\x1d.Cloud_Py_API.TaskExitRequest\x1a\x13.Cloud_Py_API.Empty\"\x00\x12>\n\x07TaskLog\x12\x1c.Cloud_Py_API.TaskLogRequest\x1a\x13.Cloud_Py_API.Empty\"\x00\x12\x41\n\tCmdStream\x12\x13.Cloud_Py_API.Empty\x1a\x1b.Cloud_Py_API.ServerCommand\"\x00\x30\x01\x12\x45\n\tFsGetInfo\x12\x1b.Cloud_Py_API.FsListRequest\x1a\x19.Cloud_Py_API.FsListReply\"\x00\x12\x42\n\x06\x46sList\x12\x1b.Cloud_Py_API.FsListRequest\x1a\x19.Cloud_Py_API.FsListReply\"\x00\x12\x44\n\x06\x46sRead\x12\x1b.Cloud_Py_API.FsReadRequest\x1a\x19.Cloud_Py_API.FsReadReply\"\x00\x30\x01\x12\x42\n\x08\x46sCreate\x12\x1d.Cloud_Py_API.FsCreateRequest\x1a\x15.Cloud_Py_API.FsReply\"\x00\x12\x42\n\x07\x46sWrite\x12\x1c.Cloud_Py_API.FsWriteRequest\x1a\x15.Cloud_Py_API.FsReply\"\x00(\x01\x12\x42\n\x08\x46sDelete\x12\x1d.Cloud_Py_API.FsDeleteRequest\x1a\x15.Cloud_Py_API.FsReply\"\x00\x12>\n\x06\x46sMove\x12\x1b.Cloud_Py_API.FsMoveRequest\x1a\x15.Cloud_Py_API.FsReply\"\x00\x12H\n\x08\x44\x62Select\x12\x1d.Cloud_Py_API.DbSelectRequest\x1a\x1b.Cloud_Py_API.DbSelectReply\"\x00\x12H\n\x08\x44\x62\x43ursor\x12\x1d.Cloud_Py_API.DbCursorRequest\x1a\x1b.Cloud_Py_API.DbCursorReply\"\x00\x12\x42\n\x06\x44\x62\x45xec\x12\x1b.Cloud_Py_API.DbExecRequest\x1a\x19.Cloud_Py_API.DbExecReply\"\x00\x62\x06proto3'
 )
 
 _LOGLVL = _descriptor.EnumDescriptor(
@@ -58,8 +58,8 @@ _LOGLVL = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=2787,
-  serialized_end=2848,
+  serialized_start=2820,
+  serialized_end=2881,
 )
 _sym_db.RegisterEnumDescriptor(_LOGLVL)
 
@@ -104,8 +104,8 @@ _TASKSTATUS = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=2850,
-  serialized_end=2965,
+  serialized_start=2883,
+  serialized_end=2998,
 )
 _sym_db.RegisterEnumDescriptor(_TASKSTATUS)
 
@@ -145,8 +145,8 @@ _FSRESULTCODE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=2967,
-  serialized_end=3055,
+  serialized_start=3000,
+  serialized_end=3088,
 )
 _sym_db.RegisterEnumDescriptor(_FSRESULTCODE)
 
@@ -194,8 +194,8 @@ _DBCURSORREQUEST_CCMD = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=2213,
-  serialized_end=2256,
+  serialized_start=2246,
+  serialized_end=2289,
 )
 _sym_db.RegisterEnumDescriptor(_DBCURSORREQUEST_CCMD)
 
@@ -224,8 +224,8 @@ _DBEXECREQUEST_RTYPE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=2581,
-  serialized_end=2624,
+  serialized_start=2614,
+  serialized_end=2657,
 )
 _sym_db.RegisterEnumDescriptor(_DBEXECREQUEST_RTYPE)
 
@@ -249,8 +249,8 @@ _SERVERCOMMAND_CMD_ID = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=2744,
-  serialized_end=2785,
+  serialized_start=2777,
+  serialized_end=2818,
 )
 _sym_db.RegisterEnumDescriptor(_SERVERCOMMAND_CMD_ID)
 
@@ -321,8 +321,8 @@ _TASKINITREPLY_CFGOPTIONS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=161,
-  serialized_end=258,
+  serialized_start=194,
+  serialized_end=291,
 )
 
 _TASKINITREPLY = _descriptor.Descriptor(
@@ -334,29 +334,43 @@ _TASKINITREPLY = _descriptor.Descriptor(
   create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
-      name='filePath', full_name='Cloud_Py_API.TaskInitReply.filePath', index=0,
+      name='appName', full_name='Cloud_Py_API.TaskInitReply.appName', index=0,
       number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='funcName', full_name='Cloud_Py_API.TaskInitReply.funcName', index=1,
+      name='modName', full_name='Cloud_Py_API.TaskInitReply.modName', index=1,
       number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='args', full_name='Cloud_Py_API.TaskInitReply.args', index=2,
-      number=3, type=9, cpp_type=9, label=3,
+      name='modPath', full_name='Cloud_Py_API.TaskInitReply.modPath', index=2,
+      number=3, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='funcName', full_name='Cloud_Py_API.TaskInitReply.funcName', index=3,
+      number=4, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='args', full_name='Cloud_Py_API.TaskInitReply.args', index=4,
+      number=5, type=9, cpp_type=9, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='config', full_name='Cloud_Py_API.TaskInitReply.config', index=3,
-      number=4, type=11, cpp_type=10, label=1,
+      name='config', full_name='Cloud_Py_API.TaskInitReply.config', index=5,
+      number=6, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -374,7 +388,7 @@ _TASKINITREPLY = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=38,
-  serialized_end=258,
+  serialized_end=291,
 )
 
 
@@ -412,8 +426,8 @@ _TASKSETSTATUSREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=260,
-  serialized_end=340,
+  serialized_start=293,
+  serialized_end=373,
 )
 
 
@@ -444,8 +458,8 @@ _TASKEXITREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=342,
-  serialized_end=375,
+  serialized_start=375,
+  serialized_end=408,
 )
 
 
@@ -490,8 +504,8 @@ _TASKLOGREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=377,
-  serialized_end=465,
+  serialized_start=410,
+  serialized_end=498,
 )
 
 
@@ -529,8 +543,8 @@ _FSID = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=467,
-  serialized_end=505,
+  serialized_start=500,
+  serialized_end=538,
 )
 
 
@@ -561,8 +575,8 @@ _FSGETINFOREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=507,
-  serialized_end=561,
+  serialized_start=540,
+  serialized_end=594,
 )
 
 
@@ -698,8 +712,8 @@ _FSGETINFOREPLY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=564,
-  serialized_end=879,
+  serialized_start=597,
+  serialized_end=912,
 )
 
 
@@ -730,8 +744,8 @@ _FSLISTREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=881,
-  serialized_end=931,
+  serialized_start=914,
+  serialized_end=964,
 )
 
 
@@ -762,8 +776,8 @@ _FSLISTREPLY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=933,
-  serialized_end=991,
+  serialized_start=966,
+  serialized_end=1024,
 )
 
 
@@ -794,8 +808,8 @@ _FSREADREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=993,
-  serialized_end=1044,
+  serialized_start=1026,
+  serialized_end=1077,
 )
 
 
@@ -833,8 +847,8 @@ _FSREADREPLY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1046,
-  serialized_end=1121,
+  serialized_start=1079,
+  serialized_end=1154,
 )
 
 
@@ -886,8 +900,8 @@ _FSCREATEREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1123,
-  serialized_end=1229,
+  serialized_start=1156,
+  serialized_end=1262,
 )
 
 
@@ -925,8 +939,8 @@ _FSWRITEREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1231,
-  serialized_end=1300,
+  serialized_start=1264,
+  serialized_end=1333,
 )
 
 
@@ -957,8 +971,8 @@ _FSDELETEREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1302,
-  serialized_end=1355,
+  serialized_start=1335,
+  serialized_end=1388,
 )
 
 
@@ -1003,8 +1017,8 @@ _FSMOVEREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1357,
-  serialized_end=1443,
+  serialized_start=1390,
+  serialized_end=1476,
 )
 
 
@@ -1035,8 +1049,8 @@ _FSREPLY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1445,
-  serialized_end=1499,
+  serialized_start=1478,
+  serialized_end=1532,
 )
 
 
@@ -1074,8 +1088,8 @@ _WHEREEXPR = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1501,
-  serialized_end=1546,
+  serialized_start=1534,
+  serialized_end=1579,
 )
 
 
@@ -1113,8 +1127,8 @@ _STR_ALIAS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1548,
-  serialized_end=1588,
+  serialized_start=1581,
+  serialized_end=1621,
 )
 
 
@@ -1173,8 +1187,8 @@ _DBSELECTREQUEST_JOINTYPE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1922,
-  serialized_end=2013,
+  serialized_start=1955,
+  serialized_end=2046,
 )
 
 _DBSELECTREQUEST_HAVINGEXPR = _descriptor.Descriptor(
@@ -1211,8 +1225,8 @@ _DBSELECTREQUEST_HAVINGEXPR = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2015,
-  serialized_end=2061,
+  serialized_start=2048,
+  serialized_end=2094,
 )
 
 _DBSELECTREQUEST = _descriptor.Descriptor(
@@ -1298,8 +1312,8 @@ _DBSELECTREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1591,
-  serialized_end=2061,
+  serialized_start=1624,
+  serialized_end=2094,
 )
 
 
@@ -1344,8 +1358,8 @@ _DBSELECTREPLY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2063,
-  serialized_end=2127,
+  serialized_start=2096,
+  serialized_end=2160,
 )
 
 
@@ -1384,8 +1398,8 @@ _DBCURSORREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2129,
-  serialized_end=2256,
+  serialized_start=2162,
+  serialized_end=2289,
 )
 
 
@@ -1423,8 +1437,8 @@ _DBCURSORREPLY_COLUMNDATA = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2373,
-  serialized_end=2417,
+  serialized_start=2406,
+  serialized_end=2450,
 )
 
 _DBCURSORREPLY = _descriptor.Descriptor(
@@ -1468,8 +1482,8 @@ _DBCURSORREPLY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2259,
-  serialized_end=2417,
+  serialized_start=2292,
+  serialized_end=2450,
 )
 
 
@@ -1529,8 +1543,8 @@ _DBEXECREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2420,
-  serialized_end=2624,
+  serialized_start=2453,
+  serialized_end=2657,
 )
 
 
@@ -1568,8 +1582,8 @@ _DBEXECREPLY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2626,
-  serialized_end=2677,
+  serialized_start=2659,
+  serialized_end=2710,
 )
 
 
@@ -1601,8 +1615,8 @@ _SERVERCOMMAND = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2679,
-  serialized_end=2785,
+  serialized_start=2712,
+  serialized_end=2818,
 )
 
 _TASKINITREPLY_CFGOPTIONS.fields_by_name['log_lvl'].enum_type = _LOGLVL
@@ -1891,8 +1905,8 @@ _CLOUDPYAPICORE = _descriptor.ServiceDescriptor(
   index=0,
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_start=3058,
-  serialized_end=4101,
+  serialized_start=3091,
+  serialized_end=4134,
   methods=[
   _descriptor.MethodDescriptor(
     name='TaskInit',

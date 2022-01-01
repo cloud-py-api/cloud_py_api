@@ -13,14 +13,14 @@ from helpers import debug_msg
 
 
 def _signal_exit():
-    time.sleep(0.8)
+    time.sleep(1.3)
     os.kill(os.getpid(), signal.SIGTERM)
 
 
 class ClientCloudPA:
+    task_init_data = None
     _main_channel = None
     _main_stub = None
-    _task_init_data = None
     _exit_sent: bool = False
     _cmd_thread = None
 
@@ -30,7 +30,7 @@ class ClientCloudPA:
                                                             ('grpc.keepalive_timeout_ms', 10000)
                                                             ])
         self._main_stub = core_pb2_grpc.CloudPyApiCoreStub(self._main_channel)
-        self._task_init_data = self._main_stub.TaskInit(Empty())
+        self.task_init_data = self._main_stub.TaskInit(Empty())
         debug_msg('connected')
         self._cmd_thread = Thread(target=self.__listen_for_commands__, daemon=False)
         self._cmd_thread.start()
@@ -56,7 +56,7 @@ class ClientCloudPA:
         self._main_stub.TaskStatus(TaskSetStatusRequest(st_code=status,
                                                         error=error))
 
-    def exit(self, result: str = '') -> None:
+    def exit(self, result) -> None:
         debug_msg('exit()')
         self._exit_sent = True
         try:
@@ -73,7 +73,7 @@ class ClientCloudPA:
     def log(self, log_lvl: int, mod_name: str, content: Union[str, list]) -> None:
         if content is None:
             raise ValueError('no log content')
-        if self._task_init_data.config.log_lvl <= log_lvl:
+        if self.task_init_data.config.log_lvl <= log_lvl:
             _log_content = []
             if isinstance(content, str):
                 _log_content.append(content)

@@ -34,15 +34,17 @@ enum taskStatus {
 message Empty { }
 
 message TaskInitReply {
-  string filePath = 1;                    //Path to file, to be executed.
-  string funcName = 2;                    //Which function to execute(optional).
-  repeated string args = 3;               //Optional arguments to pass to target python app's module.
+  string appName = 1;                     //name of the app(folder in frmAppData must be present with the same name).
+  string modName = 2;                     //module name to use for `import_module` func.
+  string modPath = 3;                     //Path to module root, to be executed.
+  string funcName = 4;                    //Which function to execute.
+  repeated string args = 5;               //Optional arguments to pass to target python app's module.
   message cfgOptions {
     logLvl log_lvl = 1;                   //0-4 , level logs from NC documentation.
     string dataFolder = 2;                //Path to NC data folder.
-    string frameworkAppData = 3;          //Path to target folder of app inside framework app data.
+    string frameworkAppData = 3;          //Path to cloud_py_api app data folder.
   }
-  cfgOptions config = 4;
+  cfgOptions config = 6;
 }
 
 message TaskSetStatusRequest {            //No reply.

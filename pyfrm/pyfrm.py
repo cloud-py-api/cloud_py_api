@@ -1,7 +1,8 @@
 import signal
 import sys
-import time
-from os import getpid
+from os import getpid, path
+from enum import Enum
+from importlib import invalidate_caches, import_module
 
 from grpc import RpcError
 from core_pb2 import logLvl, taskStatus
@@ -9,36 +10,100 @@ from helpers import print_err, debug_msg
 from core_proto import ClientCloudPA
 
 
+class ExitCodes(Enum):
+    CODE_OK = 0
+    CODE_CONN_BROKE = 1
+    CODE_CONN_IMP = 2
+    CODE_INIT_ERR = 3
+    CODE_LOAD_ERR = 4
+    CODE_EXCEPTION = 5
+
+
 def signal_handler(signum=None, _frame=None):
     print_err('Got signal:', signum)
     sys.exit(0)
 
 
-def true_main(connect_address: str, auth: str = '') -> int:
+def check_task_init(cloud: ClientCloudPA) -> bool:
+    _task_data = cloud.task_init_data
+    if not _task_data.appName:
+        cloud.log(logLvl.FATAL, 'cpa_core', 'invalid task appName')
+        return False
+    if not _task_data.modName:
+        cloud.log(logLvl.FATAL, 'cpa_core', 'invalid task modName')
+        return False
+    if not _task_data.modPath:
+        cloud.log(logLvl.FATAL, 'cpa_core', 'invalid task modPath')
+        return False
+    if not _task_data.funcName:
+        cloud.log(logLvl.FATAL, 'cpa_core', 'invalid task funcName')
+        return False
+    if not _task_data.config.frameworkAppData:
+        cloud.log(logLvl.FATAL, 'cpa_core', 'invalid task frameworkAppData')
+        return False
+    return True
+
+
+def true_main(connect_address: str, auth: str = '') -> ExitCodes:
     cloud = None
+    exit_code = ExitCodes.CODE_OK
     try:
         cloud = ClientCloudPA(connect_address, auth)
-        cloud.set_status(taskStatus.ST_IN_PROGRESS)
-        cloud.log(logLvl.DEBUG, 'cpa_core', f'Started with pid={getpid()}')
-
-        cloud.log(logLvl.DEBUG, 'TEST', 'sleeping')
-        time.sleep(5.0)
-        cloud.log(logLvl.DEBUG, 'TEST', 'waking up')
-
-        cloud.set_status(taskStatus.ST_SUCCESS)
-        cloud.exit('result_ok')
-    except RpcError as exc:
-        ret_val = 1
+        result = None
+        try:
+            cloud.set_status(taskStatus.ST_IN_PROGRESS)
+            cloud.log(logLvl.DEBUG, 'cpa_core', f'Started with pid={getpid()}')
+            if not check_task_init(cloud):
+                cloud.set_status(taskStatus.ST_INIT_ERROR)
+                return ExitCodes.CODE_INIT_ERR
+            cloud.log(logLvl.DEBUG, 'cpa_core', f'Start loading target app: {cloud.task_init_data.appName}')
+            # TODO: expand site_path to frameworkAppData + appName   -> as first element?
+            sys.path.append(path.dirname(path.abspath(cloud.task_init_data.modPath)))
+            invalidate_caches()
+            try:
+                target_module = import_module(cloud.task_init_data.modName, None)
+                globals()[cloud.task_init_data.modName] = target_module
+            except (ModuleNotFoundError, AttributeError, ImportError, ValueError):
+                cloud.log(logLvl.FATAL, 'cpa_core', 'Error during target module load.')
+                cloud.set_status(taskStatus.ST_ERROR)
+                return ExitCodes.CODE_LOAD_ERR
+            try:
+                func_to_call = getattr(target_module, cloud.task_init_data.funcName)
+            except AttributeError:
+                cloud.log(logLvl.FATAL, 'cpa_core', f'Function {cloud.task_init_data.funcName} not found.')
+                cloud.set_status(taskStatus.ST_ERROR)
+                return ExitCodes.CODE_LOAD_ERR
+            cloud.log(logLvl.DEBUG, 'cpa_core', f'Calling target app entry point({cloud.task_init_data.funcName})')
+            result = func_to_call()
+            cloud.log(logLvl.DEBUG, 'cpa_core', f'Target app finished.')
+            if result is None or isinstance(result, str):
+                cloud.log(logLvl.DEBUG, 'cpa_core', f"Result length=`{len(result) if result is not None else 'None'}`")
+            else:
+                cloud.log(logLvl.ERROR, 'cpa_core', f'Invalid result type({str(type(result))})')
+                result = None
+            cloud.set_status(taskStatus.ST_SUCCESS)
+        except Exception as exception_info:
+            exception_name = type(exception_info).__name__
+            if exception_name in ('RpcError',):
+                raise exception_info from None
+            exit_code = ExitCodes.CODE_EXCEPTION
+            cloud.set_status(taskStatus.ST_EXCEPTION)
+            cloud.log(logLvl.ERROR, 'cpa_core', f'Error({type(exception_info).__name__}):`{str(exception_info)}`')
+        finally:
+            cloud.exit(result)
+    except RpcError as exception_info:
+        exit_code = ExitCodes.CODE_CONN_BROKE
         if cloud is None:
             print_err('Cant establish connect to server')
-            ret_val = 2
-        print_err(str(exc))
-        return ret_val
-    return 0
+            exit_code = ExitCodes.CODE_CONN_IMP
+        print_err(str(exception_info))
+    return exit_code
 
 
 if __name__ == '__main__':
+    debug_msg('__main__: started')
     for sig in [signal.SIGINT, signal.SIGQUIT, signal.SIGTERM, signal.SIGHUP]:
         signal.signal(sig, signal_handler)
-    debug_msg('started')
-    sys.exit(true_main(sys.argv[1:2][0]))
+    r = true_main(sys.argv[1:2][0])
+    debug_msg(f'__main__: finished, exit_code = {r.value}:{r.name}')
+    sys.exit(r.value)

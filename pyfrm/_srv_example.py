@@ -19,8 +19,11 @@ def run_python_script(python_script_path, *args):
 
 
 class TaskParameters:
-    def __init__(self, log_lvl, data_folder, frm_app_data, file_path, func_name, *args):
-        self.file_path = file_path
+    def __init__(self, log_lvl, data_folder, frm_app_data,
+                 app_name, mod_name, mod_path, func_name, *args):
+        self.app_name = app_name
+        self.mod_name = mod_name
+        self.mod_path = mod_path
         self.func_name = func_name
         self.args = args
         self.log_lvl = log_lvl
@@ -31,12 +34,13 @@ class TaskParameters:
 class ServerCloudPA(core_pb2_grpc.CloudPyApiCoreServicer, TaskParameters):
     stop_flag: bool = False
     connection_alive: bool = False
-    result: str = ''
     task_status: taskStatus = taskStatus.ST_UNKNOWN
     task_error: str = ''
 
     def TaskInit(self, request, context):
-        return TaskInitReply(filePath=self.file_path,
+        return TaskInitReply(appName=self.app_name,
+                             modName=self.mod_name,
+                             modPath=self.mod_path,
                              funcName=self.func_name,
                              args=self.args,
                              config=TaskInitReply.cfgOptions(
@@ -62,7 +66,8 @@ class ServerCloudPA(core_pb2_grpc.CloudPyApiCoreServicer, TaskParameters):
 
     def TaskExit(self, request, context):
         self.result = request.result
-        print(f'Server: receive TaskExit, with result = <{self.result}>')
+        print('Server: receive TaskExit')
+        print(f'Server: result length = {len(self.result)}, result: {self.result}')
         self.__stop()
         return Empty()
 
@@ -88,7 +93,7 @@ class ServerCloudPA(core_pb2_grpc.CloudPyApiCoreServicer, TaskParameters):
 # @pytest.mark.parametrize(
 #     "address, port, app_file, app_func",
 #     (
-#         ('unix:./../tmp/test.sock', '', 'hello_world.py', ''),
+#         ('unix:./../tmp/test.sock', '', 'hello_world.py', 'function_hello_world'),
 #         ('localhost', '', 'hello_world.py', ''),
 #         ('0.0.0.0', '', 'hello_world.py', ''),
 #         ('[::]', '60051', 'hello_world.py', ''),
@@ -106,14 +111,14 @@ class ServerCloudPA(core_pb2_grpc.CloudPyApiCoreServicer, TaskParameters):
 if __name__ == '__main__':
     address = 'unix:./../tmp/test.sock'
     port = '0'
-    app_file = 'hello_word.py'
-    app_func = ''
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=2))
     servicer = ServerCloudPA(log_lvl=logLvl.DEBUG,
                              data_folder='./../tmp/data_folder',
                              frm_app_data='./../tmp/frm_app_data',
-                             file_path=f'../tests/python/apps_example/{app_file}',
-                             func_name=app_func,
+                             app_name='hello_world',
+                             mod_name='hello_world',
+                             mod_path='../tests/python/apps_example/hello_world',
+                             func_name='function_hello_world',
                              )
     core_pb2_grpc.add_CloudPyApiCoreServicer_to_server(servicer, server)
     connect_address = address
@@ -133,12 +138,13 @@ if __name__ == '__main__':
                     break
                 if not servicer.connection_alive:
                     break
-        else:
+        elif servicer.task_status == taskStatus.ST_UNKNOWN:
             print('Server: timeout, client did not connected')
     server.stop(grace=0.5)
     try:
         p_obj.wait(timeout=3.0)
     except TimeoutExpired:
         print('Server: timeout waiting child process')
+    print(f'Server: task finished with status {taskStatus.Name(servicer.task_status)}')
     print('Server: exiting')
     sys.exit(0)
