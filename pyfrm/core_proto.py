@@ -13,7 +13,7 @@ from helpers import debug_msg
 
 
 def _signal_exit():
-    time.sleep(1.3)
+    time.sleep(1.6)
     os.kill(os.getpid(), signal.SIGTERM)
 
 
@@ -47,7 +47,7 @@ class ClientCloudPA:
                 debug_msg(f'cmd.id = {ServerCommand.cmd_id.Name(cmd.id)}')
                 if cmd.id == ServerCommand.cmd_id.TASK_STOP:
                     break
-        except grpc.RpcError as exc:
+        except (grpc.RpcError, ValueError) as exc:
             debug_msg(str(exc))
         if not self._exit_sent:
             Thread(target=_signal_exit, daemon=True).start()
@@ -56,7 +56,7 @@ class ClientCloudPA:
         self._main_stub.TaskStatus(TaskSetStatusRequest(st_code=status,
                                                         error=error))
 
-    def exit(self, result) -> None:
+    def exit(self, result=None) -> None:
         debug_msg('exit()')
         self._exit_sent = True
         try:

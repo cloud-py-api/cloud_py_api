@@ -1,14 +1,23 @@
-def function_call_example(arg1, srg2):
-    print(f'function_call_example:<{arg1}> and <{srg2}>')
+import nc_py_api.cloud_api as cpa
 
 
-print('This is string will be executed during import!')
+def func_hello_world():
+    ca = cpa.CloudApi()
+    ca.log(cpa.LogLvl.INFO.value, 'hello_world', 'HelloWorld')
+    return 'OK'
 
 
-def function_hello_world():
-    print(f'function_hello_world!')
-    return 'WOW!'
+# TODO: write successful test
+def func_hello_world_args(*arums):
+    ca = cpa.CloudApi()
+    ca.log(cpa.LogLvl.INFO.value, 'hello_world_args', *arums)
+    return f'logged {str(len(arums))} arguments'
 
 
-if __name__ == '__main__':
-    print('This will not be executed at all')
+# TODO: write test for no result
+def func_no_result(*_arums):
+    pass
+
+
+def func_exception():
+    raise ValueError('TEST')

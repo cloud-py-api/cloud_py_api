@@ -1,6 +1,7 @@
 import sys
 import os
 import time
+import re
 from subprocess import PIPE, Popen, TimeoutExpired
 from concurrent import futures
 
@@ -20,12 +21,12 @@ def run_python_script(python_script_path, *args):
 
 class TaskParameters:
     def __init__(self, log_lvl, data_folder, frm_app_data,
-                 app_name, mod_name, mod_path, func_name, *args):
+                 app_name, mod_name, mod_path, func_name, **kwargs):
         self.app_name = app_name
         self.mod_name = mod_name
         self.mod_path = mod_path
         self.func_name = func_name
-        self.args = args
+        self.args = kwargs.get('args')
         self.log_lvl = log_lvl
         self.data_folder = data_folder
         self.frm_app_data = frm_app_data
@@ -36,17 +37,22 @@ class ServerCloudPA(core_pb2_grpc.CloudPyApiCoreServicer, TaskParameters):
     connection_alive: bool = False
     task_status: taskStatus = taskStatus.ST_UNKNOWN
     task_error: str = ''
+    result: str
+    logs_storage: list = []
 
     def TaskInit(self, request, context):
-        return TaskInitReply(appName=self.app_name,
-                             modName=self.mod_name,
-                             modPath=self.mod_path,
-                             funcName=self.func_name,
-                             args=self.args,
-                             config=TaskInitReply.cfgOptions(
-                                 log_lvl=self.log_lvl,
-                                 dataFolder=self.data_folder,
-                                 frameworkAppData=self.frm_app_data))
+        _reply = TaskInitReply(appName=self.app_name,
+                               modName=self.mod_name,
+                               modPath=self.mod_path,
+                               funcName=self.func_name,
+                               config=TaskInitReply.cfgOptions(
+                                   log_lvl=self.log_lvl,
+                                   dataFolder=self.data_folder,
+                                   frameworkAppData=self.frm_app_data))
+        if self.args is not None:
+            for _each_arg in self.args:
+                _reply.args.append(_each_arg)
+        return _reply
 
     def TaskStatus(self, request, context):
         if self.task_status != request.st_code:
@@ -62,6 +68,7 @@ class ServerCloudPA(core_pb2_grpc.CloudPyApiCoreServicer, TaskParameters):
         mod_name = request.module if len(request.module) else 'Unknown'
         for record in request.content:
             print(f'Client: {mod_name} : {logLvl.Name(request.log_lvl)} : {record}')
+            self.logs_storage.append(f'{mod_name}:{record}')
         return Empty()
 
     def TaskExit(self, request, context):
@@ -90,44 +97,27 @@ class ServerCloudPA(core_pb2_grpc.CloudPyApiCoreServicer, TaskParameters):
         self.stop_flag = True
 
 
-# @pytest.mark.parametrize(
-#     "address, port, app_file, app_func",
-#     (
-#         ('unix:./../tmp/test.sock', '', 'hello_world.py', 'function_hello_world'),
-#         ('localhost', '', 'hello_world.py', ''),
-#         ('0.0.0.0', '', 'hello_world.py', ''),
-#         ('[::]', '60051', 'hello_world.py', ''),
-#     ),
-#     ids=(
-#         'unix',
-#         'local_random',
-#         'all_random',
-#         'port',
-#     ),
-# )
-# def xxx_t_est_basic(address: str = 'localhost', port: str = '0'):
-#     pass
-
-if __name__ == '__main__':
-    address = 'unix:./../tmp/test.sock'
-    port = '0'
+def _srv_example(address, port, app_name, module_name, module_path, function_to_call, *args):
+    print('')
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=2))
     servicer = ServerCloudPA(log_lvl=logLvl.DEBUG,
                              data_folder='./../tmp/data_folder',
                              frm_app_data='./../tmp/frm_app_data',
-                             app_name='hello_world',
-                             mod_name='hello_world',
-                             mod_path='../tests/python/apps_example/hello_world',
-                             func_name='function_hello_world',
+                             app_name=app_name,
+                             mod_name=module_name,
+                             mod_path=module_path,
+                             func_name=function_to_call,
+                             args=args
                              )
     core_pb2_grpc.add_CloudPyApiCoreServicer_to_server(servicer, server)
     connect_address = address
-    if port and port != '0':
-        listen_port = server.add_insecure_port(f'{address}:{port}')
-    else:
-        listen_port = server.add_insecure_port(address)
     if not address.startswith('unix:'):
-        connect_address += ':' + listen_port
+        if not port:
+            port = '0'
+        listen_port = server.add_insecure_port(f'{address}:{port}')
+        connect_address += ':' + str(listen_port)
+    else:
+        server.add_insecure_port(address)
     print(f'Server: connect address = {connect_address}')
     p_obj = run_python_script('pyfrm.py', connect_address)
     server.start()
@@ -147,4 +137,101 @@ if __name__ == '__main__':
         print('Server: timeout waiting child process')
     print(f'Server: task finished with status {taskStatus.Name(servicer.task_status)}')
     print('Server: exiting')
+    return servicer.task_status, servicer.task_error, servicer.result, servicer.logs_storage
+
+
+def srv_example(address, port, app_name, module_name, module_path, function_to_call, args=None):
+    if args is not None:
+        _status, _error, _result, _logs = _srv_example(address, port,
+                                                       app_name, module_name, module_path,
+                                                       function_to_call, args)
+    else:
+        _status, _error, _result, _logs = _srv_example(address, port,
+                                                       app_name, module_name, module_path,
+                                                       function_to_call)
+    return _status, _error, _result, _logs
+
+
+if __name__ == '__main__':
+    status, error, result, logs = srv_example('localhost', '0', 'hello_world', 'hello_world2',
+                                              '../tests/python/apps_example/hello_world', 'func_hello_world')
     sys.exit(0)
+
+
+import pytest
+
+
+@pytest.mark.parametrize(
+    "address, port, app_name, module_name, module_path, function_to_call, args,"
+    "expected_status, expected_error, expected_result, logs_must_contain",
+    (
+        ('unix:./../tmp/test.sock', '', 'hello_world', 'hello_world',
+         '../tests/python/apps_example/hello_world', 'func_hello_world', None,
+         taskStatus.ST_SUCCESS, '', 'OK', r'HelloWorld'),
+        ('localhost', '0', 'hello_world', 'hello_world',
+         '../tests/python/apps_example/hello_world', 'func_hello_world', None,
+         taskStatus.ST_SUCCESS, '', 'OK', r'HelloWorld'),
+        ('0.0.0.0', '', 'hello_world', 'hello_world',
+         '../tests/python/apps_example/hello_world', 'func_hello_world', None,
+         taskStatus.ST_SUCCESS, '', 'OK', r'HelloWorld'),
+        ('[::]', '60051', 'hello_world', 'hello_world',
+         '../tests/python/apps_example/hello_world', 'func_hello_world', None,
+         taskStatus.ST_SUCCESS, '', 'OK', r'HelloWorld'),
+    ),
+    ids=(
+        'unix',
+        'local_random',
+        'all_random',
+        'ip6_port',
+    ),
+)
+def test_hello_world(address, port, app_name, module_name, module_path, function_to_call, args,
+                     expected_status, expected_error, expected_result, logs_must_contain):
+    _status, _error, _result, _logs = srv_example(address, port,
+                                                  app_name, module_name, module_path,
+                                                  function_to_call, args)
+    assert _status == expected_status
+    assert _error == expected_error
+    assert _result == expected_result
+    if logs_must_contain:
+        assert len([s for s in _logs if re.search(logs_must_contain, s) is not None]) > 0
+
+
+@pytest.mark.parametrize(
+    "address, port, app_name, module_name, module_path, function_to_call, args,"
+    "expected_status, expected_error, expected_result, logs_must_contain",
+    (
+        ('unix:./../tmp/test.sock', '', 'invalid_app_name', 'hello_world',
+         '../tests/python/apps_example/hello_world', 'func_hello_world', None,
+         taskStatus.ST_ERROR, 'TODO', '', 'TODO'),
+        ('localhost', '0', 'hello_world', 'invalid_module_name',
+         '../tests/python/apps_example/hello_world', 'func_hello_world', None,
+         taskStatus.ST_ERROR, 'Error loading invalid_module_name module.', '', r'cpa_core:Error.*module'),
+        ('0.0.0.0', '', 'hello_world', 'hello_world',
+         '../tests/python/invalid_path', 'func_hello_world', None,
+         taskStatus.ST_ERROR, 'Error loading hello_world module.', '', r'cpa_core:Error.*module'),
+        ('[::]', '60051', 'hello_world', 'hello_world',
+         '../tests/python/apps_example/hello_world', 'invalid_function', None,
+         taskStatus.ST_ERROR, 'Function invalid_function not found.', '', r'cpa_core:Function.*not\sfound'),
+        ('[::]', '0', 'hello_world', 'hello_world',
+         '../tests/python/apps_example/hello_world', 'func_hello_world', 'args_error',
+         taskStatus.ST_EXCEPTION, 'TypeError', '', r'cpa_core:Error\(TypeError\)'),
+    ),
+    ids=(
+        'unix__invalid_app_name',
+        'local_random__invalid_module_name',
+        'all_random__invalid_path',
+        'ip6_port__invalid_function',
+        'ip6_random__args_error',
+    ),
+)
+def test_error_handling(address, port, app_name, module_name, module_path, function_to_call, args,
+                        expected_status, expected_error, expected_result, logs_must_contain):
+    _status, _error, _result, _logs = srv_example(address, port,
+                                                  app_name, module_name, module_path,
+                                                  function_to_call, args)
+    assert _status == expected_status
+    assert _error == expected_error
+    assert _result == expected_result
+    if logs_must_contain:
+        assert len([s for s in _logs if re.search(logs_must_contain, s) is not None]) > 0
