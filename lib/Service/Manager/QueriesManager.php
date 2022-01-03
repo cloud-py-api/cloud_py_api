@@ -26,7 +26,7 @@ declare(strict_types=1);
  *
  */
 
-namespace OCA\Cloud_Py_API\Service\Database;
+namespace OCA\Cloud_Py_API\Service\Manager;
 
 
 /**

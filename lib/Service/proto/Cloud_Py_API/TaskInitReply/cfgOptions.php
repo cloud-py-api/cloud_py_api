@@ -26,11 +26,11 @@ class cfgOptions extends \Google\Protobuf\Internal\Message
      */
     protected $dataFolder = '';
     /**
-     *Path to target folder of app inside framework app data.
+     *Path to cloud_py_api app data folder.
      *
-     * Generated from protobuf field <code>string frameworkAppDataFolder = 3;</code>
+     * Generated from protobuf field <code>string frameworkAppData = 3;</code>
      */
-    protected $frameworkAppDataFolder = '';
+    protected $frameworkAppData = '';
 
     /**
      * Constructor.
@@ -42,8 +42,8 @@ class cfgOptions extends \Google\Protobuf\Internal\Message
      *          0-4 , level logs from NC documentation.
      *     @type string $dataFolder
      *          Path to NC data folder.
-     *     @type string $frameworkAppDataFolder
-     *          Path to target folder of app inside framework app data.
+     *     @type string $frameworkAppData
+     *          Path to cloud_py_api app data folder.
      * }
      */
     public function __construct($data = NULL) {
@@ -104,27 +104,27 @@ class cfgOptions extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     *Path to target folder of app inside framework app data.
+     *Path to cloud_py_api app data folder.
      *
-     * Generated from protobuf field <code>string frameworkAppDataFolder = 3;</code>
+     * Generated from protobuf field <code>string frameworkAppData = 3;</code>
      * @return string
      */
-    public function getFrameworkAppDataFolder()
+    public function getFrameworkAppData()
     {
-        return $this->frameworkAppDataFolder;
+        return $this->frameworkAppData;
     }
 
     /**
-     *Path to target folder of app inside framework app data.
+     *Path to cloud_py_api app data folder.
      *
-     * Generated from protobuf field <code>string frameworkAppDataFolder = 3;</code>
+     * Generated from protobuf field <code>string frameworkAppData = 3;</code>
      * @param string $var
      * @return $this
      */
-    public function setFrameworkAppDataFolder($var)
+    public function setFrameworkAppData($var)
     {
         GPBUtil::checkString($var, True);
-        $this->frameworkAppDataFolder = $var;
+        $this->frameworkAppData = $var;
 
         return $this;
     }

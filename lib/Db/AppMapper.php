@@ -73,7 +73,7 @@ class AppMapper extends QBMapper {
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException if more than one result
 	 */
-	public function findByAppId(String $appId): Entity {
+	public function findByAppId(string $appId): Entity {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->select('*')

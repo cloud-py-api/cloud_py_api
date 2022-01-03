@@ -28,10 +28,13 @@ declare(strict_types=1);
 
 namespace OCA\Cloud_Py_API\Migration;
 
-use OCA\Cloud_Py_API\Event\SyncAppConfigEvent;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\Migration\IOutput;
 use OCP\Migration\IRepairStep;
+
+use OCA\Cloud_Py_API\Db\App;
+use OCA\Cloud_Py_API\Event\SyncAppConfigEvent;
+use OCA\Cloud_Py_API\Service\AppsService;
 
 
 class AppUpdateStep implements IRepairStep {
@@ -39,8 +42,12 @@ class AppUpdateStep implements IRepairStep {
 	/** @var IEventDispatcher */
 	private $eventDispatcher;
 
-	public function __construct(IEventDispatcher $eventDispatcher) {
+	/** @var AppsService */
+	private $appsService;
+
+	public function __construct(IEventDispatcher $eventDispatcher, AppsService $appsService) {
 		$this->eventDispatcher = $eventDispatcher;
+		$this->appsService = $appsService;
 	}
 
 	public function getName(): string {
@@ -49,7 +56,11 @@ class AppUpdateStep implements IRepairStep {
 
 	public function run(IOutput $output) {
 		$output->startProgress(1);
-		$this->eventDispatcher->dispatchTyped(new SyncAppConfigEvent(['apps_id' => ['cloud_py_api']]));
+		$this->eventDispatcher->dispatchTyped(new SyncAppConfigEvent([
+			'apps_id' => array_map(function (App $app) {
+				return $app->getAppId();
+			}, $this->appsService->getApps())
+		]));
 		$output->advance(1);
 		$output->finishProgress();
 	}

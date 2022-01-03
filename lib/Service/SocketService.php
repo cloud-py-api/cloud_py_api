@@ -28,17 +28,43 @@ declare(strict_types=1);
 
 namespace OCA\Cloud_Py_API\Service;
 
-use OCA\Cloud_Py_API\Service\Process\Process;
+use OCP\Files\IAppData;
 
+class SocketService {
 
-class ProcessService {
+	/** @var array */
+	private $sockets = array();
 
-	/**
-	 * @return Process|null
-	 */
-	public function createProcess($params = []) {
-		// TODO: Creating a piped process
-		return null;
+	/** @var IAppData */
+	private $appData;
+
+	/** @var FsService */
+	private $fs;
+
+	/** @var DbService */
+	private $db;
+
+	public function __construct(IAppData $appData, FsService $fs, DbService $db)
+	{
+		$this->appData = $appData;
+		$this->fs = $fs;
+		$this->db = $db;
+	}
+
+	public function createSocketFile($params = []) {
+		// TODO
+	}
+
+	public function deleteSocketFile($params = []) {
+		// TODO
+	}
+
+	public function writeToSocket($params = []) {
+		// TODO
+	}
+
+	public function readFromSocket($params = []) {
+		// TODO
 	}
 
 }

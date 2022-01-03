@@ -54,8 +54,8 @@ class App extends Entity implements JsonSerializable {
 		if (isset($params['id'])) {
 			$this->setId($params['id']);
 		}
-		if (isset($params['app_id'])) {
-			$this->setAppId($params['app_id']);
+		if (isset($params['appId'])) {
+			$this->setAppId($params['appId']);
 		}
 		if (isset($params['token'])) {
 			$this->setToken($params['token']);

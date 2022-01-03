@@ -37,4 +37,7 @@ Nextcloud Python API Framework
 			<step>OCA\Cloud_Py_API\Migration\AppUpdateStep</step>
 		</pre-migration>
 	</repair-steps>
+	<commands>
+		<command>OCA\Cloud_Py_API\Command\TestCommand</command>
+	</commands>
 </info>

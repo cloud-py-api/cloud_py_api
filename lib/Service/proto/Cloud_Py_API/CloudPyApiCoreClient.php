@@ -4,8 +4,6 @@
 namespace Cloud_Py_API;
 
 /**
- * DB messages end 
- *
  */
 class CloudPyApiCoreClient extends \Grpc\BaseStub {
 
@@ -33,12 +31,12 @@ class CloudPyApiCoreClient extends \Grpc\BaseStub {
     }
 
     /**
-     * @param \Cloud_Py_API\TaskStatusRequest $argument input argument
+     * @param \Cloud_Py_API\TaskSetStatusRequest $argument input argument
      * @param array $metadata metadata
      * @param array $options call options
      * @return \Grpc\UnaryCall
      */
-    public function TaskStatus(\Cloud_Py_API\TaskStatusRequest $argument,
+    public function TaskStatus(\Cloud_Py_API\TaskSetStatusRequest $argument,
       $metadata = [], $options = []) {
         return $this->_simpleRequest('/Cloud_Py_API.CloudPyApiCore/TaskStatus',
         $argument,
@@ -61,20 +59,6 @@ class CloudPyApiCoreClient extends \Grpc\BaseStub {
     }
 
     /**
-     * @param \Cloud_Py_API\PBEmpty $argument input argument
-     * @param array $metadata metadata
-     * @param array $options call options
-     * @return \Grpc\UnaryCall
-     */
-    public function TaskState(\Cloud_Py_API\PBEmpty $argument,
-      $metadata = [], $options = []) {
-        return $this->_simpleRequest('/Cloud_Py_API.CloudPyApiCore/TaskState',
-        $argument,
-        ['\Cloud_Py_API\TaskStateReply', 'decode'],
-        $metadata, $options);
-    }
-
-    /**
      * @param \Cloud_Py_API\TaskLogRequest $argument input argument
      * @param array $metadata metadata
      * @param array $options call options
@@ -85,6 +69,20 @@ class CloudPyApiCoreClient extends \Grpc\BaseStub {
         return $this->_simpleRequest('/Cloud_Py_API.CloudPyApiCore/TaskLog',
         $argument,
         ['\Cloud_Py_API\PBEmpty', 'decode'],
+        $metadata, $options);
+    }
+
+    /**
+     * @param \Cloud_Py_API\PBEmpty $argument input argument
+     * @param array $metadata metadata
+     * @param array $options call options
+     * @return \Grpc\ServerStreamingCall
+     */
+    public function CmdStream(\Cloud_Py_API\PBEmpty $argument,
+      $metadata = [], $options = []) {
+        return $this->_serverStreamRequest('/Cloud_Py_API.CloudPyApiCore/CmdStream',
+        $argument,
+        ['\Cloud_Py_API\ServerCommand', 'decode'],
         $metadata, $options);
     }
 

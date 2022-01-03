@@ -28,21 +28,42 @@ declare(strict_types=1);
 
 namespace OCA\Cloud_Py_API\Service;
 
+use OCP\Files\IAppData;
+
 use OCA\Cloud_Py_API\Db\PackageMapper;
+use OCA\Cloud_Py_API\Db\Package;
 
 
 class PackagesService {
 
-	/** @var AppMapper */
+	/** @var PackageMapper */
 	private $mapper;
 
-	public function __construct(PackageMapper $packageMapper)
+	/** @var IAppData */
+	private $appData;
+
+	public function __construct(PackageMapper $packageMapper, IAppData $appData)
 	{
 		$this->mapper = $packageMapper;
+		$this->appData = $appData;
 	}
 
 	public function getPackages() {
 		return $this->mapper->findAll();
+	}
+
+	public function registerPackage(string $appId, array $packageData) {
+		// TODO
+	}
+
+	public function getPackage(string $appId, string $packageName) {
+		return $this->mapper->findAppPackageByName($appId, $packageName);
+	}
+
+	public function removePackage(string $appId, string $packageName) {
+		/** @var Package */
+		$package = $this->mapper->findAppPackageByName($appId, $packageName);
+		return $this->mapper->delete($package);
 	}
 
 }

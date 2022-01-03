@@ -30,27 +30,26 @@ namespace OCA\Cloud_Py_API\Listener;
 
 use OCP\EventDispatcher\Event;
 use OCP\EventDispatcher\IEventListener;
-use Psr\Log\LoggerInterface;
 
 use OCA\Cloud_Py_API\Event\SyncAppConfigEvent;
+use OCA\Cloud_Py_API\Service\AppsService;
 
 
 class SyncAppConfigListener implements IEventListener {
 
-	/** @var LoggerInterface */
-	private $logger;
+	/** @var AppsService */
+	private $appsService;
 
-	public function __construct(LoggerInterface $logger)
+	public function __construct(AppsService $appsService)
 	{
-		$this->logger = $logger;
+		$this->appsService = $appsService;
 	}
 
 	public function handle(Event $event): void {
 		if (!$event instanceof SyncAppConfigEvent) {
 			return;
 		}
-		$this->logger->warning('[' . self::class . '] event emmited: ' . json_encode($event));
-		// TODO: Run config sync actions
+		$this->appsService->syncAppsConfigs();
 	}
 
 }

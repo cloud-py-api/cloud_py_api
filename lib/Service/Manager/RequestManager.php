@@ -26,28 +26,43 @@ declare(strict_types=1);
  *
  */
 
-namespace OCA\Cloud_Py_API\Service\Process;
+namespace OCA\Cloud_Py_API\Service\Manager;
 
-interface HandlerInterface {
 
-	/**
-	 * @param string $errorString
-	 * @param Process $process (use close function to close the process)
-	 * @return Process
-	 */
-	public function processReadStdErr(string $errorString, Process $process): Process;
+/**
+ * Socket requests manager
+ */
+class RequestManager {
 
 	/**
-	 * @param string $outputString
-	 * @param Process $process  (use close function to close the process)
-	 * @return Process
+	 * List of Requests.
 	 */
-	public function processReadStdOut(string $outputString, Process $process): Process;
+	private $requests = array();
 
-	/**
-	 * @param Process $process
-	 * @return string|null (null to close the StdIn resource)
-	 */
-	public function processWriteStdIn(Process $process):?string;
+	public static function getRequest(string $message_id) {
+		if (isset(self::$requests[$message_id])) {
+			return self::$requests[$message_id];
+		}
+		return null;
+	}
+
+	public static function setRequest(string $message_id, mixed $message) {
+		if (!isset(self::$requests[$message_id])) {
+			self::$requests[$message_id] = $message;
+			return true;
+		}
+		return false;
+	}
+
+	public static function removeRequest(string $message_id): bool {
+		if (isset(self::$requests[$message_id])) {
+			$queryIndex = array_search($message_id, array_keys(self::$requests));
+			if ($queryIndex !== false) {
+				array_splice(self::$requests, $queryIndex, 1);
+				return true;
+			}
+		}
+		return false;
+	}
 
 }

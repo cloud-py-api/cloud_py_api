@@ -58,6 +58,22 @@ class PackageMapper extends QBMapper {
 		return $this->findEntity($qb);
 	}
 
+	/**
+	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
+	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException if more than one result
+	 */
+	public function findByName(string $packageName): Entity {
+		$qb = $this->db->getQueryBuilder();
+
+		$qb->select('*')
+			->from($this->tableName)
+			->where(
+				$qb->expr()->eq('name', $qb->createNamedParameter($packageName, IQueryBuilder::PARAM_STR))
+			);
+
+		return $this->findEntity($qb);
+	}
+
 	public function findAll($limit=null, $offset=null): array {
 		$qb = $this->db->getQueryBuilder();
 
@@ -73,7 +89,7 @@ class PackageMapper extends QBMapper {
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException if more than one result
 	 */
-	public function findAllByAppId(String $appId): array {
+	public function findAllByAppId(string $appId): array {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->select('*')
@@ -83,6 +99,23 @@ class PackageMapper extends QBMapper {
 			);
 
 		return $this->findEntities($qb);
+	}
+
+	/**
+	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
+	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException if more than one result
+	 */
+	public function findAppPackageByName(string $appId, string $packageName): Entity {
+		$qb = $this->db->getQueryBuilder();
+
+		$qb->select('*')
+			->from($this->tableName)
+			->where(
+				$qb->expr()->eq('app_id', $qb->createNamedParameter($appId, IQueryBuilder::PARAM_STR)),
+				$qb->expr()->eq('name', $qb->createNamedParameter($packageName, IQueryBuilder::PARAM_STR))
+			);
+
+		return $this->findEntity($qb);
 	}
 
 }

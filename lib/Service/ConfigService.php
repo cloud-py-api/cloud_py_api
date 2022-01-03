@@ -28,9 +28,45 @@ declare(strict_types=1);
 
 namespace OCA\Cloud_Py_API\Service;
 
-use OCA\Cloud_Py_API\Service\Process\Process;
+use OCP\Files\IAppData;
+use OCP\IConfig;
+
+use OCA\Cloud_Py_API\Db\AppMapper;
+use OCA\Cloud_Py_API\AppInfo\Application;
 
 
-class DependenciesService {
-	// TODO: Dependencies Service for syncing python packages with Database
+class ConfigService {
+
+	/** @var AppMapper */
+	private $mapper;
+
+	/** @var IAppData */
+	private $appData;
+
+	/** @var IConfig */
+	private $config;
+
+	public function __construct(AppMapper $appMapper, IAppData $appData, IConfig $config)
+	{
+		$this->mapper = $appMapper;
+		$this->appData = $appData;
+		$this->config = $config;
+	}
+
+	public function scanAppsForConfig() {
+		// TODO Scan all apps directories (custom_apps, apps, etc.) for appinfo/cloud_py_api_config
+	}
+
+	public function validateConfig(string $appId, string $config) {
+		// TODO
+	}
+
+	public function syncAppConfig(string $appId, array $config) {
+		// TODO
+	}
+
+	public function writeAppConfig(string $appId, array $config) {
+		// TODO Write updated config to PHP config file
+	}
+
 }
