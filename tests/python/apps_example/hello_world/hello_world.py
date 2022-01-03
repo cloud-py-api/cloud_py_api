@@ -7,15 +7,19 @@ def func_hello_world():
     return 'OK'
 
 
-# TODO: write successful test
-def func_hello_world_args(*arums):
+def func_hello_world_fixed_two_args(arg1, arg2):
     ca = cpa.CloudApi()
-    ca.log(cpa.LogLvl.INFO.value, 'hello_world_args', *arums)
-    return f'logged {str(len(arums))} arguments'
+    ca.log(cpa.LogLvl.INFO.value, 'hello_world_fixed_two_args', f'{arg1 + arg2}')
+    return arg1 + arg2
 
 
-# TODO: write test for no result
-def func_no_result(*_arums):
+def func_hello_world_args(*arguments):
+    ca = cpa.CloudApi()
+    ca.log(cpa.LogLvl.INFO.value, 'hello_world_args', f'{arguments}')
+    return f'get {str(len(arguments))} argument(s)'
+
+
+def func_no_result():
     pass
 
 

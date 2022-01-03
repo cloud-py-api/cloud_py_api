@@ -21,12 +21,12 @@ def run_python_script(python_script_path, *args):
 
 class TaskParameters:
     def __init__(self, log_lvl, data_folder, frm_app_data,
-                 app_name, mod_name, mod_path, func_name, **kwargs):
+                 app_name, mod_name, mod_path, func_name, args):
         self.app_name = app_name
         self.mod_name = mod_name
         self.mod_path = mod_path
         self.func_name = func_name
-        self.args = kwargs.get('args')
+        self.args = args
         self.log_lvl = log_lvl
         self.data_folder = data_folder
         self.frm_app_data = frm_app_data
@@ -50,8 +50,13 @@ class ServerCloudPA(core_pb2_grpc.CloudPyApiCoreServicer, TaskParameters):
                                    dataFolder=self.data_folder,
                                    frameworkAppData=self.frm_app_data))
         if self.args is not None:
-            for _each_arg in self.args:
-                _reply.args.append(_each_arg)
+            if isinstance(self.args, (list, tuple)):
+                for _each_arg in self.args:
+                    _reply.args.append(_each_arg)
+            elif isinstance(self.args, str):
+                _reply.args.append(self.args)
+            else:
+                raise TypeError('Only str, tuple of str and list of str types are supported.')
         return _reply
 
     def TaskStatus(self, request, context):
@@ -97,7 +102,7 @@ class ServerCloudPA(core_pb2_grpc.CloudPyApiCoreServicer, TaskParameters):
         self.stop_flag = True
 
 
-def _srv_example(address, port, app_name, module_name, module_path, function_to_call, *args):
+def srv_example(address, port, app_name, module_name, module_path, function_to_call, args=None):
     print('')
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=2))
     servicer = ServerCloudPA(log_lvl=logLvl.DEBUG,
@@ -138,18 +143,6 @@ def _srv_example(address, port, app_name, module_name, module_path, function_to_
     print(f'Server: task finished with status {taskStatus.Name(servicer.task_status)}')
     print('Server: exiting')
     return servicer.task_status, servicer.task_error, servicer.result, servicer.logs_storage
-
-
-def srv_example(address, port, app_name, module_name, module_path, function_to_call, args=None):
-    if args is not None:
-        _status, _error, _result, _logs = _srv_example(address, port,
-                                                       app_name, module_name, module_path,
-                                                       function_to_call, args)
-    else:
-        _status, _error, _result, _logs = _srv_example(address, port,
-                                                       app_name, module_name, module_path,
-                                                       function_to_call)
-    return _status, _error, _result, _logs
 
 
 if __name__ == '__main__':
@@ -203,7 +196,7 @@ def test_hello_world(address, port, app_name, module_name, module_path, function
     (
         ('unix:./../tmp/test.sock', '', 'invalid_app_name', 'hello_world',
          '../tests/python/apps_example/hello_world', 'func_hello_world', None,
-         taskStatus.ST_ERROR, 'TODO', '', 'TODO'),
+         taskStatus.ST_INIT_ERROR, 'Directory with python packages for app cannot be accessed.', '', r''),
         ('localhost', '0', 'hello_world', 'invalid_module_name',
          '../tests/python/apps_example/hello_world', 'func_hello_world', None,
          taskStatus.ST_ERROR, 'Error loading invalid_module_name module.', '', r'cpa_core:Error.*module'),
@@ -215,7 +208,7 @@ def test_hello_world(address, port, app_name, module_name, module_path, function
          taskStatus.ST_ERROR, 'Function invalid_function not found.', '', r'cpa_core:Function.*not\sfound'),
         ('[::]', '0', 'hello_world', 'hello_world',
          '../tests/python/apps_example/hello_world', 'func_hello_world', 'args_error',
-         taskStatus.ST_EXCEPTION, 'TypeError', '', r'cpa_core:Error\(TypeError\)'),
+         taskStatus.ST_EXCEPTION, 'TypeError', '', r'cpa_core:Exception\(TypeError\)'),
     ),
     ids=(
         'unix__invalid_app_name',
@@ -227,6 +220,50 @@ def test_hello_world(address, port, app_name, module_name, module_path, function
 )
 def test_error_handling(address, port, app_name, module_name, module_path, function_to_call, args,
                         expected_status, expected_error, expected_result, logs_must_contain):
+    _status, _error, _result, _logs = srv_example(address, port,
+                                                  app_name, module_name, module_path,
+                                                  function_to_call, args)
+    assert _status == expected_status
+    assert _error == expected_error
+    assert _result == expected_result
+    if logs_must_contain:
+        assert len([s for s in _logs if re.search(logs_must_contain, s) is not None]) > 0
+
+
+@pytest.mark.parametrize(
+    "address, port, app_name, module_name, module_path, function_to_call, args,"
+    "expected_status, expected_error, expected_result, logs_must_contain",
+    (
+        ('unix:./../tmp/test.sock', '', 'hello_world', 'hello_world',
+         '../tests/python/apps_example/hello_world', 'func_hello_world_fixed_two_args', ('one_', 'two'),
+         taskStatus.ST_SUCCESS, '', 'one_two', r''),
+        ('unix:./../tmp/test.sock', '', 'hello_world', 'hello_world',
+         '../tests/python/apps_example/hello_world', 'func_hello_world_args', None,
+         taskStatus.ST_SUCCESS, '', 'get 0 argument(s)', r''),
+        ('localhost', '0', 'hello_world', 'hello_world',
+         '../tests/python/apps_example/hello_world', 'func_hello_world_args', '1',
+         taskStatus.ST_SUCCESS, '', 'get 1 argument(s)', r'hello_world_args:\(\'1\',\)'),
+        ('0.0.0.0', '', 'hello_world', 'hello_world',
+         '../tests/python/apps_example/hello_world', 'func_hello_world_args', ('1', '2'),
+         taskStatus.ST_SUCCESS, '', 'get 2 argument(s)', r'hello_world_args:\(\'1\',\s\'2\'\)'),
+        ('[::]', '60051', 'hello_world', 'hello_world',
+         '../tests/python/apps_example/hello_world', 'func_no_result', None,
+         taskStatus.ST_SUCCESS, '', '', r'cpa_core:Result length=`None`'),
+        ('[::]', '0', 'hello_world', 'hello_world',
+         '../tests/python/apps_example/hello_world', 'func_exception', None,
+         taskStatus.ST_EXCEPTION, 'ValueError', '', r'cpa_core:Exception\(ValueError\):`TEST`'),
+    ),
+    ids=(
+        'unix__fixed_two_args',
+        'unix__none_args',
+        'local_random__one_arg',
+        'all_random__two_args',
+        'ip6_port__no_result',
+        'ip6_random__exception',
+    ),
+)
+def test_other_basics(address, port, app_name, module_name, module_path, function_to_call, args,
+                      expected_status, expected_error, expected_result, logs_must_contain):
     _status, _error, _result, _logs = srv_example(address, port,
                                                   app_name, module_name, module_path,
                                                   function_to_call, args)

@@ -21,5 +21,5 @@ def _pyfrm_set_conn(cloud_connector):
 
 class CloudApi:
     @staticmethod
-    def log(log_lvl: int, mod_name: str, content: Union[str, list]) -> None:
+    def log(log_lvl: int, mod_name: str, content: Union[str, list, tuple]) -> None:
         _ncc.log(log_lvl, mod_name, content)

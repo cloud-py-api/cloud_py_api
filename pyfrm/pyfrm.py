@@ -28,19 +28,19 @@ def signal_handler(signum=None, _frame=None):
 def check_task_init(cloud: ClientCloudPA) -> bool:
     _task_data = cloud.task_init_data
     if not _task_data.appName:
-        cloud.log(logLvl.FATAL, 'cpa_core', 'invalid task appName')
+        cloud.log(logLvl.FATAL, 'cpa_core', 'invalid task`s appName')
         return False
     if not _task_data.modName:
-        cloud.log(logLvl.FATAL, 'cpa_core', 'invalid task modName')
+        cloud.log(logLvl.FATAL, 'cpa_core', 'invalid task`s modName')
         return False
     if not _task_data.modPath:
-        cloud.log(logLvl.FATAL, 'cpa_core', 'invalid task modPath')
+        cloud.log(logLvl.FATAL, 'cpa_core', 'invalid task`s modPath')
         return False
     if not _task_data.funcName:
-        cloud.log(logLvl.FATAL, 'cpa_core', 'invalid task funcName')
+        cloud.log(logLvl.FATAL, 'cpa_core', 'invalid task`s funcName')
         return False
     if not _task_data.config.frameworkAppData:
-        cloud.log(logLvl.FATAL, 'cpa_core', 'invalid task frameworkAppData')
+        cloud.log(logLvl.FATAL, 'cpa_core', 'invalid task`s frameworkAppData')
         return False
     return True
 
@@ -58,6 +58,14 @@ def true_main(connect_address: str, auth: str = '') -> ExitCodes:
                 cloud.set_status(taskStatus.ST_INIT_ERROR)
                 return ExitCodes.CODE_INIT_ERR
             cloud.log(logLvl.DEBUG, 'cpa_core', f'Start loading target app: {cloud.task_init_data.appName}')
+            _app_packages = path.abspath(
+                path.join(cloud.task_init_data.config.frameworkAppData, cloud.task_init_data.appName))
+            _app_packages_exists = path.isdir(_app_packages)
+            if not _app_packages_exists:
+                cloud.log(logLvl.FATAL, 'cpa_core',
+                          f'App directory({_app_packages}) with python packages cannot be accessed.')
+                cloud.set_status(taskStatus.ST_INIT_ERROR, 'Directory with python packages for app cannot be accessed.')
+                return ExitCodes.CODE_INIT_ERR
             # TODO: expand site_path to frameworkAppData + appName   -> as first element?
             sys.path.append(path.dirname(path.abspath(cloud.task_init_data.modPath)))
             invalidate_caches()
@@ -90,7 +98,7 @@ def true_main(connect_address: str, auth: str = '') -> ExitCodes:
                 raise exception_info from None
             exit_code = ExitCodes.CODE_EXCEPTION
             cloud.set_status(taskStatus.ST_EXCEPTION, str(type(exception_info).__name__))
-            cloud.log(logLvl.ERROR, 'cpa_core', f'Error({type(exception_info).__name__}):`{str(exception_info)}`')
+            cloud.log(logLvl.ERROR, 'cpa_core', f'Exception({type(exception_info).__name__}):`{str(exception_info)}`')
         finally:
             cloud.exit(result)
     except RpcError as exception_info:

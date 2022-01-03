@@ -70,7 +70,7 @@ class ClientCloudPA:
             except TimeoutExpired as exc:
                 debug_msg(str(exc))
 
-    def log(self, log_lvl: int, mod_name: str, content: Union[str, list]) -> None:
+    def log(self, log_lvl: int, mod_name: str, content: Union[str, list, tuple]) -> None:
         if content is None:
             raise ValueError('no log content')
         if self.task_init_data.config.log_lvl <= log_lvl:
