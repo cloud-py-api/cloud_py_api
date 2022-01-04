@@ -24,7 +24,7 @@
  *
  */
 
-namespace OCA\Cloud_Py_API\Tests\Unit\AppInfo;
+namespace OCA\Cloud_Py_API\Tests\Unit\Service;
 
 use ChristophWurst\Nextcloud\Testing\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;

@@ -30,12 +30,12 @@ namespace OCA\Cloud_Py_API\Service;
 
 use OCP\IDBConnection;
 
-use Cloud_Py_API\DbCursorReply;
-use Cloud_Py_API\DbCursorRequest;
-use Cloud_Py_API\DbExecReply;
-use Cloud_Py_API\DbExecRequest;
-use Cloud_Py_API\DbSelectReply;
-use Cloud_Py_API\DbSelectRequest;
+use OCA\Cloud_Py_API\Proto\DbCursorReply;
+use OCA\Cloud_Py_API\Proto\DbCursorRequest;
+use OCA\Cloud_Py_API\Proto\DbExecReply;
+use OCA\Cloud_Py_API\Proto\DbExecRequest;
+use OCA\Cloud_Py_API\Proto\DbSelectReply;
+use OCA\Cloud_Py_API\Proto\DbSelectRequest;
 
 
 class DbService {
@@ -55,7 +55,7 @@ class DbService {
 	 * 
 	 * @return DbSelectReply|null DB Select results
 	 */
-	public function select(DbSelectRequest $request): DbSelectReply {
+	public function select(DbSelectRequest $request): ?DbSelectReply {
 		return new DbSelectReply(null);
 	}
 
@@ -66,7 +66,7 @@ class DbService {
 	 * 
 	 * @return DbExecReply|null DB Exec statements results
 	 */
-	public function exec(DbExecRequest $request): DbExecReply {
+	public function exec(DbExecRequest $request): ?DbExecReply {
 		return new DbExecReply(null);
 	}
 
@@ -77,7 +77,7 @@ class DbService {
 	 * 
 	 * @return DbCursorReply DB Cursor
 	 */
-	public function cursor(DbCursorRequest $request): DbCursorReply {
+	public function cursor(DbCursorRequest $request): ?DbCursorReply {
 		return new DbCursorReply(null);
 	}
 

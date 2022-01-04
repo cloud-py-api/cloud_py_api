@@ -26,32 +26,36 @@ declare(strict_types=1);
  *
  */
 
-namespace OCA\Cloud_Py_API\AppInfo;
+namespace OCA\Cloud_Py_API\Command;
 
-use OCP\AppFramework\App;
-use OCP\AppFramework\Bootstrap\IBootContext;
-use OCP\AppFramework\Bootstrap\IBootstrap;
-use OCP\AppFramework\Bootstrap\IRegistrationContext;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 
-use OCA\Cloud_Py_API\Event\SyncAppConfigEvent;
-use OCA\Cloud_Py_API\Listener\SyncAppConfigListener;
+use OCA\Cloud_Py_API\Service\ServerService;
 
-include_once __DIR__ . '/../../vendor/autoload.php';
 
-class Application extends App implements IBootstrap {
+class RunGrpcServerCommand extends Command {
 
-	public const APP_ID = 'cloud_py_api';
 
-	public function __construct() {
-		parent::__construct(self::APP_ID);
+	/** @var ServerService */
+	private $serverService;
+
+	public function __construct(ServerService $serverService) {
+		parent::__construct();
+
+		$this->serverService = $serverService;
 	}
 
-	public function register(IRegistrationContext $context): void {
-		$context->registerEventListener(SyncAppConfigEvent::class, SyncAppConfigListener::class);
-		require_once __DIR__ . '/../Proto/GPBMetadata/Core.php';
+	protected function configure(): void {
+		$this->setName("cloud_py_api:grpc:server:run");
+		$this->setDescription("Run GRPC server");
 	}
 
-	public function boot(IBootContext $context): void {
+	protected function execute(InputInterface $input, OutputInterface $output): int {
+		$output->writeln('Running GRPC server on 0.0.0.0:50051...');
+		$this->serverService->runGrpcServer();
+		return 0;
 	}
 
 }

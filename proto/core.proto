@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package Cloud_Py_API;
+package OCA.Cloud_Py_API.Proto;
 
 /*
 All communications messages send by client, server only reply on them.
@@ -76,7 +76,7 @@ enum fsResultCode {
 
 message fsId {
   string userId = 1;
-  string fileId = 2;
+  int64 fileId = 2;
 }
 
 message FsGetInfoRequest {
@@ -98,7 +98,7 @@ message FsGetInfoReply {
   bool encrypted = 12;
   string etag = 13;
   string ownerName = 14;
-  int64 storageId = 15;
+  string storageId = 15;
   int64 mountId = 16;
 }
 
