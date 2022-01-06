@@ -3,11 +3,11 @@ syntax = "proto3";
 package OCA.Cloud_Py_API.Proto;
 
 /*
-All communications messages send by client, server only reply on them.
+All communications messages send by client, server only replies on them(exceptions is CmdStream).
 
-Client must send TaskStatus + TaskExit messages before exit.
-Gracefully shutdown: server reply with TaskStateReply.bStop = True and wait for clients TaskStatus/TaskExit.
-Immediately shutdown: server closes pipe/sock.
+Client must set TaskStatus and send TaskExit messages before exit.
+Gracefully shutdown: server sends CmdStream.TASK_STOP and wait for clients TaskStatus/TaskExit.
+Immediately shutdown: server closes socket.
 Remark: Both client and server part, must stop work after communication channel become broken.
 */
 
@@ -44,6 +44,8 @@ message TaskInitReply {
     string dataFolder = 2;                //Path to NC data folder.
     string frameworkAppData = 3;          //Path to cloud_py_api app data folder.
     string userId = 4;                    //Current NC user UID
+    bool useFileDirect = 5;               //Use extra direct FS module for python, when possible.
+    bool useDBDirect = 6;                 //Use extra direct DB module for python, if possible.
   }
   cfgOptions config = 6;
 }
