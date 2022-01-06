@@ -3,11 +3,10 @@ syntax = "proto3";
 package OCA.Cloud_Py_API.Proto;
 
 /*
-All communications messages send by client, server only replies on them(exceptions is CmdStream).
+All communications messages send by client, server only replies on them.
 
 Client must set TaskStatus and send TaskExit messages before exit.
-Gracefully shutdown: server sends CmdStream.TASK_STOP and wait for clients TaskStatus/TaskExit.
-Immediately shutdown: server closes socket.
+Shutdown: server closes socket.
 Remark: Both client and server part, must stop work after communication channel become broken.
 */
 
@@ -231,22 +230,11 @@ message DbExecReply {
 
 /* DB messages end */
 
-/* Next two messages are for server->client command background thread */
-
-message ServerCommand {
-  enum cmd_id {
-      TASK_NOTHING = 0;
-      TASK_STOP = 1;
-  }
-  cmd_id id = 1;
-}
-
 service CloudPyApiCore {
   rpc TaskInit (Empty) returns (TaskInitReply) {}
   rpc TaskStatus (TaskSetStatusRequest) returns (Empty) {}
   rpc TaskExit (TaskExitRequest) returns (Empty) {}
   rpc TaskLog (TaskLogRequest) returns (Empty) {}
-  rpc CmdStream (Empty) returns (stream ServerCommand) {}
   rpc FsGetInfo (FsListRequest) returns (FsListReply) {}
   rpc FsList (FsListRequest) returns (FsListReply) {}
   rpc FsRead (FsReadRequest) returns (stream FsReadReply) {}
