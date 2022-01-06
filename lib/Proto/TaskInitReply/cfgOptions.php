@@ -31,6 +31,12 @@ class cfgOptions extends \Google\Protobuf\Internal\Message
      * Generated from protobuf field <code>string frameworkAppData = 3;</code>
      */
     protected $frameworkAppData = '';
+    /**
+     *Current NC user UID
+     *
+     * Generated from protobuf field <code>string userId = 4;</code>
+     */
+    protected $userId = '';
 
     /**
      * Constructor.
@@ -44,6 +50,8 @@ class cfgOptions extends \Google\Protobuf\Internal\Message
      *          Path to NC data folder.
      *     @type string $frameworkAppData
      *          Path to cloud_py_api app data folder.
+     *     @type string $userId
+     *          Current NC user UID
      * }
      */
     public function __construct($data = NULL) {
@@ -125,6 +133,32 @@ class cfgOptions extends \Google\Protobuf\Internal\Message
     {
         GPBUtil::checkString($var, True);
         $this->frameworkAppData = $var;
+
+        return $this;
+    }
+
+    /**
+     *Current NC user UID
+     *
+     * Generated from protobuf field <code>string userId = 4;</code>
+     * @return string
+     */
+    public function getUserId()
+    {
+        return $this->userId;
+    }
+
+    /**
+     *Current NC user UID
+     *
+     * Generated from protobuf field <code>string userId = 4;</code>
+     * @param string $var
+     * @return $this
+     */
+    public function setUserId($var)
+    {
+        GPBUtil::checkString($var, True);
+        $this->userId = $var;
 
         return $this;
     }

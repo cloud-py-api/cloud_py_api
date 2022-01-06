@@ -43,6 +43,7 @@ message TaskInitReply {
     logLvl log_lvl = 1;                   //0-4 , level logs from NC documentation.
     string dataFolder = 2;                //Path to NC data folder.
     string frameworkAppData = 3;          //Path to cloud_py_api app data folder.
+    string userId = 4;                    //Current NC user UID
   }
   cfgOptions config = 6;
 }
