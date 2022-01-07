@@ -85,7 +85,7 @@ message FsGetInfoRequest {
   fsId fileId = 1;
 }
 
-message FsObjInfo {
+message FsNodeInfo {
   fsId fileId = 1;
   bool is_dir = 2;
   bool is_local = 3;
@@ -109,7 +109,7 @@ message FsListRequest {
 }
 
 message FsListReply {
-  repeated FsObjInfo nodes = 1;
+  repeated FsNodeInfo nodes = 1;
 }
 
 message FsReadRequest {
