@@ -84,8 +84,7 @@ class ClientCloudPA:
             user_id = self.task_init_data.config.userId
         if self.task_init_data.config.useFileDirect:
             raise Exception('Not implemented.')
-        _fs_id = fsId(userId=user_id, fileId=file_id)
-        _fs_reply = self._main_stub.FsList(FsListRequest(dirId=_fs_id))
+        _fs_reply = self._main_stub.FsList(FsListRequest(dirId=fsId(userId=user_id, fileId=file_id)))
         _dir_list = []
         for each_obj in _fs_reply.nodes:
             _dir_list.append(self.__node_to_fs_obj_info(each_obj))
@@ -96,8 +95,8 @@ class ClientCloudPA:
             user_id = self.task_init_data.config.userId
         if self.task_init_data.config.useFileDirect:
             raise Exception('Not implemented.')
-        fs_reply = self._main_stub.FsGetInfo(FsGetInfoRequest(userId=user_id, fileId=file_id))
-        if len(fs_reply.nodes):
+        fs_reply = self._main_stub.FsGetInfo(FsGetInfoRequest(fileId=fsId(userId=user_id, fileId=file_id)))
+        if not len(fs_reply.nodes):
             return None
         return self.__node_to_fs_obj_info(fs_reply.nodes[0])
 

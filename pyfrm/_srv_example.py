@@ -3,6 +3,7 @@ import os
 import re
 from subprocess import PIPE, Popen, TimeoutExpired
 from concurrent import futures
+from pathlib import Path
 
 import grpc
 from core_pb2 import taskStatus, logLvl, Empty, \
@@ -89,28 +90,53 @@ class ServerCloudPA(core_pb2_grpc.CloudPyApiCoreServicer, TaskParameters):
         self.connection_alive = False
         return Empty()
 
+    def __fs_add_file(self, obj_path) -> int:
+        _new_id = 1 + self._fs_emulation.get('l_id', 0)
+        self._fs_emulation['l_id'] = _new_id
+        self._fs_emulation[_new_id] = obj_path
+        return _new_id
+
+    def __fs_emulate_list_handler(self, obj_path, file_id):
+        if self.__fs_get_path_by_id(file_id):
+            return file_id
+        return self.__fs_add_file(obj_path)
+
+    def __fs_entry_to_node(self, obj_path, file_id) -> FsNodeInfo:
+        _fs_id = fsId(userId=self.user_id, fileId=file_id)
+        _target = Path(obj_path)
+        _target_stat = _target.stat()
+        return FsNodeInfo(fileId=_fs_id, is_dir=_target.is_dir(), is_local=True,
+                          name=_target.name, internal_path=os.path.relpath(_target),
+                          abs_path=str(_target.resolve()),
+                          mtime=_target_stat.st_mtime_ns,
+                          size=0 if _target.is_dir() else _target_stat.st_size)
+
+    def __fs_get_path_by_id(self, file_id) -> str:
+        _path = self._fs_emulation.get(file_id, '')
+        return _path
+
     def FsList(self, request, context):
         # This is not a real function, just stuff for development testing.
         print(f'Server: client requested list files of: userId={request.dirId.userId}, fileId={request.dirId.fileId}')
         if not request.dirId.fileId:
             _target_path = self.data_folder         # in production this must be root folder of User.
         else:
-            raise Exception('Not implemented')
+            _target_path = self.__fs_get_path_by_id(request.dirId.fileId)
+            if not _target_path:
+                return FsListReply()
         _nodes = []
         with os.scandir(_target_path) as _target_obj:
             for entry in _target_obj:
-                request.dirId.fileId += 1
-                # _fs_emulation
-                _fs_id = fsId(userId=request.dirId.userId, fileId=request.dirId.fileId)
-                _nodes.append(FsNodeInfo(fileId=_fs_id, is_dir=entry.is_dir(), is_local=True,
-                                         name=entry.name, internal_path=entry.path,
-                                         abs_path=os.path.abspath(entry.path),
-                                         mtime=os.path.getmtime(entry.path),
-                                         size=0 if entry.is_dir() else os.path.getsize(entry)))
+                _file_id = self.__fs_emulate_list_handler(os.path.abspath(entry.path), request.dirId.fileId)
+                _nodes.append(self.__fs_entry_to_node(os.path.abspath(entry.path), _file_id))
         return FsListReply(nodes=_nodes)
 
     def FsGetInfo(self, request, context):
-        print(f'Server: client requested file info about: userId={request.dirId.userId}, fileId={request.dirId.fileId}')
+        # This is not a real function, just stuff for development testing.
+        print(f'Server: request file info for: userId={request.fileId.userId}, fileId={request.fileId.fileId}')
+        _path = self.__fs_get_path_by_id(request.fileId.fileId)
+        if _path:
+            return FsListReply(nodes=[self.__fs_entry_to_node(os.path.abspath(_path), request.fileId.fileId)])
         return FsListReply()
 
 

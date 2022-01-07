@@ -7,7 +7,7 @@ def func_fs_list_info():
     fs_objects = ca.dir_list()
     ca.log(cpa.LogLvl.DEBUG, 'fs_example', f'{len(fs_objects)} objects in user root directory')
     for fs_object in fs_objects:
-        fs_same_object = ca.file_info(fs_object.id)
+        fs_same_object = ca.file_info(fs_object)
         if fs_object.is_dir != fs_same_object.is_dir:
             return 'BAD'
         if fs_object.mimetype != fs_same_object.mimetype:
@@ -26,7 +26,7 @@ def func_fs_list_info():
             return 'BAD'
         if fs_object.mount_id != fs_same_object.mount_id:
             return 'BAD'
-        ca.log(cpa.LogLvl.DEBUG, 'fs_example', str(fs_object))
+        ca.log(cpa.LogLvl.DEBUG, 'fs_example', f'\n\t{str(fs_object)}')
     return 'GOOD'
 
 
