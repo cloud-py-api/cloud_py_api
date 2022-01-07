@@ -85,7 +85,7 @@ message FsGetInfoRequest {
   fsId fileId = 1;
 }
 
-message FsGetInfoReply {
+message FsObjInfo {
   fsId fileId = 1;
   bool is_dir = 2;
   bool is_local = 3;
@@ -109,7 +109,7 @@ message FsListRequest {
 }
 
 message FsListReply {
-  repeated FsGetInfoReply nodes = 1;
+  repeated FsObjInfo nodes = 1;
 }
 
 message FsReadRequest {
@@ -140,7 +140,7 @@ message FsDeleteRequest {                 //Reply for this is a FsReply message.
 message FsMoveRequest {                   //Reply for this is a FsReply message.
   fsId fileId = 1;
   string targetPath = 2;                  //absolute path relative to MP.
-  bool bCopy = 3;
+  bool copy = 3;
 }
 
 message FsReply {
