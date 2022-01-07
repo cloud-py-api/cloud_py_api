@@ -85,7 +85,7 @@ message FsGetInfoRequest {
   fsId fileId = 1;
 }
 
-message FsNodeInfo {
+message p {
   fsId fileId = 1;
   bool is_dir = 2;
   bool is_local = 3;
