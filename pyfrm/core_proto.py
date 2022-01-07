@@ -1,4 +1,5 @@
 from typing import Union
+from threading import Event
 
 import grpc
 from core_pb2 import taskStatus, Empty, \
@@ -15,12 +16,21 @@ class ClientCloudPA:
     _main_channel = None
     _main_stub = None
     _exit_sent: bool = False
+    _connected_event = Event()
+
+    def __wait_for_server_connect(self, channel_connectivity):
+        if channel_connectivity in (grpc.ChannelConnectivity.READY, grpc.ChannelConnectivity.IDLE):
+            self._connected_event.set()
 
     def __init__(self, connect_address: str, auth: str):
         self._main_channel = grpc.insecure_channel(target=connect_address,
                                                    options=[('grpc.enable_retries', 1),
                                                             ('grpc.keepalive_timeout_ms', 10000)
                                                             ])
+        self._main_channel.subscribe(self.__wait_for_server_connect)
+        if not self._connected_event.wait(timeout=5.0):
+            raise grpc.RpcError('Timeout connecting to the server')
+        self._main_channel.unsubscribe(self.__wait_for_server_connect)
         self._main_stub = core_pb2_grpc.CloudPyApiCoreStub(self._main_channel)
         self.task_init_data = self._main_stub.TaskInit(Empty())
         debug_msg('connected')
@@ -103,7 +113,7 @@ class ClientCloudPA:
     def fs_read(self, user_id: str, file_id: int) -> [FsResultCode, bytes]:
         if self.task_init_data.config.useFileDirect:
             raise Exception('Not implemented.')
-        fs_reply = self._main_stub.FsRead(FsReadRequest(userId=user_id, fileId=file_id))
+        fs_reply = self._main_stub.FsRead(FsReadRequest(fileId=fsId(userId=user_id, fileId=file_id)))
         return FsResultCode(fs_reply.resCode), fs_reply.content
 
     def fs_create(self, parent_dir_user_id: str, parent_dir_id: int, name: str,
@@ -112,25 +122,26 @@ class ClientCloudPA:
             raise Exception('Not implemented.')
         if not is_file and len(content) > 0:
             raise ValueError('Content can be specified only for files.')
-        fs_reply = self._main_stub.FsCreate(FsCreateRequest(userId=parent_dir_user_id, fileId=parent_dir_id,
+        fs_reply = self._main_stub.FsCreate(FsCreateRequest(parentDirId=fsId(userId=parent_dir_user_id,
+                                                                             fileId=parent_dir_id),
                                                             name=name, is_file=is_file, content=content))
         return FsResultCode(fs_reply.resCode)
 
     def fs_write(self, user_id: str, file_id: int, content: bytes) -> FsResultCode:
         if self.task_init_data.config.useFileDirect:
             raise Exception('Not implemented.')
-        fs_reply = self._main_stub.FsWrite(FsWriteRequest(userId=user_id, fileId=file_id, content=content))
+        fs_reply = self._main_stub.FsWrite(FsWriteRequest(fileId=fsId(userId=user_id, fileId=file_id), content=content))
         return FsResultCode(fs_reply.resCode)
 
     def fs_delete(self, user_id: str, file_id: int) -> FsResultCode:
         if self.task_init_data.config.useFileDirect:
             raise Exception('Not implemented.')
-        fs_reply = self._main_stub.FsDelete(FsDeleteRequest(userId=user_id, fileId=file_id))
+        fs_reply = self._main_stub.FsDelete(FsDeleteRequest(fileId=fsId(userId=user_id, fileId=file_id)))
         return FsResultCode(fs_reply.resCode)
 
     def fs_move(self, user_id: str, file_id: int, target_path: str, copy: bool = False) -> FsResultCode:
         if self.task_init_data.config.useFileDirect:
             raise Exception('Not implemented.')
-        fs_reply = self._main_stub.FsMove(FsMoveRequest(userId=user_id, fileId=file_id,
+        fs_reply = self._main_stub.FsMove(FsMoveRequest(fileId=fsId(userId=user_id, fileId=file_id),
                                                         targetPath=target_path, copy=copy))
         return FsResultCode(fs_reply.resCode)
