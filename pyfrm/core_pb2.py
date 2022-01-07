@@ -16,16 +16,16 @@ _sym_db = _symbol_database.Default()
 
 DESCRIPTOR = _descriptor.FileDescriptor(
   name='core.proto',
-  package='Cloud_Py_API',
+  package='OCA.Cloud_Py_API.Proto',
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\ncore.proto\x12\x0c\x43loud_Py_API\"\x07\n\x05\x45mpty\"\xfd\x01\n\rTaskInitReply\x12\x0f\n\x07\x61ppName\x18\x01 \x01(\t\x12\x0f\n\x07modName\x18\x02 \x01(\t\x12\x0f\n\x07modPath\x18\x03 \x01(\t\x12\x10\n\x08\x66uncName\x18\x04 \x01(\t\x12\x0c\n\x04\x61rgs\x18\x05 \x03(\t\x12\x36\n\x06\x63onfig\x18\x06 \x01(\x0b\x32&.Cloud_Py_API.TaskInitReply.cfgOptions\x1a\x61\n\ncfgOptions\x12%\n\x07log_lvl\x18\x01 \x01(\x0e\x32\x14.Cloud_Py_API.logLvl\x12\x12\n\ndataFolder\x18\x02 \x01(\t\x12\x18\n\x10\x66rameworkAppData\x18\x03 \x01(\t\"P\n\x14TaskSetStatusRequest\x12)\n\x07st_code\x18\x01 \x01(\x0e\x32\x18.Cloud_Py_API.taskStatus\x12\r\n\x05\x65rror\x18\x02 \x01(\t\"!\n\x0fTaskExitRequest\x12\x0e\n\x06result\x18\x01 \x01(\t\"X\n\x0eTaskLogRequest\x12%\n\x07log_lvl\x18\x01 \x01(\x0e\x32\x14.Cloud_Py_API.logLvl\x12\x0e\n\x06module\x18\x02 \x01(\t\x12\x0f\n\x07\x63ontent\x18\x03 \x03(\t\"&\n\x04\x66sId\x12\x0e\n\x06userId\x18\x01 \x01(\t\x12\x0e\n\x06\x66ileId\x18\x02 \x01(\t\"6\n\x10\x46sGetInfoRequest\x12\"\n\x06\x66ileId\x18\x01 \x01(\x0b\x32\x12.Cloud_Py_API.fsId\"\xbb\x02\n\x0e\x46sGetInfoReply\x12\"\n\x06\x66ileId\x18\x01 \x01(\x0b\x32\x12.Cloud_Py_API.fsId\x12\x0e\n\x06is_dir\x18\x02 \x01(\x08\x12\x10\n\x08is_local\x18\x03 \x01(\x08\x12\x10\n\x08mimetype\x18\x04 \x01(\t\x12\x0c\n\x04name\x18\x05 \x01(\t\x12\x15\n\rinternal_path\x18\x06 \x01(\t\x12\x10\n\x08\x61\x62s_path\x18\x07 \x01(\t\x12\x0c\n\x04size\x18\x08 \x01(\x03\x12\x13\n\x0bpermissions\x18\t \x01(\x03\x12\r\n\x05mtime\x18\n \x01(\x03\x12\x10\n\x08\x63hecksum\x18\x0b \x01(\t\x12\x11\n\tencrypted\x18\x0c \x01(\x08\x12\x0c\n\x04\x65tag\x18\r \x01(\t\x12\x11\n\townerName\x18\x0e \x01(\t\x12\x11\n\tstorageId\x18\x0f \x01(\x03\x12\x0f\n\x07mountId\x18\x10 \x01(\x03\"2\n\rFsListRequest\x12!\n\x05\x64irId\x18\x01 \x01(\x0b\x32\x12.Cloud_Py_API.fsId\":\n\x0b\x46sListReply\x12+\n\x05nodes\x18\x01 \x03(\x0b\x32\x1c.Cloud_Py_API.FsGetInfoReply\"3\n\rFsReadRequest\x12\"\n\x06\x66ileId\x18\x01 \x01(\x0b\x32\x12.Cloud_Py_API.fsId\"K\n\x0b\x46sReadReply\x12+\n\x07resCode\x18\x01 \x01(\x0e\x32\x1a.Cloud_Py_API.fsResultCode\x12\x0f\n\x07\x63ontent\x18\x02 \x01(\x0c\"j\n\x0f\x46sCreateRequest\x12\'\n\x0bparentDirId\x18\x01 \x01(\x0b\x32\x12.Cloud_Py_API.fsId\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x0f\n\x07is_file\x18\x03 \x01(\x08\x12\x0f\n\x07\x63ontent\x18\x04 \x01(\x0c\"E\n\x0e\x46sWriteRequest\x12\"\n\x06\x66ileId\x18\x01 \x01(\x0b\x32\x12.Cloud_Py_API.fsId\x12\x0f\n\x07\x63ontent\x18\x02 \x01(\x0c\"5\n\x0f\x46sDeleteRequest\x12\"\n\x06\x66ileId\x18\x01 \x01(\x0b\x32\x12.Cloud_Py_API.fsId\"V\n\rFsMoveRequest\x12\"\n\x06\x66ileId\x18\x01 \x01(\x0b\x32\x12.Cloud_Py_API.fsId\x12\x12\n\ntargetPath\x18\x02 \x01(\t\x12\r\n\x05\x62\x43opy\x18\x03 \x01(\x08\"6\n\x07\x46sReply\x12+\n\x07resCode\x18\x01 \x01(\x0e\x32\x1a.Cloud_Py_API.fsResultCode\"-\n\twhereExpr\x12\x0c\n\x04type\x18\x01 \x01(\t\x12\x12\n\nexpression\x18\x02 \x01(\t\"(\n\tstr_alias\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\r\n\x05\x61lias\x18\x02 \x01(\t\"\xd6\x03\n\x0f\x44\x62SelectRequest\x12(\n\x07\x63olumns\x18\x01 \x03(\x0b\x32\x17.Cloud_Py_API.str_alias\x12%\n\x04\x66rom\x18\x02 \x03(\x0b\x32\x17.Cloud_Py_API.str_alias\x12\x35\n\x05joins\x18\x03 \x03(\x0b\x32&.Cloud_Py_API.DbSelectRequest.joinType\x12(\n\x07whereas\x18\x04 \x03(\x0b\x32\x17.Cloud_Py_API.whereExpr\x12\x0f\n\x07groupBy\x18\x05 \x03(\t\x12\x39\n\x07havings\x18\x06 \x03(\x0b\x32(.Cloud_Py_API.DbSelectRequest.havingExpr\x12\x0f\n\x07orderBy\x18\x07 \x03(\t\x12\x12\n\nmaxResults\x18\x08 \x01(\x03\x12\x13\n\x0b\x66irstResult\x18\t \x01(\x03\x1a[\n\x08joinType\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x11\n\tfromAlias\x18\x02 \x01(\t\x12\x0c\n\x04join\x18\x03 \x01(\t\x12\r\n\x05\x61lias\x18\x04 \x01(\t\x12\x11\n\tcondition\x18\x05 \x01(\t\x1a.\n\nhavingExpr\x12\x0c\n\x04type\x18\x01 \x01(\t\x12\x12\n\nexpression\x18\x02 \x01(\t\"@\n\rDbSelectReply\x12\x10\n\x08rowCount\x18\x01 \x01(\x03\x12\r\n\x05\x65rror\x18\x02 \x01(\t\x12\x0e\n\x06handle\x18\x03 \x01(\x03\"\x7f\n\x0f\x44\x62\x43ursorRequest\x12/\n\x03\x63md\x18\x01 \x01(\x0e\x32\".Cloud_Py_API.DbCursorRequest.cCmd\x12\x0e\n\x06handle\x18\x02 \x01(\x03\"+\n\x04\x63\x43md\x12\t\n\x05\x46\x45TCH\x10\x00\x12\r\n\tFETCH_ALL\x10\x01\x12\t\n\x05\x43LOSE\x10\x02\"\x9e\x01\n\rDbCursorReply\x12\r\n\x05\x65rror\x18\x01 \x01(\t\x12\x13\n\x0b\x63olumnsName\x18\x02 \x03(\t\x12;\n\x0b\x63olumnsData\x18\x03 \x03(\x0b\x32&.Cloud_Py_API.DbCursorReply.columnData\x1a,\n\ncolumnData\x12\x10\n\x08\x62Present\x18\x01 \x01(\x08\x12\x0c\n\x04\x64\x61ta\x18\x02 \x01(\x0c\"\xcc\x01\n\rDbExecRequest\x12/\n\x04type\x18\x01 \x01(\x0e\x32!.Cloud_Py_API.DbExecRequest.rType\x12\x12\n\ntable_name\x18\x02 \x01(\t\x12\x0f\n\x07\x63olumns\x18\x03 \x03(\t\x12\x0e\n\x06values\x18\x04 \x03(\x0c\x12(\n\x07whereas\x18\x05 \x03(\x0b\x32\x17.Cloud_Py_API.whereExpr\"+\n\x05rType\x12\n\n\x06INSERT\x10\x00\x12\n\n\x06UPDATE\x10\x01\x12\n\n\x06\x44\x45LETE\x10\x02\"3\n\x0b\x44\x62\x45xecReply\x12\x15\n\rnAffectedRows\x18\x01 \x01(\x03\x12\r\n\x05\x65rror\x18\x02 \x01(\t\"j\n\rServerCommand\x12.\n\x02id\x18\x01 \x01(\x0e\x32\".Cloud_Py_API.ServerCommand.cmd_id\")\n\x06\x63md_id\x12\x10\n\x0cTASK_NOTHING\x10\x00\x12\r\n\tTASK_STOP\x10\x01*=\n\x06logLvl\x12\t\n\x05\x44\x45\x42UG\x10\x00\x12\x08\n\x04INFO\x10\x01\x12\x08\n\x04WARN\x10\x02\x12\t\n\x05\x45RROR\x10\x03\x12\t\n\x05\x46\x41TAL\x10\x04*s\n\ntaskStatus\x12\x0e\n\nST_SUCCESS\x10\x00\x12\x12\n\x0eST_IN_PROGRESS\x10\x01\x12\x11\n\rST_INIT_ERROR\x10\x02\x12\x10\n\x0cST_EXCEPTION\x10\x03\x12\x0c\n\x08ST_ERROR\x10\x04\x12\x0e\n\nST_UNKNOWN\x10\x05*X\n\x0c\x66sResultCode\x12\x0c\n\x08NO_ERROR\x10\x00\x12\x11\n\rNOT_PERMITTED\x10\x01\x12\n\n\x06LOCKED\x10\x02\x12\r\n\tNOT_FOUND\x10\x03\x12\x0c\n\x08IO_ERROR\x10\x04\x32\x93\x08\n\x0e\x43loudPyApiCore\x12>\n\x08TaskInit\x12\x13.Cloud_Py_API.Empty\x1a\x1b.Cloud_Py_API.TaskInitReply\"\x00\x12G\n\nTaskStatus\x12\".Cloud_Py_API.TaskSetStatusRequest\x1a\x13.Cloud_Py_API.Empty\"\x00\x12@\n\x08TaskExit\x12\x1d.Cloud_Py_API.TaskExitRequest\x1a\x13.Cloud_Py_API.Empty\"\x00\x12>\n\x07TaskLog\x12\x1c.Cloud_Py_API.TaskLogRequest\x1a\x13.Cloud_Py_API.Empty\"\x00\x12\x41\n\tCmdStream\x12\x13.Cloud_Py_API.Empty\x1a\x1b.Cloud_Py_API.ServerCommand\"\x00\x30\x01\x12\x45\n\tFsGetInfo\x12\x1b.Cloud_Py_API.FsListRequest\x1a\x19.Cloud_Py_API.FsListReply\"\x00\x12\x42\n\x06\x46sList\x12\x1b.Cloud_Py_API.FsListRequest\x1a\x19.Cloud_Py_API.FsListReply\"\x00\x12\x44\n\x06\x46sRead\x12\x1b.Cloud_Py_API.FsReadRequest\x1a\x19.Cloud_Py_API.FsReadReply\"\x00\x30\x01\x12\x42\n\x08\x46sCreate\x12\x1d.Cloud_Py_API.FsCreateRequest\x1a\x15.Cloud_Py_API.FsReply\"\x00\x12\x42\n\x07\x46sWrite\x12\x1c.Cloud_Py_API.FsWriteRequest\x1a\x15.Cloud_Py_API.FsReply\"\x00(\x01\x12\x42\n\x08\x46sDelete\x12\x1d.Cloud_Py_API.FsDeleteRequest\x1a\x15.Cloud_Py_API.FsReply\"\x00\x12>\n\x06\x46sMove\x12\x1b.Cloud_Py_API.FsMoveRequest\x1a\x15.Cloud_Py_API.FsReply\"\x00\x12H\n\x08\x44\x62Select\x12\x1d.Cloud_Py_API.DbSelectRequest\x1a\x1b.Cloud_Py_API.DbSelectReply\"\x00\x12H\n\x08\x44\x62\x43ursor\x12\x1d.Cloud_Py_API.DbCursorRequest\x1a\x1b.Cloud_Py_API.DbCursorReply\"\x00\x12\x42\n\x06\x44\x62\x45xec\x12\x1b.Cloud_Py_API.DbExecRequest\x1a\x19.Cloud_Py_API.DbExecReply\"\x00\x62\x06proto3'
+  serialized_pb=b'\n\ncore.proto\x12\x16OCA.Cloud_Py_API.Proto\"\x07\n\x05\x45mpty\"\xce\x02\n\rTaskInitReply\x12\x0f\n\x07\x61ppName\x18\x01 \x01(\t\x12\x0f\n\x07modName\x18\x02 \x01(\t\x12\x0f\n\x07modPath\x18\x03 \x01(\t\x12\x10\n\x08\x66uncName\x18\x04 \x01(\t\x12\x0c\n\x04\x61rgs\x18\x05 \x03(\t\x12@\n\x06\x63onfig\x18\x06 \x01(\x0b\x32\x30.OCA.Cloud_Py_API.Proto.TaskInitReply.cfgOptions\x1a\xa7\x01\n\ncfgOptions\x12/\n\x07log_lvl\x18\x01 \x01(\x0e\x32\x1e.OCA.Cloud_Py_API.Proto.logLvl\x12\x12\n\ndataFolder\x18\x02 \x01(\t\x12\x18\n\x10\x66rameworkAppData\x18\x03 \x01(\t\x12\x0e\n\x06userId\x18\x04 \x01(\t\x12\x15\n\ruseFileDirect\x18\x05 \x01(\x08\x12\x13\n\x0buseDBDirect\x18\x06 \x01(\x08\"Z\n\x14TaskSetStatusRequest\x12\x33\n\x07st_code\x18\x01 \x01(\x0e\x32\".OCA.Cloud_Py_API.Proto.taskStatus\x12\r\n\x05\x65rror\x18\x02 \x01(\t\"!\n\x0fTaskExitRequest\x12\x0e\n\x06result\x18\x01 \x01(\t\"b\n\x0eTaskLogRequest\x12/\n\x07log_lvl\x18\x01 \x01(\x0e\x32\x1e.OCA.Cloud_Py_API.Proto.logLvl\x12\x0e\n\x06module\x18\x02 \x01(\t\x12\x0f\n\x07\x63ontent\x18\x03 \x03(\t\"&\n\x04\x66sId\x12\x0e\n\x06userId\x18\x01 \x01(\t\x12\x0e\n\x06\x66ileId\x18\x02 \x01(\x03\"@\n\x10\x46sGetInfoRequest\x12,\n\x06\x66ileId\x18\x01 \x01(\x0b\x32\x1c.OCA.Cloud_Py_API.Proto.fsId\"\xc1\x02\n\nFsNodeInfo\x12,\n\x06\x66ileId\x18\x01 \x01(\x0b\x32\x1c.OCA.Cloud_Py_API.Proto.fsId\x12\x0e\n\x06is_dir\x18\x02 \x01(\x08\x12\x10\n\x08is_local\x18\x03 \x01(\x08\x12\x10\n\x08mimetype\x18\x04 \x01(\t\x12\x0c\n\x04name\x18\x05 \x01(\t\x12\x15\n\rinternal_path\x18\x06 \x01(\t\x12\x10\n\x08\x61\x62s_path\x18\x07 \x01(\t\x12\x0c\n\x04size\x18\x08 \x01(\x03\x12\x13\n\x0bpermissions\x18\t \x01(\x03\x12\r\n\x05mtime\x18\n \x01(\x03\x12\x10\n\x08\x63hecksum\x18\x0b \x01(\t\x12\x11\n\tencrypted\x18\x0c \x01(\x08\x12\x0c\n\x04\x65tag\x18\r \x01(\t\x12\x11\n\townerName\x18\x0e \x01(\t\x12\x11\n\tstorageId\x18\x0f \x01(\t\x12\x0f\n\x07mountId\x18\x10 \x01(\x03\"<\n\rFsListRequest\x12+\n\x05\x64irId\x18\x01 \x01(\x0b\x32\x1c.OCA.Cloud_Py_API.Proto.fsId\"@\n\x0b\x46sListReply\x12\x31\n\x05nodes\x18\x01 \x03(\x0b\x32\".OCA.Cloud_Py_API.Proto.FsNodeInfo\"=\n\rFsReadRequest\x12,\n\x06\x66ileId\x18\x01 \x01(\x0b\x32\x1c.OCA.Cloud_Py_API.Proto.fsId\"U\n\x0b\x46sReadReply\x12\x35\n\x07resCode\x18\x01 \x01(\x0e\x32$.OCA.Cloud_Py_API.Proto.fsResultCode\x12\x0f\n\x07\x63ontent\x18\x02 \x01(\x0c\"t\n\x0f\x46sCreateRequest\x12\x31\n\x0bparentDirId\x18\x01 \x01(\x0b\x32\x1c.OCA.Cloud_Py_API.Proto.fsId\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x0f\n\x07is_file\x18\x03 \x01(\x08\x12\x0f\n\x07\x63ontent\x18\x04 \x01(\x0c\"O\n\x0e\x46sWriteRequest\x12,\n\x06\x66ileId\x18\x01 \x01(\x0b\x32\x1c.OCA.Cloud_Py_API.Proto.fsId\x12\x0f\n\x07\x63ontent\x18\x02 \x01(\x0c\"?\n\x0f\x46sDeleteRequest\x12,\n\x06\x66ileId\x18\x01 \x01(\x0b\x32\x1c.OCA.Cloud_Py_API.Proto.fsId\"_\n\rFsMoveRequest\x12,\n\x06\x66ileId\x18\x01 \x01(\x0b\x32\x1c.OCA.Cloud_Py_API.Proto.fsId\x12\x12\n\ntargetPath\x18\x02 \x01(\t\x12\x0c\n\x04\x63opy\x18\x03 \x01(\x08\"@\n\x07\x46sReply\x12\x35\n\x07resCode\x18\x01 \x01(\x0e\x32$.OCA.Cloud_Py_API.Proto.fsResultCode\"-\n\twhereExpr\x12\x0c\n\x04type\x18\x01 \x01(\t\x12\x12\n\nexpression\x18\x02 \x01(\t\"(\n\tstr_alias\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\r\n\x05\x61lias\x18\x02 \x01(\t\"\x88\x04\n\x0f\x44\x62SelectRequest\x12\x32\n\x07\x63olumns\x18\x01 \x03(\x0b\x32!.OCA.Cloud_Py_API.Proto.str_alias\x12/\n\x04\x66rom\x18\x02 \x03(\x0b\x32!.OCA.Cloud_Py_API.Proto.str_alias\x12?\n\x05joins\x18\x03 \x03(\x0b\x32\x30.OCA.Cloud_Py_API.Proto.DbSelectRequest.joinType\x12\x32\n\x07whereas\x18\x04 \x03(\x0b\x32!.OCA.Cloud_Py_API.Proto.whereExpr\x12\x0f\n\x07groupBy\x18\x05 \x03(\t\x12\x43\n\x07havings\x18\x06 \x03(\x0b\x32\x32.OCA.Cloud_Py_API.Proto.DbSelectRequest.havingExpr\x12\x0f\n\x07orderBy\x18\x07 \x03(\t\x12\x12\n\nmaxResults\x18\x08 \x01(\x03\x12\x13\n\x0b\x66irstResult\x18\t \x01(\x03\x1a[\n\x08joinType\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x11\n\tfromAlias\x18\x02 \x01(\t\x12\x0c\n\x04join\x18\x03 \x01(\t\x12\r\n\x05\x61lias\x18\x04 \x01(\t\x12\x11\n\tcondition\x18\x05 \x01(\t\x1a.\n\nhavingExpr\x12\x0c\n\x04type\x18\x01 \x01(\t\x12\x12\n\nexpression\x18\x02 \x01(\t\"@\n\rDbSelectReply\x12\x10\n\x08rowCount\x18\x01 \x01(\x03\x12\r\n\x05\x65rror\x18\x02 \x01(\t\x12\x0e\n\x06handle\x18\x03 \x01(\x03\"\x89\x01\n\x0f\x44\x62\x43ursorRequest\x12\x39\n\x03\x63md\x18\x01 \x01(\x0e\x32,.OCA.Cloud_Py_API.Proto.DbCursorRequest.cCmd\x12\x0e\n\x06handle\x18\x02 \x01(\x03\"+\n\x04\x63\x43md\x12\t\n\x05\x46\x45TCH\x10\x00\x12\r\n\tFETCH_ALL\x10\x01\x12\t\n\x05\x43LOSE\x10\x02\"\xa8\x01\n\rDbCursorReply\x12\r\n\x05\x65rror\x18\x01 \x01(\t\x12\x13\n\x0b\x63olumnsName\x18\x02 \x03(\t\x12\x45\n\x0b\x63olumnsData\x18\x03 \x03(\x0b\x32\x30.OCA.Cloud_Py_API.Proto.DbCursorReply.columnData\x1a,\n\ncolumnData\x12\x10\n\x08\x62Present\x18\x01 \x01(\x08\x12\x0c\n\x04\x64\x61ta\x18\x02 \x01(\x0c\"\xe0\x01\n\rDbExecRequest\x12\x39\n\x04type\x18\x01 \x01(\x0e\x32+.OCA.Cloud_Py_API.Proto.DbExecRequest.rType\x12\x12\n\ntable_name\x18\x02 \x01(\t\x12\x0f\n\x07\x63olumns\x18\x03 \x03(\t\x12\x0e\n\x06values\x18\x04 \x03(\x0c\x12\x32\n\x07whereas\x18\x05 \x03(\x0b\x32!.OCA.Cloud_Py_API.Proto.whereExpr\"+\n\x05rType\x12\n\n\x06INSERT\x10\x00\x12\n\n\x06UPDATE\x10\x01\x12\n\n\x06\x44\x45LETE\x10\x02\"3\n\x0b\x44\x62\x45xecReply\x12\x15\n\rnAffectedRows\x18\x01 \x01(\x03\x12\r\n\x05\x65rror\x18\x02 \x01(\t*=\n\x06logLvl\x12\t\n\x05\x44\x45\x42UG\x10\x00\x12\x08\n\x04INFO\x10\x01\x12\x08\n\x04WARN\x10\x02\x12\t\n\x05\x45RROR\x10\x03\x12\t\n\x05\x46\x41TAL\x10\x04*s\n\ntaskStatus\x12\x0e\n\nST_SUCCESS\x10\x00\x12\x12\n\x0eST_IN_PROGRESS\x10\x01\x12\x11\n\rST_INIT_ERROR\x10\x02\x12\x10\n\x0cST_EXCEPTION\x10\x03\x12\x0c\n\x08ST_ERROR\x10\x04\x12\x0e\n\nST_UNKNOWN\x10\x05*X\n\x0c\x66sResultCode\x12\x0c\n\x08NO_ERROR\x10\x00\x12\x11\n\rNOT_PERMITTED\x10\x01\x12\n\n\x06LOCKED\x10\x02\x12\r\n\tNOT_FOUND\x10\x03\x12\x0c\n\x08IO_ERROR\x10\x04\x32\xeb\t\n\x0e\x43loudPyApiCore\x12R\n\x08TaskInit\x12\x1d.OCA.Cloud_Py_API.Proto.Empty\x1a%.OCA.Cloud_Py_API.Proto.TaskInitReply\"\x00\x12[\n\nTaskStatus\x12,.OCA.Cloud_Py_API.Proto.TaskSetStatusRequest\x1a\x1d.OCA.Cloud_Py_API.Proto.Empty\"\x00\x12T\n\x08TaskExit\x12\'.OCA.Cloud_Py_API.Proto.TaskExitRequest\x1a\x1d.OCA.Cloud_Py_API.Proto.Empty\"\x00\x12R\n\x07TaskLog\x12&.OCA.Cloud_Py_API.Proto.TaskLogRequest\x1a\x1d.OCA.Cloud_Py_API.Proto.Empty\"\x00\x12\\\n\tFsGetInfo\x12(.OCA.Cloud_Py_API.Proto.FsGetInfoRequest\x1a#.OCA.Cloud_Py_API.Proto.FsListReply\"\x00\x12V\n\x06\x46sList\x12%.OCA.Cloud_Py_API.Proto.FsListRequest\x1a#.OCA.Cloud_Py_API.Proto.FsListReply\"\x00\x12X\n\x06\x46sRead\x12%.OCA.Cloud_Py_API.Proto.FsReadRequest\x1a#.OCA.Cloud_Py_API.Proto.FsReadReply\"\x00\x30\x01\x12V\n\x08\x46sCreate\x12\'.OCA.Cloud_Py_API.Proto.FsCreateRequest\x1a\x1f.OCA.Cloud_Py_API.Proto.FsReply\"\x00\x12V\n\x07\x46sWrite\x12&.OCA.Cloud_Py_API.Proto.FsWriteRequest\x1a\x1f.OCA.Cloud_Py_API.Proto.FsReply\"\x00(\x01\x12V\n\x08\x46sDelete\x12\'.OCA.Cloud_Py_API.Proto.FsDeleteRequest\x1a\x1f.OCA.Cloud_Py_API.Proto.FsReply\"\x00\x12R\n\x06\x46sMove\x12%.OCA.Cloud_Py_API.Proto.FsMoveRequest\x1a\x1f.OCA.Cloud_Py_API.Proto.FsReply\"\x00\x12\\\n\x08\x44\x62Select\x12\'.OCA.Cloud_Py_API.Proto.DbSelectRequest\x1a%.OCA.Cloud_Py_API.Proto.DbSelectReply\"\x00\x12\\\n\x08\x44\x62\x43ursor\x12\'.OCA.Cloud_Py_API.Proto.DbCursorRequest\x1a%.OCA.Cloud_Py_API.Proto.DbCursorReply\"\x00\x12V\n\x06\x44\x62\x45xec\x12%.OCA.Cloud_Py_API.Proto.DbExecRequest\x1a#.OCA.Cloud_Py_API.Proto.DbExecReply\"\x00\x62\x06proto3'
 )
 
 _LOGLVL = _descriptor.EnumDescriptor(
   name='logLvl',
-  full_name='Cloud_Py_API.logLvl',
+  full_name='OCA.Cloud_Py_API.Proto.logLvl',
   filename=None,
   file=DESCRIPTOR,
   create_key=_descriptor._internal_create_key,
@@ -58,15 +58,15 @@ _LOGLVL = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=2820,
-  serialized_end=2881,
+  serialized_start=3015,
+  serialized_end=3076,
 )
 _sym_db.RegisterEnumDescriptor(_LOGLVL)
 
 logLvl = enum_type_wrapper.EnumTypeWrapper(_LOGLVL)
 _TASKSTATUS = _descriptor.EnumDescriptor(
   name='taskStatus',
-  full_name='Cloud_Py_API.taskStatus',
+  full_name='OCA.Cloud_Py_API.Proto.taskStatus',
   filename=None,
   file=DESCRIPTOR,
   create_key=_descriptor._internal_create_key,
@@ -104,15 +104,15 @@ _TASKSTATUS = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=2883,
-  serialized_end=2998,
+  serialized_start=3078,
+  serialized_end=3193,
 )
 _sym_db.RegisterEnumDescriptor(_TASKSTATUS)
 
 taskStatus = enum_type_wrapper.EnumTypeWrapper(_TASKSTATUS)
 _FSRESULTCODE = _descriptor.EnumDescriptor(
   name='fsResultCode',
-  full_name='Cloud_Py_API.fsResultCode',
+  full_name='OCA.Cloud_Py_API.Proto.fsResultCode',
   filename=None,
   file=DESCRIPTOR,
   create_key=_descriptor._internal_create_key,
@@ -145,8 +145,8 @@ _FSRESULTCODE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=3000,
-  serialized_end=3088,
+  serialized_start=3195,
+  serialized_end=3283,
 )
 _sym_db.RegisterEnumDescriptor(_FSRESULTCODE)
 
@@ -171,7 +171,7 @@ IO_ERROR = 4
 
 _DBCURSORREQUEST_CCMD = _descriptor.EnumDescriptor(
   name='cCmd',
-  full_name='Cloud_Py_API.DbCursorRequest.cCmd',
+  full_name='OCA.Cloud_Py_API.Proto.DbCursorRequest.cCmd',
   filename=None,
   file=DESCRIPTOR,
   create_key=_descriptor._internal_create_key,
@@ -194,14 +194,14 @@ _DBCURSORREQUEST_CCMD = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=2246,
-  serialized_end=2289,
+  serialized_start=2519,
+  serialized_end=2562,
 )
 _sym_db.RegisterEnumDescriptor(_DBCURSORREQUEST_CCMD)
 
 _DBEXECREQUEST_RTYPE = _descriptor.EnumDescriptor(
   name='rType',
-  full_name='Cloud_Py_API.DbExecRequest.rType',
+  full_name='OCA.Cloud_Py_API.Proto.DbExecRequest.rType',
   filename=None,
   file=DESCRIPTOR,
   create_key=_descriptor._internal_create_key,
@@ -224,40 +224,15 @@ _DBEXECREQUEST_RTYPE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=2614,
-  serialized_end=2657,
+  serialized_start=2917,
+  serialized_end=2960,
 )
 _sym_db.RegisterEnumDescriptor(_DBEXECREQUEST_RTYPE)
-
-_SERVERCOMMAND_CMD_ID = _descriptor.EnumDescriptor(
-  name='cmd_id',
-  full_name='Cloud_Py_API.ServerCommand.cmd_id',
-  filename=None,
-  file=DESCRIPTOR,
-  create_key=_descriptor._internal_create_key,
-  values=[
-    _descriptor.EnumValueDescriptor(
-      name='TASK_NOTHING', index=0, number=0,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-    _descriptor.EnumValueDescriptor(
-      name='TASK_STOP', index=1, number=1,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-  ],
-  containing_type=None,
-  serialized_options=None,
-  serialized_start=2777,
-  serialized_end=2818,
-)
-_sym_db.RegisterEnumDescriptor(_SERVERCOMMAND_CMD_ID)
 
 
 _EMPTY = _descriptor.Descriptor(
   name='Empty',
-  full_name='Cloud_Py_API.Empty',
+  full_name='OCA.Cloud_Py_API.Proto.Empty',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
@@ -275,37 +250,58 @@ _EMPTY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=28,
-  serialized_end=35,
+  serialized_start=38,
+  serialized_end=45,
 )
 
 
 _TASKINITREPLY_CFGOPTIONS = _descriptor.Descriptor(
   name='cfgOptions',
-  full_name='Cloud_Py_API.TaskInitReply.cfgOptions',
+  full_name='OCA.Cloud_Py_API.Proto.TaskInitReply.cfgOptions',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
-      name='log_lvl', full_name='Cloud_Py_API.TaskInitReply.cfgOptions.log_lvl', index=0,
+      name='log_lvl', full_name='OCA.Cloud_Py_API.Proto.TaskInitReply.cfgOptions.log_lvl', index=0,
       number=1, type=14, cpp_type=8, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='dataFolder', full_name='Cloud_Py_API.TaskInitReply.cfgOptions.dataFolder', index=1,
+      name='dataFolder', full_name='OCA.Cloud_Py_API.Proto.TaskInitReply.cfgOptions.dataFolder', index=1,
       number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='frameworkAppData', full_name='Cloud_Py_API.TaskInitReply.cfgOptions.frameworkAppData', index=2,
+      name='frameworkAppData', full_name='OCA.Cloud_Py_API.Proto.TaskInitReply.cfgOptions.frameworkAppData', index=2,
       number=3, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='userId', full_name='OCA.Cloud_Py_API.Proto.TaskInitReply.cfgOptions.userId', index=3,
+      number=4, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='useFileDirect', full_name='OCA.Cloud_Py_API.Proto.TaskInitReply.cfgOptions.useFileDirect', index=4,
+      number=5, type=8, cpp_type=7, label=1,
+      has_default_value=False, default_value=False,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='useDBDirect', full_name='OCA.Cloud_Py_API.Proto.TaskInitReply.cfgOptions.useDBDirect', index=5,
+      number=6, type=8, cpp_type=7, label=1,
+      has_default_value=False, default_value=False,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
@@ -321,55 +317,55 @@ _TASKINITREPLY_CFGOPTIONS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=194,
-  serialized_end=291,
+  serialized_start=215,
+  serialized_end=382,
 )
 
 _TASKINITREPLY = _descriptor.Descriptor(
   name='TaskInitReply',
-  full_name='Cloud_Py_API.TaskInitReply',
+  full_name='OCA.Cloud_Py_API.Proto.TaskInitReply',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
-      name='appName', full_name='Cloud_Py_API.TaskInitReply.appName', index=0,
+      name='appName', full_name='OCA.Cloud_Py_API.Proto.TaskInitReply.appName', index=0,
       number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='modName', full_name='Cloud_Py_API.TaskInitReply.modName', index=1,
+      name='modName', full_name='OCA.Cloud_Py_API.Proto.TaskInitReply.modName', index=1,
       number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='modPath', full_name='Cloud_Py_API.TaskInitReply.modPath', index=2,
+      name='modPath', full_name='OCA.Cloud_Py_API.Proto.TaskInitReply.modPath', index=2,
       number=3, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='funcName', full_name='Cloud_Py_API.TaskInitReply.funcName', index=3,
+      name='funcName', full_name='OCA.Cloud_Py_API.Proto.TaskInitReply.funcName', index=3,
       number=4, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='args', full_name='Cloud_Py_API.TaskInitReply.args', index=4,
+      name='args', full_name='OCA.Cloud_Py_API.Proto.TaskInitReply.args', index=4,
       number=5, type=9, cpp_type=9, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='config', full_name='Cloud_Py_API.TaskInitReply.config', index=5,
+      name='config', full_name='OCA.Cloud_Py_API.Proto.TaskInitReply.config', index=5,
       number=6, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
@@ -387,28 +383,28 @@ _TASKINITREPLY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=38,
-  serialized_end=291,
+  serialized_start=48,
+  serialized_end=382,
 )
 
 
 _TASKSETSTATUSREQUEST = _descriptor.Descriptor(
   name='TaskSetStatusRequest',
-  full_name='Cloud_Py_API.TaskSetStatusRequest',
+  full_name='OCA.Cloud_Py_API.Proto.TaskSetStatusRequest',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
-      name='st_code', full_name='Cloud_Py_API.TaskSetStatusRequest.st_code', index=0,
+      name='st_code', full_name='OCA.Cloud_Py_API.Proto.TaskSetStatusRequest.st_code', index=0,
       number=1, type=14, cpp_type=8, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='error', full_name='Cloud_Py_API.TaskSetStatusRequest.error', index=1,
+      name='error', full_name='OCA.Cloud_Py_API.Proto.TaskSetStatusRequest.error', index=1,
       number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
@@ -426,21 +422,21 @@ _TASKSETSTATUSREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=293,
-  serialized_end=373,
+  serialized_start=384,
+  serialized_end=474,
 )
 
 
 _TASKEXITREQUEST = _descriptor.Descriptor(
   name='TaskExitRequest',
-  full_name='Cloud_Py_API.TaskExitRequest',
+  full_name='OCA.Cloud_Py_API.Proto.TaskExitRequest',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
-      name='result', full_name='Cloud_Py_API.TaskExitRequest.result', index=0,
+      name='result', full_name='OCA.Cloud_Py_API.Proto.TaskExitRequest.result', index=0,
       number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
@@ -458,35 +454,35 @@ _TASKEXITREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=375,
-  serialized_end=408,
+  serialized_start=476,
+  serialized_end=509,
 )
 
 
 _TASKLOGREQUEST = _descriptor.Descriptor(
   name='TaskLogRequest',
-  full_name='Cloud_Py_API.TaskLogRequest',
+  full_name='OCA.Cloud_Py_API.Proto.TaskLogRequest',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
-      name='log_lvl', full_name='Cloud_Py_API.TaskLogRequest.log_lvl', index=0,
+      name='log_lvl', full_name='OCA.Cloud_Py_API.Proto.TaskLogRequest.log_lvl', index=0,
       number=1, type=14, cpp_type=8, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='module', full_name='Cloud_Py_API.TaskLogRequest.module', index=1,
+      name='module', full_name='OCA.Cloud_Py_API.Proto.TaskLogRequest.module', index=1,
       number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='content', full_name='Cloud_Py_API.TaskLogRequest.content', index=2,
+      name='content', full_name='OCA.Cloud_Py_API.Proto.TaskLogRequest.content', index=2,
       number=3, type=9, cpp_type=9, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
@@ -504,30 +500,30 @@ _TASKLOGREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=410,
-  serialized_end=498,
+  serialized_start=511,
+  serialized_end=609,
 )
 
 
 _FSID = _descriptor.Descriptor(
   name='fsId',
-  full_name='Cloud_Py_API.fsId',
+  full_name='OCA.Cloud_Py_API.Proto.fsId',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
-      name='userId', full_name='Cloud_Py_API.fsId.userId', index=0,
+      name='userId', full_name='OCA.Cloud_Py_API.Proto.fsId.userId', index=0,
       number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='fileId', full_name='Cloud_Py_API.fsId.fileId', index=1,
-      number=2, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
+      name='fileId', full_name='OCA.Cloud_Py_API.Proto.fsId.fileId', index=1,
+      number=2, type=3, cpp_type=2, label=1,
+      has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
@@ -543,21 +539,21 @@ _FSID = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=500,
-  serialized_end=538,
+  serialized_start=611,
+  serialized_end=649,
 )
 
 
 _FSGETINFOREQUEST = _descriptor.Descriptor(
   name='FsGetInfoRequest',
-  full_name='Cloud_Py_API.FsGetInfoRequest',
+  full_name='OCA.Cloud_Py_API.Proto.FsGetInfoRequest',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
-      name='fileId', full_name='Cloud_Py_API.FsGetInfoRequest.fileId', index=0,
+      name='fileId', full_name='OCA.Cloud_Py_API.Proto.FsGetInfoRequest.fileId', index=0,
       number=1, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
@@ -575,126 +571,126 @@ _FSGETINFOREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=540,
-  serialized_end=594,
+  serialized_start=651,
+  serialized_end=715,
 )
 
 
-_FSGETINFOREPLY = _descriptor.Descriptor(
-  name='FsGetInfoReply',
-  full_name='Cloud_Py_API.FsGetInfoReply',
+_FSNODEINFO = _descriptor.Descriptor(
+  name='FsNodeInfo',
+  full_name='OCA.Cloud_Py_API.Proto.FsNodeInfo',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
-      name='fileId', full_name='Cloud_Py_API.FsGetInfoReply.fileId', index=0,
+      name='fileId', full_name='OCA.Cloud_Py_API.Proto.FsNodeInfo.fileId', index=0,
       number=1, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='is_dir', full_name='Cloud_Py_API.FsGetInfoReply.is_dir', index=1,
+      name='is_dir', full_name='OCA.Cloud_Py_API.Proto.FsNodeInfo.is_dir', index=1,
       number=2, type=8, cpp_type=7, label=1,
       has_default_value=False, default_value=False,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='is_local', full_name='Cloud_Py_API.FsGetInfoReply.is_local', index=2,
+      name='is_local', full_name='OCA.Cloud_Py_API.Proto.FsNodeInfo.is_local', index=2,
       number=3, type=8, cpp_type=7, label=1,
       has_default_value=False, default_value=False,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='mimetype', full_name='Cloud_Py_API.FsGetInfoReply.mimetype', index=3,
+      name='mimetype', full_name='OCA.Cloud_Py_API.Proto.FsNodeInfo.mimetype', index=3,
       number=4, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='name', full_name='Cloud_Py_API.FsGetInfoReply.name', index=4,
+      name='name', full_name='OCA.Cloud_Py_API.Proto.FsNodeInfo.name', index=4,
       number=5, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='internal_path', full_name='Cloud_Py_API.FsGetInfoReply.internal_path', index=5,
+      name='internal_path', full_name='OCA.Cloud_Py_API.Proto.FsNodeInfo.internal_path', index=5,
       number=6, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='abs_path', full_name='Cloud_Py_API.FsGetInfoReply.abs_path', index=6,
+      name='abs_path', full_name='OCA.Cloud_Py_API.Proto.FsNodeInfo.abs_path', index=6,
       number=7, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='size', full_name='Cloud_Py_API.FsGetInfoReply.size', index=7,
+      name='size', full_name='OCA.Cloud_Py_API.Proto.FsNodeInfo.size', index=7,
       number=8, type=3, cpp_type=2, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='permissions', full_name='Cloud_Py_API.FsGetInfoReply.permissions', index=8,
+      name='permissions', full_name='OCA.Cloud_Py_API.Proto.FsNodeInfo.permissions', index=8,
       number=9, type=3, cpp_type=2, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='mtime', full_name='Cloud_Py_API.FsGetInfoReply.mtime', index=9,
+      name='mtime', full_name='OCA.Cloud_Py_API.Proto.FsNodeInfo.mtime', index=9,
       number=10, type=3, cpp_type=2, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='checksum', full_name='Cloud_Py_API.FsGetInfoReply.checksum', index=10,
+      name='checksum', full_name='OCA.Cloud_Py_API.Proto.FsNodeInfo.checksum', index=10,
       number=11, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='encrypted', full_name='Cloud_Py_API.FsGetInfoReply.encrypted', index=11,
+      name='encrypted', full_name='OCA.Cloud_Py_API.Proto.FsNodeInfo.encrypted', index=11,
       number=12, type=8, cpp_type=7, label=1,
       has_default_value=False, default_value=False,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='etag', full_name='Cloud_Py_API.FsGetInfoReply.etag', index=12,
+      name='etag', full_name='OCA.Cloud_Py_API.Proto.FsNodeInfo.etag', index=12,
       number=13, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='ownerName', full_name='Cloud_Py_API.FsGetInfoReply.ownerName', index=13,
+      name='ownerName', full_name='OCA.Cloud_Py_API.Proto.FsNodeInfo.ownerName', index=13,
       number=14, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='storageId', full_name='Cloud_Py_API.FsGetInfoReply.storageId', index=14,
-      number=15, type=3, cpp_type=2, label=1,
-      has_default_value=False, default_value=0,
+      name='storageId', full_name='OCA.Cloud_Py_API.Proto.FsNodeInfo.storageId', index=14,
+      number=15, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='mountId', full_name='Cloud_Py_API.FsGetInfoReply.mountId', index=15,
+      name='mountId', full_name='OCA.Cloud_Py_API.Proto.FsNodeInfo.mountId', index=15,
       number=16, type=3, cpp_type=2, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
@@ -712,21 +708,21 @@ _FSGETINFOREPLY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=597,
-  serialized_end=912,
+  serialized_start=718,
+  serialized_end=1039,
 )
 
 
 _FSLISTREQUEST = _descriptor.Descriptor(
   name='FsListRequest',
-  full_name='Cloud_Py_API.FsListRequest',
+  full_name='OCA.Cloud_Py_API.Proto.FsListRequest',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
-      name='dirId', full_name='Cloud_Py_API.FsListRequest.dirId', index=0,
+      name='dirId', full_name='OCA.Cloud_Py_API.Proto.FsListRequest.dirId', index=0,
       number=1, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
@@ -744,21 +740,21 @@ _FSLISTREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=914,
-  serialized_end=964,
+  serialized_start=1041,
+  serialized_end=1101,
 )
 
 
 _FSLISTREPLY = _descriptor.Descriptor(
   name='FsListReply',
-  full_name='Cloud_Py_API.FsListReply',
+  full_name='OCA.Cloud_Py_API.Proto.FsListReply',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
-      name='nodes', full_name='Cloud_Py_API.FsListReply.nodes', index=0,
+      name='nodes', full_name='OCA.Cloud_Py_API.Proto.FsListReply.nodes', index=0,
       number=1, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
@@ -776,21 +772,21 @@ _FSLISTREPLY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=966,
-  serialized_end=1024,
+  serialized_start=1103,
+  serialized_end=1167,
 )
 
 
 _FSREADREQUEST = _descriptor.Descriptor(
   name='FsReadRequest',
-  full_name='Cloud_Py_API.FsReadRequest',
+  full_name='OCA.Cloud_Py_API.Proto.FsReadRequest',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
-      name='fileId', full_name='Cloud_Py_API.FsReadRequest.fileId', index=0,
+      name='fileId', full_name='OCA.Cloud_Py_API.Proto.FsReadRequest.fileId', index=0,
       number=1, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
@@ -808,28 +804,28 @@ _FSREADREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1026,
-  serialized_end=1077,
+  serialized_start=1169,
+  serialized_end=1230,
 )
 
 
 _FSREADREPLY = _descriptor.Descriptor(
   name='FsReadReply',
-  full_name='Cloud_Py_API.FsReadReply',
+  full_name='OCA.Cloud_Py_API.Proto.FsReadReply',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
-      name='resCode', full_name='Cloud_Py_API.FsReadReply.resCode', index=0,
+      name='resCode', full_name='OCA.Cloud_Py_API.Proto.FsReadReply.resCode', index=0,
       number=1, type=14, cpp_type=8, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='content', full_name='Cloud_Py_API.FsReadReply.content', index=1,
+      name='content', full_name='OCA.Cloud_Py_API.Proto.FsReadReply.content', index=1,
       number=2, type=12, cpp_type=9, label=1,
       has_default_value=False, default_value=b"",
       message_type=None, enum_type=None, containing_type=None,
@@ -847,42 +843,42 @@ _FSREADREPLY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1079,
-  serialized_end=1154,
+  serialized_start=1232,
+  serialized_end=1317,
 )
 
 
 _FSCREATEREQUEST = _descriptor.Descriptor(
   name='FsCreateRequest',
-  full_name='Cloud_Py_API.FsCreateRequest',
+  full_name='OCA.Cloud_Py_API.Proto.FsCreateRequest',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
-      name='parentDirId', full_name='Cloud_Py_API.FsCreateRequest.parentDirId', index=0,
+      name='parentDirId', full_name='OCA.Cloud_Py_API.Proto.FsCreateRequest.parentDirId', index=0,
       number=1, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='name', full_name='Cloud_Py_API.FsCreateRequest.name', index=1,
+      name='name', full_name='OCA.Cloud_Py_API.Proto.FsCreateRequest.name', index=1,
       number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='is_file', full_name='Cloud_Py_API.FsCreateRequest.is_file', index=2,
+      name='is_file', full_name='OCA.Cloud_Py_API.Proto.FsCreateRequest.is_file', index=2,
       number=3, type=8, cpp_type=7, label=1,
       has_default_value=False, default_value=False,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='content', full_name='Cloud_Py_API.FsCreateRequest.content', index=3,
+      name='content', full_name='OCA.Cloud_Py_API.Proto.FsCreateRequest.content', index=3,
       number=4, type=12, cpp_type=9, label=1,
       has_default_value=False, default_value=b"",
       message_type=None, enum_type=None, containing_type=None,
@@ -900,28 +896,28 @@ _FSCREATEREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1156,
-  serialized_end=1262,
+  serialized_start=1319,
+  serialized_end=1435,
 )
 
 
 _FSWRITEREQUEST = _descriptor.Descriptor(
   name='FsWriteRequest',
-  full_name='Cloud_Py_API.FsWriteRequest',
+  full_name='OCA.Cloud_Py_API.Proto.FsWriteRequest',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
-      name='fileId', full_name='Cloud_Py_API.FsWriteRequest.fileId', index=0,
+      name='fileId', full_name='OCA.Cloud_Py_API.Proto.FsWriteRequest.fileId', index=0,
       number=1, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='content', full_name='Cloud_Py_API.FsWriteRequest.content', index=1,
+      name='content', full_name='OCA.Cloud_Py_API.Proto.FsWriteRequest.content', index=1,
       number=2, type=12, cpp_type=9, label=1,
       has_default_value=False, default_value=b"",
       message_type=None, enum_type=None, containing_type=None,
@@ -939,21 +935,21 @@ _FSWRITEREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1264,
-  serialized_end=1333,
+  serialized_start=1437,
+  serialized_end=1516,
 )
 
 
 _FSDELETEREQUEST = _descriptor.Descriptor(
   name='FsDeleteRequest',
-  full_name='Cloud_Py_API.FsDeleteRequest',
+  full_name='OCA.Cloud_Py_API.Proto.FsDeleteRequest',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
-      name='fileId', full_name='Cloud_Py_API.FsDeleteRequest.fileId', index=0,
+      name='fileId', full_name='OCA.Cloud_Py_API.Proto.FsDeleteRequest.fileId', index=0,
       number=1, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
@@ -971,35 +967,35 @@ _FSDELETEREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1335,
-  serialized_end=1388,
+  serialized_start=1518,
+  serialized_end=1581,
 )
 
 
 _FSMOVEREQUEST = _descriptor.Descriptor(
   name='FsMoveRequest',
-  full_name='Cloud_Py_API.FsMoveRequest',
+  full_name='OCA.Cloud_Py_API.Proto.FsMoveRequest',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
-      name='fileId', full_name='Cloud_Py_API.FsMoveRequest.fileId', index=0,
+      name='fileId', full_name='OCA.Cloud_Py_API.Proto.FsMoveRequest.fileId', index=0,
       number=1, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='targetPath', full_name='Cloud_Py_API.FsMoveRequest.targetPath', index=1,
+      name='targetPath', full_name='OCA.Cloud_Py_API.Proto.FsMoveRequest.targetPath', index=1,
       number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='bCopy', full_name='Cloud_Py_API.FsMoveRequest.bCopy', index=2,
+      name='copy', full_name='OCA.Cloud_Py_API.Proto.FsMoveRequest.copy', index=2,
       number=3, type=8, cpp_type=7, label=1,
       has_default_value=False, default_value=False,
       message_type=None, enum_type=None, containing_type=None,
@@ -1017,21 +1013,21 @@ _FSMOVEREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1390,
-  serialized_end=1476,
+  serialized_start=1583,
+  serialized_end=1678,
 )
 
 
 _FSREPLY = _descriptor.Descriptor(
   name='FsReply',
-  full_name='Cloud_Py_API.FsReply',
+  full_name='OCA.Cloud_Py_API.Proto.FsReply',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
-      name='resCode', full_name='Cloud_Py_API.FsReply.resCode', index=0,
+      name='resCode', full_name='OCA.Cloud_Py_API.Proto.FsReply.resCode', index=0,
       number=1, type=14, cpp_type=8, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
@@ -1049,28 +1045,28 @@ _FSREPLY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1478,
-  serialized_end=1532,
+  serialized_start=1680,
+  serialized_end=1744,
 )
 
 
 _WHEREEXPR = _descriptor.Descriptor(
   name='whereExpr',
-  full_name='Cloud_Py_API.whereExpr',
+  full_name='OCA.Cloud_Py_API.Proto.whereExpr',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
-      name='type', full_name='Cloud_Py_API.whereExpr.type', index=0,
+      name='type', full_name='OCA.Cloud_Py_API.Proto.whereExpr.type', index=0,
       number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='expression', full_name='Cloud_Py_API.whereExpr.expression', index=1,
+      name='expression', full_name='OCA.Cloud_Py_API.Proto.whereExpr.expression', index=1,
       number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
@@ -1088,28 +1084,28 @@ _WHEREEXPR = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1534,
-  serialized_end=1579,
+  serialized_start=1746,
+  serialized_end=1791,
 )
 
 
 _STR_ALIAS = _descriptor.Descriptor(
   name='str_alias',
-  full_name='Cloud_Py_API.str_alias',
+  full_name='OCA.Cloud_Py_API.Proto.str_alias',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
-      name='name', full_name='Cloud_Py_API.str_alias.name', index=0,
+      name='name', full_name='OCA.Cloud_Py_API.Proto.str_alias.name', index=0,
       number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='alias', full_name='Cloud_Py_API.str_alias.alias', index=1,
+      name='alias', full_name='OCA.Cloud_Py_API.Proto.str_alias.alias', index=1,
       number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
@@ -1127,49 +1123,49 @@ _STR_ALIAS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1581,
-  serialized_end=1621,
+  serialized_start=1793,
+  serialized_end=1833,
 )
 
 
 _DBSELECTREQUEST_JOINTYPE = _descriptor.Descriptor(
   name='joinType',
-  full_name='Cloud_Py_API.DbSelectRequest.joinType',
+  full_name='OCA.Cloud_Py_API.Proto.DbSelectRequest.joinType',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
-      name='name', full_name='Cloud_Py_API.DbSelectRequest.joinType.name', index=0,
+      name='name', full_name='OCA.Cloud_Py_API.Proto.DbSelectRequest.joinType.name', index=0,
       number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='fromAlias', full_name='Cloud_Py_API.DbSelectRequest.joinType.fromAlias', index=1,
+      name='fromAlias', full_name='OCA.Cloud_Py_API.Proto.DbSelectRequest.joinType.fromAlias', index=1,
       number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='join', full_name='Cloud_Py_API.DbSelectRequest.joinType.join', index=2,
+      name='join', full_name='OCA.Cloud_Py_API.Proto.DbSelectRequest.joinType.join', index=2,
       number=3, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='alias', full_name='Cloud_Py_API.DbSelectRequest.joinType.alias', index=3,
+      name='alias', full_name='OCA.Cloud_Py_API.Proto.DbSelectRequest.joinType.alias', index=3,
       number=4, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='condition', full_name='Cloud_Py_API.DbSelectRequest.joinType.condition', index=4,
+      name='condition', full_name='OCA.Cloud_Py_API.Proto.DbSelectRequest.joinType.condition', index=4,
       number=5, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
@@ -1187,27 +1183,27 @@ _DBSELECTREQUEST_JOINTYPE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1955,
-  serialized_end=2046,
+  serialized_start=2217,
+  serialized_end=2308,
 )
 
 _DBSELECTREQUEST_HAVINGEXPR = _descriptor.Descriptor(
   name='havingExpr',
-  full_name='Cloud_Py_API.DbSelectRequest.havingExpr',
+  full_name='OCA.Cloud_Py_API.Proto.DbSelectRequest.havingExpr',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
-      name='type', full_name='Cloud_Py_API.DbSelectRequest.havingExpr.type', index=0,
+      name='type', full_name='OCA.Cloud_Py_API.Proto.DbSelectRequest.havingExpr.type', index=0,
       number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='expression', full_name='Cloud_Py_API.DbSelectRequest.havingExpr.expression', index=1,
+      name='expression', full_name='OCA.Cloud_Py_API.Proto.DbSelectRequest.havingExpr.expression', index=1,
       number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
@@ -1225,76 +1221,76 @@ _DBSELECTREQUEST_HAVINGEXPR = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2048,
-  serialized_end=2094,
+  serialized_start=2310,
+  serialized_end=2356,
 )
 
 _DBSELECTREQUEST = _descriptor.Descriptor(
   name='DbSelectRequest',
-  full_name='Cloud_Py_API.DbSelectRequest',
+  full_name='OCA.Cloud_Py_API.Proto.DbSelectRequest',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
-      name='columns', full_name='Cloud_Py_API.DbSelectRequest.columns', index=0,
+      name='columns', full_name='OCA.Cloud_Py_API.Proto.DbSelectRequest.columns', index=0,
       number=1, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='from', full_name='Cloud_Py_API.DbSelectRequest.from', index=1,
+      name='from', full_name='OCA.Cloud_Py_API.Proto.DbSelectRequest.from', index=1,
       number=2, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='joins', full_name='Cloud_Py_API.DbSelectRequest.joins', index=2,
+      name='joins', full_name='OCA.Cloud_Py_API.Proto.DbSelectRequest.joins', index=2,
       number=3, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='whereas', full_name='Cloud_Py_API.DbSelectRequest.whereas', index=3,
+      name='whereas', full_name='OCA.Cloud_Py_API.Proto.DbSelectRequest.whereas', index=3,
       number=4, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='groupBy', full_name='Cloud_Py_API.DbSelectRequest.groupBy', index=4,
+      name='groupBy', full_name='OCA.Cloud_Py_API.Proto.DbSelectRequest.groupBy', index=4,
       number=5, type=9, cpp_type=9, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='havings', full_name='Cloud_Py_API.DbSelectRequest.havings', index=5,
+      name='havings', full_name='OCA.Cloud_Py_API.Proto.DbSelectRequest.havings', index=5,
       number=6, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='orderBy', full_name='Cloud_Py_API.DbSelectRequest.orderBy', index=6,
+      name='orderBy', full_name='OCA.Cloud_Py_API.Proto.DbSelectRequest.orderBy', index=6,
       number=7, type=9, cpp_type=9, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='maxResults', full_name='Cloud_Py_API.DbSelectRequest.maxResults', index=7,
+      name='maxResults', full_name='OCA.Cloud_Py_API.Proto.DbSelectRequest.maxResults', index=7,
       number=8, type=3, cpp_type=2, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='firstResult', full_name='Cloud_Py_API.DbSelectRequest.firstResult', index=8,
+      name='firstResult', full_name='OCA.Cloud_Py_API.Proto.DbSelectRequest.firstResult', index=8,
       number=9, type=3, cpp_type=2, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
@@ -1312,35 +1308,35 @@ _DBSELECTREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1624,
-  serialized_end=2094,
+  serialized_start=1836,
+  serialized_end=2356,
 )
 
 
 _DBSELECTREPLY = _descriptor.Descriptor(
   name='DbSelectReply',
-  full_name='Cloud_Py_API.DbSelectReply',
+  full_name='OCA.Cloud_Py_API.Proto.DbSelectReply',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
-      name='rowCount', full_name='Cloud_Py_API.DbSelectReply.rowCount', index=0,
+      name='rowCount', full_name='OCA.Cloud_Py_API.Proto.DbSelectReply.rowCount', index=0,
       number=1, type=3, cpp_type=2, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='error', full_name='Cloud_Py_API.DbSelectReply.error', index=1,
+      name='error', full_name='OCA.Cloud_Py_API.Proto.DbSelectReply.error', index=1,
       number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='handle', full_name='Cloud_Py_API.DbSelectReply.handle', index=2,
+      name='handle', full_name='OCA.Cloud_Py_API.Proto.DbSelectReply.handle', index=2,
       number=3, type=3, cpp_type=2, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
@@ -1358,28 +1354,28 @@ _DBSELECTREPLY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2096,
-  serialized_end=2160,
+  serialized_start=2358,
+  serialized_end=2422,
 )
 
 
 _DBCURSORREQUEST = _descriptor.Descriptor(
   name='DbCursorRequest',
-  full_name='Cloud_Py_API.DbCursorRequest',
+  full_name='OCA.Cloud_Py_API.Proto.DbCursorRequest',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
-      name='cmd', full_name='Cloud_Py_API.DbCursorRequest.cmd', index=0,
+      name='cmd', full_name='OCA.Cloud_Py_API.Proto.DbCursorRequest.cmd', index=0,
       number=1, type=14, cpp_type=8, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='handle', full_name='Cloud_Py_API.DbCursorRequest.handle', index=1,
+      name='handle', full_name='OCA.Cloud_Py_API.Proto.DbCursorRequest.handle', index=1,
       number=2, type=3, cpp_type=2, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
@@ -1398,28 +1394,28 @@ _DBCURSORREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2162,
-  serialized_end=2289,
+  serialized_start=2425,
+  serialized_end=2562,
 )
 
 
 _DBCURSORREPLY_COLUMNDATA = _descriptor.Descriptor(
   name='columnData',
-  full_name='Cloud_Py_API.DbCursorReply.columnData',
+  full_name='OCA.Cloud_Py_API.Proto.DbCursorReply.columnData',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
-      name='bPresent', full_name='Cloud_Py_API.DbCursorReply.columnData.bPresent', index=0,
+      name='bPresent', full_name='OCA.Cloud_Py_API.Proto.DbCursorReply.columnData.bPresent', index=0,
       number=1, type=8, cpp_type=7, label=1,
       has_default_value=False, default_value=False,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='data', full_name='Cloud_Py_API.DbCursorReply.columnData.data', index=1,
+      name='data', full_name='OCA.Cloud_Py_API.Proto.DbCursorReply.columnData.data', index=1,
       number=2, type=12, cpp_type=9, label=1,
       has_default_value=False, default_value=b"",
       message_type=None, enum_type=None, containing_type=None,
@@ -1437,34 +1433,34 @@ _DBCURSORREPLY_COLUMNDATA = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2406,
-  serialized_end=2450,
+  serialized_start=2689,
+  serialized_end=2733,
 )
 
 _DBCURSORREPLY = _descriptor.Descriptor(
   name='DbCursorReply',
-  full_name='Cloud_Py_API.DbCursorReply',
+  full_name='OCA.Cloud_Py_API.Proto.DbCursorReply',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
-      name='error', full_name='Cloud_Py_API.DbCursorReply.error', index=0,
+      name='error', full_name='OCA.Cloud_Py_API.Proto.DbCursorReply.error', index=0,
       number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='columnsName', full_name='Cloud_Py_API.DbCursorReply.columnsName', index=1,
+      name='columnsName', full_name='OCA.Cloud_Py_API.Proto.DbCursorReply.columnsName', index=1,
       number=2, type=9, cpp_type=9, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='columnsData', full_name='Cloud_Py_API.DbCursorReply.columnsData', index=2,
+      name='columnsData', full_name='OCA.Cloud_Py_API.Proto.DbCursorReply.columnsData', index=2,
       number=3, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
@@ -1482,49 +1478,49 @@ _DBCURSORREPLY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2292,
-  serialized_end=2450,
+  serialized_start=2565,
+  serialized_end=2733,
 )
 
 
 _DBEXECREQUEST = _descriptor.Descriptor(
   name='DbExecRequest',
-  full_name='Cloud_Py_API.DbExecRequest',
+  full_name='OCA.Cloud_Py_API.Proto.DbExecRequest',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
-      name='type', full_name='Cloud_Py_API.DbExecRequest.type', index=0,
+      name='type', full_name='OCA.Cloud_Py_API.Proto.DbExecRequest.type', index=0,
       number=1, type=14, cpp_type=8, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='table_name', full_name='Cloud_Py_API.DbExecRequest.table_name', index=1,
+      name='table_name', full_name='OCA.Cloud_Py_API.Proto.DbExecRequest.table_name', index=1,
       number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='columns', full_name='Cloud_Py_API.DbExecRequest.columns', index=2,
+      name='columns', full_name='OCA.Cloud_Py_API.Proto.DbExecRequest.columns', index=2,
       number=3, type=9, cpp_type=9, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='values', full_name='Cloud_Py_API.DbExecRequest.values', index=3,
+      name='values', full_name='OCA.Cloud_Py_API.Proto.DbExecRequest.values', index=3,
       number=4, type=12, cpp_type=9, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='whereas', full_name='Cloud_Py_API.DbExecRequest.whereas', index=4,
+      name='whereas', full_name='OCA.Cloud_Py_API.Proto.DbExecRequest.whereas', index=4,
       number=5, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
@@ -1543,28 +1539,28 @@ _DBEXECREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2453,
-  serialized_end=2657,
+  serialized_start=2736,
+  serialized_end=2960,
 )
 
 
 _DBEXECREPLY = _descriptor.Descriptor(
   name='DbExecReply',
-  full_name='Cloud_Py_API.DbExecReply',
+  full_name='OCA.Cloud_Py_API.Proto.DbExecReply',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
-      name='nAffectedRows', full_name='Cloud_Py_API.DbExecReply.nAffectedRows', index=0,
+      name='nAffectedRows', full_name='OCA.Cloud_Py_API.Proto.DbExecReply.nAffectedRows', index=0,
       number=1, type=3, cpp_type=2, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='error', full_name='Cloud_Py_API.DbExecReply.error', index=1,
+      name='error', full_name='OCA.Cloud_Py_API.Proto.DbExecReply.error', index=1,
       number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
@@ -1582,41 +1578,8 @@ _DBEXECREPLY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2659,
-  serialized_end=2710,
-)
-
-
-_SERVERCOMMAND = _descriptor.Descriptor(
-  name='ServerCommand',
-  full_name='Cloud_Py_API.ServerCommand',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='id', full_name='Cloud_Py_API.ServerCommand.id', index=0,
-      number=1, type=14, cpp_type=8, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-    _SERVERCOMMAND_CMD_ID,
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=2712,
-  serialized_end=2818,
+  serialized_start=2962,
+  serialized_end=3013,
 )
 
 _TASKINITREPLY_CFGOPTIONS.fields_by_name['log_lvl'].enum_type = _LOGLVL
@@ -1625,9 +1588,9 @@ _TASKINITREPLY.fields_by_name['config'].message_type = _TASKINITREPLY_CFGOPTIONS
 _TASKSETSTATUSREQUEST.fields_by_name['st_code'].enum_type = _TASKSTATUS
 _TASKLOGREQUEST.fields_by_name['log_lvl'].enum_type = _LOGLVL
 _FSGETINFOREQUEST.fields_by_name['fileId'].message_type = _FSID
-_FSGETINFOREPLY.fields_by_name['fileId'].message_type = _FSID
+_FSNODEINFO.fields_by_name['fileId'].message_type = _FSID
 _FSLISTREQUEST.fields_by_name['dirId'].message_type = _FSID
-_FSLISTREPLY.fields_by_name['nodes'].message_type = _FSGETINFOREPLY
+_FSLISTREPLY.fields_by_name['nodes'].message_type = _FSNODEINFO
 _FSREADREQUEST.fields_by_name['fileId'].message_type = _FSID
 _FSREADREPLY.fields_by_name['resCode'].enum_type = _FSRESULTCODE
 _FSCREATEREQUEST.fields_by_name['parentDirId'].message_type = _FSID
@@ -1649,8 +1612,6 @@ _DBCURSORREPLY.fields_by_name['columnsData'].message_type = _DBCURSORREPLY_COLUM
 _DBEXECREQUEST.fields_by_name['type'].enum_type = _DBEXECREQUEST_RTYPE
 _DBEXECREQUEST.fields_by_name['whereas'].message_type = _WHEREEXPR
 _DBEXECREQUEST_RTYPE.containing_type = _DBEXECREQUEST
-_SERVERCOMMAND.fields_by_name['id'].enum_type = _SERVERCOMMAND_CMD_ID
-_SERVERCOMMAND_CMD_ID.containing_type = _SERVERCOMMAND
 DESCRIPTOR.message_types_by_name['Empty'] = _EMPTY
 DESCRIPTOR.message_types_by_name['TaskInitReply'] = _TASKINITREPLY
 DESCRIPTOR.message_types_by_name['TaskSetStatusRequest'] = _TASKSETSTATUSREQUEST
@@ -1658,7 +1619,7 @@ DESCRIPTOR.message_types_by_name['TaskExitRequest'] = _TASKEXITREQUEST
 DESCRIPTOR.message_types_by_name['TaskLogRequest'] = _TASKLOGREQUEST
 DESCRIPTOR.message_types_by_name['fsId'] = _FSID
 DESCRIPTOR.message_types_by_name['FsGetInfoRequest'] = _FSGETINFOREQUEST
-DESCRIPTOR.message_types_by_name['FsGetInfoReply'] = _FSGETINFOREPLY
+DESCRIPTOR.message_types_by_name['FsNodeInfo'] = _FSNODEINFO
 DESCRIPTOR.message_types_by_name['FsListRequest'] = _FSLISTREQUEST
 DESCRIPTOR.message_types_by_name['FsListReply'] = _FSLISTREPLY
 DESCRIPTOR.message_types_by_name['FsReadRequest'] = _FSREADREQUEST
@@ -1676,7 +1637,6 @@ DESCRIPTOR.message_types_by_name['DbCursorRequest'] = _DBCURSORREQUEST
 DESCRIPTOR.message_types_by_name['DbCursorReply'] = _DBCURSORREPLY
 DESCRIPTOR.message_types_by_name['DbExecRequest'] = _DBEXECREQUEST
 DESCRIPTOR.message_types_by_name['DbExecReply'] = _DBEXECREPLY
-DESCRIPTOR.message_types_by_name['ServerCommand'] = _SERVERCOMMAND
 DESCRIPTOR.enum_types_by_name['logLvl'] = _LOGLVL
 DESCRIPTOR.enum_types_by_name['taskStatus'] = _TASKSTATUS
 DESCRIPTOR.enum_types_by_name['fsResultCode'] = _FSRESULTCODE
@@ -1685,7 +1645,7 @@ _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 Empty = _reflection.GeneratedProtocolMessageType('Empty', (_message.Message,), {
   'DESCRIPTOR' : _EMPTY,
   '__module__' : 'core_pb2'
-  # @@protoc_insertion_point(class_scope:Cloud_Py_API.Empty)
+  # @@protoc_insertion_point(class_scope:OCA.Cloud_Py_API.Proto.Empty)
   })
 _sym_db.RegisterMessage(Empty)
 
@@ -1694,12 +1654,12 @@ TaskInitReply = _reflection.GeneratedProtocolMessageType('TaskInitReply', (_mess
   'cfgOptions' : _reflection.GeneratedProtocolMessageType('cfgOptions', (_message.Message,), {
     'DESCRIPTOR' : _TASKINITREPLY_CFGOPTIONS,
     '__module__' : 'core_pb2'
-    # @@protoc_insertion_point(class_scope:Cloud_Py_API.TaskInitReply.cfgOptions)
+    # @@protoc_insertion_point(class_scope:OCA.Cloud_Py_API.Proto.TaskInitReply.cfgOptions)
     })
   ,
   'DESCRIPTOR' : _TASKINITREPLY,
   '__module__' : 'core_pb2'
-  # @@protoc_insertion_point(class_scope:Cloud_Py_API.TaskInitReply)
+  # @@protoc_insertion_point(class_scope:OCA.Cloud_Py_API.Proto.TaskInitReply)
   })
 _sym_db.RegisterMessage(TaskInitReply)
 _sym_db.RegisterMessage(TaskInitReply.cfgOptions)
@@ -1707,119 +1667,119 @@ _sym_db.RegisterMessage(TaskInitReply.cfgOptions)
 TaskSetStatusRequest = _reflection.GeneratedProtocolMessageType('TaskSetStatusRequest', (_message.Message,), {
   'DESCRIPTOR' : _TASKSETSTATUSREQUEST,
   '__module__' : 'core_pb2'
-  # @@protoc_insertion_point(class_scope:Cloud_Py_API.TaskSetStatusRequest)
+  # @@protoc_insertion_point(class_scope:OCA.Cloud_Py_API.Proto.TaskSetStatusRequest)
   })
 _sym_db.RegisterMessage(TaskSetStatusRequest)
 
 TaskExitRequest = _reflection.GeneratedProtocolMessageType('TaskExitRequest', (_message.Message,), {
   'DESCRIPTOR' : _TASKEXITREQUEST,
   '__module__' : 'core_pb2'
-  # @@protoc_insertion_point(class_scope:Cloud_Py_API.TaskExitRequest)
+  # @@protoc_insertion_point(class_scope:OCA.Cloud_Py_API.Proto.TaskExitRequest)
   })
 _sym_db.RegisterMessage(TaskExitRequest)
 
 TaskLogRequest = _reflection.GeneratedProtocolMessageType('TaskLogRequest', (_message.Message,), {
   'DESCRIPTOR' : _TASKLOGREQUEST,
   '__module__' : 'core_pb2'
-  # @@protoc_insertion_point(class_scope:Cloud_Py_API.TaskLogRequest)
+  # @@protoc_insertion_point(class_scope:OCA.Cloud_Py_API.Proto.TaskLogRequest)
   })
 _sym_db.RegisterMessage(TaskLogRequest)
 
 fsId = _reflection.GeneratedProtocolMessageType('fsId', (_message.Message,), {
   'DESCRIPTOR' : _FSID,
   '__module__' : 'core_pb2'
-  # @@protoc_insertion_point(class_scope:Cloud_Py_API.fsId)
+  # @@protoc_insertion_point(class_scope:OCA.Cloud_Py_API.Proto.fsId)
   })
 _sym_db.RegisterMessage(fsId)
 
 FsGetInfoRequest = _reflection.GeneratedProtocolMessageType('FsGetInfoRequest', (_message.Message,), {
   'DESCRIPTOR' : _FSGETINFOREQUEST,
   '__module__' : 'core_pb2'
-  # @@protoc_insertion_point(class_scope:Cloud_Py_API.FsGetInfoRequest)
+  # @@protoc_insertion_point(class_scope:OCA.Cloud_Py_API.Proto.FsGetInfoRequest)
   })
 _sym_db.RegisterMessage(FsGetInfoRequest)
 
-FsGetInfoReply = _reflection.GeneratedProtocolMessageType('FsGetInfoReply', (_message.Message,), {
-  'DESCRIPTOR' : _FSGETINFOREPLY,
+FsNodeInfo = _reflection.GeneratedProtocolMessageType('FsNodeInfo', (_message.Message,), {
+  'DESCRIPTOR' : _FSNODEINFO,
   '__module__' : 'core_pb2'
-  # @@protoc_insertion_point(class_scope:Cloud_Py_API.FsGetInfoReply)
+  # @@protoc_insertion_point(class_scope:OCA.Cloud_Py_API.Proto.FsNodeInfo)
   })
-_sym_db.RegisterMessage(FsGetInfoReply)
+_sym_db.RegisterMessage(FsNodeInfo)
 
 FsListRequest = _reflection.GeneratedProtocolMessageType('FsListRequest', (_message.Message,), {
   'DESCRIPTOR' : _FSLISTREQUEST,
   '__module__' : 'core_pb2'
-  # @@protoc_insertion_point(class_scope:Cloud_Py_API.FsListRequest)
+  # @@protoc_insertion_point(class_scope:OCA.Cloud_Py_API.Proto.FsListRequest)
   })
 _sym_db.RegisterMessage(FsListRequest)
 
 FsListReply = _reflection.GeneratedProtocolMessageType('FsListReply', (_message.Message,), {
   'DESCRIPTOR' : _FSLISTREPLY,
   '__module__' : 'core_pb2'
-  # @@protoc_insertion_point(class_scope:Cloud_Py_API.FsListReply)
+  # @@protoc_insertion_point(class_scope:OCA.Cloud_Py_API.Proto.FsListReply)
   })
 _sym_db.RegisterMessage(FsListReply)
 
 FsReadRequest = _reflection.GeneratedProtocolMessageType('FsReadRequest', (_message.Message,), {
   'DESCRIPTOR' : _FSREADREQUEST,
   '__module__' : 'core_pb2'
-  # @@protoc_insertion_point(class_scope:Cloud_Py_API.FsReadRequest)
+  # @@protoc_insertion_point(class_scope:OCA.Cloud_Py_API.Proto.FsReadRequest)
   })
 _sym_db.RegisterMessage(FsReadRequest)
 
 FsReadReply = _reflection.GeneratedProtocolMessageType('FsReadReply', (_message.Message,), {
   'DESCRIPTOR' : _FSREADREPLY,
   '__module__' : 'core_pb2'
-  # @@protoc_insertion_point(class_scope:Cloud_Py_API.FsReadReply)
+  # @@protoc_insertion_point(class_scope:OCA.Cloud_Py_API.Proto.FsReadReply)
   })
 _sym_db.RegisterMessage(FsReadReply)
 
 FsCreateRequest = _reflection.GeneratedProtocolMessageType('FsCreateRequest', (_message.Message,), {
   'DESCRIPTOR' : _FSCREATEREQUEST,
   '__module__' : 'core_pb2'
-  # @@protoc_insertion_point(class_scope:Cloud_Py_API.FsCreateRequest)
+  # @@protoc_insertion_point(class_scope:OCA.Cloud_Py_API.Proto.FsCreateRequest)
   })
 _sym_db.RegisterMessage(FsCreateRequest)
 
 FsWriteRequest = _reflection.GeneratedProtocolMessageType('FsWriteRequest', (_message.Message,), {
   'DESCRIPTOR' : _FSWRITEREQUEST,
   '__module__' : 'core_pb2'
-  # @@protoc_insertion_point(class_scope:Cloud_Py_API.FsWriteRequest)
+  # @@protoc_insertion_point(class_scope:OCA.Cloud_Py_API.Proto.FsWriteRequest)
   })
 _sym_db.RegisterMessage(FsWriteRequest)
 
 FsDeleteRequest = _reflection.GeneratedProtocolMessageType('FsDeleteRequest', (_message.Message,), {
   'DESCRIPTOR' : _FSDELETEREQUEST,
   '__module__' : 'core_pb2'
-  # @@protoc_insertion_point(class_scope:Cloud_Py_API.FsDeleteRequest)
+  # @@protoc_insertion_point(class_scope:OCA.Cloud_Py_API.Proto.FsDeleteRequest)
   })
 _sym_db.RegisterMessage(FsDeleteRequest)
 
 FsMoveRequest = _reflection.GeneratedProtocolMessageType('FsMoveRequest', (_message.Message,), {
   'DESCRIPTOR' : _FSMOVEREQUEST,
   '__module__' : 'core_pb2'
-  # @@protoc_insertion_point(class_scope:Cloud_Py_API.FsMoveRequest)
+  # @@protoc_insertion_point(class_scope:OCA.Cloud_Py_API.Proto.FsMoveRequest)
   })
 _sym_db.RegisterMessage(FsMoveRequest)
 
 FsReply = _reflection.GeneratedProtocolMessageType('FsReply', (_message.Message,), {
   'DESCRIPTOR' : _FSREPLY,
   '__module__' : 'core_pb2'
-  # @@protoc_insertion_point(class_scope:Cloud_Py_API.FsReply)
+  # @@protoc_insertion_point(class_scope:OCA.Cloud_Py_API.Proto.FsReply)
   })
 _sym_db.RegisterMessage(FsReply)
 
 whereExpr = _reflection.GeneratedProtocolMessageType('whereExpr', (_message.Message,), {
   'DESCRIPTOR' : _WHEREEXPR,
   '__module__' : 'core_pb2'
-  # @@protoc_insertion_point(class_scope:Cloud_Py_API.whereExpr)
+  # @@protoc_insertion_point(class_scope:OCA.Cloud_Py_API.Proto.whereExpr)
   })
 _sym_db.RegisterMessage(whereExpr)
 
 str_alias = _reflection.GeneratedProtocolMessageType('str_alias', (_message.Message,), {
   'DESCRIPTOR' : _STR_ALIAS,
   '__module__' : 'core_pb2'
-  # @@protoc_insertion_point(class_scope:Cloud_Py_API.str_alias)
+  # @@protoc_insertion_point(class_scope:OCA.Cloud_Py_API.Proto.str_alias)
   })
 _sym_db.RegisterMessage(str_alias)
 
@@ -1828,19 +1788,19 @@ DbSelectRequest = _reflection.GeneratedProtocolMessageType('DbSelectRequest', (_
   'joinType' : _reflection.GeneratedProtocolMessageType('joinType', (_message.Message,), {
     'DESCRIPTOR' : _DBSELECTREQUEST_JOINTYPE,
     '__module__' : 'core_pb2'
-    # @@protoc_insertion_point(class_scope:Cloud_Py_API.DbSelectRequest.joinType)
+    # @@protoc_insertion_point(class_scope:OCA.Cloud_Py_API.Proto.DbSelectRequest.joinType)
     })
   ,
 
   'havingExpr' : _reflection.GeneratedProtocolMessageType('havingExpr', (_message.Message,), {
     'DESCRIPTOR' : _DBSELECTREQUEST_HAVINGEXPR,
     '__module__' : 'core_pb2'
-    # @@protoc_insertion_point(class_scope:Cloud_Py_API.DbSelectRequest.havingExpr)
+    # @@protoc_insertion_point(class_scope:OCA.Cloud_Py_API.Proto.DbSelectRequest.havingExpr)
     })
   ,
   'DESCRIPTOR' : _DBSELECTREQUEST,
   '__module__' : 'core_pb2'
-  # @@protoc_insertion_point(class_scope:Cloud_Py_API.DbSelectRequest)
+  # @@protoc_insertion_point(class_scope:OCA.Cloud_Py_API.Proto.DbSelectRequest)
   })
 _sym_db.RegisterMessage(DbSelectRequest)
 _sym_db.RegisterMessage(DbSelectRequest.joinType)
@@ -1849,14 +1809,14 @@ _sym_db.RegisterMessage(DbSelectRequest.havingExpr)
 DbSelectReply = _reflection.GeneratedProtocolMessageType('DbSelectReply', (_message.Message,), {
   'DESCRIPTOR' : _DBSELECTREPLY,
   '__module__' : 'core_pb2'
-  # @@protoc_insertion_point(class_scope:Cloud_Py_API.DbSelectReply)
+  # @@protoc_insertion_point(class_scope:OCA.Cloud_Py_API.Proto.DbSelectReply)
   })
 _sym_db.RegisterMessage(DbSelectReply)
 
 DbCursorRequest = _reflection.GeneratedProtocolMessageType('DbCursorRequest', (_message.Message,), {
   'DESCRIPTOR' : _DBCURSORREQUEST,
   '__module__' : 'core_pb2'
-  # @@protoc_insertion_point(class_scope:Cloud_Py_API.DbCursorRequest)
+  # @@protoc_insertion_point(class_scope:OCA.Cloud_Py_API.Proto.DbCursorRequest)
   })
 _sym_db.RegisterMessage(DbCursorRequest)
 
@@ -1865,12 +1825,12 @@ DbCursorReply = _reflection.GeneratedProtocolMessageType('DbCursorReply', (_mess
   'columnData' : _reflection.GeneratedProtocolMessageType('columnData', (_message.Message,), {
     'DESCRIPTOR' : _DBCURSORREPLY_COLUMNDATA,
     '__module__' : 'core_pb2'
-    # @@protoc_insertion_point(class_scope:Cloud_Py_API.DbCursorReply.columnData)
+    # @@protoc_insertion_point(class_scope:OCA.Cloud_Py_API.Proto.DbCursorReply.columnData)
     })
   ,
   'DESCRIPTOR' : _DBCURSORREPLY,
   '__module__' : 'core_pb2'
-  # @@protoc_insertion_point(class_scope:Cloud_Py_API.DbCursorReply)
+  # @@protoc_insertion_point(class_scope:OCA.Cloud_Py_API.Proto.DbCursorReply)
   })
 _sym_db.RegisterMessage(DbCursorReply)
 _sym_db.RegisterMessage(DbCursorReply.columnData)
@@ -1878,39 +1838,32 @@ _sym_db.RegisterMessage(DbCursorReply.columnData)
 DbExecRequest = _reflection.GeneratedProtocolMessageType('DbExecRequest', (_message.Message,), {
   'DESCRIPTOR' : _DBEXECREQUEST,
   '__module__' : 'core_pb2'
-  # @@protoc_insertion_point(class_scope:Cloud_Py_API.DbExecRequest)
+  # @@protoc_insertion_point(class_scope:OCA.Cloud_Py_API.Proto.DbExecRequest)
   })
 _sym_db.RegisterMessage(DbExecRequest)
 
 DbExecReply = _reflection.GeneratedProtocolMessageType('DbExecReply', (_message.Message,), {
   'DESCRIPTOR' : _DBEXECREPLY,
   '__module__' : 'core_pb2'
-  # @@protoc_insertion_point(class_scope:Cloud_Py_API.DbExecReply)
+  # @@protoc_insertion_point(class_scope:OCA.Cloud_Py_API.Proto.DbExecReply)
   })
 _sym_db.RegisterMessage(DbExecReply)
-
-ServerCommand = _reflection.GeneratedProtocolMessageType('ServerCommand', (_message.Message,), {
-  'DESCRIPTOR' : _SERVERCOMMAND,
-  '__module__' : 'core_pb2'
-  # @@protoc_insertion_point(class_scope:Cloud_Py_API.ServerCommand)
-  })
-_sym_db.RegisterMessage(ServerCommand)
 
 
 
 _CLOUDPYAPICORE = _descriptor.ServiceDescriptor(
   name='CloudPyApiCore',
-  full_name='Cloud_Py_API.CloudPyApiCore',
+  full_name='OCA.Cloud_Py_API.Proto.CloudPyApiCore',
   file=DESCRIPTOR,
   index=0,
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_start=3091,
-  serialized_end=4134,
+  serialized_start=3286,
+  serialized_end=4545,
   methods=[
   _descriptor.MethodDescriptor(
     name='TaskInit',
-    full_name='Cloud_Py_API.CloudPyApiCore.TaskInit',
+    full_name='OCA.Cloud_Py_API.Proto.CloudPyApiCore.TaskInit',
     index=0,
     containing_service=None,
     input_type=_EMPTY,
@@ -1920,7 +1873,7 @@ _CLOUDPYAPICORE = _descriptor.ServiceDescriptor(
   ),
   _descriptor.MethodDescriptor(
     name='TaskStatus',
-    full_name='Cloud_Py_API.CloudPyApiCore.TaskStatus',
+    full_name='OCA.Cloud_Py_API.Proto.CloudPyApiCore.TaskStatus',
     index=1,
     containing_service=None,
     input_type=_TASKSETSTATUSREQUEST,
@@ -1930,7 +1883,7 @@ _CLOUDPYAPICORE = _descriptor.ServiceDescriptor(
   ),
   _descriptor.MethodDescriptor(
     name='TaskExit',
-    full_name='Cloud_Py_API.CloudPyApiCore.TaskExit',
+    full_name='OCA.Cloud_Py_API.Proto.CloudPyApiCore.TaskExit',
     index=2,
     containing_service=None,
     input_type=_TASKEXITREQUEST,
@@ -1940,7 +1893,7 @@ _CLOUDPYAPICORE = _descriptor.ServiceDescriptor(
   ),
   _descriptor.MethodDescriptor(
     name='TaskLog',
-    full_name='Cloud_Py_API.CloudPyApiCore.TaskLog',
+    full_name='OCA.Cloud_Py_API.Proto.CloudPyApiCore.TaskLog',
     index=3,
     containing_service=None,
     input_type=_TASKLOGREQUEST,
@@ -1949,18 +1902,18 @@ _CLOUDPYAPICORE = _descriptor.ServiceDescriptor(
     create_key=_descriptor._internal_create_key,
   ),
   _descriptor.MethodDescriptor(
-    name='CmdStream',
-    full_name='Cloud_Py_API.CloudPyApiCore.CmdStream',
+    name='FsGetInfo',
+    full_name='OCA.Cloud_Py_API.Proto.CloudPyApiCore.FsGetInfo',
     index=4,
     containing_service=None,
-    input_type=_EMPTY,
-    output_type=_SERVERCOMMAND,
+    input_type=_FSGETINFOREQUEST,
+    output_type=_FSLISTREPLY,
     serialized_options=None,
     create_key=_descriptor._internal_create_key,
   ),
   _descriptor.MethodDescriptor(
-    name='FsGetInfo',
-    full_name='Cloud_Py_API.CloudPyApiCore.FsGetInfo',
+    name='FsList',
+    full_name='OCA.Cloud_Py_API.Proto.CloudPyApiCore.FsList',
     index=5,
     containing_service=None,
     input_type=_FSLISTREQUEST,
@@ -1969,19 +1922,9 @@ _CLOUDPYAPICORE = _descriptor.ServiceDescriptor(
     create_key=_descriptor._internal_create_key,
   ),
   _descriptor.MethodDescriptor(
-    name='FsList',
-    full_name='Cloud_Py_API.CloudPyApiCore.FsList',
-    index=6,
-    containing_service=None,
-    input_type=_FSLISTREQUEST,
-    output_type=_FSLISTREPLY,
-    serialized_options=None,
-    create_key=_descriptor._internal_create_key,
-  ),
-  _descriptor.MethodDescriptor(
     name='FsRead',
-    full_name='Cloud_Py_API.CloudPyApiCore.FsRead',
-    index=7,
+    full_name='OCA.Cloud_Py_API.Proto.CloudPyApiCore.FsRead',
+    index=6,
     containing_service=None,
     input_type=_FSREADREQUEST,
     output_type=_FSREADREPLY,
@@ -1990,8 +1933,8 @@ _CLOUDPYAPICORE = _descriptor.ServiceDescriptor(
   ),
   _descriptor.MethodDescriptor(
     name='FsCreate',
-    full_name='Cloud_Py_API.CloudPyApiCore.FsCreate',
-    index=8,
+    full_name='OCA.Cloud_Py_API.Proto.CloudPyApiCore.FsCreate',
+    index=7,
     containing_service=None,
     input_type=_FSCREATEREQUEST,
     output_type=_FSREPLY,
@@ -2000,8 +1943,8 @@ _CLOUDPYAPICORE = _descriptor.ServiceDescriptor(
   ),
   _descriptor.MethodDescriptor(
     name='FsWrite',
-    full_name='Cloud_Py_API.CloudPyApiCore.FsWrite',
-    index=9,
+    full_name='OCA.Cloud_Py_API.Proto.CloudPyApiCore.FsWrite',
+    index=8,
     containing_service=None,
     input_type=_FSWRITEREQUEST,
     output_type=_FSREPLY,
@@ -2010,8 +1953,8 @@ _CLOUDPYAPICORE = _descriptor.ServiceDescriptor(
   ),
   _descriptor.MethodDescriptor(
     name='FsDelete',
-    full_name='Cloud_Py_API.CloudPyApiCore.FsDelete',
-    index=10,
+    full_name='OCA.Cloud_Py_API.Proto.CloudPyApiCore.FsDelete',
+    index=9,
     containing_service=None,
     input_type=_FSDELETEREQUEST,
     output_type=_FSREPLY,
@@ -2020,8 +1963,8 @@ _CLOUDPYAPICORE = _descriptor.ServiceDescriptor(
   ),
   _descriptor.MethodDescriptor(
     name='FsMove',
-    full_name='Cloud_Py_API.CloudPyApiCore.FsMove',
-    index=11,
+    full_name='OCA.Cloud_Py_API.Proto.CloudPyApiCore.FsMove',
+    index=10,
     containing_service=None,
     input_type=_FSMOVEREQUEST,
     output_type=_FSREPLY,
@@ -2030,8 +1973,8 @@ _CLOUDPYAPICORE = _descriptor.ServiceDescriptor(
   ),
   _descriptor.MethodDescriptor(
     name='DbSelect',
-    full_name='Cloud_Py_API.CloudPyApiCore.DbSelect',
-    index=12,
+    full_name='OCA.Cloud_Py_API.Proto.CloudPyApiCore.DbSelect',
+    index=11,
     containing_service=None,
     input_type=_DBSELECTREQUEST,
     output_type=_DBSELECTREPLY,
@@ -2040,8 +1983,8 @@ _CLOUDPYAPICORE = _descriptor.ServiceDescriptor(
   ),
   _descriptor.MethodDescriptor(
     name='DbCursor',
-    full_name='Cloud_Py_API.CloudPyApiCore.DbCursor',
-    index=13,
+    full_name='OCA.Cloud_Py_API.Proto.CloudPyApiCore.DbCursor',
+    index=12,
     containing_service=None,
     input_type=_DBCURSORREQUEST,
     output_type=_DBCURSORREPLY,
@@ -2050,8 +1993,8 @@ _CLOUDPYAPICORE = _descriptor.ServiceDescriptor(
   ),
   _descriptor.MethodDescriptor(
     name='DbExec',
-    full_name='Cloud_Py_API.CloudPyApiCore.DbExec',
-    index=14,
+    full_name='OCA.Cloud_Py_API.Proto.CloudPyApiCore.DbExec',
+    index=13,
     containing_service=None,
     input_type=_DBEXECREQUEST,
     output_type=_DBEXECREPLY,

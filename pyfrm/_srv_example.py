@@ -1,13 +1,12 @@
 import sys
 import os
-import time
 import re
 from subprocess import PIPE, Popen, TimeoutExpired
 from concurrent import futures
 
 import grpc
 from core_pb2 import taskStatus, logLvl, Empty, \
-    ServerCommand, TaskInitReply
+    TaskInitReply, fsId, FsNodeInfo, FsListReply
 import core_pb2_grpc as core_pb2_grpc
 
 
@@ -20,7 +19,7 @@ def run_python_script(python_script_path, *args):
 
 
 class TaskParameters:
-    def __init__(self, log_lvl, data_folder, frm_app_data,
+    def __init__(self, log_lvl, data_folder, frm_app_data, user_id, use_file_direct, use_db_direct,
                  app_name, mod_name, mod_path, func_name, args):
         self.app_name = app_name
         self.mod_name = mod_name
@@ -30,17 +29,21 @@ class TaskParameters:
         self.log_lvl = log_lvl
         self.data_folder = data_folder
         self.frm_app_data = frm_app_data
+        self.user_id = user_id
+        self.use_file_direct = use_file_direct
+        self.use_db_direct = use_db_direct
 
 
 class ServerCloudPA(core_pb2_grpc.CloudPyApiCoreServicer, TaskParameters):
-    stop_flag: bool = False
     connection_alive: bool = False
     task_status: taskStatus = taskStatus.ST_UNKNOWN
     task_error: str = ''
     result: str
     logs_storage: list = []
+    _fs_emulation = {}
 
     def TaskInit(self, request, context):
+        self.connection_alive = True
         _reply = TaskInitReply(appName=self.app_name,
                                modName=self.mod_name,
                                modPath=self.mod_path,
@@ -48,7 +51,10 @@ class ServerCloudPA(core_pb2_grpc.CloudPyApiCoreServicer, TaskParameters):
                                config=TaskInitReply.cfgOptions(
                                    log_lvl=self.log_lvl,
                                    dataFolder=self.data_folder,
-                                   frameworkAppData=self.frm_app_data))
+                                   frameworkAppData=self.frm_app_data,
+                                   userId=self.user_id,
+                                   useFileDirect=self.use_file_direct,
+                                   useDBDirect=self.use_db_direct))
         if self.args is not None:
             if isinstance(self.args, (list, tuple)):
                 for _each_arg in self.args:
@@ -80,26 +86,32 @@ class ServerCloudPA(core_pb2_grpc.CloudPyApiCoreServicer, TaskParameters):
         self.result = request.result
         print('Server: receive TaskExit')
         print(f'Server: result length = {len(self.result)}, result: {self.result}')
-        self.__stop()
+        self.connection_alive = False
         return Empty()
 
-    def CmdStream(self, request_iterator, context):
-        print('Server: starting cmd stream')
-        self.connection_alive = True
-        context.add_callback(self.__rpc_termination_callback)
-        while not self.stop_flag:
-            time.sleep(0.1)
-        if self.connection_alive:
-            print('Server: sending stop command')
-            yield ServerCommand(id=ServerCommand.TASK_STOP)
+    def FsList(self, request, context):
+        # This is not a real function, just stuff for development testing.
+        print(f'Server: client requested list files of: userId={request.dirId.userId}, fileId={request.dirId.fileId}')
+        if not request.dirId.fileId:
+            _target_path = self.data_folder         # in production this must be root folder of User.
+        else:
+            raise Exception('Not implemented')
+        _nodes = []
+        with os.scandir(_target_path) as _target_obj:
+            for entry in _target_obj:
+                request.dirId.fileId += 1
+                # _fs_emulation
+                _fs_id = fsId(userId=request.dirId.userId, fileId=request.dirId.fileId)
+                _nodes.append(FsNodeInfo(fileId=_fs_id, is_dir=entry.is_dir(), is_local=True,
+                                         name=entry.name, internal_path=entry.path,
+                                         abs_path=os.path.abspath(entry.path),
+                                         mtime=os.path.getmtime(entry.path),
+                                         size=0 if entry.is_dir() else os.path.getsize(entry)))
+        return FsListReply(nodes=_nodes)
 
-    def __rpc_termination_callback(self):
-        print('Server: connection closed')
-        self.__stop()
-
-    def __stop(self):
-        self.connection_alive = False
-        self.stop_flag = True
+    def FsGetInfo(self, request, context):
+        print(f'Server: client requested file info about: userId={request.dirId.userId}, fileId={request.dirId.fileId}')
+        return FsListReply()
 
 
 def srv_example(address, port, app_name, module_name, module_path, function_to_call, args=None):
@@ -108,6 +120,9 @@ def srv_example(address, port, app_name, module_name, module_path, function_to_c
     servicer = ServerCloudPA(log_lvl=logLvl.DEBUG,
                              data_folder='./../tmp/data_folder',
                              frm_app_data='./../tmp/frm_app_data',
+                             user_id='user_name',
+                             use_file_direct=False,
+                             use_db_direct=False,
                              app_name=app_name,
                              mod_name=module_name,
                              mod_path=module_path,
@@ -146,8 +161,8 @@ def srv_example(address, port, app_name, module_name, module_path, function_to_c
 
 
 if __name__ == '__main__':
-    status, error, result, logs = srv_example('localhost', '0', 'hello_world', 'hello_world2',
-                                              '../tests/python/apps_example/hello_world', 'func_hello_world')
+    status, error, result, logs = srv_example('unix:./../tmp/test.sock', '0', 'fs_example', 'fs_example',
+                                              '../tests/python/apps_example/fs_example', 'func_fs_list_info')
     sys.exit(0)
 
 

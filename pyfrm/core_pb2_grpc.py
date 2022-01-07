@@ -6,7 +6,9 @@ import core_pb2 as core__pb2
 
 
 class CloudPyApiCoreStub(object):
-    """Missing associated documentation comment in .proto file."""
+    """DB messages end 
+
+    """
 
     def __init__(self, channel):
         """Constructor.
@@ -15,84 +17,81 @@ class CloudPyApiCoreStub(object):
             channel: A grpc.Channel.
         """
         self.TaskInit = channel.unary_unary(
-                '/Cloud_Py_API.CloudPyApiCore/TaskInit',
+                '/OCA.Cloud_Py_API.Proto.CloudPyApiCore/TaskInit',
                 request_serializer=core__pb2.Empty.SerializeToString,
                 response_deserializer=core__pb2.TaskInitReply.FromString,
                 )
         self.TaskStatus = channel.unary_unary(
-                '/Cloud_Py_API.CloudPyApiCore/TaskStatus',
+                '/OCA.Cloud_Py_API.Proto.CloudPyApiCore/TaskStatus',
                 request_serializer=core__pb2.TaskSetStatusRequest.SerializeToString,
                 response_deserializer=core__pb2.Empty.FromString,
                 )
         self.TaskExit = channel.unary_unary(
-                '/Cloud_Py_API.CloudPyApiCore/TaskExit',
+                '/OCA.Cloud_Py_API.Proto.CloudPyApiCore/TaskExit',
                 request_serializer=core__pb2.TaskExitRequest.SerializeToString,
                 response_deserializer=core__pb2.Empty.FromString,
                 )
         self.TaskLog = channel.unary_unary(
-                '/Cloud_Py_API.CloudPyApiCore/TaskLog',
+                '/OCA.Cloud_Py_API.Proto.CloudPyApiCore/TaskLog',
                 request_serializer=core__pb2.TaskLogRequest.SerializeToString,
                 response_deserializer=core__pb2.Empty.FromString,
                 )
-        self.CmdStream = channel.unary_stream(
-                '/Cloud_Py_API.CloudPyApiCore/CmdStream',
-                request_serializer=core__pb2.Empty.SerializeToString,
-                response_deserializer=core__pb2.ServerCommand.FromString,
-                )
         self.FsGetInfo = channel.unary_unary(
-                '/Cloud_Py_API.CloudPyApiCore/FsGetInfo',
-                request_serializer=core__pb2.FsListRequest.SerializeToString,
+                '/OCA.Cloud_Py_API.Proto.CloudPyApiCore/FsGetInfo',
+                request_serializer=core__pb2.FsGetInfoRequest.SerializeToString,
                 response_deserializer=core__pb2.FsListReply.FromString,
                 )
         self.FsList = channel.unary_unary(
-                '/Cloud_Py_API.CloudPyApiCore/FsList',
+                '/OCA.Cloud_Py_API.Proto.CloudPyApiCore/FsList',
                 request_serializer=core__pb2.FsListRequest.SerializeToString,
                 response_deserializer=core__pb2.FsListReply.FromString,
                 )
         self.FsRead = channel.unary_stream(
-                '/Cloud_Py_API.CloudPyApiCore/FsRead',
+                '/OCA.Cloud_Py_API.Proto.CloudPyApiCore/FsRead',
                 request_serializer=core__pb2.FsReadRequest.SerializeToString,
                 response_deserializer=core__pb2.FsReadReply.FromString,
                 )
         self.FsCreate = channel.unary_unary(
-                '/Cloud_Py_API.CloudPyApiCore/FsCreate',
+                '/OCA.Cloud_Py_API.Proto.CloudPyApiCore/FsCreate',
                 request_serializer=core__pb2.FsCreateRequest.SerializeToString,
                 response_deserializer=core__pb2.FsReply.FromString,
                 )
         self.FsWrite = channel.stream_unary(
-                '/Cloud_Py_API.CloudPyApiCore/FsWrite',
+                '/OCA.Cloud_Py_API.Proto.CloudPyApiCore/FsWrite',
                 request_serializer=core__pb2.FsWriteRequest.SerializeToString,
                 response_deserializer=core__pb2.FsReply.FromString,
                 )
         self.FsDelete = channel.unary_unary(
-                '/Cloud_Py_API.CloudPyApiCore/FsDelete',
+                '/OCA.Cloud_Py_API.Proto.CloudPyApiCore/FsDelete',
                 request_serializer=core__pb2.FsDeleteRequest.SerializeToString,
                 response_deserializer=core__pb2.FsReply.FromString,
                 )
         self.FsMove = channel.unary_unary(
-                '/Cloud_Py_API.CloudPyApiCore/FsMove',
+                '/OCA.Cloud_Py_API.Proto.CloudPyApiCore/FsMove',
                 request_serializer=core__pb2.FsMoveRequest.SerializeToString,
                 response_deserializer=core__pb2.FsReply.FromString,
                 )
         self.DbSelect = channel.unary_unary(
-                '/Cloud_Py_API.CloudPyApiCore/DbSelect',
+                '/OCA.Cloud_Py_API.Proto.CloudPyApiCore/DbSelect',
                 request_serializer=core__pb2.DbSelectRequest.SerializeToString,
                 response_deserializer=core__pb2.DbSelectReply.FromString,
                 )
         self.DbCursor = channel.unary_unary(
-                '/Cloud_Py_API.CloudPyApiCore/DbCursor',
+                '/OCA.Cloud_Py_API.Proto.CloudPyApiCore/DbCursor',
                 request_serializer=core__pb2.DbCursorRequest.SerializeToString,
                 response_deserializer=core__pb2.DbCursorReply.FromString,
                 )
         self.DbExec = channel.unary_unary(
-                '/Cloud_Py_API.CloudPyApiCore/DbExec',
+                '/OCA.Cloud_Py_API.Proto.CloudPyApiCore/DbExec',
                 request_serializer=core__pb2.DbExecRequest.SerializeToString,
                 response_deserializer=core__pb2.DbExecReply.FromString,
                 )
 
 
 class CloudPyApiCoreServicer(object):
-    """Missing associated documentation comment in .proto file."""
+    """DB messages end 
+
+    """
 
     def TaskInit(self, request, context):
         """Missing associated documentation comment in .proto file."""
@@ -113,12 +112,6 @@ class CloudPyApiCoreServicer(object):
         raise NotImplementedError('Method not implemented!')
 
     def TaskLog(self, request, context):
-        """Missing associated documentation comment in .proto file."""
-        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
-
-    def CmdStream(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -207,14 +200,9 @@ def add_CloudPyApiCoreServicer_to_server(servicer, server):
                     request_deserializer=core__pb2.TaskLogRequest.FromString,
                     response_serializer=core__pb2.Empty.SerializeToString,
             ),
-            'CmdStream': grpc.unary_stream_rpc_method_handler(
-                    servicer.CmdStream,
-                    request_deserializer=core__pb2.Empty.FromString,
-                    response_serializer=core__pb2.ServerCommand.SerializeToString,
-            ),
             'FsGetInfo': grpc.unary_unary_rpc_method_handler(
                     servicer.FsGetInfo,
-                    request_deserializer=core__pb2.FsListRequest.FromString,
+                    request_deserializer=core__pb2.FsGetInfoRequest.FromString,
                     response_serializer=core__pb2.FsListReply.SerializeToString,
             ),
             'FsList': grpc.unary_unary_rpc_method_handler(
@@ -264,13 +252,15 @@ def add_CloudPyApiCoreServicer_to_server(servicer, server):
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
-            'Cloud_Py_API.CloudPyApiCore', rpc_method_handlers)
+            'OCA.Cloud_Py_API.Proto.CloudPyApiCore', rpc_method_handlers)
     server.add_generic_rpc_handlers((generic_handler,))
 
 
  # This class is part of an EXPERIMENTAL API.
 class CloudPyApiCore(object):
-    """Missing associated documentation comment in .proto file."""
+    """DB messages end 
+
+    """
 
     @staticmethod
     def TaskInit(request,
@@ -283,7 +273,7 @@ class CloudPyApiCore(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/Cloud_Py_API.CloudPyApiCore/TaskInit',
+        return grpc.experimental.unary_unary(request, target, '/OCA.Cloud_Py_API.Proto.CloudPyApiCore/TaskInit',
             core__pb2.Empty.SerializeToString,
             core__pb2.TaskInitReply.FromString,
             options, channel_credentials,
@@ -300,7 +290,7 @@ class CloudPyApiCore(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/Cloud_Py_API.CloudPyApiCore/TaskStatus',
+        return grpc.experimental.unary_unary(request, target, '/OCA.Cloud_Py_API.Proto.CloudPyApiCore/TaskStatus',
             core__pb2.TaskSetStatusRequest.SerializeToString,
             core__pb2.Empty.FromString,
             options, channel_credentials,
@@ -317,7 +307,7 @@ class CloudPyApiCore(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/Cloud_Py_API.CloudPyApiCore/TaskExit',
+        return grpc.experimental.unary_unary(request, target, '/OCA.Cloud_Py_API.Proto.CloudPyApiCore/TaskExit',
             core__pb2.TaskExitRequest.SerializeToString,
             core__pb2.Empty.FromString,
             options, channel_credentials,
@@ -334,26 +324,9 @@ class CloudPyApiCore(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/Cloud_Py_API.CloudPyApiCore/TaskLog',
+        return grpc.experimental.unary_unary(request, target, '/OCA.Cloud_Py_API.Proto.CloudPyApiCore/TaskLog',
             core__pb2.TaskLogRequest.SerializeToString,
             core__pb2.Empty.FromString,
-            options, channel_credentials,
-            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
-
-    @staticmethod
-    def CmdStream(request,
-            target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            insecure=False,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.unary_stream(request, target, '/Cloud_Py_API.CloudPyApiCore/CmdStream',
-            core__pb2.Empty.SerializeToString,
-            core__pb2.ServerCommand.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -368,8 +341,8 @@ class CloudPyApiCore(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/Cloud_Py_API.CloudPyApiCore/FsGetInfo',
-            core__pb2.FsListRequest.SerializeToString,
+        return grpc.experimental.unary_unary(request, target, '/OCA.Cloud_Py_API.Proto.CloudPyApiCore/FsGetInfo',
+            core__pb2.FsGetInfoRequest.SerializeToString,
             core__pb2.FsListReply.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
@@ -385,7 +358,7 @@ class CloudPyApiCore(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/Cloud_Py_API.CloudPyApiCore/FsList',
+        return grpc.experimental.unary_unary(request, target, '/OCA.Cloud_Py_API.Proto.CloudPyApiCore/FsList',
             core__pb2.FsListRequest.SerializeToString,
             core__pb2.FsListReply.FromString,
             options, channel_credentials,
@@ -402,7 +375,7 @@ class CloudPyApiCore(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_stream(request, target, '/Cloud_Py_API.CloudPyApiCore/FsRead',
+        return grpc.experimental.unary_stream(request, target, '/OCA.Cloud_Py_API.Proto.CloudPyApiCore/FsRead',
             core__pb2.FsReadRequest.SerializeToString,
             core__pb2.FsReadReply.FromString,
             options, channel_credentials,
@@ -419,7 +392,7 @@ class CloudPyApiCore(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/Cloud_Py_API.CloudPyApiCore/FsCreate',
+        return grpc.experimental.unary_unary(request, target, '/OCA.Cloud_Py_API.Proto.CloudPyApiCore/FsCreate',
             core__pb2.FsCreateRequest.SerializeToString,
             core__pb2.FsReply.FromString,
             options, channel_credentials,
@@ -436,7 +409,7 @@ class CloudPyApiCore(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.stream_unary(request_iterator, target, '/Cloud_Py_API.CloudPyApiCore/FsWrite',
+        return grpc.experimental.stream_unary(request_iterator, target, '/OCA.Cloud_Py_API.Proto.CloudPyApiCore/FsWrite',
             core__pb2.FsWriteRequest.SerializeToString,
             core__pb2.FsReply.FromString,
             options, channel_credentials,
@@ -453,7 +426,7 @@ class CloudPyApiCore(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/Cloud_Py_API.CloudPyApiCore/FsDelete',
+        return grpc.experimental.unary_unary(request, target, '/OCA.Cloud_Py_API.Proto.CloudPyApiCore/FsDelete',
             core__pb2.FsDeleteRequest.SerializeToString,
             core__pb2.FsReply.FromString,
             options, channel_credentials,
@@ -470,7 +443,7 @@ class CloudPyApiCore(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/Cloud_Py_API.CloudPyApiCore/FsMove',
+        return grpc.experimental.unary_unary(request, target, '/OCA.Cloud_Py_API.Proto.CloudPyApiCore/FsMove',
             core__pb2.FsMoveRequest.SerializeToString,
             core__pb2.FsReply.FromString,
             options, channel_credentials,
@@ -487,7 +460,7 @@ class CloudPyApiCore(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/Cloud_Py_API.CloudPyApiCore/DbSelect',
+        return grpc.experimental.unary_unary(request, target, '/OCA.Cloud_Py_API.Proto.CloudPyApiCore/DbSelect',
             core__pb2.DbSelectRequest.SerializeToString,
             core__pb2.DbSelectReply.FromString,
             options, channel_credentials,
@@ -504,7 +477,7 @@ class CloudPyApiCore(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/Cloud_Py_API.CloudPyApiCore/DbCursor',
+        return grpc.experimental.unary_unary(request, target, '/OCA.Cloud_Py_API.Proto.CloudPyApiCore/DbCursor',
             core__pb2.DbCursorRequest.SerializeToString,
             core__pb2.DbCursorReply.FromString,
             options, channel_credentials,
@@ -521,7 +494,7 @@ class CloudPyApiCore(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/Cloud_Py_API.CloudPyApiCore/DbExec',
+        return grpc.experimental.unary_unary(request, target, '/OCA.Cloud_Py_API.Proto.CloudPyApiCore/DbExec',
             core__pb2.DbExecRequest.SerializeToString,
             core__pb2.DbExecReply.FromString,
             options, channel_credentials,
