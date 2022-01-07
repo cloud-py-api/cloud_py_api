@@ -26,9 +26,9 @@ class FsMoveRequest extends \Google\Protobuf\Internal\Message
      */
     protected $targetPath = '';
     /**
-     * Generated from protobuf field <code>bool bCopy = 3;</code>
+     * Generated from protobuf field <code>bool copy = 3;</code>
      */
-    protected $bCopy = false;
+    protected $copy = false;
 
     /**
      * Constructor.
@@ -39,7 +39,7 @@ class FsMoveRequest extends \Google\Protobuf\Internal\Message
      *     @type \OCA\Cloud_Py_API\Proto\fsId $fileId
      *     @type string $targetPath
      *          absolute path relative to MP.
-     *     @type bool $bCopy
+     *     @type bool $copy
      * }
      */
     public function __construct($data = NULL) {
@@ -106,23 +106,23 @@ class FsMoveRequest extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     * Generated from protobuf field <code>bool bCopy = 3;</code>
+     * Generated from protobuf field <code>bool copy = 3;</code>
      * @return bool
      */
-    public function getBCopy()
+    public function getCopy()
     {
-        return $this->bCopy;
+        return $this->copy;
     }
 
     /**
-     * Generated from protobuf field <code>bool bCopy = 3;</code>
+     * Generated from protobuf field <code>bool copy = 3;</code>
      * @param bool $var
      * @return $this
      */
-    public function setBCopy($var)
+    public function setCopy($var)
     {
         GPBUtil::checkBool($var);
-        $this->bCopy = $var;
+        $this->copy = $var;
 
         return $this;
     }

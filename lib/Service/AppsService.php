@@ -34,6 +34,7 @@ use OCP\Files\IAppData;
 use OCP\Files\NotFoundException;
 use OCP\AppFramework\Db\Entity;
 use OCP\AppFramework\Db\DoesNotExistException;
+use OCP\Files\NotPermittedException;
 
 use OCA\Cloud_Py_API\AppInfo\Application;
 use OCA\Cloud_Py_API\Db\App;
@@ -121,13 +122,26 @@ class AppsService {
 		// TODO
 	}
 
-	public function createAppDataFolder(string $appId) {
-		// TODO Create app folder for it's packages
+	/**
+	 * Create application's appdata folder
+	 * 
+	 * @param string $appId
+	 * 
+	 * @return bool
+	 */
+	public function createAppDataFolder(string $appId): bool {
 		$ncInstanceId = $this->config->getSystemValue('instanceid');
-		$appDataFolder = getcwd() . '/data/appdata_' . $ncInstanceId . '/appdata/' . Application::APP_ID . '/' . $appId;
+		$ncDataFolder = $this->config->getSystemValue('datadirectory');
+		$appDataFolder = $ncDataFolder . '/appdata_' . $ncInstanceId . '/' . Application::APP_ID . '/' . $appId;
 		if (!file_exists($appDataFolder)) {
-			$this->appData->newFolder($appId);
+			try	{
+				$this->appData->newFolder($appId);
+				return true;
+			} catch (NotPermittedException $e) {
+				return false;
+			}
 		}
+		return false;
 	}
 
 	/**
@@ -142,6 +156,29 @@ class AppsService {
 			return $this->appData->getFolder($appId);
 		} catch (NotFoundException | RuntimeException $e) {
 			return ['success' => false, 'error' => $e->getMessage()];
+		}
+	}
+
+	/**
+	 * Get app's appdata folder
+	 * 
+	 * @param string $appId
+	 * 
+	 * @return string|null
+	 */
+	public function getAppDataFolderAbsPath(string $appId): ?string {
+		try {
+			$appDataFolderName = $this->appData->getFolder($appId)->getName();
+			$ncInstanceId = $this->config->getSystemValue('instanceid');
+			$ncDataFolder = $this->config->getSystemValue('datadirectory');
+			$appDataFolder = $ncDataFolder . '/appdata_' . $ncInstanceId . '/' . Application::APP_ID . '/' . $appId;
+			if (file_exists($appDataFolder) && $appDataFolderName === $appId) {
+				return $appDataFolder;
+			} else {
+				return null;
+			}
+		} catch (NotFoundException | RuntimeException $e) {
+			return null;
 		}
 	}
 

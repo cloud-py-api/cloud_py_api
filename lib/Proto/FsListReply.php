@@ -14,7 +14,7 @@ use Google\Protobuf\Internal\GPBUtil;
 class FsListReply extends \Google\Protobuf\Internal\Message
 {
     /**
-     * Generated from protobuf field <code>repeated .OCA.Cloud_Py_API.Proto.FsGetInfoReply nodes = 1;</code>
+     * Generated from protobuf field <code>repeated .OCA.Cloud_Py_API.Proto.FsNodeInfo nodes = 1;</code>
      */
     private $nodes;
 
@@ -24,7 +24,7 @@ class FsListReply extends \Google\Protobuf\Internal\Message
      * @param array $data {
      *     Optional. Data for populating the Message object.
      *
-     *     @type \OCA\Cloud_Py_API\Proto\FsGetInfoReply[]|\Google\Protobuf\Internal\RepeatedField $nodes
+     *     @type \OCA\Cloud_Py_API\Proto\FsNodeInfo[]|\Google\Protobuf\Internal\RepeatedField $nodes
      * }
      */
     public function __construct($data = NULL) {
@@ -33,7 +33,7 @@ class FsListReply extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     * Generated from protobuf field <code>repeated .OCA.Cloud_Py_API.Proto.FsGetInfoReply nodes = 1;</code>
+     * Generated from protobuf field <code>repeated .OCA.Cloud_Py_API.Proto.FsNodeInfo nodes = 1;</code>
      * @return \Google\Protobuf\Internal\RepeatedField
      */
     public function getNodes()
@@ -42,13 +42,13 @@ class FsListReply extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     * Generated from protobuf field <code>repeated .OCA.Cloud_Py_API.Proto.FsGetInfoReply nodes = 1;</code>
-     * @param \OCA\Cloud_Py_API\Proto\FsGetInfoReply[]|\Google\Protobuf\Internal\RepeatedField $var
+     * Generated from protobuf field <code>repeated .OCA.Cloud_Py_API.Proto.FsNodeInfo nodes = 1;</code>
+     * @param \OCA\Cloud_Py_API\Proto\FsNodeInfo[]|\Google\Protobuf\Internal\RepeatedField $var
      * @return $this
      */
     public function setNodes($var)
     {
-        $arr = GPBUtil::checkRepeatedField($var, \Google\Protobuf\Internal\GPBType::MESSAGE, \OCA\Cloud_Py_API\Proto\FsGetInfoReply::class);
+        $arr = GPBUtil::checkRepeatedField($var, \Google\Protobuf\Internal\GPBType::MESSAGE, \OCA\Cloud_Py_API\Proto\FsNodeInfo::class);
         $this->nodes = $arr;
 
         return $this;

@@ -4,6 +4,8 @@
 namespace OCA\Cloud_Py_API\Proto;
 
 /**
+ * DB messages end 
+ *
  */
 class CloudPyApiCoreStub {
 
@@ -64,28 +66,13 @@ class CloudPyApiCoreStub {
     }
 
     /**
-     * @param \OCA\Cloud_Py_API\Proto\PBEmpty $request client request
-     * @param \Grpc\ServerCallWriter $writer write response data of \OCA\Cloud_Py_API\Proto\ServerCommand
-     * @param \Grpc\ServerContext $context server request context
-     * @return void
-     */
-    public function CmdStream(
-        \OCA\Cloud_Py_API\Proto\PBEmpty $request,
-        \Grpc\ServerCallWriter $writer,
-        \Grpc\ServerContext $context
-    ): void {
-        $context->setStatus(\Grpc\Status::unimplemented());
-        $writer->finish();
-    }
-
-    /**
-     * @param \OCA\Cloud_Py_API\Proto\FsListRequest $request client request
+     * @param \OCA\Cloud_Py_API\Proto\FsGetInfoRequest $request client request
      * @param \Grpc\ServerContext $context server request context
      * @return \OCA\Cloud_Py_API\Proto\FsListReply for response data, null if if error occured
      *     initial metadata (if any) and status (if not ok) should be set to $context
      */
     public function FsGetInfo(
-        \OCA\Cloud_Py_API\Proto\FsListRequest $request,
+        \OCA\Cloud_Py_API\Proto\FsGetInfoRequest $request,
         \Grpc\ServerContext $context
     ): ?\OCA\Cloud_Py_API\Proto\FsListReply {
         $context->setStatus(\Grpc\Status::unimplemented());
@@ -251,16 +238,10 @@ class CloudPyApiCoreStub {
                 '\OCA\Cloud_Py_API\Proto\TaskLogRequest',
                 \Grpc\MethodDescriptor::UNARY_CALL
             ),
-            '/OCA.Cloud_Py_API.Proto.CloudPyApiCore/CmdStream' => new \Grpc\MethodDescriptor(
-                $this,
-                'CmdStream',
-                '\OCA\Cloud_Py_API\Proto\PBEmpty',
-                \Grpc\MethodDescriptor::SERVER_STREAMING_CALL
-            ),
             '/OCA.Cloud_Py_API.Proto.CloudPyApiCore/FsGetInfo' => new \Grpc\MethodDescriptor(
                 $this,
                 'FsGetInfo',
-                '\OCA\Cloud_Py_API\Proto\FsListRequest',
+                '\OCA\Cloud_Py_API\Proto\FsGetInfoRequest',
                 \Grpc\MethodDescriptor::UNARY_CALL
             ),
             '/OCA.Cloud_Py_API.Proto.CloudPyApiCore/FsList' => new \Grpc\MethodDescriptor(

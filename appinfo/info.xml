@@ -38,8 +38,10 @@ Nextcloud Python API Framework
 		</pre-migration>
 	</repair-steps>
 	<commands>
-		<command>OCA\Cloud_Py_API\Command\TestCommand</command>
 		<command>OCA\Cloud_Py_API\Command\RunGrpcServerCommand</command>
-		<command>OCA\Cloud_Py_API\Command\RunGrpcClientCommand</command>
+		<command>OCA\Cloud_Py_API\Command\RunGrpcBgServerCommand</command>
+		<command>OCA\Cloud_Py_API\Command\RunGrpcClientTaskInitCommand</command>
+		<command>OCA\Cloud_Py_API\Command\RunGrpcClientFsListCommand</command>
+		<command>OCA\Cloud_Py_API\Command\RunGrpcClientFsInfoCommand</command>
 	</commands>
 </info>

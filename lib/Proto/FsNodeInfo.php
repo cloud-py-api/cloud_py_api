@@ -9,9 +9,9 @@ use Google\Protobuf\Internal\RepeatedField;
 use Google\Protobuf\Internal\GPBUtil;
 
 /**
- * Generated from protobuf message <code>OCA.Cloud_Py_API.Proto.FsGetInfoReply</code>
+ * Generated from protobuf message <code>OCA.Cloud_Py_API.Proto.FsNodeInfo</code>
  */
-class FsGetInfoReply extends \Google\Protobuf\Internal\Message
+class FsNodeInfo extends \Google\Protobuf\Internal\Message
 {
     /**
      * Generated from protobuf field <code>.OCA.Cloud_Py_API.Proto.fsId fileId = 1;</code>

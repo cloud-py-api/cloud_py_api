@@ -37,6 +37,18 @@ class cfgOptions extends \Google\Protobuf\Internal\Message
      * Generated from protobuf field <code>string userId = 4;</code>
      */
     protected $userId = '';
+    /**
+     *Use extra direct FS module for python, when possible.
+     *
+     * Generated from protobuf field <code>bool useFileDirect = 5;</code>
+     */
+    protected $useFileDirect = false;
+    /**
+     *Use extra direct DB module for python, if possible.
+     *
+     * Generated from protobuf field <code>bool useDBDirect = 6;</code>
+     */
+    protected $useDBDirect = false;
 
     /**
      * Constructor.
@@ -52,6 +64,10 @@ class cfgOptions extends \Google\Protobuf\Internal\Message
      *          Path to cloud_py_api app data folder.
      *     @type string $userId
      *          Current NC user UID
+     *     @type bool $useFileDirect
+     *          Use extra direct FS module for python, when possible.
+     *     @type bool $useDBDirect
+     *          Use extra direct DB module for python, if possible.
      * }
      */
     public function __construct($data = NULL) {
@@ -159,6 +175,58 @@ class cfgOptions extends \Google\Protobuf\Internal\Message
     {
         GPBUtil::checkString($var, True);
         $this->userId = $var;
+
+        return $this;
+    }
+
+    /**
+     *Use extra direct FS module for python, when possible.
+     *
+     * Generated from protobuf field <code>bool useFileDirect = 5;</code>
+     * @return bool
+     */
+    public function getUseFileDirect()
+    {
+        return $this->useFileDirect;
+    }
+
+    /**
+     *Use extra direct FS module for python, when possible.
+     *
+     * Generated from protobuf field <code>bool useFileDirect = 5;</code>
+     * @param bool $var
+     * @return $this
+     */
+    public function setUseFileDirect($var)
+    {
+        GPBUtil::checkBool($var);
+        $this->useFileDirect = $var;
+
+        return $this;
+    }
+
+    /**
+     *Use extra direct DB module for python, if possible.
+     *
+     * Generated from protobuf field <code>bool useDBDirect = 6;</code>
+     * @return bool
+     */
+    public function getUseDBDirect()
+    {
+        return $this->useDBDirect;
+    }
+
+    /**
+     *Use extra direct DB module for python, if possible.
+     *
+     * Generated from protobuf field <code>bool useDBDirect = 6;</code>
+     * @param bool $var
+     * @return $this
+     */
+    public function setUseDBDirect($var)
+    {
+        GPBUtil::checkBool($var);
+        $this->useDBDirect = $var;
 
         return $this;
     }

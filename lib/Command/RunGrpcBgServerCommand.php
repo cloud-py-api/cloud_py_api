@@ -33,10 +33,10 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 
-use OCA\Cloud_Py_API\Service\UtilsService;
+use OCA\Cloud_Py_API\Service\ServerService;
 
 
-class RunGrpcServerCommand extends Command {
+class RunGrpcBgServerCommand extends Command {
 
 	public const ARGUMENT_HOSTNAME = 'hostname';
 	public const ARGUMENT_PORT = 'port';
@@ -47,18 +47,18 @@ class RunGrpcServerCommand extends Command {
 	public const ARGUMENT_FUNCNAME = 'funcname';
 	public const ARGUMENT_ARGS = 'args';
 
-	/** @var UtilsService */
-	private $utils;
+	/** @var ServerService */
+	private $serverService;
 
-	public function __construct(UtilsService $utils) {
+	public function __construct(ServerService $serverService) {
 		parent::__construct();
 
-		$this->utils = $utils;
+		$this->serverService = $serverService;
 	}
 
 	protected function configure(): void {
-		$this->setName("cloud_py_api:grpc:server:run");
-		$this->setDescription("Run GRPC server in background");
+		$this->setName("cloud_py_api:grpc:server:bg:run");
+		$this->setDescription("Run GRPC server");
 		$this->addArgument(self::ARGUMENT_HOSTNAME, InputArgument::REQUIRED);
 		$this->addArgument(self::ARGUMENT_PORT, InputArgument::REQUIRED);
 		$this->addArgument(self::ARGUMENT_APPNAME, InputArgument::REQUIRED);
@@ -76,25 +76,14 @@ class RunGrpcServerCommand extends Command {
 		$modpath = $input->getArgument(self::ARGUMENT_MODPATH);
 		$funcname = $input->getArgument(self::ARGUMENT_FUNCNAME);
 		$args = $input->getArgument(self::ARGUMENT_ARGS);
-
-		$pathToOcc = getcwd() . '/occ';
-		$cloudPyApiCommand = 'cloud_py_api:grpc:server:bg:run ' . $hostname . ' ' . $port
-			. $appname . ' ' . $modname . ' ' . $modpath . ' ' . $funcname;
-		if ($args !== null) {
-			$cloudPyApiCommand += array_reduce(json_decode($args), function ($carry, $argument) {
-				return $carry += ' ' . $argument;
-			});
-		}
-		$command = $this->utils->getPhpInterpreter() . ' ' . $pathToOcc . ' ' . $cloudPyApiCommand 
-			. ' > /dev/null 2>&1 & echo $!';
-		exec($command, $cmdOut);
-		if (isset($cmdOut[0]) && intval($cmdOut[0]) > 0) {
-			$pid = $cmdOut[0];
-			$output->writeln($pid);
-			return 0;
-		}
-		$output->writeln('Seems like server not started..');
-		return 1;
+		$this->serverService->runGrpcServer($hostname, $port, [
+			'appname' => $appname,
+			'modname' => $modname,
+			'modpath' => $modpath,
+			'funcname' => $funcname,
+			'args' => $args !== null ? json_decode($args) : $args,
+		]);
+		return 0;
 	}
 
 }

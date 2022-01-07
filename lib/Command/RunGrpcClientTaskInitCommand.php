@@ -31,41 +31,34 @@ namespace OCA\Cloud_Py_API\Command;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use OCP\Files\SimpleFS\ISimpleFolder;
+use Symfony\Component\Console\Input\InputArgument;
 
-use OCA\Cloud_Py_API\Service\AppsService;
+use OCA\Cloud_Py_API\Service\ServerService;
 
 
-class TestCommand extends Command {
+class RunGrpcClientTaskInitCommand extends Command {
 
-	/** @var AppsService */
-	private $appsService;
+	public const ARGUMENT_HOSTNAME = 'hostname';
+	public const ARGUMENT_PORT = 'port';
 
-	public function __construct(AppsService $appsService) {
+	/** @var ServerService */
+	private $serverService;
+
+	public function __construct(ServerService $serverService) {
 		parent::__construct();
 
-		$this->appsService = $appsService;
+		$this->serverService = $serverService;
 	}
 
 	protected function configure(): void {
-		$this->setName("cloud_py_api:test");
-		$this->setDescription("Test command");
+		$this->setName("cloud_py_api:grpc:client:task:init");
+		$this->setDescription("Run GRPC client TaskInit request");
+		$this->addArgument(self::ARGUMENT_HOSTNAME, InputArgument::REQUIRED);
+		$this->addArgument(self::ARGUMENT_PORT, InputArgument::REQUIRED);
 	}
 
 	protected function execute(InputInterface $input, OutputInterface $output): int {
-		// $this->appsService->createAppDataFolder('cloud_py_api');
-		/** @var ISimpleFolder */
-		$appDataFolder = $this->appsService->getAppDataFolder('cloud_py_api');
-		$output->writeln($appDataFolder->getName());
-		$appDataFolder->newFile('test_file.txt', 'Some text');
-		$appDataFolderNodes = $appDataFolder->getDirectoryListing();
-		$output->writeln(json_encode($appDataFolderNodes));
-
-		$output->writeln('cloud_py_api config: ' . json_encode($this->appsService->getAppConfig('cloud_py_api')));
-		$output->writeln('mediadc config: ' . json_encode($this->appsService->getAppConfig('mediadc')));
-		$output->writeln('non-existed config: ' . json_encode($this->appsService->getAppConfig('123')));
-
-		$this->appsService->registerApp('mediadc');
+		$this->serverService->testTaskInit($input, $output);
 		return 0;
 	}
 

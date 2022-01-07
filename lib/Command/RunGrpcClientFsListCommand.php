@@ -36,10 +36,12 @@ use Symfony\Component\Console\Input\InputArgument;
 use OCA\Cloud_Py_API\Service\ServerService;
 
 
-class RunGrpcClientCommand extends Command {
+class RunGrpcClientFsListCommand extends Command {
 
-	public const ARGUMENT_FILE_ID = 'fileid';
+	public const ARGUMENT_HOSTNAME = 'hostname';
+	public const ARGUMENT_PORT = 'port';
 	public const ARGUMENT_USER_ID = 'userid';
+	public const ARGUMENT_FILE_ID = 'fileid';
 
 	/** @var ServerService */
 	private $serverService;
@@ -52,14 +54,15 @@ class RunGrpcClientCommand extends Command {
 
 	protected function configure(): void {
 		$this->setName("cloud_py_api:grpc:client:fs:list");
-		$this->setDescription("Run GRPC server");
-		$this->addArgument(self::ARGUMENT_FILE_ID, InputArgument::REQUIRED);
+		$this->setDescription("Run GRPC client FsList request");
+		$this->addArgument(self::ARGUMENT_HOSTNAME, InputArgument::REQUIRED);
+		$this->addArgument(self::ARGUMENT_PORT, InputArgument::REQUIRED);
 		$this->addArgument(self::ARGUMENT_USER_ID, InputArgument::REQUIRED);
+		$this->addArgument(self::ARGUMENT_FILE_ID, InputArgument::OPTIONAL);
 	}
 
 	protected function execute(InputInterface $input, OutputInterface $output): int {
-		$this->serverService->testClientServerCommunication($input, $output);
-
+		$this->serverService->testFsList($input, $output);
 		return 0;
 	}
 

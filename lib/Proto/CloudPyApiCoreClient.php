@@ -4,6 +4,8 @@
 namespace OCA\Cloud_Py_API\Proto;
 
 /**
+ * DB messages end 
+ *
  */
 class CloudPyApiCoreClient extends \Grpc\BaseStub {
 
@@ -73,26 +75,12 @@ class CloudPyApiCoreClient extends \Grpc\BaseStub {
     }
 
     /**
-     * @param \OCA\Cloud_Py_API\Proto\PBEmpty $argument input argument
-     * @param array $metadata metadata
-     * @param array $options call options
-     * @return \Grpc\ServerStreamingCall
-     */
-    public function CmdStream(\OCA\Cloud_Py_API\Proto\PBEmpty $argument,
-      $metadata = [], $options = []) {
-        return $this->_serverStreamRequest('/OCA.Cloud_Py_API.Proto.CloudPyApiCore/CmdStream',
-        $argument,
-        ['\OCA\Cloud_Py_API\Proto\ServerCommand', 'decode'],
-        $metadata, $options);
-    }
-
-    /**
-     * @param \OCA\Cloud_Py_API\Proto\FsListRequest $argument input argument
+     * @param \OCA\Cloud_Py_API\Proto\FsGetInfoRequest $argument input argument
      * @param array $metadata metadata
      * @param array $options call options
      * @return \Grpc\UnaryCall
      */
-    public function FsGetInfo(\OCA\Cloud_Py_API\Proto\FsListRequest $argument,
+    public function FsGetInfo(\OCA\Cloud_Py_API\Proto\FsGetInfoRequest $argument,
       $metadata = [], $options = []) {
         return $this->_simpleRequest('/OCA.Cloud_Py_API.Proto.CloudPyApiCore/FsGetInfo',
         $argument,

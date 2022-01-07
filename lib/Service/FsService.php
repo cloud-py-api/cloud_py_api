@@ -28,20 +28,20 @@ declare(strict_types=1);
 
 namespace OCA\Cloud_Py_API\Service;
 
-use OCP\Files\IAppData;
 use OCP\Files\FileInfo;
 use OCP\Files\Node;
+use OCP\Files\File;
 use OCP\Files\Folder;
 use OCP\Files\IRootFolder;
-use Psr\Log\LoggerInterface;
 
 use OCA\Cloud_Py_API\Proto\FsCreateRequest;
 use OCA\Cloud_Py_API\Proto\FsDeleteRequest;
-use OCA\Cloud_Py_API\Proto\FsGetInfoReply;
+use OCA\Cloud_Py_API\Proto\FsGetInfoRequest;
 use OCA\Cloud_Py_API\Proto\fsId;
 use OCA\Cloud_Py_API\Proto\FsListReply;
 use OCA\Cloud_Py_API\Proto\FsListRequest;
 use OCA\Cloud_Py_API\Proto\FsMoveRequest;
+use OCA\Cloud_Py_API\Proto\FsNodeInfo;
 use OCA\Cloud_Py_API\Proto\FsReadReply;
 use OCA\Cloud_Py_API\Proto\FsReadRequest;
 use OCA\Cloud_Py_API\Proto\FsReply;
@@ -53,15 +53,34 @@ class FsService {
 	/** @var IRootFolder */
 	private $rootFolder;
 
-	/** @var IAppData */
-	private $appData;
-
-	public function __construct(IAppData $appData, IRootFolder $rootFolder,
-								LoggerInterface $logger)
+	public function __construct(IRootFolder $rootFolder)
 	{
 		$this->rootFolder = $rootFolder;
-		$this->appData = $appData;
-		$this->logger = $logger;
+	}
+
+	/**
+	 * FS Get File info
+	 * 
+	 * @param FsGetInfoRequest $request
+	 * 
+	 * @return FsListReply|null FS FileInfo result
+	 */
+	public function info(FsGetInfoRequest $request): ?FsListReply {
+		$fsId = $request->getFileId();
+		$fileId = $fsId->getFileId();
+		$userId = $fsId->getUserId();
+		$userFolder = $this->rootFolder->getUserFolder($userId);
+		$nodes = $userFolder->getById($fileId);
+		$response = new FsListReply();
+		$responseNodes = array();
+		if (count($nodes) === 1 && isset($nodes[0]) && $nodes[0] instanceof File) {
+			/** @var File $file */
+			$file = $nodes[0];
+			$fsNodeInfo = $this->getFsNodeInfo($file);
+			array_push($responseNodes, $fsNodeInfo);
+		}
+		$response->setNodes($responseNodes);
+		return $response;
 	}
 
 	/**
@@ -73,44 +92,59 @@ class FsService {
 	 */
 	public function list(FsListRequest $request): ?FsListReply {
 		$fsId = $request->getDirId();
-		$dirId = $fsId->getFileId();
 		$userId = $fsId->getUserId();
+		$dirId = $fsId->getFileId();
+		/** @var Folder */
 		$userFolder = $this->rootFolder->getUserFolder($userId);
-		$nodes = $userFolder->getById($dirId);
 		$response = new FsListReply();
 		$responseNodes = array();
-		$response->setNodes($responseNodes);
-		if (count($nodes) === 1) {
-			/** @var Folder */
-			$folder = $nodes[0];
-			$dirNodes = $folder->getDirectoryListing();
-			/** @var Node */
-			foreach ($dirNodes as $node) {
-				$fsGetInfoReply = new FsGetInfoReply();
-				$nodeFsId = new fsId();
-				$nodeFsId->setFileId($node->getId());
-				$nodeFsId->setUserId($node->getOwner()->getUID());
-				$fsGetInfoReply->setFileId($nodeFsId);
-				$fsGetInfoReply->setIsDir($node->getType() === FileInfo::TYPE_FOLDER);
-				$fsGetInfoReply->setIsLocal(true);
-				$fsGetInfoReply->setMimetype($node->getMimetype());
-				$fsGetInfoReply->setName($node->getName());
-				$fsGetInfoReply->setInternalPath($node->getInternalPath());
-				$fsGetInfoReply->setAbsPath($node->getPath());
-				$fsGetInfoReply->setSize($node->getSize());
-				$fsGetInfoReply->setPermissions($node->getPermissions());
-				$fsGetInfoReply->setMtime($node->getMTime());
-				$fsGetInfoReply->setChecksum($node->getChecksum());
-				$fsGetInfoReply->setEncrypted($node->isEncrypted());
-				$fsGetInfoReply->setEtag($node->getEtag());
-				$fsGetInfoReply->setOwnerName($node->getOwner()->getUID());
-				$fsGetInfoReply->setStorageId($node->getStorage()->getId());
-				$fsGetInfoReply->setMountId($node->getMountPoint()->getMountId() !== null ? $node->getMountPoint()->getMountId() : -1);
-				array_push($responseNodes, $fsGetInfoReply);
+		if (isset($dirId) && $dirId !== 0) {
+			$nodes = $userFolder->getById($dirId);
+			if (count($nodes) === 1 && isset($nodes[0]) && $nodes[0] instanceof Folder) {
+				/** @var Folder $folder */
+				$folder = $nodes[0];
+				$dirNodes = $folder->getDirectoryListing();
+				/** @var Node */
+				foreach ($dirNodes as $node) {
+					$fsNodeInfo = $this->getFsNodeInfo($node);
+					array_push($responseNodes, $fsNodeInfo);
+				}
 			}
-			$response->setNodes($responseNodes);
+		} else {
+			$nodes = $userFolder->getDirectoryListing();
+			foreach ($nodes as $node) {
+				$fsNodeInfo = $this->getFsNodeInfo($node);
+				array_push($responseNodes, $fsNodeInfo);
+			}
 		}
+		$response->setNodes($responseNodes);
 		return $response;
+	}
+
+	private function getFsNodeInfo(Node $node): FsNodeInfo {
+		$fsGetInfoReply = new FsNodeInfo();
+		$nodeFsId = new fsId();
+		$nodeFsId->setFileId($node->getId());
+		$nodeFsId->setUserId($node->getOwner()->getUID());
+		$fsGetInfoReply->setFileId($nodeFsId);
+		$fsGetInfoReply->setIsDir($node->getType() === FileInfo::TYPE_FOLDER);
+		$fsGetInfoReply->setIsLocal($node->getStorage()->isLocal());
+		$fsGetInfoReply->setMimetype($node->getMimetype());
+		$fsGetInfoReply->setName($node->getName());
+		$fsGetInfoReply->setInternalPath($node->getInternalPath());
+		$fsGetInfoReply->setAbsPath($node->getPath());
+		$fsGetInfoReply->setSize($node->getSize());
+		$fsGetInfoReply->setPermissions($node->getPermissions());
+		$fsGetInfoReply->setMtime($node->getMTime());
+		$fsGetInfoReply->setChecksum($node->getChecksum());
+		$fsGetInfoReply->setEncrypted($node->isEncrypted());
+		$fsGetInfoReply->setEtag($node->getEtag());
+		$fsGetInfoReply->setOwnerName($node->getOwner()->getUID());
+		$fsGetInfoReply->setStorageId($node->getStorage()->getId());
+		if ($node->getMountPoint()->getMountId() !== null) {
+			$fsGetInfoReply->setMountId($node->getMountPoint()->getMountId());
+		}
+		return $fsGetInfoReply;
 	}
 
 	/**

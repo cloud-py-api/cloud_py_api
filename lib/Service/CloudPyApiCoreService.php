@@ -29,11 +29,12 @@ declare(strict_types=1);
 namespace OCA\Cloud_Py_API\Service;
 
 use OCA\Cloud_Py_API\Proto\CloudPyApiCoreStub;
-use Psr\Log\LoggerInterface;
 
-use function Sabre\HTTP\encodePath;
 
 class CloudPyApiCoreService extends CloudPyApiCoreStub {
+
+	/** @var TaskService */
+	private $tasks;
 
 	/** @var FsService */
 	private $fs;
@@ -41,11 +42,11 @@ class CloudPyApiCoreService extends CloudPyApiCoreStub {
 	/** @var DbService */
 	private $db;
 
-	public function __construct(FsService $fs, DbService $db, LoggerInterface $logger)
+	public function __construct(TaskService $tasks, FsService $fs, DbService $db)
 	{
+		$this->tasks = $tasks;
 		$this->fs = $fs;
 		$this->db = $db;
-		$this->logger = $logger;
 	}
 
 	/**
@@ -58,8 +59,8 @@ class CloudPyApiCoreService extends CloudPyApiCoreStub {
 		\OCA\Cloud_Py_API\Proto\PBEmpty $request,
 		\Grpc\ServerContext $context
 	): ?\OCA\Cloud_Py_API\Proto\TaskInitReply {
-		$context->setStatus(\Grpc\Status::unimplemented());
-		return null;
+		$context->setStatus(\Grpc\Status::ok());
+		return $this->tasks->init($request);
 	}
 
 	/**
@@ -72,8 +73,8 @@ class CloudPyApiCoreService extends CloudPyApiCoreStub {
 		\OCA\Cloud_Py_API\Proto\TaskSetStatusRequest $request,
 		\Grpc\ServerContext $context
 	): ?\OCA\Cloud_Py_API\Proto\PBEmpty {
-		$context->setStatus(\Grpc\Status::unimplemented());
-		return null;
+		$context->setStatus(\Grpc\Status::ok());
+		return $this->tasks->status($request);
 	}
 
 	/**
@@ -86,8 +87,8 @@ class CloudPyApiCoreService extends CloudPyApiCoreStub {
 		\OCA\Cloud_Py_API\Proto\TaskExitRequest $request,
 		\Grpc\ServerContext $context
 	): ?\OCA\Cloud_Py_API\Proto\PBEmpty {
-		$context->setStatus(\Grpc\Status::unimplemented());
-		return null;
+		$context->setStatus(\Grpc\Status::ok());
+		return $this->tasks->exit($request);
 	}
 
 	/**
@@ -100,37 +101,22 @@ class CloudPyApiCoreService extends CloudPyApiCoreStub {
 		\OCA\Cloud_Py_API\Proto\TaskLogRequest $request,
 		\Grpc\ServerContext $context
 	): ?\OCA\Cloud_Py_API\Proto\PBEmpty {
-		$context->setStatus(\Grpc\Status::unimplemented());
-		return null;
+		$context->setStatus(\Grpc\Status::ok());
+		return $this->tasks->log($request);
 	}
 
 	/**
-	 * @param \OCA\Cloud_Py_API\Proto\PBEmpty $request client request
-	 * @param \Grpc\ServerCallWriter $writer write response data of \OCA\Cloud_Py_API\Proto\ServerCommand
-	 * @param \Grpc\ServerContext $context server request context
-	 * @return void
-	 */
-	public function CmdStream(
-		\OCA\Cloud_Py_API\Proto\PBEmpty $request,
-		\Grpc\ServerCallWriter $writer,
-		\Grpc\ServerContext $context
-	): void {
-		$context->setStatus(\Grpc\Status::unimplemented());
-		$writer->finish();
-	}
-
-	/**
-	 * @param \OCA\Cloud_Py_API\Proto\FsListRequest $request client request
+	 * @param \OCA\Cloud_Py_API\Proto\FsGetInfoRequest $request client request
 	 * @param \Grpc\ServerContext $context server request context
 	 * @return \OCA\Cloud_Py_API\Proto\FsListReply for response data, null if if error occured
 	 *     initial metadata (if any) and status (if not ok) should be set to $context
 	 */
 	public function FsGetInfo(
-		\OCA\Cloud_Py_API\Proto\FsListRequest $request,
+		\OCA\Cloud_Py_API\Proto\FsGetInfoRequest $request,
 		\Grpc\ServerContext $context
 	): ?\OCA\Cloud_Py_API\Proto\FsListReply {
-		$context->setStatus(\Grpc\Status::unimplemented());
-		return null;
+		$context->setStatus(\Grpc\Status::ok());
+		return $this->fs->info($request);
 	}
 
 	/**
@@ -143,6 +129,7 @@ class CloudPyApiCoreService extends CloudPyApiCoreStub {
 		\OCA\Cloud_Py_API\Proto\FsListRequest $request,
 		\Grpc\ServerContext $context
 		): ?\OCA\Cloud_Py_API\Proto\FsListReply {
+		$context->setStatus(\Grpc\Status::ok());
 		return $this->fs->list($request);
 	}
 
@@ -228,7 +215,7 @@ class CloudPyApiCoreService extends CloudPyApiCoreStub {
 		\Grpc\ServerContext $context
 	): ?\OCA\Cloud_Py_API\Proto\DbSelectReply {
 		$context->setStatus(\Grpc\Status::unimplemented());
-		return null;
+		return $this->db->select($request);
 	}
 
 	/**
@@ -242,7 +229,7 @@ class CloudPyApiCoreService extends CloudPyApiCoreStub {
 		\Grpc\ServerContext $context
 	): ?\OCA\Cloud_Py_API\Proto\DbCursorReply {
 		$context->setStatus(\Grpc\Status::unimplemented());
-		return null;
+		return $this->db->cursor($request);
 	}
 
 	/**
@@ -256,7 +243,7 @@ class CloudPyApiCoreService extends CloudPyApiCoreStub {
 		\Grpc\ServerContext $context
 	): ?\OCA\Cloud_Py_API\Proto\DbExecReply {
 		$context->setStatus(\Grpc\Status::unimplemented());
-		return null;
+		return $this->db->exec($request);
 	}
 
 }

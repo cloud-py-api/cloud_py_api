@@ -30,14 +30,19 @@ namespace OCA\Cloud_Py_API\Service\Manager;
 
 
 /**
- * Socket requests manager
+ * GRPC requests manager
  */
 class RequestManager {
 
 	/**
 	 * List of Requests.
 	 */
-	private $requests = array();
+	private $requests = array(
+		// 'appId' => [
+		// 	'handler' => '\OCA\MediaDC\Service\Callback\TaskCallback::processResult',
+		// 	'result' => null,
+		// ],
+	);
 
 	public static function getRequest(string $message_id) {
 		if (isset(self::$requests[$message_id])) {
@@ -48,7 +53,8 @@ class RequestManager {
 
 	public static function setRequest(string $message_id, mixed $message) {
 		if (!isset(self::$requests[$message_id])) {
-			self::$requests[$message_id] = $message;
+			self::$requests[$message_id]['result'] = $message;
+			// call_user_func(self::$requests[$message_id]['handler']);
 			return true;
 		}
 		return false;
