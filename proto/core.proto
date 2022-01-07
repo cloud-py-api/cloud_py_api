@@ -235,7 +235,7 @@ service CloudPyApiCore {
   rpc TaskStatus (TaskSetStatusRequest) returns (Empty) {}
   rpc TaskExit (TaskExitRequest) returns (Empty) {}
   rpc TaskLog (TaskLogRequest) returns (Empty) {}
-  rpc FsGetInfo (FsListRequest) returns (FsListReply) {}
+  rpc FsGetInfo (FsGetInfoRequest) returns (FsListReply) {}
   rpc FsList (FsListRequest) returns (FsListReply) {}
   rpc FsRead (FsReadRequest) returns (stream FsReadReply) {}
   rpc FsCreate (FsCreateRequest) returns (FsReply) {}
