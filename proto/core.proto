@@ -114,6 +114,8 @@ message FsListReply {
 
 message FsReadRequest {
   fsId fileId = 1;
+  int64 offset = 2;
+  int64 bytes_to_read = 3;
 }
 
 message FsReadReply {
@@ -121,11 +123,16 @@ message FsReadReply {
   bytes content = 2;                      //Present only if resCode is NO_ERROR.
 }
 
-message FsCreateRequest {                 //Reply for this is a FsReply message.
+message FsCreateRequest {                 //Reply for this is a FsCreateReply message.
   fsId parentDirId = 1;
   string name = 2;
   bool is_file = 3;
   bytes content = 4;
+}
+
+message FsCreateReply {                   //Reply for FsCreateRequest.
+  fsResultCode resCode = 1;
+  fsId fileId = 2;
 }
 
 message FsWriteRequest {                  //Reply for this is a FsReply message.
@@ -238,7 +245,7 @@ service CloudPyApiCore {
   rpc FsGetInfo (FsGetInfoRequest) returns (FsListReply) {}
   rpc FsList (FsListRequest) returns (FsListReply) {}
   rpc FsRead (FsReadRequest) returns (stream FsReadReply) {}
-  rpc FsCreate (FsCreateRequest) returns (FsReply) {}
+  rpc FsCreate (FsCreateRequest) returns (FsCreateReply) {}
   rpc FsWrite (stream FsWriteRequest) returns (FsReply) {}
   rpc FsDelete (FsDeleteRequest) returns (FsReply) {}
   rpc FsMove (FsMoveRequest) returns (FsReply) {}
