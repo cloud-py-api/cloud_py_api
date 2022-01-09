@@ -28,13 +28,21 @@ declare(strict_types=1);
 
 namespace OCA\Cloud_Py_API\Service;
 
+use Grpc\ServerCallReader;
+use Grpc\ServerCallWriter;
 use OCP\Files\FileInfo;
 use OCP\Files\Node;
 use OCP\Files\File;
 use OCP\Files\Folder;
 use OCP\Files\IRootFolder;
+use OCP\Files\InvalidPathException;
+use OCP\Files\NotFoundException;
+use OCP\Files\NotPermittedException;
+use OCP\Lock\LockedException;
+use OCP\Files\GenericFileException;
 
 use OCA\Cloud_Py_API\Proto\FsCreateRequest;
+use OCA\Cloud_Py_API\Proto\FsCreateReply;
 use OCA\Cloud_Py_API\Proto\FsDeleteRequest;
 use OCA\Cloud_Py_API\Proto\FsGetInfoRequest;
 use OCA\Cloud_Py_API\Proto\fsId;
@@ -45,6 +53,7 @@ use OCA\Cloud_Py_API\Proto\FsNodeInfo;
 use OCA\Cloud_Py_API\Proto\FsReadReply;
 use OCA\Cloud_Py_API\Proto\FsReadRequest;
 use OCA\Cloud_Py_API\Proto\FsReply;
+use OCA\Cloud_Py_API\Proto\fsResultCode;
 use OCA\Cloud_Py_API\Proto\FsWriteRequest;
 
 
@@ -151,22 +160,113 @@ class FsService {
 	 * FS Read file
 	 * 
 	 * @param FsReadRequest $request
-	 * 
-	 * @return FsReadReply|null FS Read file contents
+	 * @param ServerCallWriter $writer
 	 */
-	public function read(FsReadRequest $request): ?FsReadReply {
-		return new FsReadReply(null);
+	public function read(FsReadRequest $request, ServerCallWriter $writer): void {
+		$fsId = $request->getFileId();
+		$fileId = $fsId->getFileId();
+		$userId = $fsId->getUserId();
+		$offset = $request->getOffset();
+		$length = $request->getBytesToRead();
+		$userFolder = $this->rootFolder->getUserFolder($userId);
+		$response = new FsReadReply();
+		$nodes = $userFolder->getById($fileId);
+		if (count($nodes) === 1 && isset($nodes[0]) && $nodes[0] instanceof File) {
+			/** @var File */
+			$file = $nodes[0];
+			if ($offset === 0 && $length === 0) {
+				try {
+					if ($file->getSize() / pow(1024, 3) <= 2) {
+						/** @var FsReadReply */
+						$response->setLast(true);
+						$response->setContent($file->getContent());
+						$response->setResCode(fsResultCode::NO_ERROR);
+					}
+					// TODO Add batch reading if 2GB GRPC packet size limit exceed
+				} catch (NotPermittedException | LockedException $e) {
+					if ($e instanceof NotPermittedException) {
+						$response->setResCode(fsResultCode::NOT_PERMITTED);
+					} else if ($e instanceof NotPermittedException) {
+						$response->setResCode(fsResultCode::LOCKED);
+					}
+				}
+			} else {
+				try {
+					$handle = $file->fopen('r');
+					if ($handle) {
+						if (fseek($handle, $offset) === 0) {
+							$response->setLast(true);
+							$data = fread($handle, $length);
+							if ($data !== false) {
+								$response->setContent($data);
+								$response->setResCode(fsResultCode::NO_ERROR);
+							}
+							$writer->write($response);
+							fclose($handle);
+						}
+					}
+				} catch (NotPermittedException | LockedException $e) {
+					if ($e instanceof NotPermittedException) {
+						$response->setResCode(fsResultCode::NOT_PERMITTED);
+					} else if ($e instanceof NotPermittedException) {
+						$response->setResCode(fsResultCode::LOCKED);
+					}
+				}
+			}
+		}
+		$writer->write($response);
+		$writer->finish();
 	}
 
 	/**
 	 * FS Write file
 	 * 
-	 * @param FsWriteRequest $request
+	 * @param ServerCallReader $reader
 	 * 
 	 * @return FsReply|null FS Write file results
 	 */
-	public function write(FsWriteRequest $request): ?FsReply {
-		return new FsReply(null);
+	public function write(ServerCallReader $reader): ?FsReply {
+		$handle = null;
+		$response = new FsReply();
+		$response->setResCode(fsResultCode::NO_ERROR);
+		/** @var FsWriteRequest $request */
+		while($request = $reader->read()) {
+			if ($handle === null) {
+				$fsId = $request->getFileId();
+				$fileId = $fsId->getFileId();
+				$userId = $fsId->getUserId();
+				$userFolder = $this->rootFolder->getUserFolder($userId);
+				$nodes = $userFolder->getById($fileId);
+				if (count($nodes) === 1 && isset($nodes[0]) && $nodes[0] instanceof File) {
+					/** @var File */
+					$file = $nodes[0];
+					try {
+						$handle = $file->fopen('w');
+					} catch (NotPermittedException | GenericFileException | LockedException $e) {
+						if ($e instanceof NotPermittedException) {
+							$response->setResCode(fsResultCode::NOT_PERMITTED);
+						} else if ($e instanceof LockedException) {
+							$response->setResCode(fsResultCode::LOCKED);
+						} else if ($e instanceof GenericFileException) {
+							$response->setResCode(fsResultCode::IO_ERROR);
+						}
+					}
+				}
+			}
+			if ($handle) {
+				$data = $request->getContent();
+				if (fwrite($handle, $data) === false) {
+					$response->setResCode(fsResultCode::IO_ERROR);
+				} else {
+					$response->setResCode(fsResultCode::NO_ERROR);
+				}
+				if ($request->getLast()) {
+					break;
+				}
+			}
+		}
+		fclose($handle);
+		return $response;
 	}
 
 	/**
@@ -174,10 +274,49 @@ class FsService {
 	 * 
 	 * @param FsCreateRequest $params
 	 * 
-	 * @return FsReply|null FS Create results
+	 * @return FsCreateReply|null FS Create results
 	 */
-	public function create(FsCreateRequest $request): ?FsReply {
-		return new FsReply(null);
+	public function create(FsCreateRequest $request): ?FsCreateReply {
+		/** @var fsId */
+		$parentDirFsId = $request->getParentDirId();
+		$userId = $parentDirFsId->getUserId();
+		$parentDirId = $parentDirFsId->getFileId();
+		/** @var Folder */
+		$userFolder = $this->rootFolder->getUserFolder($userId);
+		$response = new FsCreateReply();
+		if ($parentDirId !== null) {
+			$nodes = $userFolder->getById($parentDirId);
+			if (count($nodes) === 1 && isset($nodes[0]) && $nodes[0] instanceof Folder) {
+				/** @var Folder */
+				$folder = $nodes[0];
+				try {
+					if ($request->getIsFile()) {
+						$newFile = $folder->newFile($request->getName(), $request->getContent());
+						$response->setFileId($newFile->getId());
+					} else {
+						$newFolder = $folder->newFolder($request->getName());
+						$response->setFileId($newFolder->getId());
+					}
+					$response->setResCode(fsResultCode::NO_ERROR);
+				} catch (NotPermittedException $e) {
+					$response->setResCode(fsResultCode::NOT_FOUND);
+				}
+			}
+		} else {
+			try {
+				if ($request->getIsFile()) {
+					$newFile = $userFolder->newFile($request->getName(), $request->getContent());
+					$response->setFileId($newFile->getId());
+				} else {
+					$newFolder = $userFolder->newFolder($request->getName());
+					$response->setFileId($newFolder->getId());
+				}
+				$response->setResCode(fsResultCode::NO_ERROR);
+			} catch (NotPermittedException $e) {
+				$response->setResCode(fsResultCode::NOT_PERMITTED);
+			}
+		}
+		return $response;
 	}
 
 	/**
@@ -188,7 +327,29 @@ class FsService {
 	 * @return FsReply|null FS Delete results
 	 */
 	public function delete(FsDeleteRequest $request): ?FsReply {
-		return new FsReply(null);
+		$fsId = $request->getFileId();
+		$nodeId = $fsId->getFileId();
+		$userId = $fsId->getUserId();
+		$userFolder = $this->rootFolder->getUserFolder($userId);
+		$response = new FsReply();
+		$nodes = $userFolder->getById($nodeId);
+		if (count($nodes) === 1 && isset($nodes[0])) {
+			/** @var Node */
+			$node = $nodes[0];
+			try {
+				$node->delete();
+				$response->setResCode(0);
+			} catch (NotPermittedException | InvalidPathException | NotFoundException $e) {
+				if ($e instanceof NotPermittedException) {
+					$response->setResCode(fsResultCode::NOT_PERMITTED);
+				} else if ($e instanceof InvalidPathException || $e instanceof NotFoundException) {
+					$response->setResCode(fsResultCode::NOT_FOUND);
+				}
+			}
+		} else {
+			$response->setResCode(fsResultCode::NOT_FOUND);
+		}
+		return $response;
 	}
 
 	/**
@@ -199,7 +360,31 @@ class FsService {
 	 * @return FsReply FS Move results
 	 */
 	public function move(FsMoveRequest $request): ?FsReply {
-		return new FsReply(null);
+		$fsId = $request->getFileId();
+		$userId = $fsId->getUserId();
+		$nodeId = $fsId->getFileId();
+		$userFolder = $this->rootFolder->getUserFolder($userId);
+		$response = new FsReply();
+		$nodes = $userFolder->getById($nodeId);
+		if (count($nodes) === 1 && isset($nodes[0])) {
+			/** @var Node */
+			$node = $nodes[0];
+			try {
+				$node->move($request->getTargetPath());
+				$response->setResCode(fsResultCode::NO_ERROR);
+			} catch (NotPermittedException | NotFoundException | LockedException $e) {
+				if ($e instanceof NotPermittedException) {
+					$response->setResCode(fsResultCode::NOT_PERMITTED);
+				} else if ($e instanceof NotFoundException) {
+					$response->setResCode(fsResultCode::NOT_FOUND);
+				} else if ($e instanceof LockedException) {
+					$response->setResCode(fsResultCode::LOCKED);
+				}
+			}
+		} else {
+			$response->setResCode(fsResultCode::NOT_FOUND);
+		}
+		return $response;
 	}
 
 }

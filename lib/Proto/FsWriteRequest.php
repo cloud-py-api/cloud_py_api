@@ -20,7 +20,11 @@ class FsWriteRequest extends \Google\Protobuf\Internal\Message
      */
     protected $fileId = null;
     /**
-     * Generated from protobuf field <code>bytes content = 2;</code>
+     * Generated from protobuf field <code>bool last = 2;</code>
+     */
+    protected $last = false;
+    /**
+     * Generated from protobuf field <code>bytes content = 3;</code>
      */
     protected $content = '';
 
@@ -31,6 +35,7 @@ class FsWriteRequest extends \Google\Protobuf\Internal\Message
      *     Optional. Data for populating the Message object.
      *
      *     @type \OCA\Cloud_Py_API\Proto\fsId $fileId
+     *     @type bool $last
      *     @type string $content
      * }
      */
@@ -72,7 +77,29 @@ class FsWriteRequest extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     * Generated from protobuf field <code>bytes content = 2;</code>
+     * Generated from protobuf field <code>bool last = 2;</code>
+     * @return bool
+     */
+    public function getLast()
+    {
+        return $this->last;
+    }
+
+    /**
+     * Generated from protobuf field <code>bool last = 2;</code>
+     * @param bool $var
+     * @return $this
+     */
+    public function setLast($var)
+    {
+        GPBUtil::checkBool($var);
+        $this->last = $var;
+
+        return $this;
+    }
+
+    /**
+     * Generated from protobuf field <code>bytes content = 3;</code>
      * @return string
      */
     public function getContent()
@@ -81,7 +108,7 @@ class FsWriteRequest extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     * Generated from protobuf field <code>bytes content = 2;</code>
+     * Generated from protobuf field <code>bytes content = 3;</code>
      * @param string $var
      * @return $this
      */

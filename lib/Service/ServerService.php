@@ -34,6 +34,8 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 use Grpc\RpcServer;
+use Grpc\ClientStreamingCall;
+use Grpc\ServerStreamingCall;
 
 use OCA\Cloud_Py_API\Proto\CloudPyApiCoreClient;
 use OCA\Cloud_Py_API\Proto\FsGetInfoRequest;
@@ -41,6 +43,9 @@ use OCA\Cloud_Py_API\Proto\FsNodeInfo;
 use OCA\Cloud_Py_API\Proto\fsId;
 use OCA\Cloud_Py_API\Proto\FsListReply;
 use OCA\Cloud_Py_API\Proto\FsListRequest;
+use OCA\Cloud_Py_API\Proto\FsReadReply;
+use OCA\Cloud_Py_API\Proto\FsReadRequest;
+use OCA\Cloud_Py_API\Proto\FsWriteRequest;
 use OCA\Cloud_Py_API\Proto\PBEmpty;
 use OCA\Cloud_Py_API\Proto\TaskInitReply;
 use OCA\Cloud_Py_API\Proto\TaskInitReply\cfgOptions;
@@ -122,6 +127,87 @@ class ServerService {
 				$output->writeln($responseNode->getFileId()->getFileId() . '. ' . $responseNode->getName() . ' (' . $responseNode->getSize() .' bytes)');
 			}
 		}
+	}
+
+	public function testFsReadFile(InputInterface $input, OutputInterface $output) {
+		$hostname = $input->getArgument('hostname');
+		$port = $input->getArgument('port');
+		$userid = $input->getArgument('userid');
+		$fileid = $input->getArgument('fileid');
+		$offset = $input->getArgument('offset');
+		$length = $input->getArgument('length');
+		$client = new CloudPyApiCoreClient($hostname . ':' . $port, [
+			'credentials' => \Grpc\ChannelCredentials::createInsecure()
+		]);
+		/** @var FsReadRequest */
+		$request = new FsReadRequest();
+		$fsId = new fsId();
+		$fsId->setUserId($userid);
+		$fsId->setFileId(intval($fileid));
+		$request->setFileId($fsId);
+		if (isset($offset)) {
+			$request->setOffset($offset);
+		}
+		if (isset($length)) {
+			$request->setBytesToRead($length);
+		}
+		/** @var ServerStreamingCall */
+		$call = $client->FsRead($request);
+		$output->writeln('Responses: ');
+		/** @var FsReadReply $response */
+		foreach ($call->responses() as $response) {
+			$output->writeln('Res code: ' . $response->getResCode());
+			$output->writeln('Last: ' . $response->getLast());
+			$output->writeln('Content: ' . $response->getContent());
+		}
+	}
+
+	public function testFsWriteFile(InputInterface $input, OutputInterface $output) {
+		$hostname = $input->getArgument('hostname');
+		$port = $input->getArgument('port');
+		$userid = $input->getArgument('userid');
+		$fileid = $input->getArgument('fileid');
+		$content = $input->getArgument('content');
+		$client = new CloudPyApiCoreClient($hostname . ':' . $port, [
+			'credentials' => \Grpc\ChannelCredentials::createInsecure()
+		]);
+
+		$request1 = new FsWriteRequest();
+		$fsId = new fsId();
+		$fsId->setFileId($fileid);
+		$fsId->setUserId($userid);
+		$request1->setFileId($fsId);
+		$request1->setLast(false);
+		$request1->setContent($content);
+
+		$request2 = new FsWriteRequest();
+		$fsId = new fsId();
+		$fsId->setFileId($fileid);
+		$fsId->setUserId($userid);
+		$request2->setFileId($fsId);
+		$request2->setLast(true);
+		$request2->setContent($content);
+
+		/** @var ClientStreamingCall */
+		$call = $client->FsWrite();
+		$call->write($request1);
+		$call->write($request2);
+		/** @var FsReply */
+		list($response, $status) = $call->wait();
+		$output->writeln('Status: ' . json_encode($status));
+		$output->writeln('Response: ' . json_encode($response->getResCode()));
+	}
+
+	public function testFsCreateFile(InputInterface $input, OutputInterface $output) {
+		// TODO
+	}
+
+	public function testFsDeleteFile(InputInterface $input, OutputInterface $output) {
+		// TODO
+	}
+
+	public function testFsMoveFile(InputInterface $input, OutputInterface $output) {
+		// TODO
 	}
 
 	public function testTaskInit(InputInterface $input, OutputInterface $output) {

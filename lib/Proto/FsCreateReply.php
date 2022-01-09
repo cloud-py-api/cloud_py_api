@@ -9,24 +9,20 @@ use Google\Protobuf\Internal\RepeatedField;
 use Google\Protobuf\Internal\GPBUtil;
 
 /**
- * Generated from protobuf message <code>OCA.Cloud_Py_API.Proto.FsReadReply</code>
+ *Reply for FsCreateRequest.
+ *
+ * Generated from protobuf message <code>OCA.Cloud_Py_API.Proto.FsCreateReply</code>
  */
-class FsReadReply extends \Google\Protobuf\Internal\Message
+class FsCreateReply extends \Google\Protobuf\Internal\Message
 {
     /**
      * Generated from protobuf field <code>.OCA.Cloud_Py_API.Proto.fsResultCode resCode = 1;</code>
      */
     protected $resCode = 0;
     /**
-     * Generated from protobuf field <code>bool last = 2;</code>
+     * Generated from protobuf field <code>.OCA.Cloud_Py_API.Proto.fsId fileId = 2;</code>
      */
-    protected $last = false;
-    /**
-     *Present only if resCode is NO_ERROR.
-     *
-     * Generated from protobuf field <code>bytes content = 3;</code>
-     */
-    protected $content = '';
+    protected $fileId = null;
 
     /**
      * Constructor.
@@ -35,9 +31,7 @@ class FsReadReply extends \Google\Protobuf\Internal\Message
      *     Optional. Data for populating the Message object.
      *
      *     @type int $resCode
-     *     @type bool $last
-     *     @type string $content
-     *          Present only if resCode is NO_ERROR.
+     *     @type \OCA\Cloud_Py_API\Proto\fsId $fileId
      * }
      */
     public function __construct($data = NULL) {
@@ -68,49 +62,33 @@ class FsReadReply extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     * Generated from protobuf field <code>bool last = 2;</code>
-     * @return bool
+     * Generated from protobuf field <code>.OCA.Cloud_Py_API.Proto.fsId fileId = 2;</code>
+     * @return \OCA\Cloud_Py_API\Proto\fsId|null
      */
-    public function getLast()
+    public function getFileId()
     {
-        return $this->last;
+        return $this->fileId;
+    }
+
+    public function hasFileId()
+    {
+        return isset($this->fileId);
+    }
+
+    public function clearFileId()
+    {
+        unset($this->fileId);
     }
 
     /**
-     * Generated from protobuf field <code>bool last = 2;</code>
-     * @param bool $var
+     * Generated from protobuf field <code>.OCA.Cloud_Py_API.Proto.fsId fileId = 2;</code>
+     * @param \OCA\Cloud_Py_API\Proto\fsId $var
      * @return $this
      */
-    public function setLast($var)
+    public function setFileId($var)
     {
-        GPBUtil::checkBool($var);
-        $this->last = $var;
-
-        return $this;
-    }
-
-    /**
-     *Present only if resCode is NO_ERROR.
-     *
-     * Generated from protobuf field <code>bytes content = 3;</code>
-     * @return string
-     */
-    public function getContent()
-    {
-        return $this->content;
-    }
-
-    /**
-     *Present only if resCode is NO_ERROR.
-     *
-     * Generated from protobuf field <code>bytes content = 3;</code>
-     * @param string $var
-     * @return $this
-     */
-    public function setContent($var)
-    {
-        GPBUtil::checkString($var, False);
-        $this->content = $var;
+        GPBUtil::checkMessage($var, \OCA\Cloud_Py_API\Proto\fsId::class);
+        $this->fileId = $var;
 
         return $this;
     }

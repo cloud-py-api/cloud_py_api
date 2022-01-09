@@ -43,5 +43,10 @@ Nextcloud Python API Framework
 		<command>OCA\Cloud_Py_API\Command\RunGrpcClientTaskInitCommand</command>
 		<command>OCA\Cloud_Py_API\Command\RunGrpcClientFsListCommand</command>
 		<command>OCA\Cloud_Py_API\Command\RunGrpcClientFsInfoCommand</command>
+		<command>OCA\Cloud_Py_API\Command\RunGrpcClientFsMoveCommand</command>
+		<command>OCA\Cloud_Py_API\Command\RunGrpcClientFsReadCommand</command>
+		<command>OCA\Cloud_Py_API\Command\RunGrpcClientFsWriteCommand</command>
+		<command>OCA\Cloud_Py_API\Command\RunGrpcClientFsCreateCommand</command>
+		<command>OCA\Cloud_Py_API\Command\RunGrpcClientFsDeleteCommand</command>
 	</commands>
 </info>

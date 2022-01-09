@@ -49,6 +49,14 @@ class cfgOptions extends \Google\Protobuf\Internal\Message
      * Generated from protobuf field <code>bool useDBDirect = 6;</code>
      */
     protected $useDBDirect = false;
+    /**
+     * Generated from protobuf field <code>int32 maxChunkSize = 7;</code>
+     */
+    protected $maxChunkSize = 0;
+    /**
+     * Generated from protobuf field <code>int32 maxCreateFileContent = 8;</code>
+     */
+    protected $maxCreateFileContent = 0;
 
     /**
      * Constructor.
@@ -68,6 +76,8 @@ class cfgOptions extends \Google\Protobuf\Internal\Message
      *          Use extra direct FS module for python, when possible.
      *     @type bool $useDBDirect
      *          Use extra direct DB module for python, if possible.
+     *     @type int $maxChunkSize
+     *     @type int $maxCreateFileContent
      * }
      */
     public function __construct($data = NULL) {
@@ -227,6 +237,50 @@ class cfgOptions extends \Google\Protobuf\Internal\Message
     {
         GPBUtil::checkBool($var);
         $this->useDBDirect = $var;
+
+        return $this;
+    }
+
+    /**
+     * Generated from protobuf field <code>int32 maxChunkSize = 7;</code>
+     * @return int
+     */
+    public function getMaxChunkSize()
+    {
+        return $this->maxChunkSize;
+    }
+
+    /**
+     * Generated from protobuf field <code>int32 maxChunkSize = 7;</code>
+     * @param int $var
+     * @return $this
+     */
+    public function setMaxChunkSize($var)
+    {
+        GPBUtil::checkInt32($var);
+        $this->maxChunkSize = $var;
+
+        return $this;
+    }
+
+    /**
+     * Generated from protobuf field <code>int32 maxCreateFileContent = 8;</code>
+     * @return int
+     */
+    public function getMaxCreateFileContent()
+    {
+        return $this->maxCreateFileContent;
+    }
+
+    /**
+     * Generated from protobuf field <code>int32 maxCreateFileContent = 8;</code>
+     * @param int $var
+     * @return $this
+     */
+    public function setMaxCreateFileContent($var)
+    {
+        GPBUtil::checkInt32($var);
+        $this->maxCreateFileContent = $var;
 
         return $this;
     }
