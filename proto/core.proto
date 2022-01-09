@@ -45,6 +45,8 @@ message TaskInitReply {
     string userId = 4;                    //Current NC user UID
     bool useFileDirect = 5;               //Use extra direct FS module for python, when possible.
     bool useDBDirect = 6;                 //Use extra direct DB module for python, if possible.
+    int32 maxChunkSize = 7;
+    int32 maxCreateFileContent= 8;
   }
   cfgOptions config = 6;
 }
@@ -120,7 +122,8 @@ message FsReadRequest {
 
 message FsReadReply {
   fsResultCode resCode = 1;
-  bytes content = 2;                      //Present only if resCode is NO_ERROR.
+  bool last = 2;
+  bytes content = 3;                      //Present only if resCode is NO_ERROR.
 }
 
 message FsCreateRequest {                 //Reply for this is a FsCreateReply message.
@@ -137,7 +140,8 @@ message FsCreateReply {                   //Reply for FsCreateRequest.
 
 message FsWriteRequest {                  //Reply for this is a FsReply message.
   fsId fileId = 1;
-  bytes content = 2;
+  bool last = 2;
+  bytes content = 3;
 }
 
 message FsDeleteRequest {                 //Reply for this is a FsReply message.
