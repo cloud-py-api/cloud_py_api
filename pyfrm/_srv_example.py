@@ -12,7 +12,7 @@ import core_pb2_grpc as core_pb2_grpc
 
 
 MAX_CHUNK_SIZE = 4
-MAX_CREATE_FILE_CONTENT = 50
+MAX_CREATE_FILE_CONTENT = 1
 
 
 def run_python_script(python_script_path, *args):

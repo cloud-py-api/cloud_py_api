@@ -1,21 +1,21 @@
-import nc_py_api.cloud_api as cpa
+import nc_py_api as nc_api
 
 
 def func_hello_world():
-    ca = cpa.CloudApi()
-    ca.log(cpa.LogLvl.INFO, 'hello_world', 'HelloWorld')
+    ca = nc_api.CloudApi()
+    ca.log(nc_api.LogLvl.INFO, 'hello_world', 'HelloWorld')
     return 'OK'
 
 
 def func_hello_world_fixed_two_args(arg1, arg2):
-    ca = cpa.CloudApi()
-    ca.log(cpa.LogLvl.INFO, 'hello_world_fixed_two_args', f'{arg1 + arg2}')
+    ca = nc_api.CloudApi()
+    ca.log(nc_api.LogLvl.INFO, 'hello_world_fixed_two_args', f'{arg1 + arg2}')
     return arg1 + arg2
 
 
 def func_hello_world_args(*arguments):
-    ca = cpa.CloudApi()
-    ca.log(cpa.LogLvl.INFO, 'hello_world_args', f'{arguments}')
+    ca = nc_api.CloudApi()
+    ca.log(nc_api.LogLvl.INFO, 'hello_world_args', f'{arguments}')
     return f'get {str(len(arguments))} argument(s)'
 
 

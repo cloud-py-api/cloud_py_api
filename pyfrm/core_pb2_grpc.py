@@ -54,7 +54,7 @@ class CloudPyApiCoreStub(object):
         self.FsCreate = channel.unary_unary(
                 '/OCA.Cloud_Py_API.Proto.CloudPyApiCore/FsCreate',
                 request_serializer=core__pb2.FsCreateRequest.SerializeToString,
-                response_deserializer=core__pb2.FsReply.FromString,
+                response_deserializer=core__pb2.FsCreateReply.FromString,
                 )
         self.FsWrite = channel.stream_unary(
                 '/OCA.Cloud_Py_API.Proto.CloudPyApiCore/FsWrite',
@@ -218,7 +218,7 @@ def add_CloudPyApiCoreServicer_to_server(servicer, server):
             'FsCreate': grpc.unary_unary_rpc_method_handler(
                     servicer.FsCreate,
                     request_deserializer=core__pb2.FsCreateRequest.FromString,
-                    response_serializer=core__pb2.FsReply.SerializeToString,
+                    response_serializer=core__pb2.FsCreateReply.SerializeToString,
             ),
             'FsWrite': grpc.stream_unary_rpc_method_handler(
                     servicer.FsWrite,
@@ -394,7 +394,7 @@ class CloudPyApiCore(object):
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/OCA.Cloud_Py_API.Proto.CloudPyApiCore/FsCreate',
             core__pb2.FsCreateRequest.SerializeToString,
-            core__pb2.FsReply.FromString,
+            core__pb2.FsCreateReply.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 

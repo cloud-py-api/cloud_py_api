@@ -23,6 +23,11 @@ def _pyfrm_set_conn(cloud_connector):
 
 
 class CloudApi:
+    __create_file_ex: bool
+
+    def __init__(self, create_file_ex: bool = True):
+        self.__create_file_ex = create_file_ex
+
     @staticmethod
     def log(log_lvl: Union[int, LogLvl], mod_name: str, content: Union[str, list, tuple]) -> None:
         if isinstance(log_lvl, LogLvl):
@@ -45,13 +50,23 @@ class CloudApi:
     def read_file(fs_id: FsObjId, output_obj: BytesIO, offset: int = 0, bytes_to_read: int = 0) -> FsResultCode:
         return _ncc.fs_read(fs_id.user_id, fs_id.file_id, output_obj, offset, bytes_to_read)
 
-    @staticmethod
-    def create_file(name: str, is_dir: bool = False, parent_dir: FsObjId = None,
+    def create_file(self, name: str, is_dir: bool = False, parent_dir: FsObjId = None,
                     content: bytes = b'') -> [FsResultCode, FsObjId]:
+        if is_dir and len(content) > 0:
+            raise ValueError('Content can be specified only for files.')
+        __write_after = False
+        if len(content) > _ncc.task_init_data.config.maxCreateFileContent:
+            if not self.__create_file_ex:
+                raise ValueError(f'length of content({len(content)}) exceeds config.maxCreateFileContent.')
+            __write_after = True
         _result, _user_id, _file_id = _ncc.fs_create(parent_dir.user_id if parent_dir is not None else '',
                                                      parent_dir.file_id if parent_dir is not None else 0,
-                                                     name, not is_dir, content)
-        return _result, FsObjId(user_id=_user_id, file_id=_file_id)
+                                                     name, not is_dir, content if not __write_after else b'')
+        created_object = FsObjId(user_id=_user_id, file_id=_file_id)
+        if _result == FsResultCode.NO_ERROR:
+            if __write_after:
+                _result = self.write_file(created_object, BytesIO(content))
+        return _result, created_object
 
     @staticmethod
     def write_file(fs_id: FsObjId, content: BytesIO) -> FsResultCode:

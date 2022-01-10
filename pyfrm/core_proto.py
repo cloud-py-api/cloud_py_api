@@ -131,21 +131,12 @@ class ClientCloudPA:
                   is_file: bool, content: bytes = b'') -> [FsResultCode, str, int]:
         if not parent_dir_user_id:
             parent_dir_user_id = self.task_init_data.config.userId
-        if not is_file and len(content) > 0:
-            raise ValueError('Content can be specified only for files.')
-        if self.task_init_data.config.useFileDirect:
-            raise Exception('Not implemented.')
-        if len(content) > self.task_init_data.config.maxCreateFileContent:
-            raise ValueError(f'length of content({len(content)}) exceeds config.maxCreateFileContent.')
         fs_reply = self._main_stub.FsCreate(FsCreateRequest(parentDirId=fsId(userId=parent_dir_user_id,
                                                                              fileId=parent_dir_id),
                                                             name=name, is_file=is_file, content=content))
         return FsResultCode(fs_reply.resCode), fs_reply.fileId.userId, fs_reply.fileId.fileId
 
     def fs_write(self, user_id: str, file_id: int, content: BytesIO) -> FsResultCode:
-        if self.task_init_data.config.useFileDirect:
-            raise Exception('Not implemented.')
-
         def fs_write_request_generator():
             _last = False
             while not _last:
@@ -158,14 +149,10 @@ class ClientCloudPA:
         return FsResultCode(fs_reply.resCode)
 
     def fs_delete(self, user_id: str, file_id: int) -> FsResultCode:
-        if self.task_init_data.config.useFileDirect:
-            raise Exception('Not implemented.')
         fs_reply = self._main_stub.FsDelete(FsDeleteRequest(fileId=fsId(userId=user_id, fileId=file_id)))
         return FsResultCode(fs_reply.resCode)
 
     def fs_move(self, user_id: str, file_id: int, target_path: str, copy: bool = False) -> FsResultCode:
-        if self.task_init_data.config.useFileDirect:
-            raise Exception('Not implemented.')
         fs_reply = self._main_stub.FsMove(FsMoveRequest(fileId=fsId(userId=user_id, fileId=file_id),
                                                         targetPath=target_path, copy=copy))
         return FsResultCode(fs_reply.resCode)
