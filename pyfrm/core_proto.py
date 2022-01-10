@@ -1,5 +1,7 @@
 from typing import Union
 from threading import Event
+from io import BytesIO
+from os import SEEK_SET
 
 import grpc
 from core_pb2 import taskStatus, Empty, \
@@ -110,27 +112,50 @@ class ClientCloudPA:
             return None
         return self.__node_to_fs_obj_info(fs_reply.nodes[0])
 
-    def fs_read(self, user_id: str, file_id: int) -> [FsResultCode, bytes]:
+    def fs_read(self, user_id: str, file_id: int, out_obj: BytesIO, offset: int, bytes_to_read: int) -> FsResultCode:
         if self.task_init_data.config.useFileDirect:
             raise Exception('Not implemented.')
-        fs_reply = self._main_stub.FsRead(FsReadRequest(fileId=fsId(userId=user_id, fileId=file_id)))
-        return FsResultCode(fs_reply.resCode), fs_reply.content
+        fs_read_response_iterator = self._main_stub.FsRead(FsReadRequest(fileId=fsId(userId=user_id, fileId=file_id),
+                                                                         offset=offset, bytes_to_read=bytes_to_read))
+        res_code = FsResultCode.NO_ERROR.value
+        for fs_read_response in fs_read_response_iterator:
+            res_code = fs_read_response.resCode
+            if len(fs_read_response.content):
+                out_obj.write(fs_read_response.content)
+            if fs_read_response.last:
+                break
+        out_obj.seek(0, SEEK_SET)
+        return FsResultCode(res_code)
 
     def fs_create(self, parent_dir_user_id: str, parent_dir_id: int, name: str,
-                  is_file: bool, content: bytes = b'') -> FsResultCode:
-        if self.task_init_data.config.useFileDirect:
-            raise Exception('Not implemented.')
+                  is_file: bool, content: bytes = b'') -> [FsResultCode, int]:
+        if not parent_dir_user_id:
+            parent_dir_user_id = self.task_init_data.config.userId
         if not is_file and len(content) > 0:
             raise ValueError('Content can be specified only for files.')
+        if self.task_init_data.config.useFileDirect:
+            raise Exception('Not implemented.')
+        if len(content) > self.task_init_data.config.maxCreateFileContent:
+            raise ValueError(f'length of content({len(content)}) exceeds config.maxCreateFileContent.')
         fs_reply = self._main_stub.FsCreate(FsCreateRequest(parentDirId=fsId(userId=parent_dir_user_id,
                                                                              fileId=parent_dir_id),
                                                             name=name, is_file=is_file, content=content))
-        return FsResultCode(fs_reply.resCode)
+        create_file_id = fs_reply.fileId if fs_reply.resCode == FsResultCode.NO_ERROR.value else 0
+        return FsResultCode(fs_reply.resCode), create_file_id
 
-    def fs_write(self, user_id: str, file_id: int, content: bytes) -> FsResultCode:
+    def fs_write(self, user_id: str, file_id: int, content: BytesIO) -> FsResultCode:
         if self.task_init_data.config.useFileDirect:
             raise Exception('Not implemented.')
-        fs_reply = self._main_stub.FsWrite(FsWriteRequest(fileId=fsId(userId=user_id, fileId=file_id), content=content))
+
+        def fs_write_request_generator():
+            _last = False
+            while not _last:
+                data = content.read(self.task_init_data.config.maxChunkSize)
+                _last = True if len(data) < self.task_init_data.config.maxChunkSize else False
+                _request = FsWriteRequest(fileId=fsId(userId=user_id, fileId=file_id), last=_last, content=data)
+                yield _request
+
+        fs_reply = self._main_stub.FsWrite(fs_write_request_generator())
         return FsResultCode(fs_reply.resCode)
 
     def fs_delete(self, user_id: str, file_id: int) -> FsResultCode:

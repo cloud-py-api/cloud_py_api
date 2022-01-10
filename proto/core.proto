@@ -46,7 +46,7 @@ message TaskInitReply {
     bool useFileDirect = 5;               //Use extra direct FS module for python, when possible.
     bool useDBDirect = 6;                 //Use extra direct DB module for python, if possible.
     int32 maxChunkSize = 7;
-    int32 maxCreateFileContent= 8;
+    int32 maxCreateFileContent = 8;
   }
   cfgOptions config = 6;
 }

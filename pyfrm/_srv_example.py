@@ -7,7 +7,7 @@ from pathlib import Path
 
 import grpc
 from core_pb2 import taskStatus, logLvl, Empty, \
-    TaskInitReply, fsId, FsNodeInfo, FsListReply
+    TaskInitReply, fsId, FsNodeInfo, FsListReply, fsResultCode, FsReply, FsCreateReply, FsReadReply
 import core_pb2_grpc as core_pb2_grpc
 
 
@@ -33,13 +33,15 @@ class TaskParameters:
         self.user_id = user_id
         self.use_file_direct = use_file_direct
         self.use_db_direct = use_db_direct
+        self.maxChunkSize = 4
+        self.maxCreateFileContent = 16
 
 
 class ServerCloudPA(core_pb2_grpc.CloudPyApiCoreServicer, TaskParameters):
     connection_alive: bool = False
     task_status: taskStatus = taskStatus.ST_UNKNOWN
     task_error: str = ''
-    result: str
+    result: str = ''
     logs_storage: list = []
     _fs_emulation = {}
 
@@ -55,7 +57,10 @@ class ServerCloudPA(core_pb2_grpc.CloudPyApiCoreServicer, TaskParameters):
                                    frameworkAppData=self.frm_app_data,
                                    userId=self.user_id,
                                    useFileDirect=self.use_file_direct,
-                                   useDBDirect=self.use_db_direct))
+                                   useDBDirect=self.use_db_direct,
+                                   maxChunkSize=self.maxChunkSize,
+                                   maxCreateFileContent=self.maxCreateFileContent
+                               ))
         if self.args is not None:
             if isinstance(self.args, (list, tuple)):
                 for _each_arg in self.args:
@@ -96,6 +101,12 @@ class ServerCloudPA(core_pb2_grpc.CloudPyApiCoreServicer, TaskParameters):
         self._fs_emulation[_new_id] = obj_path
         return _new_id
 
+    def __fs_add_file_if_absent(self, obj_path) -> int:
+        _id = self.__fs_get_id_by_path(obj_path)
+        if _id:
+            return _id
+        return self.__fs_add_file(obj_path)
+
     def __fs_emulate_list_handler(self, obj_path, file_id):
         if self.__fs_get_path_by_id(file_id):
             return file_id
@@ -114,6 +125,13 @@ class ServerCloudPA(core_pb2_grpc.CloudPyApiCoreServicer, TaskParameters):
     def __fs_get_path_by_id(self, file_id) -> str:
         _path = self._fs_emulation.get(file_id, '')
         return _path
+
+    def __fs_get_id_by_path(self, path) -> int:
+        for key, value in self._fs_emulation:
+            if isinstance(value, str):
+                if value == path:
+                    return key
+        return 0
 
     def FsList(self, request, context):
         # This is not a real function, just stuff for development testing.
@@ -138,6 +156,83 @@ class ServerCloudPA(core_pb2_grpc.CloudPyApiCoreServicer, TaskParameters):
         if _path:
             return FsListReply(nodes=[self.__fs_entry_to_node(os.path.abspath(_path), request.fileId.fileId)])
         return FsListReply()
+
+    def FsRead(self, request, context):
+        # This is not a real function, just stuff for development testing.
+        print(f'Server: request for fs obj read: userId={request.fileId.userId}, fileId={request.fileId.fileId}, '
+              f'offset={request.offset}, bytes_to_read={request.bytes_to_read}')
+
+        def fs_read_reply_generator():
+            for i in range(5):
+                _content = bytes(str(i).encode())
+                _last = True if i == 4 else False
+                _reply = FsReadReply(resCode=fsResultCode.NO_ERROR, last=_last, content=_content)
+                yield _reply
+
+        # TODO: emulation
+        return fs_read_reply_generator()
+
+    def FsCreate(self, request, context):
+        # This is not a real function, just stuff for development testing.
+        print(f'Server: request for fs obj create: '
+              f'name={request.name}, is_file={request.is_file}, size={len(request.content)}')
+        if request.parentDirId.fileId == 0:
+            _path = os.path.abspath(self.data_folder)
+        else:
+            _path = self.__fs_get_path_by_id(request.fileId.fileId)
+        _path += '/' + request.name
+        try:
+            if request.is_file:
+                with open(_path, mode='wb') as fd:
+                    if len(request.content):
+                        fd.write(request.content)
+            else:
+                os.mkdir(_path)
+            file_id = self.__fs_add_file_if_absent(_path)
+            res_code = fsResultCode.NO_ERROR
+        except Exception as ex:
+            print(f'Server: Exception during CreateFile: {str(ex)}')
+            file_id = 0
+            res_code = fsResultCode.NOT_PERMITTED
+        return FsCreateReply(resCode=res_code, fileId=fsId(userId=request.parentDirId.userId, fileId=file_id))
+
+    def FsWrite(self, request_iterator, context):
+        # This is not a real function, just stuff for development testing.
+        _file = None
+        for request in request_iterator:
+            print(f'Server: process write request: last={request.last}, size={len(request.content)}')
+            if _file is not None:
+                print(f'Server: init request for fs obj write: '
+                      f'userId={request.fileId.userId}, fileId={request.fileId.fileId}')
+                _path = self.__fs_get_path_by_id(request.fileId.fileId)
+                if not _path:
+                    return FsReply(resCode=fsResultCode.NOT_FOUND)
+                if os.path.isdir(_path):
+                    return FsReply(resCode=fsResultCode.NOT_PERMITTED)
+                if not os.path.isfile(_path):
+                    return FsReply(resCode=fsResultCode.IO_ERROR)
+                _file = open(_path, mode='wb')
+            if len(request.content):
+                _file.write(request.content)
+            if request.last:
+                break
+        _file.close()
+        return FsReply(resCode=fsResultCode.NO_ERROR)
+
+    def FsDelete(self, request, context):
+        # This is not a real function, just stuff for development testing.
+        print(f'Server: request for fs obj delete: userId={request.fileId.userId}, fileId={request.fileId.fileId}')
+        if not request.fileId.fileId:
+            return FsReply(resCode=fsResultCode.NOT_PERMITTED)
+        _path = self.__fs_get_path_by_id(request.fileId.fileId)
+        if not _path:
+            return FsReply(resCode=fsResultCode.NOT_FOUND)
+        if os.path.isdir(_path):
+            os.rmdir(_path)
+        else:
+            os.remove(_path)
+        self._fs_emulation.pop(request.fileId.fileId)
+        return FsReply(resCode=fsResultCode.NO_ERROR)
 
 
 def srv_example(address, port, app_name, module_name, module_path, function_to_call, args=None):
@@ -188,7 +283,7 @@ def srv_example(address, port, app_name, module_name, module_path, function_to_c
 
 if __name__ == '__main__':
     status, error, result, logs = srv_example('unix:./../tmp/test.sock', '0', 'fs_example', 'fs_example',
-                                              '../tests/python/apps_example/fs_example', 'func_fs_list_info')
+                                              '../tests/python/apps_example/fs_example', 'func_fs_read_write')
     sys.exit(0)
 
 

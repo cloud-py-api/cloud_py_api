@@ -5,6 +5,10 @@ class FsObjId:
     user_id: str
     file_id: int
 
+    def __init__(self, user_id: str = '', file_id: int = 0):
+        self.user_id = user_id
+        self.file_id = file_id
+
 
 class FsObjInfo(FsObjId):
     is_dir: bool
