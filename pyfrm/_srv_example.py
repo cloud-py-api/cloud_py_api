@@ -12,7 +12,7 @@ import core_pb2_grpc as core_pb2_grpc
 
 
 MAX_CHUNK_SIZE = 4
-MAX_CREATE_FILE_CONTENT = 8
+MAX_CREATE_FILE_CONTENT = 50
 
 
 def run_python_script(python_script_path, *args):
@@ -178,11 +178,13 @@ class ServerCloudPA(core_pb2_grpc.CloudPyApiCoreServicer, TaskParameters):
             _last = False
             while not _last:
                 _data = _file.read(self.maxChunkSize)
-                if not _data:
+                if _data:
                     if len(_data) < self.maxChunkSize:
                         _last = True
-                    _reply = FsReadReply(resCode=fsResultCode.NO_ERROR, last=_last, content=_data)
-                    yield _reply
+                else:
+                    _last = True
+                _reply = FsReadReply(resCode=fsResultCode.NO_ERROR, last=_last, content=_data)
+                yield _reply
 
         return fs_read_reply_generator()
 
@@ -215,7 +217,7 @@ class ServerCloudPA(core_pb2_grpc.CloudPyApiCoreServicer, TaskParameters):
         _file = None
         for request in request_iterator:
             print(f'Server: process write request: last={request.last}, size={len(request.content)}')
-            if _file is not None:
+            if _file is None:
                 print(f'Server: init request for fs obj write: '
                       f'userId={request.fileId.userId}, fileId={request.fileId.fileId}')
                 _path = self.__fs_get_path_by_id(request.fileId.fileId)
@@ -297,7 +299,7 @@ def srv_example(address, port, app_name, module_name, module_path, function_to_c
 
 if __name__ == '__main__':
     status, error, result, logs = srv_example('unix:./../tmp/test.sock', '0', 'fs_example', 'fs_example',
-                                              '../tests/python/apps_example/fs_example', 'func_fs_create_delete')
+                                              '../tests/python/apps_example/fs_example', 'func_fs_read_write')
     sys.exit(0)
 
 

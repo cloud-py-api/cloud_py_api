@@ -68,17 +68,30 @@ def func_fs_create_delete():
 
 def func_fs_read_write():
     ca = nc_api.CloudApi()
-    ca.create_file('111.txt', False, content=b'123')
-    # ca.log(nc_api.LogLvl.DEBUG, 'fs_example', 'writing to file 1.txt')
-    # test_debug = nc_api.FsObjId(user_id='111', file_id=2)
-    # test_obj = BytesIO()
-    # ca.read_file(test_debug, test_obj)
-    # aaa = test_obj.read()
-    # return aaa.decode()
-    # ca = nc_api.CloudApi()
-    # ca.log(nc_api.LogLvl.DEBUG, 'fs_example', 'writing to file 1.txt')
-    # test_debug = nc_api.FsObjId(user_id='111', file_id=2)
-    # ca.write_file(test_debug, BytesIO(b'000012345678'))
+    test_content1 = b'This content will be rewritten by WriteFile'
+    res, new_id = ca.create_file('rw_test.txt', False, content=test_content1)
+    if res != nc_api.FsResultCode.NO_ERROR:
+        return 'BAD'
+    rw_test_content = BytesIO()
+    res = ca.read_file(new_id, rw_test_content)
+    if res != nc_api.FsResultCode.NO_ERROR:
+        return 'BAD'
+    if rw_test_content.read() != test_content1:
+        return 'BAD'
+    test_content2 = BytesIO(b'01234567890')
+    res = ca.write_file(new_id, test_content2)
+    if res != nc_api.FsResultCode.NO_ERROR:
+        return 'BAD'
+    rw_test_content.seek(0)
+    rw_test_content.truncate()
+    res = ca.read_file(new_id, rw_test_content)
+    if res != nc_api.FsResultCode.NO_ERROR:
+        return 'BAD'
+    test_content2.seek(0)
+    if test_content2.read() != rw_test_content.read():
+        return 'BAD'
+    ca.delete_file(fs_id=new_id)
+    return 'GOOD'
 
 
 def func_fs_move_copy():
@@ -89,5 +102,5 @@ def func_fs_invalid():
     pass
 
 
-def fs_full_test():
+def fs_complex_test():
     pass
