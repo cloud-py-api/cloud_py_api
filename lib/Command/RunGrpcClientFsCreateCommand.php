@@ -42,6 +42,8 @@ class RunGrpcClientFsCreateCommand extends Command {
 	public const ARGUMENT_PORT = 'port';
 	public const ARGUMENT_USER_ID = 'userid';
 	public const ARGUMENT_PARENT_DIR_ID = 'parentdirid';
+	public const ARGUMENT_IS_FILE = 'isfile';
+	public const ARGUMENT_NAME = 'name';
 	public const ARGUMENT_CONTENT = 'content';
 
 	/** @var ServerService */
@@ -60,11 +62,13 @@ class RunGrpcClientFsCreateCommand extends Command {
 		$this->addArgument(self::ARGUMENT_PORT, InputArgument::REQUIRED);
 		$this->addArgument(self::ARGUMENT_USER_ID, InputArgument::REQUIRED);
 		$this->addArgument(self::ARGUMENT_PARENT_DIR_ID, InputArgument::REQUIRED);
+		$this->addArgument(self::ARGUMENT_IS_FILE, InputArgument::REQUIRED);
+		$this->addArgument(self::ARGUMENT_NAME, InputArgument::REQUIRED);
 		$this->addArgument(self::ARGUMENT_CONTENT, InputArgument::OPTIONAL);
 	}
 
 	protected function execute(InputInterface $input, OutputInterface $output): int {
-		$this->serverService->testFsReadFile($input, $output);
+		$this->serverService->testFsCreateFile($input, $output);
 		return 0;
 	}
 

@@ -284,6 +284,8 @@ class FsService {
 		/** @var Folder */
 		$userFolder = $this->rootFolder->getUserFolder($userId);
 		$response = new FsCreateReply();
+		$fsId = new fsId();
+		$fsId->setUserId($userId);
 		if ($parentDirId !== null) {
 			$nodes = $userFolder->getById($parentDirId);
 			if (count($nodes) === 1 && isset($nodes[0]) && $nodes[0] instanceof Folder) {
@@ -292,10 +294,12 @@ class FsService {
 				try {
 					if ($request->getIsFile()) {
 						$newFile = $folder->newFile($request->getName(), $request->getContent());
-						$response->setFileId($newFile->getId());
+						$fsId->setFileId($newFile->getId());
+						$response->setFileId($fsId);
 					} else {
 						$newFolder = $folder->newFolder($request->getName());
-						$response->setFileId($newFolder->getId());
+						$fsId->setFileId($newFolder->getId());
+						$response->setFileId($fsId);
 					}
 					$response->setResCode(fsResultCode::NO_ERROR);
 				} catch (NotPermittedException $e) {
@@ -306,10 +310,12 @@ class FsService {
 			try {
 				if ($request->getIsFile()) {
 					$newFile = $userFolder->newFile($request->getName(), $request->getContent());
-					$response->setFileId($newFile->getId());
+					$fsId->setFileId($newFile->getId());
+					$response->setFileId($fsId);
 				} else {
 					$newFolder = $userFolder->newFolder($request->getName());
-					$response->setFileId($newFolder->getId());
+					$fsId->setFileId($newFolder->getId());
+					$response->setFileId($fsId);
 				}
 				$response->setResCode(fsResultCode::NO_ERROR);
 			} catch (NotPermittedException $e) {
@@ -338,7 +344,7 @@ class FsService {
 			$node = $nodes[0];
 			try {
 				$node->delete();
-				$response->setResCode(0);
+				$response->setResCode(fsResultCode::NO_ERROR);
 			} catch (NotPermittedException | InvalidPathException | NotFoundException $e) {
 				if ($e instanceof NotPermittedException) {
 					$response->setResCode(fsResultCode::NOT_PERMITTED);
@@ -369,16 +375,21 @@ class FsService {
 		if (count($nodes) === 1 && isset($nodes[0])) {
 			/** @var Node */
 			$node = $nodes[0];
-			try {
-				$node->move($request->getTargetPath());
+			if ($request->getCopy()) {
+				$node->copy($request->getTargetPath());
 				$response->setResCode(fsResultCode::NO_ERROR);
-			} catch (NotPermittedException | NotFoundException | LockedException $e) {
-				if ($e instanceof NotPermittedException) {
-					$response->setResCode(fsResultCode::NOT_PERMITTED);
-				} else if ($e instanceof NotFoundException) {
-					$response->setResCode(fsResultCode::NOT_FOUND);
-				} else if ($e instanceof LockedException) {
-					$response->setResCode(fsResultCode::LOCKED);
+			} else {
+				try {
+					$node->move($request->getTargetPath());
+					$response->setResCode(fsResultCode::NO_ERROR);
+				} catch (NotPermittedException | NotFoundException | LockedException $e) {
+					if ($e instanceof NotPermittedException) {
+						$response->setResCode(fsResultCode::NOT_PERMITTED);
+					} else if ($e instanceof NotFoundException) {
+						$response->setResCode(fsResultCode::NOT_FOUND);
+					} else if ($e instanceof LockedException) {
+						$response->setResCode(fsResultCode::LOCKED);
+					}
 				}
 			}
 		} else {

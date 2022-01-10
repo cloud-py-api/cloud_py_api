@@ -38,13 +38,18 @@ use Grpc\ClientStreamingCall;
 use Grpc\ServerStreamingCall;
 
 use OCA\Cloud_Py_API\Proto\CloudPyApiCoreClient;
+use OCA\Cloud_Py_API\Proto\FsCreateReply;
+use OCA\Cloud_Py_API\Proto\FsCreateRequest;
+use OCA\Cloud_Py_API\Proto\FsDeleteRequest;
 use OCA\Cloud_Py_API\Proto\FsGetInfoRequest;
 use OCA\Cloud_Py_API\Proto\FsNodeInfo;
 use OCA\Cloud_Py_API\Proto\fsId;
 use OCA\Cloud_Py_API\Proto\FsListReply;
 use OCA\Cloud_Py_API\Proto\FsListRequest;
+use OCA\Cloud_Py_API\Proto\FsMoveRequest;
 use OCA\Cloud_Py_API\Proto\FsReadReply;
 use OCA\Cloud_Py_API\Proto\FsReadRequest;
+use OCA\Cloud_Py_API\Proto\FsReply;
 use OCA\Cloud_Py_API\Proto\FsWriteRequest;
 use OCA\Cloud_Py_API\Proto\PBEmpty;
 use OCA\Cloud_Py_API\Proto\TaskInitReply;
@@ -199,15 +204,74 @@ class ServerService {
 	}
 
 	public function testFsCreateFile(InputInterface $input, OutputInterface $output) {
-		// TODO
+		$hostname = $input->getArgument('hostname');
+		$port = $input->getArgument('port');
+		$userId = $input->getArgument('userid');
+		$parentDirId = $input->getArgument('parentdirid');
+		$name = $input->getArgument('name');
+		$isFile = $input->getArgument('isfile');
+		$content = $input->getArgument('content');
+		$client = new CloudPyApiCoreClient($hostname . ':' . $port, [
+			'credentials' => \Grpc\ChannelCredentials::createInsecure()
+		]);
+		$request = new FsCreateRequest();
+		$fsId = new fsId();
+		$fsId->setFileId($parentDirId);
+		$fsId->setUserId($userId);
+		$request->setParentDirId($fsId);
+		$request->setIsFile(boolval($isFile));
+		$request->setName($name);
+		$request->setContent($content);
+		/** @var FsCreateReply $response */
+		list($response, $status) = $client->FsCreate($request)->wait();
+		$output->writeln('Response status: ' . json_encode($status));
+		if (isset($response)) {
+			$output->writeln('Response: ');
+			$output->writeln('Res code: ' . $response->getResCode());
+			$output->writeln('FileId: ' . $response->getFileId()->getFileId());
+		}
 	}
 
 	public function testFsDeleteFile(InputInterface $input, OutputInterface $output) {
-		// TODO
+		$hostname = $input->getArgument('hostname');
+		$port = $input->getArgument('port');
+		$userid = $input->getArgument('userid');
+		$fileid = $input->getArgument('fileid');
+		$client = new CloudPyApiCoreClient($hostname . ':' . $port, [
+			'credentials' => \Grpc\ChannelCredentials::createInsecure()
+		]);
+		$request = new FsDeleteRequest();
+		$fsId = new fsId();
+		$fsId->setUserId($userid);
+		$fsId->setFileId($fileid);
+		$request->setFileId($fsId);
+		/** @var FsReply $response */
+		list($response, $status) = $client->FsDelete($request)->wait();
+		$output->writeln('Response status: ' . json_encode($status));
+		$output->writeln('Res code: ' . $response->getResCode());
 	}
 
 	public function testFsMoveFile(InputInterface $input, OutputInterface $output) {
-		// TODO
+		$hostname = $input->getArgument('hostname');
+		$port = $input->getArgument('port');
+		$userid = $input->getArgument('userid');
+		$fileid = $input->getArgument('fileid');
+		$targetPath = $input->getArgument('targetpath');
+		$copy = $input->getArgument('copy');
+		$client = new CloudPyApiCoreClient($hostname . ':' . $port, [
+			'credentials' => \Grpc\ChannelCredentials::createInsecure()
+		]);
+		$request = new FsMoveRequest();
+		$fsId = new fsId();
+		$fsId->setUserId($userid);
+		$fsId->setFileId($fileid);
+		$request->setFileId($fsId);
+		$request->setTargetPath($targetPath);
+		$request->setCopy(boolval($copy));
+		/** @var FsReply $response */
+		list($response, $status) = $client->FsMove($request)->wait();
+		$output->writeln('Response status: ' . json_encode($status));
+		$output->writeln('Res code: ' . $response->getResCode());
 	}
 
 	public function testTaskInit(InputInterface $input, OutputInterface $output) {

@@ -43,6 +43,7 @@ class RunGrpcClientFsMoveCommand extends Command {
 	public const ARGUMENT_USER_ID = 'userid';
 	public const ARGUMENT_FILE_ID = 'fileid';
 	public const ARGUMENT_TARGET_PATH = 'targetpath';
+	public const ARGUMENT_COPY = 'copy';
 
 	/** @var ServerService */
 	private $serverService;
@@ -61,6 +62,7 @@ class RunGrpcClientFsMoveCommand extends Command {
 		$this->addArgument(self::ARGUMENT_USER_ID, InputArgument::REQUIRED);
 		$this->addArgument(self::ARGUMENT_FILE_ID, InputArgument::REQUIRED);
 		$this->addArgument(self::ARGUMENT_TARGET_PATH, InputArgument::REQUIRED);
+		$this->addArgument(self::ARGUMENT_COPY, InputArgument::REQUIRED);
 	}
 
 	protected function execute(InputInterface $input, OutputInterface $output): int {
