@@ -111,13 +111,13 @@ class CloudPyApiCoreStub {
     /**
      * @param \OCA\Cloud_Py_API\Proto\FsCreateRequest $request client request
      * @param \Grpc\ServerContext $context server request context
-     * @return \OCA\Cloud_Py_API\Proto\FsReply for response data, null if if error occured
+     * @return \OCA\Cloud_Py_API\Proto\FsCreateReply for response data, null if if error occured
      *     initial metadata (if any) and status (if not ok) should be set to $context
      */
     public function FsCreate(
         \OCA\Cloud_Py_API\Proto\FsCreateRequest $request,
         \Grpc\ServerContext $context
-    ): ?\OCA\Cloud_Py_API\Proto\FsReply {
+    ): ?\OCA\Cloud_Py_API\Proto\FsCreateReply {
         $context->setStatus(\Grpc\Status::unimplemented());
         return null;
     }

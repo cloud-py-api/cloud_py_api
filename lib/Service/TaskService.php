@@ -39,8 +39,8 @@ use OCA\Cloud_Py_API\Proto\TaskSetStatusRequest;
 
 use OCA\Cloud_Py_API\AppInfo\Application;
 use OCA\Cloud_Py_API\Proto\logLvl;
-use OCP\Files\SimpleFS\ISimpleFolder;
 use Psr\Log\LoggerInterface;
+
 
 class TaskService {
 
@@ -52,6 +52,9 @@ class TaskService {
 
 	/** @var AppsService */
 	private $appsService;
+
+	/** @var LoggerInterface */
+	private $logger;
 
 	public function __construct(?string $userId, IConfig $config, AppsService $appsService,
 								LoggerInterface $logger) {
@@ -98,6 +101,7 @@ class TaskService {
 	 * @return PBEmpty|null
 	 */
 	public function status(TaskSetStatusRequest $request): ?PBEmpty {
+		ServerService::$APP['status'] = $request->getStCode();
 		return new PBEmpty(null);
 	}
 
@@ -109,6 +113,7 @@ class TaskService {
 	 * @return PBEmpty|null
 	 */
 	public function exit(TaskExitRequest $request): ?PBEmpty {
+		// TODO
 		return new PBEmpty(null);
 	}
 
@@ -120,6 +125,22 @@ class TaskService {
 	 * @return PBEmpty|null
 	 */
 	public function log(TaskLogRequest $request): ?PBEmpty {
+		$logLvl = $request->getLogLvl();
+		if ($logLvl === logLvl::DEBUG) {
+			$this->logger->debug('[' . $request->getModule() . '] ' . $request->getContent());
+		}
+		if ($logLvl === logLvl::INFO) {
+			$this->logger->info('[' . $request->getModule() . '] ' . $request->getContent());
+		}
+		if ($logLvl === logLvl::WARN) {
+			$this->logger->warning('[' . $request->getModule() . '] ' . $request->getContent());
+		}
+		if ($logLvl === logLvl::ERROR) {
+			$this->logger->error('[' . $request->getModule() . '] ' . $request->getContent());
+		}
+		if ($logLvl === logLvl::FATAL) {
+			$this->logger->emergency('[' . $request->getModule() . '] ' . $request->getContent());
+		}
 		return new PBEmpty(null);
 	}
 

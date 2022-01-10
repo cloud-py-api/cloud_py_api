@@ -9,7 +9,7 @@ use Google\Protobuf\Internal\RepeatedField;
 use Google\Protobuf\Internal\GPBUtil;
 
 /**
- *Reply for this is a FsReply message.
+ *Reply for this is a FsCreateReply message.
  *
  * Generated from protobuf message <code>OCA.Cloud_Py_API.Proto.FsCreateRequest</code>
  */

@@ -144,8 +144,8 @@ class CloudPyApiCoreService extends CloudPyApiCoreStub {
 		\Grpc\ServerCallWriter $writer,
 		\Grpc\ServerContext $context
 	): void {
-		$context->setStatus(\Grpc\Status::unimplemented());
-		$writer->finish();
+		$context->setStatus(\Grpc\Status::ok());
+		$this->fs->read($request, $writer);
 	}
 
 	/**
@@ -157,8 +157,8 @@ class CloudPyApiCoreService extends CloudPyApiCoreStub {
 	public function FsCreate(
 		\OCA\Cloud_Py_API\Proto\FsCreateRequest $request,
 		\Grpc\ServerContext $context
-	): ?\OCA\Cloud_Py_API\Proto\FsReply {
-		$context->setStatus(\Grpc\Status::unimplemented());
+	): ?\OCA\Cloud_Py_API\Proto\FsCreateReply {
+		$context->setStatus(\Grpc\Status::ok());
 		return $this->fs->create($request);
 	}
 
@@ -172,8 +172,8 @@ class CloudPyApiCoreService extends CloudPyApiCoreStub {
 		\Grpc\ServerCallReader $reader,
 		\Grpc\ServerContext $context
 	): ?\OCA\Cloud_Py_API\Proto\FsReply {
-		$context->setStatus(\Grpc\Status::unimplemented());
-		return null;
+		$context->setStatus(\Grpc\Status::ok());
+		return $this->fs->write($reader);
 	}
 
 	/**
@@ -186,8 +186,8 @@ class CloudPyApiCoreService extends CloudPyApiCoreStub {
 		\OCA\Cloud_Py_API\Proto\FsDeleteRequest $request,
 		\Grpc\ServerContext $context
 	): ?\OCA\Cloud_Py_API\Proto\FsReply {
-		$context->setStatus(\Grpc\Status::unimplemented());
-		return null;
+		$context->setStatus(\Grpc\Status::ok());
+		return $this->fs->delete($request);
 	}
 
 	/**
@@ -200,8 +200,8 @@ class CloudPyApiCoreService extends CloudPyApiCoreStub {
 		\OCA\Cloud_Py_API\Proto\FsMoveRequest $request,
 		\Grpc\ServerContext $context
 	): ?\OCA\Cloud_Py_API\Proto\FsReply {
-		$context->setStatus(\Grpc\Status::unimplemented());
-		return null;
+		$context->setStatus(\Grpc\Status::ok());
+		return $this->fs->move($request);
 	}
 
 	/**

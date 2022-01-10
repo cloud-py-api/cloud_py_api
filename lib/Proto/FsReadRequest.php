@@ -17,6 +17,14 @@ class FsReadRequest extends \Google\Protobuf\Internal\Message
      * Generated from protobuf field <code>.OCA.Cloud_Py_API.Proto.fsId fileId = 1;</code>
      */
     protected $fileId = null;
+    /**
+     * Generated from protobuf field <code>int64 offset = 2;</code>
+     */
+    protected $offset = 0;
+    /**
+     * Generated from protobuf field <code>int64 bytes_to_read = 3;</code>
+     */
+    protected $bytes_to_read = 0;
 
     /**
      * Constructor.
@@ -25,6 +33,8 @@ class FsReadRequest extends \Google\Protobuf\Internal\Message
      *     Optional. Data for populating the Message object.
      *
      *     @type \OCA\Cloud_Py_API\Proto\fsId $fileId
+     *     @type int|string $offset
+     *     @type int|string $bytes_to_read
      * }
      */
     public function __construct($data = NULL) {
@@ -60,6 +70,50 @@ class FsReadRequest extends \Google\Protobuf\Internal\Message
     {
         GPBUtil::checkMessage($var, \OCA\Cloud_Py_API\Proto\fsId::class);
         $this->fileId = $var;
+
+        return $this;
+    }
+
+    /**
+     * Generated from protobuf field <code>int64 offset = 2;</code>
+     * @return int|string
+     */
+    public function getOffset()
+    {
+        return $this->offset;
+    }
+
+    /**
+     * Generated from protobuf field <code>int64 offset = 2;</code>
+     * @param int|string $var
+     * @return $this
+     */
+    public function setOffset($var)
+    {
+        GPBUtil::checkInt64($var);
+        $this->offset = $var;
+
+        return $this;
+    }
+
+    /**
+     * Generated from protobuf field <code>int64 bytes_to_read = 3;</code>
+     * @return int|string
+     */
+    public function getBytesToRead()
+    {
+        return $this->bytes_to_read;
+    }
+
+    /**
+     * Generated from protobuf field <code>int64 bytes_to_read = 3;</code>
+     * @param int|string $var
+     * @return $this
+     */
+    public function setBytesToRead($var)
+    {
+        GPBUtil::checkInt64($var);
+        $this->bytes_to_read = $var;
 
         return $this;
     }
