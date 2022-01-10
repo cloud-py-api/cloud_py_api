@@ -128,7 +128,7 @@ class ClientCloudPA:
         return FsResultCode(res_code)
 
     def fs_create(self, parent_dir_user_id: str, parent_dir_id: int, name: str,
-                  is_file: bool, content: bytes = b'') -> [FsResultCode, int]:
+                  is_file: bool, content: bytes = b'') -> [FsResultCode, str, int]:
         if not parent_dir_user_id:
             parent_dir_user_id = self.task_init_data.config.userId
         if not is_file and len(content) > 0:
@@ -140,8 +140,7 @@ class ClientCloudPA:
         fs_reply = self._main_stub.FsCreate(FsCreateRequest(parentDirId=fsId(userId=parent_dir_user_id,
                                                                              fileId=parent_dir_id),
                                                             name=name, is_file=is_file, content=content))
-        create_file_id = fs_reply.fileId if fs_reply.resCode == FsResultCode.NO_ERROR.value else 0
-        return FsResultCode(fs_reply.resCode), create_file_id
+        return FsResultCode(fs_reply.resCode), fs_reply.fileId.userId, fs_reply.fileId.fileId
 
     def fs_write(self, user_id: str, file_id: int, content: BytesIO) -> FsResultCode:
         if self.task_init_data.config.useFileDirect:

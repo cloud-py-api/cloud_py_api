@@ -46,10 +46,12 @@ class CloudApi:
         return _ncc.fs_read(fs_id.user_id, fs_id.file_id, output_obj, offset, bytes_to_read)
 
     @staticmethod
-    def create_file(name: str, is_dir: bool = False, parent_dir: FsObjId = None, content: bytes = b'') -> FsResultCode:
-        return _ncc.fs_create(parent_dir.user_id if parent_dir is not None else '',
-                              parent_dir.file_id if parent_dir is not None else 0,
-                              name, not is_dir, content)
+    def create_file(name: str, is_dir: bool = False, parent_dir: FsObjId = None,
+                    content: bytes = b'') -> [FsResultCode, FsObjId]:
+        _result, _user_id, _file_id = _ncc.fs_create(parent_dir.user_id if parent_dir is not None else '',
+                                                     parent_dir.file_id if parent_dir is not None else 0,
+                                                     name, not is_dir, content)
+        return _result, FsObjId(user_id=_user_id, file_id=_file_id)
 
     @staticmethod
     def write_file(fs_id: FsObjId, content: BytesIO) -> FsResultCode:

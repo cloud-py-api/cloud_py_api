@@ -35,17 +35,35 @@ def func_fs_list_info():
 def func_fs_create_delete():
     ca = nc_api.CloudApi()
     ca.log(nc_api.LogLvl.DEBUG, 'fs_example', 'creating dir at root...')
-    if ca.create_file('TEST_CREATING_DIR', is_dir=True) != nc_api.FsResultCode.NO_ERROR:
+    res, new_id = ca.create_file('TEST_CREATING_DIR', is_dir=True)
+    if res != nc_api.FsResultCode.NO_ERROR:
         return 'BAD'
     ca.log(nc_api.LogLvl.DEBUG, 'fs_example', 'creating sub dir...')
+    res, new_id2 = ca.create_file('TEST_CREATING_SUBDIR', is_dir=True, parent_dir=new_id)
+    if res != nc_api.FsResultCode.NO_ERROR:
+        return 'BAD'
     ca.log(nc_api.LogLvl.DEBUG, 'fs_example', 'creating file at root...')
-    if ca.create_file('TEST_CREATING_FILE.txt', is_dir=False) != nc_api.FsResultCode.NO_ERROR:
+    res, new_id3 = ca.create_file('TEST_CREATING_NO_CONTENT.txt', is_dir=False)
+    if res != nc_api.FsResultCode.NO_ERROR:
         return 'BAD'
     ca.log(nc_api.LogLvl.DEBUG, 'fs_example', 'creating file at subdir...')
+    res, new_id4 = ca.create_file('TEST_CREATING_FILE_CONTENT.txt', is_dir=False, content=b'Hello world!',
+                                  parent_dir=new_id2)
+    if res != nc_api.FsResultCode.NO_ERROR:
+        return 'BAD'
     ca.log(nc_api.LogLvl.DEBUG, 'fs_example', 'deleting file at subdir...')
+    if ca.delete_file(fs_id=new_id4) != nc_api.FsResultCode.NO_ERROR:
+        return 'BAD'
     ca.log(nc_api.LogLvl.DEBUG, 'fs_example', 'deleting sub dir...')
+    if ca.delete_file(fs_id=new_id2) != nc_api.FsResultCode.NO_ERROR:
+        return 'BAD'
     ca.log(nc_api.LogLvl.DEBUG, 'fs_example', 'deleting file at root...')
+    if ca.delete_file(fs_id=new_id3) != nc_api.FsResultCode.NO_ERROR:
+        return 'BAD'
     ca.log(nc_api.LogLvl.DEBUG, 'fs_example', 'deleting dir at root...')
+    if ca.delete_file(fs_id=new_id) != nc_api.FsResultCode.NO_ERROR:
+        return 'BAD'
+    return 'GOOD'
 
 
 def func_fs_read_write():

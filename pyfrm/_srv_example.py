@@ -11,6 +11,10 @@ from core_pb2 import taskStatus, logLvl, Empty, \
 import core_pb2_grpc as core_pb2_grpc
 
 
+MAX_CHUNK_SIZE = 4
+MAX_CREATE_FILE_CONTENT = 8
+
+
 def run_python_script(python_script_path, *args):
     fd = os.open('./../tmp/errors.log', os.O_WRONLY + os.O_CREAT + os.O_TRUNC)
     process = Popen([sys.executable, python_script_path, *args],
@@ -33,8 +37,8 @@ class TaskParameters:
         self.user_id = user_id
         self.use_file_direct = use_file_direct
         self.use_db_direct = use_db_direct
-        self.maxChunkSize = 4
-        self.maxCreateFileContent = 16
+        self.maxChunkSize = MAX_CHUNK_SIZE
+        self.maxCreateFileContent = MAX_CREATE_FILE_CONTENT
 
 
 class ServerCloudPA(core_pb2_grpc.CloudPyApiCoreServicer, TaskParameters):
@@ -127,7 +131,7 @@ class ServerCloudPA(core_pb2_grpc.CloudPyApiCoreServicer, TaskParameters):
         return _path
 
     def __fs_get_id_by_path(self, path) -> int:
-        for key, value in self._fs_emulation:
+        for key, value in self._fs_emulation.items():
             if isinstance(value, str):
                 if value == path:
                     return key
@@ -161,15 +165,25 @@ class ServerCloudPA(core_pb2_grpc.CloudPyApiCoreServicer, TaskParameters):
         # This is not a real function, just stuff for development testing.
         print(f'Server: request for fs obj read: userId={request.fileId.userId}, fileId={request.fileId.fileId}, '
               f'offset={request.offset}, bytes_to_read={request.bytes_to_read}')
+        _path = self.__fs_get_path_by_id(request.fileId.fileId)
+        if not _path:
+            return FsReadReply(resCode=fsResultCode.NOT_FOUND, last=True)
+        if os.path.isdir(_path):
+            return FsReadReply(resCode=fsResultCode.NOT_PERMITTED, last=True)
+        if not os.path.isfile(_path):
+            return FsReadReply(resCode=fsResultCode.IO_ERROR, last=True)
+        _file = open(_path, mode='rb')
 
         def fs_read_reply_generator():
-            for i in range(5):
-                _content = bytes(str(i).encode())
-                _last = True if i == 4 else False
-                _reply = FsReadReply(resCode=fsResultCode.NO_ERROR, last=_last, content=_content)
-                yield _reply
+            _last = False
+            while not _last:
+                _data = _file.read(self.maxChunkSize)
+                if not _data:
+                    if len(_data) < self.maxChunkSize:
+                        _last = True
+                    _reply = FsReadReply(resCode=fsResultCode.NO_ERROR, last=_last, content=_data)
+                    yield _reply
 
-        # TODO: emulation
         return fs_read_reply_generator()
 
     def FsCreate(self, request, context):
@@ -179,7 +193,7 @@ class ServerCloudPA(core_pb2_grpc.CloudPyApiCoreServicer, TaskParameters):
         if request.parentDirId.fileId == 0:
             _path = os.path.abspath(self.data_folder)
         else:
-            _path = self.__fs_get_path_by_id(request.fileId.fileId)
+            _path = self.__fs_get_path_by_id(request.parentDirId.fileId)
         _path += '/' + request.name
         try:
             if request.is_file:
@@ -283,7 +297,7 @@ def srv_example(address, port, app_name, module_name, module_path, function_to_c
 
 if __name__ == '__main__':
     status, error, result, logs = srv_example('unix:./../tmp/test.sock', '0', 'fs_example', 'fs_example',
-                                              '../tests/python/apps_example/fs_example', 'func_fs_read_write')
+                                              '../tests/python/apps_example/fs_example', 'func_fs_create_delete')
     sys.exit(0)
 
 
