@@ -73,7 +73,15 @@ class CloudApi:
         return _ncc.fs_write(fs_id.user_id, fs_id.file_id, content)
 
     @staticmethod
-    def delete_file(fs_id: FsObjId = None) -> FsResultCode:
+    def delete_file(fs_id: FsObjId) -> FsResultCode:
         if fs_id is None:
             raise ValueError('FsObjId must be specified.')
         return _ncc.fs_delete(fs_id.user_id, fs_id.file_id)
+
+    @staticmethod
+    def move_file(fs_id: FsObjId, target_path: str, copy: bool = False) -> FsResultCode:
+        if fs_id is None:
+            raise ValueError('FsObjId must be specified.')
+        if target_path:
+            raise ValueError('target_path must be specified.')
+        return _ncc.fs_move(fs_id.user_id, fs_id.file_id, target_path, copy)

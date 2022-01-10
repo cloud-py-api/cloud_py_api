@@ -95,12 +95,15 @@ def func_fs_read_write():
 
 
 def func_fs_move_copy():
+    # This function will fail without cloud_py_api installed in NC instance(_srv_example doesnt emulate this)
     pass
 
 
 def func_fs_invalid():
+    # This function will fail without cloud_py_api installed in NC instance(_srv_example doesnt emulate this)
     pass
 
 
 def fs_complex_test():
+    # This function will fail without cloud_py_api installed in NC instance(_srv_example doesnt emulate this)
     pass
