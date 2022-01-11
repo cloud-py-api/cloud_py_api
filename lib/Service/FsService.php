@@ -85,10 +85,10 @@ class FsService {
 		$nodes = $userFolder->getById($fileId);
 		$response = new FsListReply();
 		$responseNodes = array();
-		if (count($nodes) === 1 && isset($nodes[0]) && $nodes[0] instanceof File) {
-			/** @var File $file */
-			$file = $nodes[0];
-			$fsNodeInfo = $this->getFsNodeInfo($file);
+		if (count($nodes) === 1 && isset($nodes[0])) {
+			/** @var Node $node */
+			$node = $nodes[0];
+			$fsNodeInfo = $this->getFsNodeInfo($node);
 			array_push($responseNodes, $fsNodeInfo);
 		}
 		$response->setNodes($responseNodes);

@@ -52,6 +52,7 @@ use OCA\Cloud_Py_API\Proto\FsReadRequest;
 use OCA\Cloud_Py_API\Proto\FsReply;
 use OCA\Cloud_Py_API\Proto\FsWriteRequest;
 use OCA\Cloud_Py_API\Proto\PBEmpty;
+use OCA\Cloud_Py_API\Proto\TaskExitRequest;
 use OCA\Cloud_Py_API\Proto\TaskInitReply;
 use OCA\Cloud_Py_API\Proto\TaskInitReply\cfgOptions;
 
@@ -166,6 +167,7 @@ class ServerService {
 			$output->writeln('Last: ' . json_encode(boolval($response->getLast())));
 			$output->writeln('Content: ' . $response->getContent());
 		}
+		$client->close();
 	}
 
 	public function testFsWriteFile(InputInterface $input, OutputInterface $output) {
@@ -300,11 +302,21 @@ class ServerService {
 		$output->writeln('Config: ');
 		/** @var cfgOptions */
 		$cfg = $response->getConfig();
+		$output->writeln('userId: ' . $cfg->getUserId());
 		$output->writeln('logLvl: ' . $cfg->getLogLvl());
 		$output->writeln('datafolder: ' . $cfg->getDataFolder());
 		$output->writeln('frameworkAppData: ' . $cfg->getFrameworkAppData());
 		$output->writeln('useFileDirect: ' . json_encode($cfg->getUseFileDirect()));
 		$output->writeln('useDBDirect: ' . json_encode($cfg->getUseDBDirect()));
+	}
+
+	public function testTaskExit(InputInterface $input, OutputInterface $output) {
+		$hostname = $input->getArgument('hostname');
+		$port = $input->getArgument('port');
+		$client = new CloudPyApiCoreClient($hostname . ':' . $port, [
+			'credentials' => \Grpc\ChannelCredentials::createInsecure()
+		]);
+		$client->TaskExit(new TaskExitRequest());
 	}
 
 }

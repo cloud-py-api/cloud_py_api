@@ -171,7 +171,7 @@ class AppsService {
 			$appDataFolderName = $this->appData->getFolder($appId)->getName();
 			$ncInstanceId = $this->config->getSystemValue('instanceid');
 			$ncDataFolder = $this->config->getSystemValue('datadirectory');
-			$appDataFolder = $ncDataFolder . '/appdata_' . $ncInstanceId . '/' . Application::APP_ID . '/' . $appId;
+			$appDataFolder = $ncDataFolder . '/appdata_' . $ncInstanceId . '/' . Application::APP_ID;
 			if (file_exists($appDataFolder) && $appDataFolderName === $appId) {
 				return $appDataFolder;
 			} else {

@@ -44,9 +44,6 @@ use Psr\Log\LoggerInterface;
 
 class TaskService {
 
-	/** @var string */
-	private $userId;
-
 	/** @var IConfig */
 	private $config;
 
@@ -56,9 +53,7 @@ class TaskService {
 	/** @var LoggerInterface */
 	private $logger;
 
-	public function __construct(?string $userId, IConfig $config, AppsService $appsService,
-								LoggerInterface $logger) {
-		$this->userId = $userId;
+	public function __construct(IConfig $config, AppsService $appsService, LoggerInterface $logger) {
 		$this->config = $config;
 		$this->appsService = $appsService;
 		$this->logger = $logger;
@@ -93,7 +88,9 @@ class TaskService {
 			$cfg->setLogLvl(logLvl::value(logLvl::name($this->config->getSystemValue('loglevel'))));
 			$cfg->setDataFolder($this->config->getSystemValue('datadirectory'));
 			$cfg->setFrameworkAppData($this->appsService->getAppDataFolderAbsPath(Application::APP_ID));
-			$cfg->setUserId($this->userId);
+			if (isset(ServerService::$APP['userid'])) {
+				$cfg->setUserId(ServerService::$APP['userid']);
+			}
 			$cfg->setUseDBDirect(false);
 			$cfg->setUseFileDirect(false);
 			$taskInitReply->setConfig($cfg);
@@ -121,8 +118,8 @@ class TaskService {
 	 * @return PBEmpty|null
 	 */
 	public function exit(TaskExitRequest $request): ?PBEmpty {
-		// TODO Shutdown server by PID
 		// TODO Return result to request initiator (exec_user_func in RequestsManager)
+		exit(0); // Temporal workaround, because of bad GRPC implementation for PHP
 		return new PBEmpty(null);
 	}
 
@@ -135,20 +132,24 @@ class TaskService {
 	 */
 	public function log(TaskLogRequest $request): ?PBEmpty {
 		$logLvl = $request->getLogLvl();
+		$msg = '';
+		foreach ($request->getContent() as $row) {
+			$msg .= $row . '\n';
+		}
 		if ($logLvl === logLvl::DEBUG) {
-			$this->logger->debug('[' . $request->getModule() . '] ' . $request->getContent());
+			$this->logger->debug('[' . $request->getModule() . '] ' . $msg);
 		}
 		if ($logLvl === logLvl::INFO) {
-			$this->logger->info('[' . $request->getModule() . '] ' . $request->getContent());
+			$this->logger->info('[' . $request->getModule() . '] ' . $msg);
 		}
 		if ($logLvl === logLvl::WARN) {
-			$this->logger->warning('[' . $request->getModule() . '] ' . $request->getContent());
+			$this->logger->warning('[' . $request->getModule() . '] ' . $msg);
 		}
 		if ($logLvl === logLvl::ERROR) {
-			$this->logger->error('[' . $request->getModule() . '] ' . $request->getContent());
+			$this->logger->error('[' . $request->getModule() . '] ' . $msg);
 		}
 		if ($logLvl === logLvl::FATAL) {
-			$this->logger->emergency('[' . $request->getModule() . '] ' . $request->getContent());
+			$this->logger->emergency('[' . $request->getModule() . '] ' . $msg);
 		}
 		return new PBEmpty(null);
 	}

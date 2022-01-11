@@ -41,6 +41,7 @@ class RunGrpcServerCommand extends Command {
 	public const ARGUMENT_HOSTNAME = 'hostname';
 	public const ARGUMENT_PORT = 'port';
 
+	public const ARGUMENT_USERID = 'userid';
 	public const ARGUMENT_APPNAME = 'appname';
 	public const ARGUMENT_MODNAME = 'modname';
 	public const ARGUMENT_MODPATH = 'modpath';
@@ -61,6 +62,7 @@ class RunGrpcServerCommand extends Command {
 		$this->setDescription("Run GRPC server in background");
 		$this->addArgument(self::ARGUMENT_HOSTNAME, InputArgument::REQUIRED);
 		$this->addArgument(self::ARGUMENT_PORT, InputArgument::REQUIRED);
+		$this->addArgument(self::ARGUMENT_USERID, InputArgument::REQUIRED);
 		$this->addArgument(self::ARGUMENT_APPNAME, InputArgument::REQUIRED);
 		$this->addArgument(self::ARGUMENT_MODNAME, InputArgument::REQUIRED);
 		$this->addArgument(self::ARGUMENT_MODPATH, InputArgument::REQUIRED);
@@ -71,6 +73,7 @@ class RunGrpcServerCommand extends Command {
 	protected function execute(InputInterface $input, OutputInterface $output): int {
 		$hostname = $input->getArgument(self::ARGUMENT_HOSTNAME);
 		$port = $input->getArgument(self::ARGUMENT_PORT);
+		$userid = $input->getArgument(self::ARGUMENT_USERID);
 		$appname = $input->getArgument(self::ARGUMENT_APPNAME);
 		$modname = $input->getArgument(self::ARGUMENT_MODNAME);
 		$modpath = $input->getArgument(self::ARGUMENT_MODPATH);
@@ -79,7 +82,7 @@ class RunGrpcServerCommand extends Command {
 
 		$pathToOcc = getcwd() . '/occ';
 		$cloudPyApiCommand = 'cloud_py_api:grpc:server:bg:run ' . $hostname . ' ' . $port
-			. $appname . ' ' . $modname . ' ' . $modpath . ' ' . $funcname;
+			. $userid . ' ' . $appname . ' ' . $modname . ' ' . $modpath . ' ' . $funcname;
 		if ($args !== null) {
 			$cloudPyApiCommand += array_reduce(json_decode($args), function ($carry, $argument) {
 				return $carry += ' ' . $argument;
