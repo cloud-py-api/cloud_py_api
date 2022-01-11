@@ -82,14 +82,22 @@ def func_fs_read_write():
     res = ca.write_file(new_id, test_content2)
     if res != nc_api.FsResultCode.NO_ERROR:
         return 'BAD'
-    rw_test_content.seek(0)
-    rw_test_content.truncate()
-    res = ca.read_file(new_id, rw_test_content)
-    if res != nc_api.FsResultCode.NO_ERROR:
+
+    def read_file_test(offset, size) -> bool:
+        rw_test_content.seek(0)
+        rw_test_content.truncate()
+        if ca.read_file(new_id, rw_test_content, offset=offset, bytes_to_read=size) != nc_api.FsResultCode.NO_ERROR:
+            return False
+        test_content2.seek(offset)
+        if test_content2.read(size) != rw_test_content.read(size):
+            return False
+        return True
+
+    if not read_file_test(0, 0):
         return 'BAD'
-    test_content2.seek(0)
-    if test_content2.read() != rw_test_content.read():
-        return 'BAD'
+    for i in range(test_content2.getbuffer().nbytes):
+        if not read_file_test(i, test_content2.getbuffer().nbytes - i):
+            return 'BAD'
     ca.delete_file(fs_id=new_id)
     return 'GOOD'
 

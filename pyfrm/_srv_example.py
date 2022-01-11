@@ -172,19 +172,27 @@ class ServerCloudPA(core_pb2_grpc.CloudPyApiCoreServicer, TaskParameters):
             return FsReadReply(resCode=fsResultCode.NOT_PERMITTED, last=True)
         if not os.path.isfile(_path):
             return FsReadReply(resCode=fsResultCode.IO_ERROR, last=True)
-        _file = open(_path, mode='rb')
+        target_file = open(_path, mode='rb')
+        if request.offset:
+            target_file.seek(request.offset)
+        if request.bytes_to_read:
+            end_offset = request.offset + request.bytes_to_read
+        else:
+            end_offset = os.fstat(target_file.fileno()).st_size
 
         def fs_read_reply_generator():
             _last = False
             while not _last:
-                _data = _file.read(self.maxChunkSize)
-                if _data:
-                    if len(_data) < self.maxChunkSize:
-                        _last = True
-                else:
+                _nbytes_left = end_offset - target_file.tell()
+                _nread_now = self.maxChunkSize if _nbytes_left > self.maxChunkSize else _nbytes_left
+                _data = target_file.read(_nread_now)
+                if not _data:
+                    _last = True
+                elif _nbytes_left <= self.maxChunkSize:
                     _last = True
                 _reply = FsReadReply(resCode=fsResultCode.NO_ERROR, last=_last, content=_data)
                 yield _reply
+            target_file.close()
 
         return fs_read_reply_generator()
 
