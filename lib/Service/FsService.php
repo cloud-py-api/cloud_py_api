@@ -60,7 +60,7 @@ use OCA\Cloud_Py_API\Proto\FsWriteRequest;
 
 class FsService {
 
-	public const CHUNK_SIZE = 5; // 4KB default chunk size
+	public const CHUNK_SIZE = 4096; // 4KB default chunk size
 
 	/** @var IRootFolder */
 	private $rootFolder;
