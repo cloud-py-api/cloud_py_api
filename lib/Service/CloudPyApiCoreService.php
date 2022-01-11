@@ -199,7 +199,7 @@ class CloudPyApiCoreService extends CloudPyApiCoreStub {
 	public function FsMove(
 		\OCA\Cloud_Py_API\Proto\FsMoveRequest $request,
 		\Grpc\ServerContext $context
-	): ?\OCA\Cloud_Py_API\Proto\FsReply {
+	): ?\OCA\Cloud_Py_API\Proto\FsMoveReply {
 		$context->setStatus(\Grpc\Status::ok());
 		return $this->fs->move($request);
 	}

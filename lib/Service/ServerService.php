@@ -77,6 +77,7 @@ class ServerService {
 		$server = new RpcServer();
 		$server->addHttp2Port($hostname . ':' . $port);
 		$server->handle($this->service);
+		// TODO Add running pyfrm
 		$server->run();
 	}
 
@@ -162,7 +163,7 @@ class ServerService {
 		/** @var FsReadReply $response */
 		foreach ($call->responses() as $response) {
 			$output->writeln('Res code: ' . $response->getResCode());
-			$output->writeln('Last: ' . $response->getLast());
+			$output->writeln('Last: ' . json_encode(boolval($response->getLast())));
 			$output->writeln('Content: ' . $response->getContent());
 		}
 	}

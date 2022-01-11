@@ -165,7 +165,7 @@ class CloudPyApiCoreClient extends \Grpc\BaseStub {
       $metadata = [], $options = []) {
         return $this->_simpleRequest('/OCA.Cloud_Py_API.Proto.CloudPyApiCore/FsMove',
         $argument,
-        ['\OCA\Cloud_Py_API\Proto\FsReply', 'decode'],
+        ['\OCA\Cloud_Py_API\Proto\FsMoveReply', 'decode'],
         $metadata, $options);
     }
 

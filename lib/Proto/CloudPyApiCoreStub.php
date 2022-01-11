@@ -153,13 +153,13 @@ class CloudPyApiCoreStub {
     /**
      * @param \OCA\Cloud_Py_API\Proto\FsMoveRequest $request client request
      * @param \Grpc\ServerContext $context server request context
-     * @return \OCA\Cloud_Py_API\Proto\FsReply for response data, null if if error occured
+     * @return \OCA\Cloud_Py_API\Proto\FsMoveReply for response data, null if if error occured
      *     initial metadata (if any) and status (if not ok) should be set to $context
      */
     public function FsMove(
         \OCA\Cloud_Py_API\Proto\FsMoveRequest $request,
         \Grpc\ServerContext $context
-    ): ?\OCA\Cloud_Py_API\Proto\FsReply {
+    ): ?\OCA\Cloud_Py_API\Proto\FsMoveReply {
         $context->setStatus(\Grpc\Status::unimplemented());
         return null;
     }

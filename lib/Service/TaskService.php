@@ -74,11 +74,19 @@ class TaskService {
 	public function init(PBEmpty $request): ?TaskInitReply {
 		$taskInitReply = new TaskInitReply();
 		if (ServerService::$APP !== null) {
-			$taskInitReply->setAppName(ServerService::$APP['appname']);
-			$taskInitReply->setModName(ServerService::$APP['modname']);
-			$taskInitReply->setModPath(ServerService::$APP['modpath']);
-			$taskInitReply->setFuncName(ServerService::$APP['funcname']);
-			if (ServerService::$APP['args'] !== null) {
+			if (isset(ServerService::$APP['appname'])) {
+				$taskInitReply->setAppName(ServerService::$APP['appname']);
+			}
+			if (isset(ServerService::$APP['modname'])) {
+				$taskInitReply->setModName(ServerService::$APP['modname']);
+			}
+			if (isset(ServerService::$APP['modpath'])) {
+				$taskInitReply->setModPath(ServerService::$APP['modpath']);
+			}
+			if (isset(ServerService::$APP['funcname'])) {
+				$taskInitReply->setFuncName(ServerService::$APP['funcname']);
+			}
+			if (isset(ServerService::$APP['args'])) {
 				$taskInitReply->setArgs(ServerService::$APP['args']);
 			}
 			$cfg = new cfgOptions();
@@ -113,7 +121,8 @@ class TaskService {
 	 * @return PBEmpty|null
 	 */
 	public function exit(TaskExitRequest $request): ?PBEmpty {
-		// TODO
+		// TODO Shutdown server by PID
+		// TODO Return result to request initiator (exec_user_func in RequestsManager)
 		return new PBEmpty(null);
 	}
 
