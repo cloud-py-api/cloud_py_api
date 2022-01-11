@@ -10,6 +10,8 @@ def func_fs_list_info():
     ca.log(nc_api.LogLvl.DEBUG, 'fs_example', f'{len(fs_objects)} objects in user root directory')
     for fs_object in fs_objects:
         fs_same_object = ca.file_info(fs_object)
+        if fs_same_object is None:
+            return 'BAD'
         if fs_object.is_dir != fs_same_object.is_dir:
             return 'BAD'
         if fs_object.mimetype != fs_same_object.mimetype:

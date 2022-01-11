@@ -3,6 +3,7 @@ import sys
 from os import getpid, path
 from enum import Enum
 from importlib import invalidate_caches, import_module
+from traceback import format_exc
 
 from grpc import RpcError
 from core_pb2 import logLvl, taskStatus
@@ -98,7 +99,8 @@ def true_main(connect_address: str, auth: str = '') -> ExitCodes:
                 raise exception_info from None
             exit_code = ExitCodes.CODE_EXCEPTION
             cloud.set_status(taskStatus.ST_EXCEPTION, str(type(exception_info).__name__))
-            cloud.log(logLvl.ERROR, 'cpa_core', f'Exception({type(exception_info).__name__}):`{str(exception_info)}`')
+            exception_info_str = str(format_exc())
+            cloud.log(logLvl.ERROR, 'cpa_core', f'Exception({type(exception_info).__name__}):`{exception_info_str}`')
         finally:
             cloud.exit(result)
     except RpcError as exception_info:
