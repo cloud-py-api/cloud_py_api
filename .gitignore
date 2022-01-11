@@ -21,6 +21,6 @@ vendor
 
 __pycache__
 local
-/protoc/
 venv
 tmp
+/.run/

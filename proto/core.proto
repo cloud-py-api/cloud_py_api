@@ -148,14 +148,19 @@ message FsDeleteRequest {                 //Reply for this is a FsReply message.
   fsId fileId = 1;
 }
 
-message FsMoveRequest {                   //Reply for this is a FsReply message.
+message FsReply {
+  fsResultCode resCode = 1;
+}
+
+message FsMoveRequest {                   //Reply for this is a FsMoveReply message.
   fsId fileId = 1;
   string targetPath = 2;                  //absolute path relative to MP.
   bool copy = 3;
 }
 
-message FsReply {
+message FsMoveReply {
   fsResultCode resCode = 1;
+  fsId fileId = 2;
 }
 
 /* FS messages end */
@@ -252,7 +257,7 @@ service CloudPyApiCore {
   rpc FsCreate (FsCreateRequest) returns (FsCreateReply) {}
   rpc FsWrite (stream FsWriteRequest) returns (FsReply) {}
   rpc FsDelete (FsDeleteRequest) returns (FsReply) {}
-  rpc FsMove (FsMoveRequest) returns (FsReply) {}
+  rpc FsMove (FsMoveRequest) returns (FsMoveReply) {}
   rpc DbSelect (DbSelectRequest) returns (DbSelectReply) {}
   rpc DbCursor (DbCursorRequest) returns (DbCursorReply) {}
   rpc DbExec (DbExecRequest) returns (DbExecReply) {}

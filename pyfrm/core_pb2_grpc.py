@@ -69,7 +69,7 @@ class CloudPyApiCoreStub(object):
         self.FsMove = channel.unary_unary(
                 '/OCA.Cloud_Py_API.Proto.CloudPyApiCore/FsMove',
                 request_serializer=core__pb2.FsMoveRequest.SerializeToString,
-                response_deserializer=core__pb2.FsReply.FromString,
+                response_deserializer=core__pb2.FsMoveReply.FromString,
                 )
         self.DbSelect = channel.unary_unary(
                 '/OCA.Cloud_Py_API.Proto.CloudPyApiCore/DbSelect',
@@ -233,7 +233,7 @@ def add_CloudPyApiCoreServicer_to_server(servicer, server):
             'FsMove': grpc.unary_unary_rpc_method_handler(
                     servicer.FsMove,
                     request_deserializer=core__pb2.FsMoveRequest.FromString,
-                    response_serializer=core__pb2.FsReply.SerializeToString,
+                    response_serializer=core__pb2.FsMoveReply.SerializeToString,
             ),
             'DbSelect': grpc.unary_unary_rpc_method_handler(
                     servicer.DbSelect,
@@ -445,7 +445,7 @@ class CloudPyApiCore(object):
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/OCA.Cloud_Py_API.Proto.CloudPyApiCore/FsMove',
             core__pb2.FsMoveRequest.SerializeToString,
-            core__pb2.FsReply.FromString,
+            core__pb2.FsMoveReply.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
