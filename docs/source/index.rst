@@ -1,13 +1,15 @@
-Welcome to cloud_py_api's documentation!
+Welcome to cloud_py_api documentation!
 ========================================
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
 
+   introduction
+   install/index
+   developer/index
+   core/index
+   usage
    faq/index
-
-
 
 Indices and tables
 ==================
