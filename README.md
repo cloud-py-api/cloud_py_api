@@ -1,5 +1,7 @@
 # Nextcloud cloud_py_api (Framework)
 
+[![Documentation Status](https://readthedocs.org/projects/cloud-py-api/badge/?version=latest)](https://cloud-py-api.readthedocs.io/en/latest/?badge=latest)
+
 | **Currently in development**
 
 Nextcloud cloud_py_api (Framework) for developing apps, that using Python.
