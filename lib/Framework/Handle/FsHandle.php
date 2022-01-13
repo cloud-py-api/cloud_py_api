@@ -26,7 +26,7 @@ declare(strict_types=1);
  *
  */
 
-namespace OCA\Cloud_Py_API\Service;
+namespace OCA\Cloud_Py_API\Framework\Handle;
 
 use Grpc\ServerCallReader;
 use Grpc\ServerCallWriter;
@@ -58,7 +58,7 @@ use OCA\Cloud_Py_API\Proto\fsResultCode;
 use OCA\Cloud_Py_API\Proto\FsWriteRequest;
 
 
-class FsService {
+class FsHandle {
 
 	public const CHUNK_SIZE = 4096; // 4KB default chunk size
 

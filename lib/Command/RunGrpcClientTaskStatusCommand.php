@@ -36,18 +36,11 @@ use Symfony\Component\Console\Input\InputArgument;
 use OCA\Cloud_Py_API\Service\ServerService;
 
 
-class RunGrpcBgServerCommand extends Command {
+class RunGrpcClientTaskStatusCommand extends Command {
 
 	public const ARGUMENT_HOSTNAME = 'hostname';
 	public const ARGUMENT_PORT = 'port';
-
-	public const ARGUMENT_USERID = 'userid';
-	public const ARGUMENT_APPNAME = 'appname';
-	public const ARGUMENT_HANDLER = 'handler';
-	public const ARGUMENT_MODNAME = 'modname';
-	public const ARGUMENT_MODPATH = 'modpath';
-	public const ARGUMENT_FUNCNAME = 'funcname';
-	public const ARGUMENT_ARGS = 'args';
+	public const ARGUMENT_ST_CODE = 'stCode';
 
 	/** @var ServerService */
 	private $serverService;
@@ -59,39 +52,15 @@ class RunGrpcBgServerCommand extends Command {
 	}
 
 	protected function configure(): void {
-		$this->setName("cloud_py_api:grpc:server:bg:run");
-		$this->setDescription("Run GRPC server");
+		$this->setName("cloud_py_api:grpc:client:task:status");
+		$this->setDescription("Run GRPC client TaskStatus request");
 		$this->addArgument(self::ARGUMENT_HOSTNAME, InputArgument::REQUIRED);
 		$this->addArgument(self::ARGUMENT_PORT, InputArgument::REQUIRED);
-		$this->addArgument(self::ARGUMENT_USERID, InputArgument::REQUIRED);
-		$this->addArgument(self::ARGUMENT_APPNAME, InputArgument::REQUIRED);
-		$this->addArgument(self::ARGUMENT_HANDLER, InputArgument::REQUIRED);
-		$this->addArgument(self::ARGUMENT_MODNAME, InputArgument::REQUIRED);
-		$this->addArgument(self::ARGUMENT_MODPATH, InputArgument::REQUIRED);
-		$this->addArgument(self::ARGUMENT_FUNCNAME, InputArgument::REQUIRED);
-		$this->addArgument(self::ARGUMENT_ARGS, InputArgument::OPTIONAL);
+		$this->addArgument(self::ARGUMENT_ST_CODE, InputArgument::REQUIRED);
 	}
 
 	protected function execute(InputInterface $input, OutputInterface $output): int {
-		$hostname = $input->getArgument(self::ARGUMENT_HOSTNAME);
-		$port = $input->getArgument(self::ARGUMENT_PORT);
-		$userid = $input->getArgument(self::ARGUMENT_USERID);
-		$appname = $input->getArgument(self::ARGUMENT_APPNAME);
-		$handler = $input->getArgument(self::ARGUMENT_HANDLER);
-		$modname = $input->getArgument(self::ARGUMENT_MODNAME);
-		$modpath = $input->getArgument(self::ARGUMENT_MODPATH);
-		$funcname = $input->getArgument(self::ARGUMENT_FUNCNAME);
-		$args = $input->getArgument(self::ARGUMENT_ARGS);
-		$this->serverService->runGrpcServer($hostname, $port, [
-			'userid' => $userid,
-			'appname' => $appname,
-			'handler' => $handler,
-			'modname' => $modname,
-			'modpath' => $modpath,
-			'funcname' => $funcname,
-			'args' => $args !== null ? json_decode($args) : $args,
-			'status' => null,
-		]);
+		$this->serverService->testTaskStatus($input, $output);
 		return 0;
 	}
 

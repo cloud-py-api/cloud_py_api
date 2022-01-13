@@ -26,7 +26,7 @@ declare(strict_types=1);
  *
  */
 
-namespace OCA\Cloud_Py_API\Service;
+namespace OCA\Cloud_Py_API\Framework\Handle;
 
 use OCP\IDBConnection;
 
@@ -38,7 +38,7 @@ use OCA\Cloud_Py_API\Proto\DbSelectReply;
 use OCA\Cloud_Py_API\Proto\DbSelectRequest;
 
 
-class DbService {
+class DbHandle {
 
 	/** @var IDBConnection */
 	private $dbConnection;

@@ -26,7 +26,7 @@ declare(strict_types=1);
  *
  */
 
-namespace OCA\Cloud_Py_API\Service;
+namespace OCA\Cloud_Py_API\Framework\Handle;
 
 use OCP\IConfig;
 
@@ -39,10 +39,12 @@ use OCA\Cloud_Py_API\Proto\TaskSetStatusRequest;
 
 use OCA\Cloud_Py_API\AppInfo\Application;
 use OCA\Cloud_Py_API\Proto\logLvl;
+use OCA\Cloud_Py_API\Service\AppsService;
+use OCA\Cloud_Py_API\Service\ServerService;
 use Psr\Log\LoggerInterface;
 
 
-class TaskService {
+class TaskHandle {
 
 	/** @var IConfig */
 	private $config;
@@ -94,6 +96,9 @@ class TaskService {
 			$cfg->setUseDBDirect(false);
 			$cfg->setUseFileDirect(false);
 			$taskInitReply->setConfig($cfg);
+			if (isset(ServerService::$APP['handler'])) {
+				$taskInitReply->setHandler(ServerService::$APP['handler']);
+			}
 		}
 		return $taskInitReply;
 	}
@@ -118,7 +123,9 @@ class TaskService {
 	 * @return PBEmpty|null
 	 */
 	public function exit(TaskExitRequest $request): ?PBEmpty {
-		// TODO Return result to request initiator (exec_user_func in RequestsManager)
+		if (isset(ServerService::$APP['handler'])) {
+			call_user_func(ServerService::$APP['handler'], ['result' => $request->getResult()]);
+		}
 		exit(0); // Temporal workaround, because of bad GRPC implementation for PHP
 		return new PBEmpty(null);
 	}

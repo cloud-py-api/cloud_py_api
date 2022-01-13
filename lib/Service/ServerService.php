@@ -37,69 +37,158 @@ use Grpc\RpcServer;
 use Grpc\ClientStreamingCall;
 use Grpc\ServerStreamingCall;
 
-use OCA\Cloud_Py_API\Proto\CloudPyApiCoreClient;
 use OCA\Cloud_Py_API\Proto\FsCreateReply;
-use OCA\Cloud_Py_API\Proto\FsCreateRequest;
-use OCA\Cloud_Py_API\Proto\FsDeleteRequest;
-use OCA\Cloud_Py_API\Proto\FsGetInfoRequest;
 use OCA\Cloud_Py_API\Proto\FsNodeInfo;
-use OCA\Cloud_Py_API\Proto\fsId;
-use OCA\Cloud_Py_API\Proto\FsListReply;
-use OCA\Cloud_Py_API\Proto\FsListRequest;
-use OCA\Cloud_Py_API\Proto\FsMoveRequest;
 use OCA\Cloud_Py_API\Proto\FsReadReply;
-use OCA\Cloud_Py_API\Proto\FsReadRequest;
 use OCA\Cloud_Py_API\Proto\FsReply;
-use OCA\Cloud_Py_API\Proto\FsWriteRequest;
-use OCA\Cloud_Py_API\Proto\PBEmpty;
-use OCA\Cloud_Py_API\Proto\TaskExitRequest;
 use OCA\Cloud_Py_API\Proto\TaskInitReply;
 use OCA\Cloud_Py_API\Proto\TaskInitReply\cfgOptions;
+
+use OCA\Cloud_Py_API\Framework\Core;
+use OCA\Cloud_Py_API\Framework\Db;
+use OCA\Cloud_Py_API\Framework\Fs;
 
 
 class ServerService {
 
 	public static $APP = null;
 
-	/** @var CloudPyApiCoreService */
-	private $service;
+	/** @var LoggerInterface */
+	public static $staticLogger;
 
-	public function __construct(IAppData $appData, CloudPyApiCoreService $service,
-								LoggerInterface $logger)
+	/** @var Core */
+	private $cpaCore;
+
+	/** @var Fs */
+	private $cpaFs;
+
+	/** @var Db */
+	private $cpaDb;
+
+	public function __construct(IAppData $appData, LoggerInterface $logger,
+								Core $cpaCore, Fs $cpaFs, Db $cpaDb)
 	{
 		$this->appData = $appData;
-		$this->service = $service;
+		$this->cpaCore = $cpaCore;
+		$this->cpaFs = $cpaFs;
+		$this->cpaDb = $cpaDb;
 		$this->logger = $logger;
 	}
 
-	public function runGrpcServer(string $hostname = '0.0.0.0', string $port = '50051', array $params = []) {
-		self::$APP = $params;
+	public function runGrpcServer(string $hostname = '0.0.0.0', string $port = '50051', array $appInfo = []) {
+		self::$APP = $appInfo;
+		self::$staticLogger = $this->logger;
 		/** @var RpcServer */
-		$server = new RpcServer();
-		$server->addHttp2Port($hostname . ':' . $port);
-		$server->handle($this->service);
+		$server = $this->cpaCore->createServer([
+			'hostname' => $hostname,
+			'port' => $port
+		]);
 		// TODO Add running pyfrm
 		$server->run();
 	}
+ 
+	public static function testHandler($params = []) {
+		self::$staticLogger->info('[' . self::class . '] testHandler executed, result: ' . json_decode($params['result']));
+	}
 
-	public function testFsList(InputInterface $input, OutputInterface $output) {
+	public function testTaskInit(InputInterface $input, OutputInterface $output) {
+		$hostname = $input->getArgument('hostname');
+		$port = $input->getArgument('port');
+		$pid = $this->cpaCore->runBgGrpcServer([
+			'hostname' => '0.0.0.0',
+			'port' => $port,
+			'userid' => 'admin',
+			'appname' => 'mediadc',
+			'handler' => '"\OCA\Cloud_Py_API\Service\ServerService::testHandler"',
+			'modname' => 'install',
+			'modpath' => '/var/www/html/nextcloud/apps/mediadc/lib/Service/python/install.py',
+			'funcname' => 'check',
+			'args' => null,
+		]);
+		if ($pid !== -1) {
+			sleep(1);
+			$output->writeln('Server started [pid:' . $pid . '] ... Creating client.');
+			$client = $this->cpaCore->createClient([
+				'hostname' => $hostname,
+				'port' => $port,
+			]);
+			/** @var TaskInitReply $response */
+			list($response, $status) = $this->cpaCore->TaskInit($client);
+			if (isset($status)) {
+				$output->writeln('Response status: ' . json_encode($status));
+			}
+			if (isset($response)) {
+				$output->writeln('Response: ');
+				$output->writeln('appname: ' . $response->getAppName());
+				$output->writeln('handler: ' . $response->getHandler());
+				$output->writeln('modname: ' . $response->getModName());
+				$output->writeln('modpath: ' . $response->getModPath());
+				$output->writeln('funcname: ' . $response->getFuncName());
+				if ($response->getArgs() !== null) {
+					$output->write('args:');
+					foreach ($response->getArgs() as $argument) {
+						$output->write(' ' . $argument);
+					}
+					$output->writeln('');
+				}
+				$output->writeln('Config: ');
+				/** @var cfgOptions */
+				$cfg = $response->getConfig();
+				$output->writeln('userId: ' . $cfg->getUserId());
+				$output->writeln('logLvl: ' . $cfg->getLogLvl());
+				$output->writeln('datafolder: ' . $cfg->getDataFolder());
+				$output->writeln('frameworkAppData: ' . $cfg->getFrameworkAppData());
+				$output->writeln('useFileDirect: ' . json_encode($cfg->getUseFileDirect()));
+				$output->writeln('useDBDirect: ' . json_encode($cfg->getUseDBDirect()));
+			}
+			$output->writeln('Closing server...');
+			$this->cpaCore->TaskExit($client, ['result' => json_encode('"TaskInit successfull"')]);
+		} else {
+			$output->writeln('Server not started...');
+		}
+	}
+
+	public function testTaskStatus(InputInterface $input, OutputInterface $output) {
+		$hostname = $input->getArgument('hostname');
+		$port = $input->getArgument('port');
+		$stCode = $input->getArgument('stCode');
+		$client = $this->cpaCore->createClient(['hostname' => $hostname, 'port' => $port]);
+		$this->cpaCore->TaskLog($client, ['stCode' => $stCode]);
+	}
+
+	public function testTaskExit(InputInterface $input, OutputInterface $output) {
+		$hostname = $input->getArgument('hostname');
+		$port = $input->getArgument('port');
+		$result = $input->getArgument('result');
+		$client = $this->cpaCore->createClient(['hostname' => $hostname, 'port' => $port]);
+		$this->cpaCore->TaskExit($client, ['result' => $result]);
+		$output->writeln('TaskExit request sent. Server closed.');
+	}
+
+	public function testTaskLog(InputInterface $input, OutputInterface $output) {
+		$hostname = $input->getArgument('hostname');
+		$port = $input->getArgument('port');
+		$logLvl = $input->getArgument('logLvl');
+		$module = $input->getArgument('module');
+		$content = $input->getArgument('content');
+		$client = $this->cpaCore->createClient(['hostname' => $hostname, 'port' => $port]);
+		$this->cpaCore->TaskLog($client, [
+			'logLvl' => $logLvl,
+			'module' => $module,
+			'content' => json_decode($content)
+		]);
+	}
+
+	public function testGetFileInfo(InputInterface $input, OutputInterface $output) {
 		$hostname = $input->getArgument('hostname');
 		$port = $input->getArgument('port');
 		$userid = $input->getArgument('userid');
 		$fileid = $input->getArgument('fileid');
-		$client = new CloudPyApiCoreClient($hostname . ':' . $port, [
-			'credentials' => \Grpc\ChannelCredentials::createInsecure()
+		$client = $this->cpaCore->createClient(['hostname' => $hostname, 'port' => $port]);
+		list($response, $status) = $this->cpaFs->FsInfo($client, [
+			'userid' => $userid,
+			'fileid' => $fileid,
 		]);
-		/** @var FsListRequest */
-		$request = new FsListRequest([]);
-		$fsId = new fsId();
-		$fsId->setUserId($userid);
-		if (isset($fileid)) {
-			$fsId->setFileId($fileid);
-		}
-		$request->setDirId($fsId);
-		/** @var FsListReply $response */
-		list($response, $status) = $client->FsList($request)->wait();
 		$output->writeln('Response status: ' . json_encode($status));
 		if ($response !== null && count($response->getNodes()) > 0) {
 			$output->writeln('Response items:');
@@ -110,22 +199,16 @@ class ServerService {
 		}
 	}
 
-	public function testGetFileInfo(InputInterface $input, OutputInterface $output) {
+	public function testFsList(InputInterface $input, OutputInterface $output) {
 		$hostname = $input->getArgument('hostname');
 		$port = $input->getArgument('port');
 		$userid = $input->getArgument('userid');
 		$fileid = $input->getArgument('fileid');
-		$client = new CloudPyApiCoreClient($hostname . ':' . $port, [
-			'credentials' => \Grpc\ChannelCredentials::createInsecure()
+		$client = $this->cpaCore->createClient(['hostname' => $hostname, 'port' => $port]);
+		list($response, $status) = $this->cpaFs->FsList($client, [
+			'userid' => $userid,
+			'fileid' => $fileid,
 		]);
-		/** @var FsGetInfoRequest */
-		$request = new FsGetInfoRequest([]);
-		$fsId = new fsId();
-		$fsId->setUserId($userid);
-		$fsId->setFileId($fileid);
-		$request->setFileId($fsId);
-		/** @var FsListReply $response */
-		list($response, $status) = $client->FsGetInfo($request)->wait();
 		$output->writeln('Response status: ' . json_encode($status));
 		if ($response !== null && count($response->getNodes()) > 0) {
 			$output->writeln('Response items:');
@@ -143,23 +226,14 @@ class ServerService {
 		$fileid = $input->getArgument('fileid');
 		$offset = $input->getArgument('offset');
 		$length = $input->getArgument('length');
-		$client = new CloudPyApiCoreClient($hostname . ':' . $port, [
-			'credentials' => \Grpc\ChannelCredentials::createInsecure()
-		]);
-		/** @var FsReadRequest */
-		$request = new FsReadRequest();
-		$fsId = new fsId();
-		$fsId->setUserId($userid);
-		$fsId->setFileId(intval($fileid));
-		$request->setFileId($fsId);
-		if (isset($offset)) {
-			$request->setOffset($offset);
-		}
-		if (isset($length)) {
-			$request->setBytesToRead($length);
-		}
+		$client = $this->cpaCore->createClient(['hostname' => $hostname, 'port' => $port]);
 		/** @var ServerStreamingCall */
-		$call = $client->FsRead($request);
+		$call = $this->cpaFs->FsRead($client, [
+			'userid' => $userid,
+			'fileid' => $fileid,
+			'offset' => $offset,
+			'bytesToRead' => $length
+		]);
 		$output->writeln('Responses: ');
 		/** @var FsReadReply $response */
 		foreach ($call->responses() as $response) {
@@ -176,30 +250,18 @@ class ServerService {
 		$userid = $input->getArgument('userid');
 		$fileid = $input->getArgument('fileid');
 		$content = $input->getArgument('content');
-		$client = new CloudPyApiCoreClient($hostname . ':' . $port, [
-			'credentials' => \Grpc\ChannelCredentials::createInsecure()
-		]);
-
-		$request1 = new FsWriteRequest();
-		$fsId = new fsId();
-		$fsId->setFileId($fileid);
-		$fsId->setUserId($userid);
-		$request1->setFileId($fsId);
-		$request1->setLast(false);
-		$request1->setContent($content);
-
-		$request2 = new FsWriteRequest();
-		$fsId = new fsId();
-		$fsId->setFileId($fileid);
-		$fsId->setUserId($userid);
-		$request2->setFileId($fsId);
-		$request2->setLast(true);
-		$request2->setContent($content);
-
+		$client = $this->cpaCore->createClient(['hostname' => $hostname, 'port' => $port]);
 		/** @var ClientStreamingCall */
-		$call = $client->FsWrite();
-		$call->write($request1);
-		$call->write($request2);
+		$call = $this->cpaFs->FsWrite($client);
+		foreach (str_split($content, Fs::CHUNK_SIZE) as $content) {
+			$data = $this->cpaFs->createFsWriteRequest([
+				'userid' => $userid,
+				'fileid' => $fileid,
+				'content' => $content,
+			]);
+			$output->writeln('Writing: ' . $data->getContent());
+			$call->write($data);
+		}
 		/** @var FsReply */
 		list($response, $status) = $call->wait();
 		$output->writeln('Status: ' . json_encode($status));
@@ -209,24 +271,20 @@ class ServerService {
 	public function testFsCreateFile(InputInterface $input, OutputInterface $output) {
 		$hostname = $input->getArgument('hostname');
 		$port = $input->getArgument('port');
-		$userId = $input->getArgument('userid');
+		$userid = $input->getArgument('userid');
 		$parentDirId = $input->getArgument('parentdirid');
 		$name = $input->getArgument('name');
 		$isFile = $input->getArgument('isfile');
 		$content = $input->getArgument('content');
-		$client = new CloudPyApiCoreClient($hostname . ':' . $port, [
-			'credentials' => \Grpc\ChannelCredentials::createInsecure()
-		]);
-		$request = new FsCreateRequest();
-		$fsId = new fsId();
-		$fsId->setFileId($parentDirId);
-		$fsId->setUserId($userId);
-		$request->setParentDirId($fsId);
-		$request->setIsFile(boolval($isFile));
-		$request->setName($name);
-		$request->setContent($content);
+		$client = $this->cpaCore->createClient(['hostname' => $hostname, 'port' => $port]);
 		/** @var FsCreateReply $response */
-		list($response, $status) = $client->FsCreate($request)->wait();
+		list($response, $status) = $this->cpaFs->FsCreate($client, [
+			'userid' => $userid,
+			'fileid' => $parentDirId,
+			'name' => $name,
+			'isFile' => $isFile,
+			'content' => $content,
+		]);
 		$output->writeln('Response status: ' . json_encode($status));
 		if (isset($response)) {
 			$output->writeln('Response: ');
@@ -240,16 +298,12 @@ class ServerService {
 		$port = $input->getArgument('port');
 		$userid = $input->getArgument('userid');
 		$fileid = $input->getArgument('fileid');
-		$client = new CloudPyApiCoreClient($hostname . ':' . $port, [
-			'credentials' => \Grpc\ChannelCredentials::createInsecure()
-		]);
-		$request = new FsDeleteRequest();
-		$fsId = new fsId();
-		$fsId->setUserId($userid);
-		$fsId->setFileId($fileid);
-		$request->setFileId($fsId);
+		$client = $this->cpaCore->createClient(['hostname' => $hostname, 'port' => $port]);
 		/** @var FsReply $response */
-		list($response, $status) = $client->FsDelete($request)->wait();
+		list($response, $status) = $this->cpaFs->FsDelete($client, [
+			'userid' => $userid,
+			'fileid' => $fileid,
+		]);
 		$output->writeln('Response status: ' . json_encode($status));
 		$output->writeln('Res code: ' . $response->getResCode());
 	}
@@ -261,62 +315,36 @@ class ServerService {
 		$fileid = $input->getArgument('fileid');
 		$targetPath = $input->getArgument('targetpath');
 		$copy = $input->getArgument('copy');
-		$client = new CloudPyApiCoreClient($hostname . ':' . $port, [
-			'credentials' => \Grpc\ChannelCredentials::createInsecure()
-		]);
-		$request = new FsMoveRequest();
-		$fsId = new fsId();
-		$fsId->setUserId($userid);
-		$fsId->setFileId($fileid);
-		$request->setFileId($fsId);
-		$request->setTargetPath($targetPath);
-		$request->setCopy(boolval($copy));
+		$client = $this->cpaCore->createClient(['hostname' => $hostname, 'port' => $port]);
 		/** @var FsReply $response */
-		list($response, $status) = $client->FsMove($request)->wait();
+		list($response, $status) = $this->cpaFs->FsMOve($client, [
+			'userid' => $userid,
+			'fileid' => $fileid,
+			'targetPath' => $targetPath,
+			'copy' => $copy
+		]);
 		$output->writeln('Response status: ' . json_encode($status));
 		$output->writeln('Res code: ' . $response->getResCode());
 	}
 
-	public function testTaskInit(InputInterface $input, OutputInterface $output) {
+	public function testDbSelect(InputInterface $input, OutputInterface $output) {
 		$hostname = $input->getArgument('hostname');
 		$port = $input->getArgument('port');
-		$client = new CloudPyApiCoreClient($hostname . ':' . $port, [
-			'credentials' => \Grpc\ChannelCredentials::createInsecure()
-		]);
-		$request = new PBEmpty();
-		/** @var TaskInitReply */
-		list($response, $status) = $client->TaskInit($request)->wait();
-		$output->writeln('Response status: ' . json_encode($status));
-		$output->writeln('Response: ' . json_encode($response));
-		$output->writeln('appname: ' . $response->getAppName());
-		$output->writeln('modname: ' . $response->getModName());
-		$output->writeln('modpath: ' . $response->getModPath());
-		$output->writeln('funcname: ' . $response->getFuncName());
-		if ($response->getArgs() !== null) {
-			$output->write('args:');
-			foreach ($response->getArgs() as $argument) {
-				$output->write(' ' . $argument);
-			}
-			$output->writeln('');
-		}
-		$output->writeln('Config: ');
-		/** @var cfgOptions */
-		$cfg = $response->getConfig();
-		$output->writeln('userId: ' . $cfg->getUserId());
-		$output->writeln('logLvl: ' . $cfg->getLogLvl());
-		$output->writeln('datafolder: ' . $cfg->getDataFolder());
-		$output->writeln('frameworkAppData: ' . $cfg->getFrameworkAppData());
-		$output->writeln('useFileDirect: ' . json_encode($cfg->getUseFileDirect()));
-		$output->writeln('useDBDirect: ' . json_encode($cfg->getUseDBDirect()));
+		$client = $this->cpaCore->createClient(['hostname' => $hostname, 'port' => $port]);
+		list($response, $status) = $this->cpaDb->DbSelect($client, []);
 	}
 
-	public function testTaskExit(InputInterface $input, OutputInterface $output) {
+	public function testDbExec(InputInterface $input, OutputInterface $output) {
 		$hostname = $input->getArgument('hostname');
 		$port = $input->getArgument('port');
-		$client = new CloudPyApiCoreClient($hostname . ':' . $port, [
-			'credentials' => \Grpc\ChannelCredentials::createInsecure()
-		]);
-		$client->TaskExit(new TaskExitRequest());
+		$client = $this->cpaCore->createClient(['hostname' => $hostname, 'port' => $port]);
+		list($response, $status) = $this->cpaDb->DbExec($client, []);
 	}
 
+	public function testDbCursor(InputInterface $input, OutputInterface $output) {
+		$hostname = $input->getArgument('hostname');
+		$port = $input->getArgument('port');
+		$client = $this->cpaCore->createClient(['hostname' => $hostname, 'port' => $port]);
+		list($response, $status) = $this->cpaDb->DbCursor($client, []);
+	}
 }
