@@ -6,6 +6,8 @@
 
 Nextcloud cloud_py_api (Framework) for developing apps, that using Python.
 
+[Read the docs](https://cloud-py-api.readthedocs.io/en/latest/)
+
 Example app, that using this Framework - [mediadc](https://github.com/andrey18106/mediadc).
 
 # Easy management and configuration
