@@ -26,25 +26,29 @@ declare(strict_types=1);
  *
  */
 
-namespace OCA\Cloud_Py_API\Service;
+namespace OCA\Cloud_Py_API\Framework;
 
 use OCA\Cloud_Py_API\Proto\CloudPyApiCoreStub;
 
+use OCA\Cloud_Py_API\Framework\Handle\TaskHandle;
+use OCA\Cloud_Py_API\Framework\Handle\FsHandle;
+use OCA\Cloud_Py_API\Framework\Handle\DbHandle;
 
-class CloudPyApiCoreService extends CloudPyApiCoreStub {
 
-	/** @var TaskService */
-	private $tasks;
+class CloudPyApiCore extends CloudPyApiCoreStub {
 
-	/** @var FsService */
+	/** @var TaskHandle */
+	private $task;
+
+	/** @var FsHandle */
 	private $fs;
 
-	/** @var DbService */
+	/** @var DbHandle */
 	private $db;
 
-	public function __construct(TaskService $tasks, FsService $fs, DbService $db)
+	public function __construct(TaskHandle $task, FsHandle $fs, DbHandle $db)
 	{
-		$this->tasks = $tasks;
+		$this->task = $task;
 		$this->fs = $fs;
 		$this->db = $db;
 	}
@@ -60,7 +64,7 @@ class CloudPyApiCoreService extends CloudPyApiCoreStub {
 		\Grpc\ServerContext $context
 	): ?\OCA\Cloud_Py_API\Proto\TaskInitReply {
 		$context->setStatus(\Grpc\Status::ok());
-		return $this->tasks->init($request);
+		return $this->task->init($request);
 	}
 
 	/**
@@ -74,7 +78,7 @@ class CloudPyApiCoreService extends CloudPyApiCoreStub {
 		\Grpc\ServerContext $context
 	): ?\OCA\Cloud_Py_API\Proto\PBEmpty {
 		$context->setStatus(\Grpc\Status::ok());
-		return $this->tasks->status($request);
+		return $this->task->status($request);
 	}
 
 	/**
@@ -88,7 +92,7 @@ class CloudPyApiCoreService extends CloudPyApiCoreStub {
 		\Grpc\ServerContext $context
 	): ?\OCA\Cloud_Py_API\Proto\PBEmpty {
 		$context->setStatus(\Grpc\Status::ok());
-		return $this->tasks->exit($request);
+		return $this->task->exit($request);
 	}
 
 	/**
@@ -102,7 +106,7 @@ class CloudPyApiCoreService extends CloudPyApiCoreStub {
 		\Grpc\ServerContext $context
 	): ?\OCA\Cloud_Py_API\Proto\PBEmpty {
 		$context->setStatus(\Grpc\Status::ok());
-		return $this->tasks->log($request);
+		return $this->task->log($request);
 	}
 
 	/**

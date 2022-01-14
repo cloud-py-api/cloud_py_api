@@ -47,6 +47,12 @@ class TaskInitReply extends \Google\Protobuf\Internal\Message
      * Generated from protobuf field <code>.OCA.Cloud_Py_API.Proto.TaskInitReply.cfgOptions config = 6;</code>
      */
     protected $config = null;
+    /**
+     *PHP Callback handler for TaskExit
+     *
+     * Generated from protobuf field <code>string handler = 7;</code>
+     */
+    protected $handler = '';
 
     /**
      * Constructor.
@@ -65,6 +71,8 @@ class TaskInitReply extends \Google\Protobuf\Internal\Message
      *     @type string[]|\Google\Protobuf\Internal\RepeatedField $args
      *          Optional arguments to pass to target python app's module.
      *     @type \OCA\Cloud_Py_API\Proto\TaskInitReply\cfgOptions $config
+     *     @type string $handler
+     *          PHP Callback handler for TaskExit
      * }
      */
     public function __construct($data = NULL) {
@@ -230,6 +238,32 @@ class TaskInitReply extends \Google\Protobuf\Internal\Message
     {
         GPBUtil::checkMessage($var, \OCA\Cloud_Py_API\Proto\TaskInitReply\cfgOptions::class);
         $this->config = $var;
+
+        return $this;
+    }
+
+    /**
+     *PHP Callback handler for TaskExit
+     *
+     * Generated from protobuf field <code>string handler = 7;</code>
+     * @return string
+     */
+    public function getHandler()
+    {
+        return $this->handler;
+    }
+
+    /**
+     *PHP Callback handler for TaskExit
+     *
+     * Generated from protobuf field <code>string handler = 7;</code>
+     * @param string $var
+     * @return $this
+     */
+    public function setHandler($var)
+    {
+        GPBUtil::checkString($var, True);
+        $this->handler = $var;
 
         return $this;
     }

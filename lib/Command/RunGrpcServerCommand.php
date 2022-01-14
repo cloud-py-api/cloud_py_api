@@ -28,6 +28,7 @@ declare(strict_types=1);
 
 namespace OCA\Cloud_Py_API\Command;
 
+use OCA\Cloud_Py_API\Framework\Core;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -43,6 +44,7 @@ class RunGrpcServerCommand extends Command {
 
 	public const ARGUMENT_USERID = 'userid';
 	public const ARGUMENT_APPNAME = 'appname';
+	public const ARGUMENT_HANDLER = 'handler';
 	public const ARGUMENT_MODNAME = 'modname';
 	public const ARGUMENT_MODPATH = 'modpath';
 	public const ARGUMENT_FUNCNAME = 'funcname';
@@ -51,10 +53,14 @@ class RunGrpcServerCommand extends Command {
 	/** @var UtilsService */
 	private $utils;
 
-	public function __construct(UtilsService $utils) {
+	/** @var Core */
+	private $cpaCore;
+
+	public function __construct(UtilsService $utils, Core $cpaCore) {
 		parent::__construct();
 
 		$this->utils = $utils;
+		$this->cpaCore = $cpaCore;
 	}
 
 	protected function configure(): void {
@@ -64,6 +70,7 @@ class RunGrpcServerCommand extends Command {
 		$this->addArgument(self::ARGUMENT_PORT, InputArgument::REQUIRED);
 		$this->addArgument(self::ARGUMENT_USERID, InputArgument::REQUIRED);
 		$this->addArgument(self::ARGUMENT_APPNAME, InputArgument::REQUIRED);
+		$this->addArgument(self::ARGUMENT_HANDLER, InputArgument::REQUIRED);
 		$this->addArgument(self::ARGUMENT_MODNAME, InputArgument::REQUIRED);
 		$this->addArgument(self::ARGUMENT_MODPATH, InputArgument::REQUIRED);
 		$this->addArgument(self::ARGUMENT_FUNCNAME, InputArgument::REQUIRED);
@@ -75,6 +82,7 @@ class RunGrpcServerCommand extends Command {
 		$port = $input->getArgument(self::ARGUMENT_PORT);
 		$userid = $input->getArgument(self::ARGUMENT_USERID);
 		$appname = $input->getArgument(self::ARGUMENT_APPNAME);
+		$handler = $input->getArgument(self::ARGUMENT_HANDLER);
 		$modname = $input->getArgument(self::ARGUMENT_MODNAME);
 		$modpath = $input->getArgument(self::ARGUMENT_MODPATH);
 		$funcname = $input->getArgument(self::ARGUMENT_FUNCNAME);
@@ -82,7 +90,8 @@ class RunGrpcServerCommand extends Command {
 
 		$pathToOcc = getcwd() . '/occ';
 		$cloudPyApiCommand = 'cloud_py_api:grpc:server:bg:run ' . $hostname . ' ' . $port
-			. $userid . ' ' . $appname . ' ' . $modname . ' ' . $modpath . ' ' . $funcname;
+			. ' ' . $userid . ' ' . $appname . ' ' . $handler . ' ' . $modname . ' ' . $modpath 
+			. ' ' . $funcname;
 		if ($args !== null) {
 			$cloudPyApiCommand += array_reduce(json_decode($args), function ($carry, $argument) {
 				return $carry += ' ' . $argument;
@@ -96,7 +105,6 @@ class RunGrpcServerCommand extends Command {
 			$output->writeln($pid);
 			return 0;
 		}
-		$output->writeln('Seems like server not started..');
 		return 1;
 	}
 

@@ -49,6 +49,7 @@ message TaskInitReply {
     int32 maxCreateFileContent = 8;
   }
   cfgOptions config = 6;
+  string handler = 7;                 //PHP Callback handler for TaskExit
 }
 
 message TaskSetStatusRequest {            //No reply.
