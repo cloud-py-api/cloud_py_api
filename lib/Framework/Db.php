@@ -32,12 +32,20 @@ use OCA\Cloud_Py_API\Proto\CloudPyApiCoreClient;
 use OCA\Cloud_Py_API\Proto\DbCursorRequest;
 use OCA\Cloud_Py_API\Proto\DbExecRequest;
 use OCA\Cloud_Py_API\Proto\DbSelectRequest;
-
+use OCA\Cloud_Py_API\Proto\DbSelectRequest\joinType;
+use OCA\Cloud_Py_API\Proto\str_alias;
+use OCA\Cloud_Py_API\Proto\whereExpr;
+use Psr\Log\LoggerInterface;
 
 /**
  * Cloud_Py_API Framework DB API
  */
 class Db {
+
+	public function __construct(LoggerInterface $logger)
+	{
+		$this->logger = $logger;
+	}
 
 	/**
 	 * Send DbSelect request
@@ -52,7 +60,67 @@ class Db {
 	 */
 	public function DbSelect($client, $params = []): array {
 		$request = new DbSelectRequest();
+		if (isset($params['columns'])) {
+			/** @var str_alias[] $columns */
+			$columns = array_reduce($params['columns'], function (array $carry, $column) {
+				array_push($carry, $this->createStrAlias($column));
+				return $carry;
+			}, []);
+			$request->setColumns($columns);
+		}
+		if (isset($params['from'])) {
+			/** @var str_alias[] */
+			$froms = array_reduce($params['from'], function (array $carry, $from) {
+				array_push($carry, $this->createStrAlias($from));
+				return $carry;
+			}, []);
+			$request->setFrom($froms);
+		}
+		if (isset($params['joins'])) {
+			// TODO Rewrite to parsing simple array to joinType
+			$request->setJoins([$params['joins']]);
+		}
+		if (isset($params['whereas'])) {
+			// TODO Rewrite to parsing simple array to whereExpr
+			$request->setWhereas([$params['whereas']]);
+		}
+		if (isset($params['groupBy'])) {
+			$request->setGroupBy([$params['groupBy']]);
+		}
+		if (isset($params['havings'])) {
+			$request->setHavings([$params['havings']]);
+		}
+		if (isset($params['orderBy'])) {
+			$request->setOrderBy([$params['orderBy']]);
+		}
+		if (isset($params['maxResults'])) {
+			$request->setMaxResults($params['maxResults']);
+		}
+		if (isset($params['firstResult'])) {
+			$request->setFirstResult($params['firstResult']);
+		}
 		return $client->DbSelect($request)->wait();
+	}
+
+	private function createStrAlias(array $params = []): str_alias {
+		$strAlias = new str_alias();
+		if (isset($params['name'])) {
+			$strAlias->setName($params['name']);
+		}
+		if (isset($params['alias'])) {
+			$strAlias->setAlias($params['alias']);
+		}
+		return $strAlias;
+	}
+
+	private function createJoinType(array $params = []): joinType {
+		$joinType = new joinType();
+		return $joinType;
+	}
+
+	private function createWhereExpr(array $params = []): whereExpr {
+		$whereExpr = new whereExpr();
+		return $whereExpr;
 	}
 
 	/**
@@ -84,6 +152,12 @@ class Db {
 	 */
 	public function DbCursor($client, $params = []): array {
 		$request = new DbCursorRequest();
+		if (isset($params['cmd'])) {
+			$request->setCmd($params['cmd']);
+		}
+		if (isset($params['handle'])) {
+			$request->setHandle($params['handle']);
+		}
 		return $client->DbCursor($request)->wait();
 	}
 

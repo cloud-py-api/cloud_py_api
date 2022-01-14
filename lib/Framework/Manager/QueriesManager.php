@@ -26,20 +26,30 @@ declare(strict_types=1);
  *
  */
 
-namespace OCA\Cloud_Py_API\Service\Manager;
+namespace OCA\Cloud_Py_API\Framework\Manager;
 
+use OCP\DB\IResult;
 
 /**
- * Queries manager for saving database queries results in runtime for multiple processes
+ * Queries manager for saving database queries results
  */
 class QueriesManager {
 
 	/**
-	 * Queries in work.
+	 * Saved queries results
+	 * 
+	 * @var IResult[] $queries
 	 */
-	private $queries = array();
+	private static $queries = array();
 
-	public static function getQueryResult(string $query_id) {
+	/**
+	 * Get saved query results
+	 * 
+	 * @param string $query_id unique generated query_id string
+	 * 
+	 * @return IResult|null `array` of results or `null` if not found
+	 */
+	public static function getQueryResult(string $query_id): ?IResult {
 		if (isset(self::$queries[$query_id])) {
 			return self::$queries[$query_id];
 		}
@@ -51,12 +61,12 @@ class QueriesManager {
 	 * 
 	 * @param string $query SQL query string
 	 * 
-	 * @param mixed $query_result Exectued SQL query results (array, string, int, null)
+	 * @param IResult $query_result Exectued SQL query result
 	 * 
 	 * @return string|null Returns $queryId - generated unique id based on query string, 
 	 * or null if such instance already exists
 	 */
-	public static function setQueryResult(string $query, mixed $query_result) {
+	public static function setQueryResult(string $query, IResult $query_result): ?string {
 		$queryId = sha1($query . time());
 		if (!isset(self::$queries[$queryId])) {
 			self::$queries[$queryId] = $query_result;
@@ -65,6 +75,13 @@ class QueriesManager {
 		return null;
 	}
 
+	/**
+	 * Remove resolved query result
+	 * 
+	 * @param string $query_id generated query_id string
+	 * 
+	 * @return bool true if successfully removed, otherwise false
+	 */
 	public static function removeQueryResult(string $query_id): bool {
 		if (isset(self::$queries[$query_id])) {
 			$queryIndex = array_search($query_id, array_keys(self::$queries));
@@ -74,6 +91,19 @@ class QueriesManager {
 			}
 		}
 		return false;
+	}
+
+	/**
+	 * Closes all qureies results and removes from array
+	 * 
+	 * @return void
+	 */
+	public static function closeAllResults(): void {
+		foreach (self::$queries as $query_id => $result) {
+			if (self::removeQueryResult($query_id)) {
+				$result->closeCursor();
+			}
+		}
 	}
 
 }

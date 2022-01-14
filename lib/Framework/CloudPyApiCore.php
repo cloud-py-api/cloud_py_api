@@ -218,7 +218,7 @@ class CloudPyApiCore extends CloudPyApiCoreStub {
 		\OCA\Cloud_Py_API\Proto\DbSelectRequest $request,
 		\Grpc\ServerContext $context
 	): ?\OCA\Cloud_Py_API\Proto\DbSelectReply {
-		$context->setStatus(\Grpc\Status::unimplemented());
+		$context->setStatus(\Grpc\Status::ok());
 		return $this->db->select($request);
 	}
 
@@ -232,7 +232,7 @@ class CloudPyApiCore extends CloudPyApiCoreStub {
 		\OCA\Cloud_Py_API\Proto\DbCursorRequest $request,
 		\Grpc\ServerContext $context
 	): ?\OCA\Cloud_Py_API\Proto\DbCursorReply {
-		$context->setStatus(\Grpc\Status::unimplemented());
+		$context->setStatus(\Grpc\Status::ok());
 		return $this->db->cursor($request);
 	}
 

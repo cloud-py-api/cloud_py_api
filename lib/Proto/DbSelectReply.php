@@ -24,9 +24,9 @@ class DbSelectReply extends \Google\Protobuf\Internal\Message
     /**
      *valid if only rowcount > 0.
      *
-     * Generated from protobuf field <code>int64 handle = 3;</code>
+     * Generated from protobuf field <code>string handle = 3;</code>
      */
-    protected $handle = 0;
+    protected $handle = '';
 
     /**
      * Constructor.
@@ -36,7 +36,7 @@ class DbSelectReply extends \Google\Protobuf\Internal\Message
      *
      *     @type int|string $rowCount
      *     @type string $error
-     *     @type int|string $handle
+     *     @type string $handle
      *          valid if only rowcount > 0.
      * }
      */
@@ -92,8 +92,8 @@ class DbSelectReply extends \Google\Protobuf\Internal\Message
     /**
      *valid if only rowcount > 0.
      *
-     * Generated from protobuf field <code>int64 handle = 3;</code>
-     * @return int|string
+     * Generated from protobuf field <code>string handle = 3;</code>
+     * @return string
      */
     public function getHandle()
     {
@@ -103,13 +103,13 @@ class DbSelectReply extends \Google\Protobuf\Internal\Message
     /**
      *valid if only rowcount > 0.
      *
-     * Generated from protobuf field <code>int64 handle = 3;</code>
-     * @param int|string $var
+     * Generated from protobuf field <code>string handle = 3;</code>
+     * @param string $var
      * @return $this
      */
     public function setHandle($var)
     {
-        GPBUtil::checkInt64($var);
+        GPBUtil::checkString($var, True);
         $this->handle = $var;
 
         return $this;

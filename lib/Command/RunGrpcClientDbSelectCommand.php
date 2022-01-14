@@ -41,6 +41,16 @@ class RunGrpcClientDbSelectCommand extends Command {
 	public const ARGUMENT_HOSTNAME = 'hostname';
 	public const ARGUMENT_PORT = 'port';
 
+	public const ARGUMENT_COLUMNS = 'columns';
+	public const ARGUMENT_FROM = 'from';
+	public const ARGUMENT_JOINS = 'joins';
+	public const ARGUMENT_WHEREAS = 'whereas';
+	public const ARGUMENT_GROUP_BY = 'groupBy';
+	public const ARGUMENT_HAVINGS = 'havings';
+	public const ARGUMENT_ORDER_BY = 'orderBy';
+	public const ARGUMENT_MAX_RESULTS = 'maxResults';
+	public const ARGUMENT_FIRST_RESULT = 'firstResult';
+
 	/** @var ServerService */
 	private $serverService;
 
@@ -55,6 +65,15 @@ class RunGrpcClientDbSelectCommand extends Command {
 		$this->setDescription("Run GRPC client DbSelect request");
 		$this->addArgument(self::ARGUMENT_HOSTNAME, InputArgument::REQUIRED);
 		$this->addArgument(self::ARGUMENT_PORT, InputArgument::REQUIRED);
+		// $this->addArgument(self::ARGUMENT_COLUMNS, InputArgument::REQUIRED);
+		// $this->addArgument(self::ARGUMENT_FROM, InputArgument::REQUIRED);
+		// $this->addArgument(self::ARGUMENT_JOINS, InputArgument::OPTIONAL);
+		// $this->addArgument(self::ARGUMENT_WHEREAS, InputArgument::OPTIONAL);
+		// $this->addArgument(self::ARGUMENT_GROUP_BY, InputArgument::OPTIONAL);
+		// $this->addArgument(self::ARGUMENT_HAVINGS, InputArgument::OPTIONAL);
+		// $this->addArgument(self::ARGUMENT_ORDER_BY, InputArgument::OPTIONAL);
+		// $this->addArgument(self::ARGUMENT_MAX_RESULTS, InputArgument::OPTIONAL);
+		// $this->addArgument(self::ARGUMENT_FIRST_RESULT, InputArgument::OPTIONAL);
 	}
 
 	protected function execute(InputInterface $input, OutputInterface $output): int {

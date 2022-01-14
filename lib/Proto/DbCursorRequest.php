@@ -18,9 +18,9 @@ class DbCursorRequest extends \Google\Protobuf\Internal\Message
      */
     protected $cmd = 0;
     /**
-     * Generated from protobuf field <code>int64 handle = 2;</code>
+     * Generated from protobuf field <code>string handle = 2;</code>
      */
-    protected $handle = 0;
+    protected $handle = '';
 
     /**
      * Constructor.
@@ -29,7 +29,7 @@ class DbCursorRequest extends \Google\Protobuf\Internal\Message
      *     Optional. Data for populating the Message object.
      *
      *     @type int $cmd
-     *     @type int|string $handle
+     *     @type string $handle
      * }
      */
     public function __construct($data = NULL) {
@@ -60,8 +60,8 @@ class DbCursorRequest extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     * Generated from protobuf field <code>int64 handle = 2;</code>
-     * @return int|string
+     * Generated from protobuf field <code>string handle = 2;</code>
+     * @return string
      */
     public function getHandle()
     {
@@ -69,13 +69,13 @@ class DbCursorRequest extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     * Generated from protobuf field <code>int64 handle = 2;</code>
-     * @param int|string $var
+     * Generated from protobuf field <code>string handle = 2;</code>
+     * @param string $var
      * @return $this
      */
     public function setHandle($var)
     {
-        GPBUtil::checkInt64($var);
+        GPBUtil::checkString($var, True);
         $this->handle = $var;
 
         return $this;

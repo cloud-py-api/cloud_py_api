@@ -37,17 +37,22 @@ use Grpc\RpcServer;
 use Grpc\ClientStreamingCall;
 use Grpc\ServerStreamingCall;
 
+use OCA\Cloud_Py_API\Proto\TaskInitReply;
+use OCA\Cloud_Py_API\Proto\TaskInitReply\cfgOptions;
 use OCA\Cloud_Py_API\Proto\FsCreateReply;
 use OCA\Cloud_Py_API\Proto\FsNodeInfo;
 use OCA\Cloud_Py_API\Proto\FsReadReply;
 use OCA\Cloud_Py_API\Proto\FsReply;
-use OCA\Cloud_Py_API\Proto\TaskInitReply;
-use OCA\Cloud_Py_API\Proto\TaskInitReply\cfgOptions;
+use OCA\Cloud_Py_API\Proto\DbSelectReply;
+use OCA\Cloud_Py_API\Proto\DbCursorReply;
+use OCA\Cloud_Py_API\Proto\DbCursorRequest\cCmd;
 
 use OCA\Cloud_Py_API\Framework\Core;
 use OCA\Cloud_Py_API\Framework\Db;
 use OCA\Cloud_Py_API\Framework\Fs;
 
+use OCA\Cloud_Py_API\AppInfo\Application;
+use OCA\Cloud_Py_API\Proto\DbCursorReply\columnData;
 
 class ServerService {
 
@@ -331,7 +336,49 @@ class ServerService {
 		$hostname = $input->getArgument('hostname');
 		$port = $input->getArgument('port');
 		$client = $this->cpaCore->createClient(['hostname' => $hostname, 'port' => $port]);
-		list($response, $status) = $this->cpaDb->DbSelect($client, []);
+		/** @var DbSelectReply $response */
+		list($response, $status) = $this->cpaDb->DbSelect($client, [
+			'columns' => [
+				['name' => '*'],
+			],
+			'from' => [
+				['name' => Application::APP_ID . '_settings'],
+			],
+			'joins' => null,
+			'whereas' => null,
+			'groupBy' => null,
+			'havings' => null,
+			'orderBy' => null,
+			'maxResults' => 1, // limit
+			'firstResult' => null, // offset
+		]);
+		$output->writeln('Response status: ' . json_encode($status));
+		$output->writeln('Response: ' . json_encode($response));
+		if (isset($response)) {
+			$output->writeln('Found rows: ' . $response->getRowCount());
+			if ($response->getRowCount() > 0 && $response->getHandle() !== '') {
+				/** @var DbCursorReply */
+				list ($cResponse, $cStatus) = $this->cpaDb->DbCursor($client, [
+					'cmd' => cCmd::FETCH_ALL,
+					'handle' => $response->getHandle(),
+				]);
+				$output->writeln('Cursor response status: ' . json_encode($cStatus));
+				if (isset($cResponse)) {
+					$output->writeln('Response: ' . json_encode($cResponse));
+					$output->write('Columns: ');
+					foreach($cResponse->getColumnsName() as $columName) {
+						$output->write(' ' . $columName);
+					}
+					$output->writeln('');
+					$output->write('Columns data: ');
+					/** @var columnData $columnData */
+					foreach($cResponse->getColumnsData() as $columnData) {
+						$output->write(' ' . $columnData->getData());
+					}
+					$output->writeln('');
+				}
+			}
+		}
 	}
 
 	public function testDbExec(InputInterface $input, OutputInterface $output) {
