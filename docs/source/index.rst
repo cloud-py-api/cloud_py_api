@@ -11,6 +11,9 @@ Welcome to cloud_py_api documentation!
    usage
    faq/index
 
+.. warning::
+   Documentation is in developing
+
 Indices and tables
 ==================
 
