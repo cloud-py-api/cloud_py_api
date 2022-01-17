@@ -1,2 +1,2 @@
 from .cloud_api import CloudApi, LogLvl
-from .fs import FsObjId, FsResultCode
+from .fs_api import FsObjId, FsObjInfo, FsResultCode

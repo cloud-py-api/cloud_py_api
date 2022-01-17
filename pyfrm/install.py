@@ -245,7 +245,6 @@ def check() -> [bool, int]:
         for package_name, install_info in _missing_required.items():
             log(LogLvl.ERROR, f'Missing {package_name}:{install_info}')
         return False, 1
-    log(LogLvl.DEBUG, *sys.path)
     _missing_extra = get_missing_packages(ExtraPackagesList)
     for package_name, install_info in _missing_extra.items():
         log(LogLvl.WARN, f'Missing {package_name}:{install_info}')
@@ -391,9 +390,9 @@ if __name__ == '__main__':
     group.add_argument('--check', dest='check', action='store_true',
                        help='Check installation.')
     group.add_argument('--install', dest='install', action='store_true',
-                       help='Perform installation.')
+                       help='Perform installation of basic modules for pyfrm.')
     group.add_argument('--install-extra', dest='install_extra', action='store_true',
-                       help='Perform installation.')
+                       help='Perform installation of extra modules in shared core folder.')
     group.add_argument('--update-pip', dest='update_pip', action='store_true',
                        help='Perform built-in or local pip update.')
     args = parser.parse_args()

@@ -10,7 +10,7 @@ from core_pb2 import taskStatus, Empty, \
     FsCreateRequest, FsWriteRequest, FsDeleteRequest, FsMoveRequest
 import core_pb2_grpc
 from helpers import debug_msg
-from nc_py_api.fs import FsObjInfo, FsResultCode
+from nc_py_api.fs_api import FsObjInfo, FsResultCode
 
 
 class ClientCloudPA:
@@ -152,7 +152,7 @@ class ClientCloudPA:
         fs_reply = self._main_stub.FsDelete(FsDeleteRequest(fileId=fsId(userId=user_id, fileId=file_id)))
         return FsResultCode(fs_reply.resCode)
 
-    def fs_move(self, user_id: str, file_id: int, target_path: str, copy: bool = False) -> FsResultCode:
+    def fs_move(self, user_id: str, file_id: int, target_path: str, copy: bool = False) -> [FsResultCode, str, int]:
         fs_reply = self._main_stub.FsMove(FsMoveRequest(fileId=fsId(userId=user_id, fileId=file_id),
                                                         targetPath=target_path, copy=copy))
-        return FsResultCode(fs_reply.resCode)
+        return FsResultCode(fs_reply.resCode), fs_reply.fileId.userId, fs_reply.fileId.fileId

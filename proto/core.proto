@@ -49,7 +49,7 @@ message TaskInitReply {
     int32 maxCreateFileContent = 8;
   }
   cfgOptions config = 6;
-  string handler = 7;                 //PHP Callback handler for TaskExit
+  string handler = 7;                     //PHP Callback handler for TaskExit
 }
 
 message TaskSetStatusRequest {            //No reply.
@@ -221,7 +221,7 @@ message DbCursorReply {
   string error = 1;
   repeated string columnsName = 2;
   message columnData {
-    bool bPresent = 1;                      //if result is NULL for that column raw, then this is True.
+    bool present = 1;                       //if result is NULL for that column raw, then this is True.
     bytes data = 2;                         //present if result fir column raw is not NULL.
   }
   repeated columnData columnsData = 3;
@@ -242,7 +242,8 @@ message DbExecRequest {
 
 message DbExecReply {
   int64 nAffectedRows = 1;
-  string error = 2;
+  int64 lastInsertId = 2;
+  string error = 3;
 }
 
 /* DB messages end */
