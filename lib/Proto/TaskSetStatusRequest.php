@@ -9,20 +9,18 @@ use Google\Protobuf\Internal\RepeatedField;
 use Google\Protobuf\Internal\GPBUtil;
 
 /**
- *No reply.
- *
  * Generated from protobuf message <code>OCA.Cloud_Py_API.Proto.TaskSetStatusRequest</code>
  */
 class TaskSetStatusRequest extends \Google\Protobuf\Internal\Message
 {
     /**
-     *Status code of a task.
+     * Status code of a task.
      *
      * Generated from protobuf field <code>.OCA.Cloud_Py_API.Proto.taskStatus st_code = 1;</code>
      */
     protected $st_code = 0;
     /**
-     *Optional error, if any. Valid only when Status is non success/in_progress.
+     * Optional error, if any. Valid only when Status is non success/in_progress.
      *
      * Generated from protobuf field <code>string error = 2;</code>
      */
@@ -35,9 +33,9 @@ class TaskSetStatusRequest extends \Google\Protobuf\Internal\Message
      *     Optional. Data for populating the Message object.
      *
      *     @type int $st_code
-     *          Status code of a task.
+     *           Status code of a task.
      *     @type string $error
-     *          Optional error, if any. Valid only when Status is non success/in_progress.
+     *           Optional error, if any. Valid only when Status is non success/in_progress.
      * }
      */
     public function __construct($data = NULL) {
@@ -46,7 +44,7 @@ class TaskSetStatusRequest extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     *Status code of a task.
+     * Status code of a task.
      *
      * Generated from protobuf field <code>.OCA.Cloud_Py_API.Proto.taskStatus st_code = 1;</code>
      * @return int
@@ -57,7 +55,7 @@ class TaskSetStatusRequest extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     *Status code of a task.
+     * Status code of a task.
      *
      * Generated from protobuf field <code>.OCA.Cloud_Py_API.Proto.taskStatus st_code = 1;</code>
      * @param int $var
@@ -72,7 +70,7 @@ class TaskSetStatusRequest extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     *Optional error, if any. Valid only when Status is non success/in_progress.
+     * Optional error, if any. Valid only when Status is non success/in_progress.
      *
      * Generated from protobuf field <code>string error = 2;</code>
      * @return string
@@ -83,7 +81,7 @@ class TaskSetStatusRequest extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     *Optional error, if any. Valid only when Status is non success/in_progress.
+     * Optional error, if any. Valid only when Status is non success/in_progress.
      *
      * Generated from protobuf field <code>string error = 2;</code>
      * @param string $var

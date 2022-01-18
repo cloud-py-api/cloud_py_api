@@ -4,8 +4,6 @@
 namespace OCA\Cloud_Py_API\Proto;
 
 /**
- * DB messages end 
- *
  */
 class CloudPyApiCoreStub {
 

@@ -3,14 +3,13 @@ syntax = "proto3";
 package OCA.Cloud_Py_API.Proto;
 
 /*
-All communications messages send by client, server only replies on them.
+  All communications messages send by client, server only replies on them.
 
-Client must set TaskStatus and send TaskExit messages before exit.
-Shutdown: server closes socket.
-Remark: Both client and server part, must stop work after communication channel become broken.
+  Client must set TaskStatus and send TaskExit messages before exit.
+  Shutdown: server closes socket.
+  Remark: Both client and server part, must stop work after communication channel become broken.
 */
 
-/* cloud_py_api internal messages start */
 
 /* docs.nextcloud.com/server/latest/admin_manual/configuration_server/logging_configuration.html#log-level */
 enum logLvl {
@@ -23,244 +22,46 @@ enum logLvl {
 
 enum taskStatus {
     ST_SUCCESS = 0;
-    ST_IN_PROGRESS = 1;                   //pyfrm init done, running target app
-    ST_INIT_ERROR = 2;                    //pyfrm cannot init target app
-    ST_EXCEPTION = 3;                     //unexpected exception occurred
-    ST_ERROR = 4;                         //target app return error status
-    ST_UNKNOWN = 5;                       //default task state at start
+    ST_IN_PROGRESS = 1;                   // pyfrm init done, running target app
+    ST_INIT_ERROR = 2;                    // pyfrm cannot init target app
+    ST_EXCEPTION = 3;                     // Unexpected exception occurred
+    ST_ERROR = 4;                         // Target app return error status
+    ST_UNKNOWN = 5;                       // Default task state at start
 }
 
 message Empty { }
 
 message TaskInitReply {
-  string appName = 1;                     //name of the app(folder in frmAppData must be present with the same name).
-  string modName = 2;                     //module name to use for `import_module` func.
-  string modPath = 3;                     //Path to module root, to be executed.
-  string funcName = 4;                    //Which function to execute.
-  repeated string args = 5;               //Optional arguments to pass to target python app's module.
+  string appName = 1;                     // Name of the app(folder in frmAppData must be present with the same name).
+  string modName = 2;                     // Module name to use for `import_module` func.
+  string modPath = 3;                     // Path to module root, to be executed.
+  string funcName = 4;                    // Which function to execute.
+  repeated string args = 5;               // Optional arguments to pass to target python app's module.
   message cfgOptions {
-    logLvl log_lvl = 1;                   //0-4 , level logs from NC documentation.
-    string dataFolder = 2;                //Path to NC data folder.
-    string frameworkAppData = 3;          //Path to cloud_py_api app data folder.
-    string userId = 4;                    //Current NC user UID
-    bool useFileDirect = 5;               //Use extra direct FS module for python, when possible.
-    bool useDBDirect = 6;                 //Use extra direct DB module for python, if possible.
-    int32 maxChunkSize = 7;
-    int32 maxCreateFileContent = 8;
+    logLvl log_lvl = 1;                   // 0-4 , level logs from NC documentation.
+    string dataFolder = 2;                // Path to NC data folder.
+    string frameworkAppData = 3;          // Path to cloud_py_api app data folder.
+    string userId = 4;                    // Current NC user UID
+    bool useFileDirect = 5;               // Use extra direct FS module for python, when possible.
+    bool useDBDirect = 6;                 // Use extra direct DB module for python, if possible.
+    int32 maxChunkSize = 7;               // Maximum chunk size for FS operations
+    int32 maxCreateFileContent = 8;       // Maximum chunk size for FS Create operations
   }
   cfgOptions config = 6;
   string handler = 7;                     //PHP Callback handler for TaskExit
 }
 
-message TaskSetStatusRequest {            //No reply.
-  taskStatus st_code = 1;                 //Status code of a task.
-  string error = 2;                       //Optional error, if any. Valid only when Status is non success/in_progress.
+message TaskSetStatusRequest {
+  taskStatus st_code = 1;                 // Status code of a task.
+  string error = 2;                       // Optional error, if any. Valid only when Status is non success/in_progress.
 }
 
-message TaskExitRequest {                 //No reply. Server must close pipe/socket after this message.
-  string result = 1;                      //Result of task, if any.
+message TaskExitRequest {                 // No reply. Server must close pipe/socket after this message.
+  string result = 1;                      // Result of task, if any.
 }
 
-message TaskLogRequest {                  //No reply.
+message TaskLogRequest {                  // No reply.
   logLvl log_lvl = 1;
-  string module = 2;                      //What module logs belongs to.
-  repeated string content = 3;            //One or more strings to put to log.
-}
-
-/* cloud_py_api internal messages end */
-
-/* FS messages start */
-
-enum fsResultCode {
-    NO_ERROR = 0;
-    NOT_PERMITTED = 1;
-    LOCKED = 2;
-    NOT_FOUND = 3;
-    IO_ERROR = 4;
-}
-
-message fsId {
-  string userId = 1;
-  int64 fileId = 2;
-}
-
-message FsGetInfoRequest {
-  fsId fileId = 1;
-}
-
-message FsNodeInfo {
-  fsId fileId = 1;
-  bool is_dir = 2;
-  bool is_local = 3;
-  string mimetype = 4;
-  string name = 5;
-  string internal_path = 6;
-  string abs_path = 7;
-  int64 size = 8;
-  int64 permissions = 9;
-  int64 mtime = 10;
-  string checksum = 11;
-  bool encrypted = 12;
-  string etag = 13;
-  string ownerName = 14;
-  string storageId = 15;
-  int64 mountId = 16;
-}
-
-message FsListRequest {
-  fsId dirId = 1;
-}
-
-message FsListReply {
-  repeated FsNodeInfo nodes = 1;
-}
-
-message FsReadRequest {
-  fsId fileId = 1;
-  int64 offset = 2;
-  int64 bytes_to_read = 3;
-}
-
-message FsReadReply {
-  fsResultCode resCode = 1;
-  bool last = 2;
-  bytes content = 3;                      //Present only if resCode is NO_ERROR.
-}
-
-message FsCreateRequest {                 //Reply for this is a FsCreateReply message.
-  fsId parentDirId = 1;
-  string name = 2;
-  bool is_file = 3;
-  bytes content = 4;
-}
-
-message FsCreateReply {                   //Reply for FsCreateRequest.
-  fsResultCode resCode = 1;
-  fsId fileId = 2;
-}
-
-message FsWriteRequest {                  //Reply for this is a FsReply message.
-  fsId fileId = 1;
-  bool last = 2;
-  bytes content = 3;
-}
-
-message FsDeleteRequest {                 //Reply for this is a FsReply message.
-  fsId fileId = 1;
-}
-
-message FsReply {
-  fsResultCode resCode = 1;
-}
-
-message FsMoveRequest {                   //Reply for this is a FsMoveReply message.
-  fsId fileId = 1;
-  string targetPath = 2;                  //absolute path relative to MP.
-  bool copy = 3;
-}
-
-message FsMoveReply {
-  fsResultCode resCode = 1;
-  fsId fileId = 2;
-}
-
-/* FS messages end */
-
-/* DB messages start */
-
-message whereExpr {                       //struct for `where` part.
-  string type = 1;                        //where, andWhere, orWhere
-  string expression = 2;
-}
-
-message str_alias {
-  string name = 1;
-  string alias = 2;
-}
-
-message DbSelectRequest {
-  repeated str_alias columns = 1;         //aliases or filed names.
-  repeated str_alias from = 2;
-  message joinType {
-    string name = 1;                      //join, innerJoin, leftJoin, rightJoin.
-    string fromAlias = 2;
-    string join = 3;
-    string alias = 4;
-    string condition = 5;
-  }
-  repeated joinType joins = 3;
-  repeated whereExpr whereas = 4;
-  repeated string groupBy = 5;
-  message havingExpr {
-    string type = 1;                      //having, andHaving, orHaving
-    string expression = 2;
-  }
-  repeated havingExpr havings = 6;
-  repeated string orderBy = 7;
-  int64 maxResults = 8;
-  int64 firstResult = 9;
-}
-
-message DbSelectReply {
-  int64 rowCount = 1;
-  string error = 2;
-  string handle = 3;                         //valid if only rowcount > 0.
-}
-
-message DbCursorRequest {
-  enum cCmd {
-    FETCH = 0;
-    FETCH_ALL = 1;
-    CLOSE = 2;
-  }
-  cCmd cmd = 1;
-  string handle = 2;
-}
-
-message DbCursorReply {
-  string error = 1;
-  repeated string columnsName = 2;
-  message columnData {
-    bool present = 1;                       //if result is NULL for that column raw, then this is True.
-    bytes data = 2;                         //present if result fir column raw is not NULL.
-  }
-  repeated columnData columnsData = 3;
-}
-
-message DbExecRequest {
-  enum rType {
-      INSERT = 0;
-      UPDATE = 1;
-      DELETE = 2;
-  }
-  rType type = 1;
-  string table_name = 2;
-  repeated string columns = 3;
-  repeated bytes values = 4;
-  repeated whereExpr whereas = 5;
-}
-
-message DbExecReply {
-  int64 nAffectedRows = 1;
-  int64 lastInsertId = 2;
-  string error = 3;
-}
-
-/* DB messages end */
-
-service CloudPyApiCore {
-  rpc TaskInit (Empty) returns (TaskInitReply) {}
-  rpc TaskStatus (TaskSetStatusRequest) returns (Empty) {}
-  rpc TaskExit (TaskExitRequest) returns (Empty) {}
-  rpc TaskLog (TaskLogRequest) returns (Empty) {}
-  rpc FsGetInfo (FsGetInfoRequest) returns (FsListReply) {}
-  rpc FsList (FsListRequest) returns (FsListReply) {}
-  rpc FsRead (FsReadRequest) returns (stream FsReadReply) {}
-  rpc FsCreate (FsCreateRequest) returns (FsCreateReply) {}
-  rpc FsWrite (stream FsWriteRequest) returns (FsReply) {}
-  rpc FsDelete (FsDeleteRequest) returns (FsReply) {}
-  rpc FsMove (FsMoveRequest) returns (FsMoveReply) {}
-  rpc DbSelect (DbSelectRequest) returns (DbSelectReply) {}
-  rpc DbCursor (DbCursorRequest) returns (DbCursorReply) {}
-  rpc DbExec (DbExecRequest) returns (DbExecReply) {}
+  string module = 2;                      // What module logs belongs to.
+  repeated string content = 3;            // One or more strings to put to log.
 }

@@ -9,14 +9,14 @@ use Google\Protobuf\Internal\RepeatedField;
 use Google\Protobuf\Internal\GPBUtil;
 
 /**
- *No reply. Server must close pipe/socket after this message.
+ * No reply. Server must close pipe/socket after this message.
  *
  * Generated from protobuf message <code>OCA.Cloud_Py_API.Proto.TaskExitRequest</code>
  */
 class TaskExitRequest extends \Google\Protobuf\Internal\Message
 {
     /**
-     *Result of task, if any.
+     * Result of task, if any.
      *
      * Generated from protobuf field <code>string result = 1;</code>
      */
@@ -29,7 +29,7 @@ class TaskExitRequest extends \Google\Protobuf\Internal\Message
      *     Optional. Data for populating the Message object.
      *
      *     @type string $result
-     *          Result of task, if any.
+     *           Result of task, if any.
      * }
      */
     public function __construct($data = NULL) {
@@ -38,7 +38,7 @@ class TaskExitRequest extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     *Result of task, if any.
+     * Result of task, if any.
      *
      * Generated from protobuf field <code>string result = 1;</code>
      * @return string
@@ -49,7 +49,7 @@ class TaskExitRequest extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     *Result of task, if any.
+     * Result of task, if any.
      *
      * Generated from protobuf field <code>string result = 1;</code>
      * @param string $var

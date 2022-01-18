@@ -16,31 +16,31 @@ class taskStatus
      */
     const ST_SUCCESS = 0;
     /**
-     *pyfrm init done, running target app
+     * pyfrm init done, running target app
      *
      * Generated from protobuf enum <code>ST_IN_PROGRESS = 1;</code>
      */
     const ST_IN_PROGRESS = 1;
     /**
-     *pyfrm cannot init target app
+     * pyfrm cannot init target app
      *
      * Generated from protobuf enum <code>ST_INIT_ERROR = 2;</code>
      */
     const ST_INIT_ERROR = 2;
     /**
-     *unexpected exception occurred
+     * Unexpected exception occurred
      *
      * Generated from protobuf enum <code>ST_EXCEPTION = 3;</code>
      */
     const ST_EXCEPTION = 3;
     /**
-     *target app return error status
+     * Target app return error status
      *
      * Generated from protobuf enum <code>ST_ERROR = 4;</code>
      */
     const ST_ERROR = 4;
     /**
-     *default task state at start
+     * Default task state at start
      *
      * Generated from protobuf enum <code>ST_UNKNOWN = 5;</code>
      */

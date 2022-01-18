@@ -62,36 +62,46 @@ class Db {
 		$request = new DbSelectRequest();
 		if (isset($params['columns'])) {
 			/** @var str_alias[] $columns */
-			$columns = array_reduce($params['columns'], function (array $carry, $column) {
+			$columns = array_reduce($params['columns'], function (array $carry, array $column) {
 				array_push($carry, $this->createStrAlias($column));
 				return $carry;
 			}, []);
+			$this->logger->info('[' . self::class . '] columns: ' . json_encode($columns));
 			$request->setColumns($columns);
 		}
 		if (isset($params['from'])) {
-			/** @var str_alias[] */
-			$froms = array_reduce($params['from'], function (array $carry, $from) {
+			/** @var str_alias[] $froms */
+			$froms = array_reduce($params['from'], function (array $carry, array $from) {
 				array_push($carry, $this->createStrAlias($from));
 				return $carry;
 			}, []);
 			$request->setFrom($froms);
 		}
 		if (isset($params['joins'])) {
-			// TODO Rewrite to parsing simple array to joinType
-			$request->setJoins([$params['joins']]);
+			/** @var joinType[] */
+			$joins = [];
+			foreach ($params['joins'] as $join) {
+				array_push($joins, $this->createJoinType($join));
+			}
+			$request->setJoins($joins);
 		}
 		if (isset($params['whereas'])) {
-			// TODO Rewrite to parsing simple array to whereExpr
-			$request->setWhereas([$params['whereas']]);
+			/** @var whereExpr[] */
+			$whereExpressions = [];
+			foreach ($params['whereas'] as $whereas) {
+				$whereExpr = $this->createWhereExpr($whereas);
+				array_push($whereExpressions, $whereExpr);
+			}
+			$request->setWhereas($whereExpressions);
 		}
 		if (isset($params['groupBy'])) {
-			$request->setGroupBy([$params['groupBy']]);
+			$request->setGroupBy($params['groupBy']);
 		}
 		if (isset($params['havings'])) {
 			$request->setHavings([$params['havings']]);
 		}
 		if (isset($params['orderBy'])) {
-			$request->setOrderBy([$params['orderBy']]);
+			$request->setOrderBy($params['orderBy']);
 		}
 		if (isset($params['maxResults'])) {
 			$request->setMaxResults($params['maxResults']);
@@ -115,11 +125,32 @@ class Db {
 
 	private function createJoinType(array $params = []): joinType {
 		$joinType = new joinType();
+		if (isset($params['name'])) {
+			$joinType->setName($params['name']);
+		}
+		if (isset($params['fromAlias'])) {
+			$joinType->setFromAlias($params['fromAlias']);
+		}
+		if (isset($params['join'])) {
+			$joinType->setJoin($params['join']);
+		}
+		if (isset($params['alias'])) {
+			$joinType->setAlias($params['alias']);
+		}
+		if (isset($params['condition'])) {
+			$joinType->setCondition($params['condition']);
+		}
 		return $joinType;
 	}
 
 	private function createWhereExpr(array $params = []): whereExpr {
 		$whereExpr = new whereExpr();
+		if (isset($params['type'])) {
+			$whereExpr->setType($params['type']);
+		}
+		if (isset($params['expression'])) {
+			$whereExpr->setExpression(json_encode($params['expression']));
+		}
 		return $whereExpr;
 	}
 
@@ -136,6 +167,21 @@ class Db {
 	 */
 	public function DbExec($client, $params = []): array {
 		$request = new DbExecRequest();
+		if (isset($params['type'])) {
+			$request->setType($params['type']);
+		}
+		if (isset($params['tableName'])) {
+			$request->setTableName($params['tableName']);
+		}
+		if (isset($params['columns'])) {
+			$request->setTableName($params['columns']);
+		}
+		if (isset($params['values'])) {
+			$request->setValues($params['values']);
+		}
+		if (isset($params['whereas'])) {
+			$request->setWhereas($params['whereas']);
+		}
 		return $client->DbExec($request)->wait();
 	}
 

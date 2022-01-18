@@ -38,6 +38,7 @@ use OCA\Cloud_Py_API\Proto\TaskLogRequest;
 use OCA\Cloud_Py_API\Proto\TaskSetStatusRequest;
 
 use OCA\Cloud_Py_API\AppInfo\Application;
+use OCA\Cloud_Py_API\Framework\Manager\QueriesManager;
 use OCA\Cloud_Py_API\Proto\logLvl;
 use OCA\Cloud_Py_API\Service\AppsService;
 use OCA\Cloud_Py_API\Service\ServerService;
@@ -126,6 +127,7 @@ class TaskHandle {
 		if (isset(ServerService::$APP['handler'])) {
 			call_user_func(ServerService::$APP['handler'], ['result' => $request->getResult()]);
 		}
+		QueriesManager::closeAllQueries(); // Close possible opened cursors on shutdown
 		exit(0); // Temporal workaround, because of bad GRPC implementation for PHP
 		return new PBEmpty(null);
 	}

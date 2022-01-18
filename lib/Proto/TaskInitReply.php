@@ -14,31 +14,31 @@ use Google\Protobuf\Internal\GPBUtil;
 class TaskInitReply extends \Google\Protobuf\Internal\Message
 {
     /**
-     *name of the app(folder in frmAppData must be present with the same name).
+     * Name of the app(folder in frmAppData must be present with the same name).
      *
      * Generated from protobuf field <code>string appName = 1;</code>
      */
     protected $appName = '';
     /**
-     *module name to use for `import_module` func.
+     * Module name to use for `import_module` func.
      *
      * Generated from protobuf field <code>string modName = 2;</code>
      */
     protected $modName = '';
     /**
-     *Path to module root, to be executed.
+     * Path to module root, to be executed.
      *
      * Generated from protobuf field <code>string modPath = 3;</code>
      */
     protected $modPath = '';
     /**
-     *Which function to execute.
+     * Which function to execute.
      *
      * Generated from protobuf field <code>string funcName = 4;</code>
      */
     protected $funcName = '';
     /**
-     *Optional arguments to pass to target python app's module.
+     * Optional arguments to pass to target python app's module.
      *
      * Generated from protobuf field <code>repeated string args = 5;</code>
      */
@@ -61,15 +61,15 @@ class TaskInitReply extends \Google\Protobuf\Internal\Message
      *     Optional. Data for populating the Message object.
      *
      *     @type string $appName
-     *          name of the app(folder in frmAppData must be present with the same name).
+     *           Name of the app(folder in frmAppData must be present with the same name).
      *     @type string $modName
-     *          module name to use for `import_module` func.
+     *           Module name to use for `import_module` func.
      *     @type string $modPath
-     *          Path to module root, to be executed.
+     *           Path to module root, to be executed.
      *     @type string $funcName
-     *          Which function to execute.
+     *           Which function to execute.
      *     @type string[]|\Google\Protobuf\Internal\RepeatedField $args
-     *          Optional arguments to pass to target python app's module.
+     *           Optional arguments to pass to target python app's module.
      *     @type \OCA\Cloud_Py_API\Proto\TaskInitReply\cfgOptions $config
      *     @type string $handler
      *          PHP Callback handler for TaskExit
@@ -81,7 +81,7 @@ class TaskInitReply extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     *name of the app(folder in frmAppData must be present with the same name).
+     * Name of the app(folder in frmAppData must be present with the same name).
      *
      * Generated from protobuf field <code>string appName = 1;</code>
      * @return string
@@ -92,7 +92,7 @@ class TaskInitReply extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     *name of the app(folder in frmAppData must be present with the same name).
+     * Name of the app(folder in frmAppData must be present with the same name).
      *
      * Generated from protobuf field <code>string appName = 1;</code>
      * @param string $var
@@ -107,7 +107,7 @@ class TaskInitReply extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     *module name to use for `import_module` func.
+     * Module name to use for `import_module` func.
      *
      * Generated from protobuf field <code>string modName = 2;</code>
      * @return string
@@ -118,7 +118,7 @@ class TaskInitReply extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     *module name to use for `import_module` func.
+     * Module name to use for `import_module` func.
      *
      * Generated from protobuf field <code>string modName = 2;</code>
      * @param string $var
@@ -133,7 +133,7 @@ class TaskInitReply extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     *Path to module root, to be executed.
+     * Path to module root, to be executed.
      *
      * Generated from protobuf field <code>string modPath = 3;</code>
      * @return string
@@ -144,7 +144,7 @@ class TaskInitReply extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     *Path to module root, to be executed.
+     * Path to module root, to be executed.
      *
      * Generated from protobuf field <code>string modPath = 3;</code>
      * @param string $var
@@ -159,7 +159,7 @@ class TaskInitReply extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     *Which function to execute.
+     * Which function to execute.
      *
      * Generated from protobuf field <code>string funcName = 4;</code>
      * @return string
@@ -170,7 +170,7 @@ class TaskInitReply extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     *Which function to execute.
+     * Which function to execute.
      *
      * Generated from protobuf field <code>string funcName = 4;</code>
      * @param string $var
@@ -185,7 +185,7 @@ class TaskInitReply extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     *Optional arguments to pass to target python app's module.
+     * Optional arguments to pass to target python app's module.
      *
      * Generated from protobuf field <code>repeated string args = 5;</code>
      * @return \Google\Protobuf\Internal\RepeatedField
@@ -196,7 +196,7 @@ class TaskInitReply extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     *Optional arguments to pass to target python app's module.
+     * Optional arguments to pass to target python app's module.
      *
      * Generated from protobuf field <code>repeated string args = 5;</code>
      * @param string[]|\Google\Protobuf\Internal\RepeatedField $var

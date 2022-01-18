@@ -33,6 +33,8 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+use OCP\DB\QueryBuilder\IQueryBuilder;
+
 use Grpc\RpcServer;
 use Grpc\ClientStreamingCall;
 use Grpc\ServerStreamingCall;
@@ -46,13 +48,18 @@ use OCA\Cloud_Py_API\Proto\FsReply;
 use OCA\Cloud_Py_API\Proto\DbSelectReply;
 use OCA\Cloud_Py_API\Proto\DbCursorReply;
 use OCA\Cloud_Py_API\Proto\DbCursorRequest\cCmd;
+use OCA\Cloud_Py_API\Proto\DbCursorReply\columnData;
+use OCA\Cloud_Py_API\Proto\DbExecRequest\rType;
+use OCA\Cloud_Py_API\Proto\exprType;
+use OCA\Cloud_Py_API\Proto\pType;
+use OCA\Cloud_Py_API\Proto\pValueType;
 
 use OCA\Cloud_Py_API\Framework\Core;
 use OCA\Cloud_Py_API\Framework\Db;
 use OCA\Cloud_Py_API\Framework\Fs;
 
 use OCA\Cloud_Py_API\AppInfo\Application;
-use OCA\Cloud_Py_API\Proto\DbCursorReply\columnData;
+
 
 class ServerService {
 
@@ -339,16 +346,31 @@ class ServerService {
 		/** @var DbSelectReply $response */
 		list($response, $status) = $this->cpaDb->DbSelect($client, [
 			'columns' => [
-				['name' => '*'],
+				['name' => 's.name'],
 			],
 			'from' => [
-				['name' => Application::APP_ID . '_settings'],
+				['name' => Application::APP_ID . '_settings', 'alias' => 's'],
 			],
 			'joins' => null,
-			'whereas' => null,
+			'whereas' => [
+				[
+					'type' => 'where',
+					'expression' => [
+						'type' => exprType::EQ,
+						'column' => 'name',
+						'param' => [
+							'name' => 'name',
+							'value' => 'appdata_path',
+							'value_type' => pValueType::STR,
+							'param_type' => pType::NAMED,
+							'placeholder' => 'App data param placeholder',
+						]
+					]
+				],
+			],
 			'groupBy' => null,
 			'havings' => null,
-			'orderBy' => null,
+			'orderBy' => ['name'],
 			'maxResults' => 1, // limit
 			'firstResult' => null, // offset
 		]);
@@ -358,7 +380,7 @@ class ServerService {
 			$output->writeln('Found rows: ' . $response->getRowCount());
 			if ($response->getRowCount() > 0 && $response->getHandle() !== '') {
 				/** @var DbCursorReply */
-				list ($cResponse, $cStatus) = $this->cpaDb->DbCursor($client, [
+				list($cResponse, $cStatus) = $this->cpaDb->DbCursor($client, [
 					'cmd' => cCmd::FETCH_ALL,
 					'handle' => $response->getHandle(),
 				]);
@@ -376,6 +398,12 @@ class ServerService {
 						$output->write(' ' . $columnData->getData());
 					}
 					$output->writeln('');
+					/** @var DbCursorReply */
+					list($cCloseResponse, $cCloseStatus) = $this->cpaDb->DbCursor($client, [
+						'cmd' => cCmd::CLOSE,
+						'handle' => $response->getHandle(),
+					]);
+					$output->writeln('Close cursor status: ' . json_encode($cCloseStatus));
 				}
 			}
 		}
@@ -385,13 +413,40 @@ class ServerService {
 		$hostname = $input->getArgument('hostname');
 		$port = $input->getArgument('port');
 		$client = $this->cpaCore->createClient(['hostname' => $hostname, 'port' => $port]);
-		list($response, $status) = $this->cpaDb->DbExec($client, []);
+		list($response, $status) = $this->cpaDb->DbExec($client, [
+			'type' => rType::INSERT,
+			'tableName' => Application::APP_ID . '_settings',
+			'columns' => [],
+			'values' => [],
+			'whereas' => [],
+		]);
+		$output->writeln('Response status: ' . json_encode($status));
 	}
 
 	public function testDbCursor(InputInterface $input, OutputInterface $output) {
 		$hostname = $input->getArgument('hostname');
 		$port = $input->getArgument('port');
+		$cmd = $input->getArgument('cmd');
+		$handle = $input->getArgument('handle');
 		$client = $this->cpaCore->createClient(['hostname' => $hostname, 'port' => $port]);
-		list($response, $status) = $this->cpaDb->DbCursor($client, []);
+		list($response, $status) = $this->cpaDb->DbCursor($client, [
+			'cmd' => $cmd,
+			'handle' => $handle,
+		]);
+		$output->writeln('Response status: ' . json_encode($status));
+		if (isset($response)) {
+			$output->writeln('Response: ' . json_encode($response));
+			$output->write('Columns: ');
+			foreach($response->getColumnsName() as $columName) {
+				$output->write(' ' . $columName);
+			}
+			$output->writeln('');
+			$output->write('Columns data: ');
+			/** @var columnData $columnData */
+			foreach($response->getColumnsData() as $columnData) {
+				$output->write(' ' . $columnData->getData());
+			}
+			$output->writeln('');
+		}
 	}
 }

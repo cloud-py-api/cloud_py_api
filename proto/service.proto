@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package OCA.Cloud_Py_API.Proto;
+
+import "core.proto";
+import "fs.proto";
+import "db.proto";
+
+
+service CloudPyApiCore {
+  rpc TaskInit (OCA.Cloud_Py_API.Proto.Empty) returns (OCA.Cloud_Py_API.Proto.TaskInitReply) {}
+  rpc TaskStatus (OCA.Cloud_Py_API.Proto.TaskSetStatusRequest) returns (OCA.Cloud_Py_API.Proto.Empty) {}
+  rpc TaskExit (OCA.Cloud_Py_API.Proto.TaskExitRequest) returns (OCA.Cloud_Py_API.Proto.Empty) {}
+  rpc TaskLog (OCA.Cloud_Py_API.Proto.TaskLogRequest) returns (OCA.Cloud_Py_API.Proto.Empty) {}
+  rpc FsGetInfo (OCA.Cloud_Py_API.Proto.FsGetInfoRequest) returns (OCA.Cloud_Py_API.Proto.FsListReply) {}
+  rpc FsList (OCA.Cloud_Py_API.Proto.FsListRequest) returns (OCA.Cloud_Py_API.Proto.FsListReply) {}
+  rpc FsRead (OCA.Cloud_Py_API.Proto.FsReadRequest) returns (stream OCA.Cloud_Py_API.Proto.FsReadReply) {}
+  rpc FsCreate (OCA.Cloud_Py_API.Proto.FsCreateRequest) returns (OCA.Cloud_Py_API.Proto.FsCreateReply) {}
+  rpc FsWrite (stream OCA.Cloud_Py_API.Proto.FsWriteRequest) returns (OCA.Cloud_Py_API.Proto.FsReply) {}
+  rpc FsDelete (OCA.Cloud_Py_API.Proto.FsDeleteRequest) returns (OCA.Cloud_Py_API.Proto.FsReply) {}
+  rpc FsMove (OCA.Cloud_Py_API.Proto.FsMoveRequest) returns (OCA.Cloud_Py_API.Proto.FsMoveReply) {}
+  rpc DbSelect (OCA.Cloud_Py_API.Proto.DbSelectRequest) returns (OCA.Cloud_Py_API.Proto.DbSelectReply) {}
+  rpc DbCursor (OCA.Cloud_Py_API.Proto.DbCursorRequest) returns (OCA.Cloud_Py_API.Proto.DbCursorReply) {}
+  rpc DbExec (OCA.Cloud_Py_API.Proto.DbExecRequest) returns (OCA.Cloud_Py_API.Proto.DbExecReply) {}
+}

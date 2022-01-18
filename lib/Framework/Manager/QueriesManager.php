@@ -98,7 +98,7 @@ class QueriesManager {
 	 * 
 	 * @return void
 	 */
-	public static function closeAllResults(): void {
+	public static function closeAllQueries(): void {
 		foreach (self::$queries as $query_id => $result) {
 			if (self::removeQueryResult($query_id)) {
 				$result->closeCursor();

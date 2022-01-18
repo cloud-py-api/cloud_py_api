@@ -43,7 +43,14 @@ use OCA\Cloud_Py_API\Proto\DbExecReply;
 use OCA\Cloud_Py_API\Proto\DbExecRequest;
 use OCA\Cloud_Py_API\Proto\DbSelectReply;
 use OCA\Cloud_Py_API\Proto\DbSelectRequest;
-
+use OCA\Cloud_Py_API\Proto\DbSelectRequest\havingExpr;
+use OCA\Cloud_Py_API\Proto\DbSelectRequest\joinType;
+use OCA\Cloud_Py_API\Proto\exprType;
+use OCA\Cloud_Py_API\Proto\pType;
+use OCA\Cloud_Py_API\Proto\whereExpr;
+use OCP\DB\QueryBuilder\IParameter;
+use OCP\IConfig;
+use PDO;
 use Psr\Log\LoggerInterface;
 
 
@@ -54,7 +61,7 @@ class DbHandle {
 	/** @var IDBConnection */
 	private $dbConnection;
 
-	public function __construct(IDBConnection $dbConnection, LoggerInterface $logger)
+	public function __construct(IDBConnection $dbConnection, IConfig $config, LoggerInterface $logger)
 	{
 		$this->dbConnection = $dbConnection;
 		$this->logger = $logger;
@@ -80,29 +87,66 @@ class DbHandle {
 				array_push($columns, [$column->getName()]);
 			}
 		}
+		$qb->select(...$columns);
+
 		/** @var RepeatedField */
 		$strFroms = $request->getFrom();
 		if (isset($strFroms[0])) {
-			$from = $strFroms[0]->getName();
+			if ($strFroms[0]->getAlias() !== '') {
+				$qb->from($strFroms[0]->getName(), $strFroms[0]->getAlias());
+			} else {
+				$qb->from($strFroms[0]->getName());
+			}
 		}
-		$joins = $request->getJoins();
-		$whereas = $request->getWhereas();
-		$groupBy = $request->getGroupBy();
-		$havings = $request->getHavings();
-		$orderBy = $request->getOrderBy();
-		$maxResults = $request->getMaxResults();
-		$firstResult = $request->getFirstResult();
 
-		$qb->select(...$columns)
-			->from($from)
-			->setMaxResults($maxResults)
-			->setFirstResult($firstResult);
+		/** @var joinType */
+		foreach ($request->getJoins() as $join) {
+			$qb->join($join->getFromAlias(), $join->getJoin(), $join->getAlias(), $join->getCondition());
+		}
+
+		/** @var whereExpr $whereas */
+		foreach ($request->getWhereas() as $whereas) {
+			$whereExpr = $this->buildWhereExpr($qb, $whereas);
+			if ($whereas->getType() === 'where') {
+				$qb->where($whereExpr);
+			}
+			if ($whereas->getType() === 'andWhere') {
+				$qb->orWhere($whereExpr);
+			}
+			if ($whereas->getType() === 'orWhere') {
+				$qb->andWhere($whereExpr);
+			}
+		}
+
+		$groupBys = [];
+		foreach ($request->getGroupBy() as $groupBy) {
+			array_push($groupBys, json_decode($groupBy));
+		}
+		if (count($groupBys) > 0) {
+			$qb->groupBy(...$groupBys);
+		}
+
+		/** @var havingExpr */
+		foreach ($request->getHavings() as $having) {
+			$qb->having($having->getExpression());
+		}
+
+		if (isset($request->getOrderBy()[0])) {
+			$qb->orderBy($request->getOrderBy()[0]);
+		}
+
+		$maxResults = $request->getMaxResults();
+		$qb->setMaxResults($maxResults);
+
+		$firstResult = $request->getFirstResult();
+		$qb->setFirstResult($firstResult);
 
 		try {
 			/** @var IResult $result */
 			$result = $qb->executeQuery();
 			$handle = QueriesManager::setQueryResult($qb->getSQL(), $result);
 			$this->logger->info('[' . self::class . '] saved result id: ' . $handle);
+			$this->logger->info('[' . self::class . '] SQL: ' . $qb->getSQL());
 			$response->setRowCount($result->rowCount());
 			$response->setHandle($handle);
 		} catch (\RuntimeException $e) {
@@ -110,6 +154,46 @@ class DbHandle {
 		}
 
 		return $response;
+	}
+
+	private function buildWhereExpr(IQueryBuilder $qb, whereExpr $whereas): ?string {
+		$expr = null;
+		$expression = json_decode($whereas->getExpression(), true);
+		if ($expression['type'] === exprType::EQ) {
+			$expr = $qb->expr()->eq($expression['column'], $this->buildExprParam($qb, $expression['param']));
+		}
+		if ($expression['type'] === exprType::NEQ) {
+			$expr = $qb->expr()->neq($expression['column'], $this->buildExprParam($qb, $expression['param']));
+		}
+		if ($expression['type'] === exprType::LT) {
+			$expr = $qb->expr()->lt($expression['column'], $this->buildExprParam($qb, $expression['param']));
+		}
+		if ($expression['type'] === exprType::LTE) {
+			$expr = $qb->expr()->lte($expression['column'], $this->buildExprParam($qb, $expression['param']));
+		}
+		if ($expression['type'] === exprType::GT) {
+			$expr = $qb->expr()->gt($expression['column'], $this->buildExprParam($qb, $expression['param']));
+		}
+		if ($expression['type'] === exprType::GTE) {
+			$expr = $qb->expr()->gt($expression['column'], $this->buildExprParam($qb, $expression['param']));
+		}
+		return $expr;
+	}
+
+	private function buildExprParam(IQueryBuilder $qb, array $param): ?IParameter {
+		/** @var IParameter */
+		$parameter = null;
+		if ($param['param_type'] === pType::NAMED) {
+			$parameter =$qb->createNamedParameter($param['value'], $param['value_type']);
+		}
+		if ($param['param_type'] === pType::POSITIONAL) {
+			$parameter = $qb->createPositionalParameter($param['value'], $param['value_type']);
+		}
+		if ($param['param_type'] === pType::PBDEFAULT) {
+			$parameter = $qb->createParameter($param['name']);
+			$qb->setParameter($param['name'], $param['value'], $param['type']);
+		}
+		return $parameter;
 	}
 
 	/** 
@@ -120,7 +204,13 @@ class DbHandle {
 	 * @return DbExecReply|null DB Exec statements results
 	 */
 	public function exec(DbExecRequest $request): ?DbExecReply {
-		return new DbExecReply(null);
+		$response = new DbExecReply();
+		$type = $request->getType();
+		$tableName = $request->getTableName();
+		$columns = $request->getColumns();
+		$values = $request->getValues();
+		$whereAs = $request->getWhereas();
+		return $response;
 	}
 
 	/**
@@ -165,10 +255,10 @@ class DbHandle {
 
 	private function createColumnData(array $params = []): columnData {
 		$columnData = new columnData();
-		$columnData->setBPresent(false);
+		$columnData->setPresent(false);
 		if (isset($params['data'])) {
 			$columnData->setData($params['data']);
-			$columnData->setBPresent(true);
+			$columnData->setPresent(true);
 		}
 		return $columnData;
 	}

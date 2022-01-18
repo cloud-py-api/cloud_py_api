@@ -14,46 +14,50 @@ use Google\Protobuf\Internal\GPBUtil;
 class cfgOptions extends \Google\Protobuf\Internal\Message
 {
     /**
-     *0-4 , level logs from NC documentation.
+     * 0-4 , level logs from NC documentation.
      *
      * Generated from protobuf field <code>.OCA.Cloud_Py_API.Proto.logLvl log_lvl = 1;</code>
      */
     protected $log_lvl = 0;
     /**
-     *Path to NC data folder.
+     * Path to NC data folder.
      *
      * Generated from protobuf field <code>string dataFolder = 2;</code>
      */
     protected $dataFolder = '';
     /**
-     *Path to cloud_py_api app data folder.
+     * Path to cloud_py_api app data folder.
      *
      * Generated from protobuf field <code>string frameworkAppData = 3;</code>
      */
     protected $frameworkAppData = '';
     /**
-     *Current NC user UID
+     * Current NC user UID
      *
      * Generated from protobuf field <code>string userId = 4;</code>
      */
     protected $userId = '';
     /**
-     *Use extra direct FS module for python, when possible.
+     * Use extra direct FS module for python, when possible.
      *
      * Generated from protobuf field <code>bool useFileDirect = 5;</code>
      */
     protected $useFileDirect = false;
     /**
-     *Use extra direct DB module for python, if possible.
+     * Use extra direct DB module for python, if possible.
      *
      * Generated from protobuf field <code>bool useDBDirect = 6;</code>
      */
     protected $useDBDirect = false;
     /**
+     * Maximum chunk size for FS operations
+     *
      * Generated from protobuf field <code>int32 maxChunkSize = 7;</code>
      */
     protected $maxChunkSize = 0;
     /**
+     * Maximum chunk size for FS Create operations
+     *
      * Generated from protobuf field <code>int32 maxCreateFileContent = 8;</code>
      */
     protected $maxCreateFileContent = 0;
@@ -65,19 +69,21 @@ class cfgOptions extends \Google\Protobuf\Internal\Message
      *     Optional. Data for populating the Message object.
      *
      *     @type int $log_lvl
-     *          0-4 , level logs from NC documentation.
+     *           0-4 , level logs from NC documentation.
      *     @type string $dataFolder
-     *          Path to NC data folder.
+     *           Path to NC data folder.
      *     @type string $frameworkAppData
-     *          Path to cloud_py_api app data folder.
+     *           Path to cloud_py_api app data folder.
      *     @type string $userId
-     *          Current NC user UID
+     *           Current NC user UID
      *     @type bool $useFileDirect
-     *          Use extra direct FS module for python, when possible.
+     *           Use extra direct FS module for python, when possible.
      *     @type bool $useDBDirect
-     *          Use extra direct DB module for python, if possible.
+     *           Use extra direct DB module for python, if possible.
      *     @type int $maxChunkSize
+     *           Maximum chunk size for FS operations
      *     @type int $maxCreateFileContent
+     *           Maximum chunk size for FS Create operations
      * }
      */
     public function __construct($data = NULL) {
@@ -86,7 +92,7 @@ class cfgOptions extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     *0-4 , level logs from NC documentation.
+     * 0-4 , level logs from NC documentation.
      *
      * Generated from protobuf field <code>.OCA.Cloud_Py_API.Proto.logLvl log_lvl = 1;</code>
      * @return int
@@ -97,7 +103,7 @@ class cfgOptions extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     *0-4 , level logs from NC documentation.
+     * 0-4 , level logs from NC documentation.
      *
      * Generated from protobuf field <code>.OCA.Cloud_Py_API.Proto.logLvl log_lvl = 1;</code>
      * @param int $var
@@ -112,7 +118,7 @@ class cfgOptions extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     *Path to NC data folder.
+     * Path to NC data folder.
      *
      * Generated from protobuf field <code>string dataFolder = 2;</code>
      * @return string
@@ -123,7 +129,7 @@ class cfgOptions extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     *Path to NC data folder.
+     * Path to NC data folder.
      *
      * Generated from protobuf field <code>string dataFolder = 2;</code>
      * @param string $var
@@ -138,7 +144,7 @@ class cfgOptions extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     *Path to cloud_py_api app data folder.
+     * Path to cloud_py_api app data folder.
      *
      * Generated from protobuf field <code>string frameworkAppData = 3;</code>
      * @return string
@@ -149,7 +155,7 @@ class cfgOptions extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     *Path to cloud_py_api app data folder.
+     * Path to cloud_py_api app data folder.
      *
      * Generated from protobuf field <code>string frameworkAppData = 3;</code>
      * @param string $var
@@ -164,7 +170,7 @@ class cfgOptions extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     *Current NC user UID
+     * Current NC user UID
      *
      * Generated from protobuf field <code>string userId = 4;</code>
      * @return string
@@ -175,7 +181,7 @@ class cfgOptions extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     *Current NC user UID
+     * Current NC user UID
      *
      * Generated from protobuf field <code>string userId = 4;</code>
      * @param string $var
@@ -190,7 +196,7 @@ class cfgOptions extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     *Use extra direct FS module for python, when possible.
+     * Use extra direct FS module for python, when possible.
      *
      * Generated from protobuf field <code>bool useFileDirect = 5;</code>
      * @return bool
@@ -201,7 +207,7 @@ class cfgOptions extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     *Use extra direct FS module for python, when possible.
+     * Use extra direct FS module for python, when possible.
      *
      * Generated from protobuf field <code>bool useFileDirect = 5;</code>
      * @param bool $var
@@ -216,7 +222,7 @@ class cfgOptions extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     *Use extra direct DB module for python, if possible.
+     * Use extra direct DB module for python, if possible.
      *
      * Generated from protobuf field <code>bool useDBDirect = 6;</code>
      * @return bool
@@ -227,7 +233,7 @@ class cfgOptions extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     *Use extra direct DB module for python, if possible.
+     * Use extra direct DB module for python, if possible.
      *
      * Generated from protobuf field <code>bool useDBDirect = 6;</code>
      * @param bool $var
@@ -242,6 +248,8 @@ class cfgOptions extends \Google\Protobuf\Internal\Message
     }
 
     /**
+     * Maximum chunk size for FS operations
+     *
      * Generated from protobuf field <code>int32 maxChunkSize = 7;</code>
      * @return int
      */
@@ -251,6 +259,8 @@ class cfgOptions extends \Google\Protobuf\Internal\Message
     }
 
     /**
+     * Maximum chunk size for FS operations
+     *
      * Generated from protobuf field <code>int32 maxChunkSize = 7;</code>
      * @param int $var
      * @return $this
@@ -264,6 +274,8 @@ class cfgOptions extends \Google\Protobuf\Internal\Message
     }
 
     /**
+     * Maximum chunk size for FS Create operations
+     *
      * Generated from protobuf field <code>int32 maxCreateFileContent = 8;</code>
      * @return int
      */
@@ -273,6 +285,8 @@ class cfgOptions extends \Google\Protobuf\Internal\Message
     }
 
     /**
+     * Maximum chunk size for FS Create operations
+     *
      * Generated from protobuf field <code>int32 maxCreateFileContent = 8;</code>
      * @param int $var
      * @return $this

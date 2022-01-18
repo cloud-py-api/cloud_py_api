@@ -40,6 +40,8 @@ class RunGrpcClientDbCursorCommand extends Command {
 
 	public const ARGUMENT_HOSTNAME = 'hostname';
 	public const ARGUMENT_PORT = 'port';
+	public const ARGUMENT_CMD = 'cmd';
+	public const ARGUMENT_HANDLE = 'handle';
 
 	/** @var ServerService */
 	private $serverService;
@@ -55,6 +57,8 @@ class RunGrpcClientDbCursorCommand extends Command {
 		$this->setDescription("Run GRPC client DbCursor request");
 		$this->addArgument(self::ARGUMENT_HOSTNAME, InputArgument::REQUIRED);
 		$this->addArgument(self::ARGUMENT_PORT, InputArgument::REQUIRED);
+		$this->addArgument(self::ARGUMENT_CMD, InputArgument::REQUIRED);
+		$this->addArgument(self::ARGUMENT_HANDLE, InputArgument::REQUIRED);
 	}
 
 	protected function execute(InputInterface $input, OutputInterface $output): int {

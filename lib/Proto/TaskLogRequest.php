@@ -9,7 +9,7 @@ use Google\Protobuf\Internal\RepeatedField;
 use Google\Protobuf\Internal\GPBUtil;
 
 /**
- *No reply.
+ * No reply.
  *
  * Generated from protobuf message <code>OCA.Cloud_Py_API.Proto.TaskLogRequest</code>
  */
@@ -20,13 +20,13 @@ class TaskLogRequest extends \Google\Protobuf\Internal\Message
      */
     protected $log_lvl = 0;
     /**
-     *What module logs belongs to.
+     * What module logs belongs to.
      *
      * Generated from protobuf field <code>string module = 2;</code>
      */
     protected $module = '';
     /**
-     *One or more strings to put to log.
+     * One or more strings to put to log.
      *
      * Generated from protobuf field <code>repeated string content = 3;</code>
      */
@@ -40,9 +40,9 @@ class TaskLogRequest extends \Google\Protobuf\Internal\Message
      *
      *     @type int $log_lvl
      *     @type string $module
-     *          What module logs belongs to.
+     *           What module logs belongs to.
      *     @type string[]|\Google\Protobuf\Internal\RepeatedField $content
-     *          One or more strings to put to log.
+     *           One or more strings to put to log.
      * }
      */
     public function __construct($data = NULL) {
@@ -73,7 +73,7 @@ class TaskLogRequest extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     *What module logs belongs to.
+     * What module logs belongs to.
      *
      * Generated from protobuf field <code>string module = 2;</code>
      * @return string
@@ -84,7 +84,7 @@ class TaskLogRequest extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     *What module logs belongs to.
+     * What module logs belongs to.
      *
      * Generated from protobuf field <code>string module = 2;</code>
      * @param string $var
@@ -99,7 +99,7 @@ class TaskLogRequest extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     *One or more strings to put to log.
+     * One or more strings to put to log.
      *
      * Generated from protobuf field <code>repeated string content = 3;</code>
      * @return \Google\Protobuf\Internal\RepeatedField
@@ -110,7 +110,7 @@ class TaskLogRequest extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     *One or more strings to put to log.
+     * One or more strings to put to log.
      *
      * Generated from protobuf field <code>repeated string content = 3;</code>
      * @param string[]|\Google\Protobuf\Internal\RepeatedField $var

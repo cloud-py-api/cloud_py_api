@@ -1,0 +1,96 @@
+syntax = "proto3";
+
+package OCA.Cloud_Py_API.Proto;
+
+enum fsResultCode {
+  NO_ERROR = 0;
+  NOT_PERMITTED = 1;
+  LOCKED = 2;
+  NOT_FOUND = 3;
+  IO_ERROR = 4;
+}
+
+message fsId {
+  string userId = 1;
+  int64 fileId = 2;
+}
+
+message FsGetInfoRequest {
+  fsId fileId = 1;
+}
+
+message FsNodeInfo {
+  fsId fileId = 1;
+  bool is_dir = 2;
+  bool is_local = 3;
+  string mimetype = 4;
+  string name = 5;
+  string internal_path = 6;
+  string abs_path = 7;
+  int64 size = 8;
+  int64 permissions = 9;
+  int64 mtime = 10;
+  string checksum = 11;
+  bool encrypted = 12;
+  string etag = 13;
+  string ownerName = 14;
+  string storageId = 15;
+  int64 mountId = 16;
+}
+
+message FsListRequest {
+  fsId dirId = 1;
+}
+
+message FsListReply {
+  repeated FsNodeInfo nodes = 1;
+}
+
+message FsReadRequest {
+  fsId fileId = 1;
+  int64 offset = 2;
+  int64 bytes_to_read = 3;
+}
+
+message FsReadReply {
+  fsResultCode resCode = 1;
+  bool last = 2;
+  bytes content = 3;                      // Present only if resCode is NO_ERROR.
+}
+
+message FsCreateRequest {                 // Reply for this is a FsCreateReply message.
+  fsId parentDirId = 1;
+  string name = 2;
+  bool is_file = 3;
+  bytes content = 4;
+}
+
+message FsCreateReply {                   // Reply for FsCreateRequest.
+  fsResultCode resCode = 1;
+  fsId fileId = 2;
+}
+
+message FsWriteRequest {                  // Reply for this is a FsReply message.
+  fsId fileId = 1;
+  bool last = 2;
+  bytes content = 3;
+}
+
+message FsDeleteRequest {                 // Reply for this is a FsReply message.
+  fsId fileId = 1;
+}
+
+message FsReply {
+  fsResultCode resCode = 1;
+}
+
+message FsMoveRequest {                   // Reply for this is a FsMoveReply message.
+  fsId fileId = 1;
+  string targetPath = 2;                  // Absolute path relative to MountPoint.
+  bool copy = 3;
+}
+
+message FsMoveReply {
+  fsResultCode resCode = 1;
+  fsId fileId = 2;
+}

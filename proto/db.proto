@@ -1,0 +1,118 @@
+syntax = "proto3";
+
+package OCA.Cloud_Py_API.Proto;
+
+enum exprType {
+  EQ = 0;
+  NEQ = 1;
+  LT = 2;
+  LTE = 3;
+  GT = 4;
+  GTE = 5;
+  IS_NULL = 6;
+  IS_NOT_NULL = 7;
+  LIKE = 8;
+  NOT_LINE = 9;
+  IN = 10;
+  NOT_IN = 11;
+}
+
+enum pType {
+  DEFAULT = 0;
+  NAMED = 1;
+  POSITIONAL = 2;
+}
+
+enum pValueType {
+  NULL = 0;
+  BOOL = 1;
+  INT = 2;
+  STR = 3;
+  LOB = 4;
+  DATE = 5;
+  INT_ARRAY = 6;
+  STR_ARRAY = 7;
+}
+
+message whereExpr {                       //struct for `where` part.
+  string type = 1;                        //where, andWhere, orWhere
+  string expression = 2;
+  exprType expressionType = 3;
+  pType paramType = 4;
+  string paramColumn = 5;
+  string paramValue = 6;
+  pValueType paramValueType = 7;
+}
+
+message str_alias {
+  string name = 1;
+  string alias = 2;
+}
+
+message DbSelectRequest {
+  repeated str_alias columns = 1;         //aliases or filed names.
+  repeated str_alias from = 2;
+  message joinType {
+    string name = 1;                      //join, innerJoin, leftJoin, rightJoin.
+    string fromAlias = 2;
+    string join = 3;
+    string alias = 4;
+    string condition = 5;
+  }
+  repeated joinType joins = 3;
+  repeated whereExpr whereas = 4;
+  repeated string groupBy = 5;
+  message havingExpr {
+    string type = 1;                      //having, andHaving, orHaving
+    string expression = 2;
+  }
+  repeated havingExpr havings = 6;
+  repeated string orderBy = 7;
+  int64 maxResults = 8;
+  int64 firstResult = 9;
+}
+
+message DbSelectReply {
+  int64 rowCount = 1;
+  string error = 2;
+  string handle = 3;                         //valid if only rowcount > 0.
+}
+
+message DbCursorRequest {
+  enum cCmd {
+    FETCH = 0;
+    FETCH_ALL = 1;
+    CLOSE = 2;
+  }
+  cCmd cmd = 1;
+  string handle = 2;
+}
+
+message DbCursorReply {
+  string error = 1;
+  repeated string columnsName = 2;
+  message columnData {
+    bool present = 1;                       //if result is NULL for that column raw, then this is True.
+    bytes data = 2;                         //present if result fir column raw is not NULL.
+  }
+  repeated columnData columnsData = 3;
+}
+
+message DbExecRequest {
+  enum rType {
+      INSERT = 0;
+      UPDATE = 1;
+      DELETE = 2;
+  }
+  rType type = 1;
+  string table_name = 2;
+  repeated string columns = 3;
+  repeated bytes values = 4;
+  repeated whereExpr whereas = 5;
+}
+
+message DbExecReply {
+  int64 nAffectedRows = 1;
+  int64 lastInsertId = 2;
+  string error = 3;
+}

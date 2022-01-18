@@ -41,6 +41,12 @@ class RunGrpcClientDbExecCommand extends Command {
 	public const ARGUMENT_HOSTNAME = 'hostname';
 	public const ARGUMENT_PORT = 'port';
 
+	public const ARGUMENT_TYPE = 'type';
+	public const ARGUMENT_TABLE_NAME = 'tableName';
+	public const ARGUMENT_COLUMNS = 'columns';
+	public const ARGUMENT_VALUES = 'values';
+	public const ARGUMENT_WHEREAS = 'whereas';
+
 	/** @var ServerService */
 	private $serverService;
 
@@ -55,6 +61,11 @@ class RunGrpcClientDbExecCommand extends Command {
 		$this->setDescription("Run GRPC client DbExec request");
 		$this->addArgument(self::ARGUMENT_HOSTNAME, InputArgument::REQUIRED);
 		$this->addArgument(self::ARGUMENT_PORT, InputArgument::REQUIRED);
+		$this->addArgument(self::ARGUMENT_TYPE, InputArgument::REQUIRED);
+		$this->addArgument(self::ARGUMENT_TABLE_NAME, InputArgument::REQUIRED);
+		$this->addArgument(self::ARGUMENT_COLUMNS, InputArgument::OPTIONAL);
+		$this->addArgument(self::ARGUMENT_VALUES, InputArgument::OPTIONAL);
+		$this->addArgument(self::ARGUMENT_WHEREAS, InputArgument::OPTIONAL);
 	}
 
 	protected function execute(InputInterface $input, OutputInterface $output): int {
