@@ -10,7 +10,8 @@ build:
     python: "3.9"
 
 sphinx:
-   configuration: docs/conf.py
+   builder: html
+   configuration: docs/source/conf.py
 
 python:
    install:
