@@ -4,21 +4,11 @@ nc\_py\_api package
 Submodules
 ----------
 
-nc\_py\_api.cloud\_api module
------------------------------
+.. toctree::
+   :maxdepth: 4
 
-.. automodule:: nc_py_api.cloud_api
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-nc\_py\_api.fs\_api module
---------------------------
-
-.. automodule:: nc_py_api.fs_api
-   :members:
-   :undoc-members:
-   :show-inheritance:
+   nc_py_api.cloud_api
+   nc_py_api.fs_api
 
 Module contents
 ---------------
