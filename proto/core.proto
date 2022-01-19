@@ -31,6 +31,14 @@ enum taskStatus {
 
 message Empty { }
 
+message dbConfig {
+  string dbHost = 1;                      // Current DB Host configuration
+  string dbType = 2;                      // Current DB Type configuration
+  string dbName = 3;                      // Current DB Name configuration
+  string dbUser = 4;                      // Current DB User configuration
+  string dbPass = 5;                      // Current DB Password configuration
+}
+
 message TaskInitReply {
   string appName = 1;                     // Name of the app(folder in frmAppData must be present with the same name).
   string modName = 2;                     // Module name to use for `import_module` func.
@@ -46,9 +54,10 @@ message TaskInitReply {
     bool useDBDirect = 6;                 // Use extra direct DB module for python, if possible.
     int32 maxChunkSize = 7;               // Maximum chunk size for FS operations
     int32 maxCreateFileContent = 8;       // Maximum chunk size for FS Create operations
+    dbConfig dbConf = 9;                  // Database configuration
   }
   cfgOptions config = 6;
-  string handler = 7;                     //PHP Callback handler for TaskExit
+  string handler = 7;                     // PHP Callback handler for TaskExit
 }
 
 message TaskSetStatusRequest {

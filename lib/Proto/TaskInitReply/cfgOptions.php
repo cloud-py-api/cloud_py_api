@@ -61,6 +61,12 @@ class cfgOptions extends \Google\Protobuf\Internal\Message
      * Generated from protobuf field <code>int32 maxCreateFileContent = 8;</code>
      */
     protected $maxCreateFileContent = 0;
+    /**
+     * Database configuration
+     *
+     * Generated from protobuf field <code>.OCA.Cloud_Py_API.Proto.dbConfig dbConf = 9;</code>
+     */
+    protected $dbConf = null;
 
     /**
      * Constructor.
@@ -84,6 +90,8 @@ class cfgOptions extends \Google\Protobuf\Internal\Message
      *           Maximum chunk size for FS operations
      *     @type int $maxCreateFileContent
      *           Maximum chunk size for FS Create operations
+     *     @type \OCA\Cloud_Py_API\Proto\dbConfig $dbConf
+     *           Database configuration
      * }
      */
     public function __construct($data = NULL) {
@@ -295,6 +303,42 @@ class cfgOptions extends \Google\Protobuf\Internal\Message
     {
         GPBUtil::checkInt32($var);
         $this->maxCreateFileContent = $var;
+
+        return $this;
+    }
+
+    /**
+     * Database configuration
+     *
+     * Generated from protobuf field <code>.OCA.Cloud_Py_API.Proto.dbConfig dbConf = 9;</code>
+     * @return \OCA\Cloud_Py_API\Proto\dbConfig|null
+     */
+    public function getDbConf()
+    {
+        return $this->dbConf;
+    }
+
+    public function hasDbConf()
+    {
+        return isset($this->dbConf);
+    }
+
+    public function clearDbConf()
+    {
+        unset($this->dbConf);
+    }
+
+    /**
+     * Database configuration
+     *
+     * Generated from protobuf field <code>.OCA.Cloud_Py_API.Proto.dbConfig dbConf = 9;</code>
+     * @param \OCA\Cloud_Py_API\Proto\dbConfig $var
+     * @return $this
+     */
+    public function setDbConf($var)
+    {
+        GPBUtil::checkMessage($var, \OCA\Cloud_Py_API\Proto\dbConfig::class);
+        $this->dbConf = $var;
 
         return $this;
     }

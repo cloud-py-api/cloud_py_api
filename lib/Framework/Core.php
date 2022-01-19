@@ -61,7 +61,7 @@ class Core {
 	 * @param array $params hostname, port, userid, appname, handler,
 	 *                      modname, modpath, funcname, args
 	 * 
-	 * @return void
+	 * @return int
 	 */
 	public function runBgGrpcServer(array $params = []): int {
 		if (isset($params['hostname'])) {
@@ -179,7 +179,7 @@ class Core {
 	}
 
 	/**
-	 * Send TaskLog
+	 * Send TaskLog request
 	 * 
 	 * @param CloudPyApiCoreClient $client
 	 * @param array $params

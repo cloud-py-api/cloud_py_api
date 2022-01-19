@@ -48,7 +48,7 @@ class TaskInitReply extends \Google\Protobuf\Internal\Message
      */
     protected $config = null;
     /**
-     *PHP Callback handler for TaskExit
+     * PHP Callback handler for TaskExit
      *
      * Generated from protobuf field <code>string handler = 7;</code>
      */
@@ -72,7 +72,7 @@ class TaskInitReply extends \Google\Protobuf\Internal\Message
      *           Optional arguments to pass to target python app's module.
      *     @type \OCA\Cloud_Py_API\Proto\TaskInitReply\cfgOptions $config
      *     @type string $handler
-     *          PHP Callback handler for TaskExit
+     *           PHP Callback handler for TaskExit
      * }
      */
     public function __construct($data = NULL) {
@@ -243,7 +243,7 @@ class TaskInitReply extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     *PHP Callback handler for TaskExit
+     * PHP Callback handler for TaskExit
      *
      * Generated from protobuf field <code>string handler = 7;</code>
      * @return string
@@ -254,7 +254,7 @@ class TaskInitReply extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     *PHP Callback handler for TaskExit
+     * PHP Callback handler for TaskExit
      *
      * Generated from protobuf field <code>string handler = 7;</code>
      * @param string $var

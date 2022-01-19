@@ -39,6 +39,7 @@ use OCA\Cloud_Py_API\Proto\TaskSetStatusRequest;
 
 use OCA\Cloud_Py_API\AppInfo\Application;
 use OCA\Cloud_Py_API\Framework\Manager\QueriesManager;
+use OCA\Cloud_Py_API\Proto\dbConfig;
 use OCA\Cloud_Py_API\Proto\logLvl;
 use OCA\Cloud_Py_API\Service\AppsService;
 use OCA\Cloud_Py_API\Service\ServerService;
@@ -96,6 +97,13 @@ class TaskHandle {
 			}
 			$cfg->setUseDBDirect(false);
 			$cfg->setUseFileDirect(false);
+			$dbConf = new dbConfig();
+			$dbConf->setDbHost($this->config->getSystemValue('dbhost'));
+			$dbConf->setDbType($this->config->getSystemValue('dbtype'));
+			$dbConf->setDbName($this->config->getSystemValue('dbname'));
+			$dbConf->setDbUser($this->config->getSystemValue('dbuser'));
+			$dbConf->setDbPass($this->config->getSystemValue('dbpassword'));
+			$cfg->setDbConf($dbConf);
 			$taskInitReply->setConfig($cfg);
 			if (isset(ServerService::$APP['handler'])) {
 				$taskInitReply->setHandler(ServerService::$APP['handler']);
