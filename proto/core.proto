@@ -37,6 +37,7 @@ message dbConfig {
   string dbName = 3;                      // Current DB Name configuration
   string dbUser = 4;                      // Current DB User configuration
   string dbPass = 5;                      // Current DB Password configuration
+  string dbPrefix = 6;                    // Current DB tables prefix configuration
 }
 
 message TaskInitReply {

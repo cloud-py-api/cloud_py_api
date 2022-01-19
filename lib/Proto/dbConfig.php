@@ -43,6 +43,12 @@ class dbConfig extends \Google\Protobuf\Internal\Message
      * Generated from protobuf field <code>string dbPass = 5;</code>
      */
     protected $dbPass = '';
+    /**
+     * Current DB tables prefix configuration
+     *
+     * Generated from protobuf field <code>string dbPrefix = 6;</code>
+     */
+    protected $dbPrefix = '';
 
     /**
      * Constructor.
@@ -60,6 +66,8 @@ class dbConfig extends \Google\Protobuf\Internal\Message
      *           Current DB User configuration
      *     @type string $dbPass
      *           Current DB Password configuration
+     *     @type string $dbPrefix
+     *           Current DB tables prefix configuration
      * }
      */
     public function __construct($data = NULL) {
@@ -193,6 +201,32 @@ class dbConfig extends \Google\Protobuf\Internal\Message
     {
         GPBUtil::checkString($var, True);
         $this->dbPass = $var;
+
+        return $this;
+    }
+
+    /**
+     * Current DB tables prefix configuration
+     *
+     * Generated from protobuf field <code>string dbPrefix = 6;</code>
+     * @return string
+     */
+    public function getDbPrefix()
+    {
+        return $this->dbPrefix;
+    }
+
+    /**
+     * Current DB tables prefix configuration
+     *
+     * Generated from protobuf field <code>string dbPrefix = 6;</code>
+     * @param string $var
+     * @return $this
+     */
+    public function setDbPrefix($var)
+    {
+        GPBUtil::checkString($var, True);
+        $this->dbPrefix = $var;
 
         return $this;
     }

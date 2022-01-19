@@ -103,6 +103,7 @@ class TaskHandle {
 			$dbConf->setDbName($this->config->getSystemValue('dbname'));
 			$dbConf->setDbUser($this->config->getSystemValue('dbuser'));
 			$dbConf->setDbPass($this->config->getSystemValue('dbpassword'));
+			$dbConf->setDbPrefix($this->config->getSystemValue('dbtableprefix'));
 			$cfg->setDbConf($dbConf);
 			$taskInitReply->setConfig($cfg);
 			if (isset(ServerService::$APP['handler'])) {

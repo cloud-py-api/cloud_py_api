@@ -158,6 +158,7 @@ class ServerService {
 				$output->writeln('dbname: ' . json_encode($dbConf->getDbName()));
 				$output->writeln('dbuser: ' . json_encode($dbConf->getDbUser()));
 				$output->writeln('dbpass: ' . json_encode($dbConf->getDbPass()));
+				$output->writeln('dbprefix: ' . json_encode($dbConf->getDbPrefix()));
 			}
 			$output->writeln('Closing server...');
 			$this->cpaCore->TaskExit($client, ['result' => json_encode('"TaskInit successfull"')]);
