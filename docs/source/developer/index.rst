@@ -2,6 +2,7 @@ Developer documentation
 =======================
 
 .. toctree::
-   :maxdepth: 4
+   :maxdepth: 6
 
-   python
+   python/index
+   php/index
