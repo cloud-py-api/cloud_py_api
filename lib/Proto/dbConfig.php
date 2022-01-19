@@ -14,41 +14,83 @@ use Google\Protobuf\Internal\GPBUtil;
 class dbConfig extends \Google\Protobuf\Internal\Message
 {
     /**
-     * Current DB Host configuration
+     * DB Host configuration
      *
      * Generated from protobuf field <code>string dbHost = 1;</code>
      */
     protected $dbHost = '';
     /**
-     * Current DB Type configuration
+     * DB Type configuration
      *
      * Generated from protobuf field <code>string dbType = 2;</code>
      */
     protected $dbType = '';
     /**
-     * Current DB Name configuration
+     * DB Name configuration
      *
      * Generated from protobuf field <code>string dbName = 3;</code>
      */
     protected $dbName = '';
     /**
-     * Current DB User configuration
+     * DB User configuration
      *
      * Generated from protobuf field <code>string dbUser = 4;</code>
      */
     protected $dbUser = '';
     /**
-     * Current DB Password configuration
+     * DB Password configuration
      *
      * Generated from protobuf field <code>string dbPass = 5;</code>
      */
     protected $dbPass = '';
     /**
-     * Current DB tables prefix configuration
+     * DB tables prefix configuration
      *
      * Generated from protobuf field <code>string dbPrefix = 6;</code>
      */
     protected $dbPrefix = '';
+    /**
+     * DB Socket configuration from ini (mysql)
+     *
+     * Generated from protobuf field <code>string iniDbSocket = 7;</code>
+     */
+    protected $iniDbSocket = '';
+    /**
+     * DB Host configuration from ini (mysql)
+     *
+     * Generated from protobuf field <code>string iniDbHost = 8;</code>
+     */
+    protected $iniDbHost = '';
+    /**
+     * DB Port configuration from ini (mysql)
+     *
+     * Generated from protobuf field <code>string iniDbPort = 9;</code>
+     */
+    protected $iniDbPort = '';
+    /**
+     * DB MYSQL_ATTR_SSL_KEY configuration
+     *
+     * Generated from protobuf field <code>string dbDriverSslKey = 10;</code>
+     */
+    protected $dbDriverSslKey = '';
+    /**
+     * DB MYSQL_ATTR_SSL_CERT configuration
+     *
+     * Generated from protobuf field <code>string dbDriverSslCert = 11;</code>
+     */
+    protected $dbDriverSslCert = '';
+    /**
+     * DB MYSQL_ATTR_SSL_CA configuration
+     *
+     * Generated from protobuf field <code>string dbDriverSslCa = 12;</code>
+     */
+    protected $dbDriverSslCa = '';
+    /**
+     * DB MYSQL_ATTR_SSL_VERIFY_SERVER_CERT configuration
+     *
+     * Generated from protobuf field <code>string dbDriverSslVerifyCrt = 13;</code>
+     */
+    protected $dbDriverSslVerifyCrt = '';
 
     /**
      * Constructor.
@@ -57,17 +99,31 @@ class dbConfig extends \Google\Protobuf\Internal\Message
      *     Optional. Data for populating the Message object.
      *
      *     @type string $dbHost
-     *           Current DB Host configuration
+     *           DB Host configuration
      *     @type string $dbType
-     *           Current DB Type configuration
+     *           DB Type configuration
      *     @type string $dbName
-     *           Current DB Name configuration
+     *           DB Name configuration
      *     @type string $dbUser
-     *           Current DB User configuration
+     *           DB User configuration
      *     @type string $dbPass
-     *           Current DB Password configuration
+     *           DB Password configuration
      *     @type string $dbPrefix
-     *           Current DB tables prefix configuration
+     *           DB tables prefix configuration
+     *     @type string $iniDbSocket
+     *           DB Socket configuration from ini (mysql)
+     *     @type string $iniDbHost
+     *           DB Host configuration from ini (mysql)
+     *     @type string $iniDbPort
+     *           DB Port configuration from ini (mysql)
+     *     @type string $dbDriverSslKey
+     *           DB MYSQL_ATTR_SSL_KEY configuration
+     *     @type string $dbDriverSslCert
+     *           DB MYSQL_ATTR_SSL_CERT configuration
+     *     @type string $dbDriverSslCa
+     *           DB MYSQL_ATTR_SSL_CA configuration
+     *     @type string $dbDriverSslVerifyCrt
+     *           DB MYSQL_ATTR_SSL_VERIFY_SERVER_CERT configuration
      * }
      */
     public function __construct($data = NULL) {
@@ -76,7 +132,7 @@ class dbConfig extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     * Current DB Host configuration
+     * DB Host configuration
      *
      * Generated from protobuf field <code>string dbHost = 1;</code>
      * @return string
@@ -87,7 +143,7 @@ class dbConfig extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     * Current DB Host configuration
+     * DB Host configuration
      *
      * Generated from protobuf field <code>string dbHost = 1;</code>
      * @param string $var
@@ -102,7 +158,7 @@ class dbConfig extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     * Current DB Type configuration
+     * DB Type configuration
      *
      * Generated from protobuf field <code>string dbType = 2;</code>
      * @return string
@@ -113,7 +169,7 @@ class dbConfig extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     * Current DB Type configuration
+     * DB Type configuration
      *
      * Generated from protobuf field <code>string dbType = 2;</code>
      * @param string $var
@@ -128,7 +184,7 @@ class dbConfig extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     * Current DB Name configuration
+     * DB Name configuration
      *
      * Generated from protobuf field <code>string dbName = 3;</code>
      * @return string
@@ -139,7 +195,7 @@ class dbConfig extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     * Current DB Name configuration
+     * DB Name configuration
      *
      * Generated from protobuf field <code>string dbName = 3;</code>
      * @param string $var
@@ -154,7 +210,7 @@ class dbConfig extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     * Current DB User configuration
+     * DB User configuration
      *
      * Generated from protobuf field <code>string dbUser = 4;</code>
      * @return string
@@ -165,7 +221,7 @@ class dbConfig extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     * Current DB User configuration
+     * DB User configuration
      *
      * Generated from protobuf field <code>string dbUser = 4;</code>
      * @param string $var
@@ -180,7 +236,7 @@ class dbConfig extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     * Current DB Password configuration
+     * DB Password configuration
      *
      * Generated from protobuf field <code>string dbPass = 5;</code>
      * @return string
@@ -191,7 +247,7 @@ class dbConfig extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     * Current DB Password configuration
+     * DB Password configuration
      *
      * Generated from protobuf field <code>string dbPass = 5;</code>
      * @param string $var
@@ -206,7 +262,7 @@ class dbConfig extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     * Current DB tables prefix configuration
+     * DB tables prefix configuration
      *
      * Generated from protobuf field <code>string dbPrefix = 6;</code>
      * @return string
@@ -217,7 +273,7 @@ class dbConfig extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     * Current DB tables prefix configuration
+     * DB tables prefix configuration
      *
      * Generated from protobuf field <code>string dbPrefix = 6;</code>
      * @param string $var
@@ -227,6 +283,188 @@ class dbConfig extends \Google\Protobuf\Internal\Message
     {
         GPBUtil::checkString($var, True);
         $this->dbPrefix = $var;
+
+        return $this;
+    }
+
+    /**
+     * DB Socket configuration from ini (mysql)
+     *
+     * Generated from protobuf field <code>string iniDbSocket = 7;</code>
+     * @return string
+     */
+    public function getIniDbSocket()
+    {
+        return $this->iniDbSocket;
+    }
+
+    /**
+     * DB Socket configuration from ini (mysql)
+     *
+     * Generated from protobuf field <code>string iniDbSocket = 7;</code>
+     * @param string $var
+     * @return $this
+     */
+    public function setIniDbSocket($var)
+    {
+        GPBUtil::checkString($var, True);
+        $this->iniDbSocket = $var;
+
+        return $this;
+    }
+
+    /**
+     * DB Host configuration from ini (mysql)
+     *
+     * Generated from protobuf field <code>string iniDbHost = 8;</code>
+     * @return string
+     */
+    public function getIniDbHost()
+    {
+        return $this->iniDbHost;
+    }
+
+    /**
+     * DB Host configuration from ini (mysql)
+     *
+     * Generated from protobuf field <code>string iniDbHost = 8;</code>
+     * @param string $var
+     * @return $this
+     */
+    public function setIniDbHost($var)
+    {
+        GPBUtil::checkString($var, True);
+        $this->iniDbHost = $var;
+
+        return $this;
+    }
+
+    /**
+     * DB Port configuration from ini (mysql)
+     *
+     * Generated from protobuf field <code>string iniDbPort = 9;</code>
+     * @return string
+     */
+    public function getIniDbPort()
+    {
+        return $this->iniDbPort;
+    }
+
+    /**
+     * DB Port configuration from ini (mysql)
+     *
+     * Generated from protobuf field <code>string iniDbPort = 9;</code>
+     * @param string $var
+     * @return $this
+     */
+    public function setIniDbPort($var)
+    {
+        GPBUtil::checkString($var, True);
+        $this->iniDbPort = $var;
+
+        return $this;
+    }
+
+    /**
+     * DB MYSQL_ATTR_SSL_KEY configuration
+     *
+     * Generated from protobuf field <code>string dbDriverSslKey = 10;</code>
+     * @return string
+     */
+    public function getDbDriverSslKey()
+    {
+        return $this->dbDriverSslKey;
+    }
+
+    /**
+     * DB MYSQL_ATTR_SSL_KEY configuration
+     *
+     * Generated from protobuf field <code>string dbDriverSslKey = 10;</code>
+     * @param string $var
+     * @return $this
+     */
+    public function setDbDriverSslKey($var)
+    {
+        GPBUtil::checkString($var, True);
+        $this->dbDriverSslKey = $var;
+
+        return $this;
+    }
+
+    /**
+     * DB MYSQL_ATTR_SSL_CERT configuration
+     *
+     * Generated from protobuf field <code>string dbDriverSslCert = 11;</code>
+     * @return string
+     */
+    public function getDbDriverSslCert()
+    {
+        return $this->dbDriverSslCert;
+    }
+
+    /**
+     * DB MYSQL_ATTR_SSL_CERT configuration
+     *
+     * Generated from protobuf field <code>string dbDriverSslCert = 11;</code>
+     * @param string $var
+     * @return $this
+     */
+    public function setDbDriverSslCert($var)
+    {
+        GPBUtil::checkString($var, True);
+        $this->dbDriverSslCert = $var;
+
+        return $this;
+    }
+
+    /**
+     * DB MYSQL_ATTR_SSL_CA configuration
+     *
+     * Generated from protobuf field <code>string dbDriverSslCa = 12;</code>
+     * @return string
+     */
+    public function getDbDriverSslCa()
+    {
+        return $this->dbDriverSslCa;
+    }
+
+    /**
+     * DB MYSQL_ATTR_SSL_CA configuration
+     *
+     * Generated from protobuf field <code>string dbDriverSslCa = 12;</code>
+     * @param string $var
+     * @return $this
+     */
+    public function setDbDriverSslCa($var)
+    {
+        GPBUtil::checkString($var, True);
+        $this->dbDriverSslCa = $var;
+
+        return $this;
+    }
+
+    /**
+     * DB MYSQL_ATTR_SSL_VERIFY_SERVER_CERT configuration
+     *
+     * Generated from protobuf field <code>string dbDriverSslVerifyCrt = 13;</code>
+     * @return string
+     */
+    public function getDbDriverSslVerifyCrt()
+    {
+        return $this->dbDriverSslVerifyCrt;
+    }
+
+    /**
+     * DB MYSQL_ATTR_SSL_VERIFY_SERVER_CERT configuration
+     *
+     * Generated from protobuf field <code>string dbDriverSslVerifyCrt = 13;</code>
+     * @param string $var
+     * @return $this
+     */
+    public function setDbDriverSslVerifyCrt($var)
+    {
+        GPBUtil::checkString($var, True);
+        $this->dbDriverSslVerifyCrt = $var;
 
         return $this;
     }

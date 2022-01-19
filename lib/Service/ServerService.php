@@ -152,13 +152,20 @@ class ServerService {
 				$output->writeln('frameworkAppData: ' . $cfg->getFrameworkAppData());
 				$output->writeln('useFileDirect: ' . json_encode($cfg->getUseFileDirect()));
 				$output->writeln('useDBDirect: ' . json_encode($cfg->getUseDBDirect()));
-				$dbConf = $cfg->getDbConf();
-				$output->writeln('dbhost: ' . json_encode($dbConf->getDbHost()));
-				$output->writeln('dbtype: ' . json_encode($dbConf->getDbType()));
-				$output->writeln('dbname: ' . json_encode($dbConf->getDbName()));
-				$output->writeln('dbuser: ' . json_encode($dbConf->getDbUser()));
-				$output->writeln('dbpass: ' . json_encode($dbConf->getDbPass()));
-				$output->writeln('dbprefix: ' . json_encode($dbConf->getDbPrefix()));
+				$dbCfg = $response->getDbCfg();
+				$output->writeln('dbhost: ' . json_encode($dbCfg->getDbHost()));
+				$output->writeln('dbtype: ' . json_encode($dbCfg->getDbType()));
+				$output->writeln('dbname: ' . json_encode($dbCfg->getDbName()));
+				$output->writeln('dbuser: ' . json_encode($dbCfg->getDbUser()));
+				$output->writeln('dbpass: ' . json_encode($dbCfg->getDbPass()));
+				$output->writeln('dbprefix: ' . json_encode($dbCfg->getDbPrefix()));
+				$output->writeln('iniHost: ' . json_encode($dbCfg->getIniDbHost()));
+				$output->writeln('iniPort: ' . json_encode($dbCfg->getIniDbPort()));
+				$output->writeln('iniSocket: ' . json_encode($dbCfg->getIniDbSocket()));
+				$output->writeln('dbDriverSslKey: ' . json_encode($dbCfg->getDbDriverSslKey()));
+				$output->writeln('dbDriverSslCert: ' . json_encode($dbCfg->getDbDriverSslCert()));
+				$output->writeln('dbDriverSslCa: ' . json_encode($dbCfg->getDbDriverSslCa()));
+				$output->writeln('dbDriverSslVerifyCrt: ' . json_encode($dbCfg->getDbDriverSslVerifyCrt()));
 			}
 			$output->writeln('Closing server...');
 			$this->cpaCore->TaskExit($client, ['result' => json_encode('"TaskInit successfull"')]);

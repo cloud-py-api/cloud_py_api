@@ -97,14 +97,24 @@ class TaskHandle {
 			}
 			$cfg->setUseDBDirect(false);
 			$cfg->setUseFileDirect(false);
-			$dbConf = new dbConfig();
-			$dbConf->setDbHost($this->config->getSystemValue('dbhost'));
-			$dbConf->setDbType($this->config->getSystemValue('dbtype'));
-			$dbConf->setDbName($this->config->getSystemValue('dbname'));
-			$dbConf->setDbUser($this->config->getSystemValue('dbuser'));
-			$dbConf->setDbPass($this->config->getSystemValue('dbpassword'));
-			$dbConf->setDbPrefix($this->config->getSystemValue('dbtableprefix'));
-			$cfg->setDbConf($dbConf);
+			$dbCfg = new dbConfig();
+			$dbCfg->setDbHost($this->config->getSystemValue('dbhost'));
+			$dbCfg->setDbType($this->config->getSystemValue('dbtype'));
+			$dbCfg->setDbName($this->config->getSystemValue('dbname'));
+			$dbCfg->setDbUser($this->config->getSystemValue('dbuser'));
+			$dbCfg->setDbPass($this->config->getSystemValue('dbpassword'));
+			$dbCfg->setDbPrefix($this->config->getSystemValue('dbtableprefix'));
+			$dbCfg->setIniDbHost(ini_get('mysqli.default_host'));
+			$dbCfg->setIniDbPort(ini_get('mysqli.default_port'));
+			$dbCfg->setIniDbSocket(ini_get('pdo_mysql.default_socket'));
+			$dbdriveroptions = $this->config->getSystemValue('dbdriveroptions');
+			if (isset($dbdriveroptions)) {
+				$dbCfg->setDbDriverSslKey($dbdriveroptions[\PDO::MYSQL_ATTR_SSL_KEY]);
+				$dbCfg->setDbDriverSslCert($dbdriveroptions[\PDO::MYSQL_ATTR_SSL_CERT]);
+				$dbCfg->setDbDriverSslCa($dbdriveroptions[\PDO::MYSQL_ATTR_SSL_CA]);
+				$dbCfg->setDbDriverSslVerifyCrt($dbdriveroptions[\PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT]);
+			}
+			$taskInitReply->setDbCfg($dbCfg);
 			$taskInitReply->setConfig($cfg);
 			if (isset(ServerService::$APP['handler'])) {
 				$taskInitReply->setHandler(ServerService::$APP['handler']);

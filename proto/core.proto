@@ -32,12 +32,19 @@ enum taskStatus {
 message Empty { }
 
 message dbConfig {
-  string dbHost = 1;                      // Current DB Host configuration
-  string dbType = 2;                      // Current DB Type configuration
-  string dbName = 3;                      // Current DB Name configuration
-  string dbUser = 4;                      // Current DB User configuration
-  string dbPass = 5;                      // Current DB Password configuration
-  string dbPrefix = 6;                    // Current DB tables prefix configuration
+  string dbHost = 1;                      // DB Host configuration
+  string dbType = 2;                      // DB Type configuration
+  string dbName = 3;                      // DB Name configuration
+  string dbUser = 4;                      // DB User configuration
+  string dbPass = 5;                      // DB Password configuration
+  string dbPrefix = 6;                    // DB tables prefix configuration
+  string iniDbSocket = 7;                 // DB Socket configuration from ini (mysql)
+  string iniDbHost = 8;                   // DB Host configuration from ini (mysql)
+  string iniDbPort = 9;                   // DB Port configuration from ini (mysql)
+  string dbDriverSslKey = 10;             // DB MYSQL_ATTR_SSL_KEY configuration
+  string dbDriverSslCert = 11;            // DB MYSQL_ATTR_SSL_CERT configuration
+  string dbDriverSslCa = 12;              // DB MYSQL_ATTR_SSL_CA configuration
+  string dbDriverSslVerifyCrt = 13;       // DB MYSQL_ATTR_SSL_VERIFY_SERVER_CERT configuration
 }
 
 message TaskInitReply {
@@ -55,10 +62,10 @@ message TaskInitReply {
     bool useDBDirect = 6;                 // Use extra direct DB module for python, if possible.
     int32 maxChunkSize = 7;               // Maximum chunk size for FS operations
     int32 maxCreateFileContent = 8;       // Maximum chunk size for FS Create operations
-    dbConfig dbConf = 9;                  // Database configuration
   }
   cfgOptions config = 6;
-  string handler = 7;                     // PHP Callback handler for TaskExit
+  dbConfig dbCfg = 7;                    // Database configuration
+  string handler = 8;                     // PHP Callback handler for TaskExit
 }
 
 message TaskSetStatusRequest {

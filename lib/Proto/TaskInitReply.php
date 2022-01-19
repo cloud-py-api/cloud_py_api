@@ -48,9 +48,15 @@ class TaskInitReply extends \Google\Protobuf\Internal\Message
      */
     protected $config = null;
     /**
+     * Database configuration
+     *
+     * Generated from protobuf field <code>.OCA.Cloud_Py_API.Proto.dbConfig dbCfg = 7;</code>
+     */
+    protected $dbCfg = null;
+    /**
      * PHP Callback handler for TaskExit
      *
-     * Generated from protobuf field <code>string handler = 7;</code>
+     * Generated from protobuf field <code>string handler = 8;</code>
      */
     protected $handler = '';
 
@@ -71,6 +77,8 @@ class TaskInitReply extends \Google\Protobuf\Internal\Message
      *     @type string[]|\Google\Protobuf\Internal\RepeatedField $args
      *           Optional arguments to pass to target python app's module.
      *     @type \OCA\Cloud_Py_API\Proto\TaskInitReply\cfgOptions $config
+     *     @type \OCA\Cloud_Py_API\Proto\dbConfig $dbCfg
+     *           Database configuration
      *     @type string $handler
      *           PHP Callback handler for TaskExit
      * }
@@ -243,9 +251,45 @@ class TaskInitReply extends \Google\Protobuf\Internal\Message
     }
 
     /**
+     * Database configuration
+     *
+     * Generated from protobuf field <code>.OCA.Cloud_Py_API.Proto.dbConfig dbCfg = 7;</code>
+     * @return \OCA\Cloud_Py_API\Proto\dbConfig|null
+     */
+    public function getDbCfg()
+    {
+        return $this->dbCfg;
+    }
+
+    public function hasDbCfg()
+    {
+        return isset($this->dbCfg);
+    }
+
+    public function clearDbCfg()
+    {
+        unset($this->dbCfg);
+    }
+
+    /**
+     * Database configuration
+     *
+     * Generated from protobuf field <code>.OCA.Cloud_Py_API.Proto.dbConfig dbCfg = 7;</code>
+     * @param \OCA\Cloud_Py_API\Proto\dbConfig $var
+     * @return $this
+     */
+    public function setDbCfg($var)
+    {
+        GPBUtil::checkMessage($var, \OCA\Cloud_Py_API\Proto\dbConfig::class);
+        $this->dbCfg = $var;
+
+        return $this;
+    }
+
+    /**
      * PHP Callback handler for TaskExit
      *
-     * Generated from protobuf field <code>string handler = 7;</code>
+     * Generated from protobuf field <code>string handler = 8;</code>
      * @return string
      */
     public function getHandler()
@@ -256,7 +300,7 @@ class TaskInitReply extends \Google\Protobuf\Internal\Message
     /**
      * PHP Callback handler for TaskExit
      *
-     * Generated from protobuf field <code>string handler = 7;</code>
+     * Generated from protobuf field <code>string handler = 8;</code>
      * @param string $var
      * @return $this
      */
