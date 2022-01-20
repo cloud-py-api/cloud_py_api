@@ -33,8 +33,6 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-use OCP\DB\QueryBuilder\IQueryBuilder;
-
 use Grpc\RpcServer;
 use Grpc\ClientStreamingCall;
 use Grpc\ServerStreamingCall;
@@ -98,7 +96,7 @@ class ServerService {
 		// TODO Add running pyfrm
 		$server->run();
 	}
- 
+
 	public static function testHandler($params = []) {
 		self::$staticLogger->info('[' . self::class . '] testHandler executed, result: ' . json_decode($params['result']));
 	}

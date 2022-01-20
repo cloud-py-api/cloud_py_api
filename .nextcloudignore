@@ -23,3 +23,10 @@ tests
 /psalm.xml
 /stylelint.config.js
 /webpack.*
+/docs
+/nc_py_api
+/proto
+/tmp
+.readthedocs.yaml
+pyproject.toml
+/pyfrm/_srv_example.py

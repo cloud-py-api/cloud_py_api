@@ -85,7 +85,6 @@ class PythonService {
 	 * and `output` of the script after Python script finish executing.
 	 */
 	public function run($scriptName, $scriptParams, $nonBlocking = false, $env = []) {
-		// TODO Rewrite to GRPC Client call
 		if (count($scriptParams) > 0) {
 			$params = array_map('\OCA\Cloud_Py_API\Service\PythonService::scriptParamsCallback', array_keys($scriptParams), array_values($scriptParams));
 			$cmd = $this->pythonCommand . ' ' . $this->cwd . $scriptName . ' ' . join(' ', $params);
@@ -154,6 +153,10 @@ class PythonService {
 	 */
 	private function parsePythonOutput($pythonResult) {
 		// TODO
+	}
+
+	public function installStandalonePython() {
+		// TODO Try to install standalone python
 	}
 
 }
