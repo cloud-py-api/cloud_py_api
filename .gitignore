@@ -24,3 +24,4 @@ local
 venv
 tmp
 /.run/
+/nc_py_api/nc_py_api.egg-info/

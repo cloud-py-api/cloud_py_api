@@ -62,6 +62,8 @@ ExtraPackagesList = {'numpy': 'numpy',
                      'PIL': 'pillow',
                      'scipy': 'scipy',
                      'pywt': 'pywavelets',
+                     'pg8000': 'pg8000',
+                     'pymysql': 'PyMySQL[rsa,ed25519]',
                      'sqlalchemy': 'SQLAlchemy'
                      }
 

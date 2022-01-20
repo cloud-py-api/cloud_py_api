@@ -1,7 +1,7 @@
 import logging
 from os import path
-from sqlalchemy import create_engine, event
 from urllib.parse import quote_plus
+from sqlalchemy import create_engine, event
 
 from .log_lvl import LogLvl
 
@@ -29,11 +29,13 @@ class DbApi:
             sql_logger.setLevel(logging.INFO)
             sql_logger.addHandler(DbLogHandler(ncc))
 
-    def create_engine(self):
+    def create_engine(self, auto_table_prefix: bool = True):
+        _exec_options = {}
+        if auto_table_prefix:
+            nc_table_prefix = self.get_table_prefix()
+            if nc_table_prefix:
+                _exec_options['table_prefix'] = nc_table_prefix
         if self.__ncc.task_init_data.config.useDBDirect:
-            _exec_options = {}
-            if self.__ncc.task_init_data.dbCfg.dbPrefix:
-                _exec_options['table_prefix'] = self.__ncc.task_init_data.dbCfg.dbPrefix
             connect_params = {}
             socket_dict_name = 'unix_socket'
             spike_socket_end_value = ''
@@ -67,14 +69,16 @@ class DbApi:
                                    future=True, execution_options=_exec_options)
             if engine:
                 @event.listens_for(engine, "before_cursor_execute", retval=True)
-                def before_cursor_execute(conn, cursor, statement, parameters, context, executemany):
-                    table_prefix = context.execution_options.get("table_prefix", None)
-                    if table_prefix:
-                        statement = statement.replace("*PREFIX*", table_prefix)
+                def before_cursor_execute(_conn, _cursor, statement, parameters, context, _executemany):
+                    __table_prefix = context.execution_options.get("table_prefix", None)
+                    if __table_prefix:
+                        statement = statement.replace("*PREFIX*", __table_prefix)
                     return statement, parameters
             return engine
-        else:
-            raise NotImplementedError()
+        raise NotImplementedError()
+
+    def get_table_prefix(self) -> str:
+        return self.__ncc.task_init_data.dbCfg.dbPrefix
 
     @staticmethod
     def __parse_host_value(host_port_socket: str) -> [str, str]:
