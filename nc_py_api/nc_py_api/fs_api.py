@@ -1,8 +1,10 @@
 from enum import Enum
 from typing import Union
 from io import BytesIO
+from dataclasses import dataclass
 
 
+@dataclass
 class FsObjId:
     user_id: str
     file_id: int
@@ -12,6 +14,7 @@ class FsObjId:
         self.file_id = file_id
 
 
+@dataclass
 class FsObjInfo(FsObjId):
     is_dir: bool
     is_local: bool

@@ -5,7 +5,7 @@
 extension-pkg-whitelist=
 
 # Add files or directories to the blacklist. They should be base names, not paths.
-ignore=nc_py_api,tests,requirements.txt
+ignore=requirements.txt
 
 # Add files or directories matching the regex patterns to the blacklist. The regex matches against base names, not paths.
 ignore-patterns=
@@ -50,11 +50,7 @@ confidence=
 # --enable=similarities". If you want to run only the classes checker, but have
 # no Warning level messages displayed, use "--disable=all --enable=classes
 # --disable=W".
-disable=C0114,
-        C0115,
-        C0116,
-        W0703,
-        R0801
+disable=
 
 # Enable the message, report, category or checker with the given id(s). You can
 # either give multiple identifier separated by comma (,) or put this option
@@ -176,7 +172,9 @@ good-names=a,b,c,d,e,f,i,j,k,
            ex,
            Run,
            _,
-           fp
+           fp,
+           fs,
+           db
 
 # Include a hint for the correct naming format with invalid-name.
 include-naming-hint=no
@@ -379,13 +377,13 @@ known-third-party=enchant
 max-args=8
 
 # Maximum number of attributes for a class (see R0902).
-max-attributes=9
+max-attributes=16
 
 # Maximum number of boolean expressions in an if statement.
 max-bool-expr=5
 
 # Maximum number of branch for function / method body.
-max-branches=12
+max-branches=16
 
 # Maximum number of locals for function / method body.
 max-locals=15
