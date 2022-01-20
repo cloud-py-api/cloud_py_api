@@ -27,7 +27,7 @@ jobs:
       - name: Build pure wheel
         working-directory: ./nc_py_api
         run: |
-          python -m pip install twine
+          python -m pip install twine wheel
           pip wheel -w wheelhouse/ .
 
       - name: Check builded wheel
@@ -39,7 +39,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: wheels
-          path: wheelhouse/*.whl
+          path: ./nc_py_api/wheelhouse/nc_py_api*.whl
           if-no-files-found: error
 
   sdist:
@@ -87,7 +87,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: wheels
-          path: wheelhouse/*.tar.gz
+          path: ./nc_py_api/wheelhouse/*.tar.gz
 
   publish:
     needs: [sdist, wheels_any]
