@@ -14,35 +14,35 @@ use Google\Protobuf\Internal\GPBUtil;
 class dbConfig extends \Google\Protobuf\Internal\Message
 {
     /**
-     * DB Host configuration
-     *
-     * Generated from protobuf field <code>string dbHost = 1;</code>
-     */
-    protected $dbHost = '';
-    /**
      * DB Type configuration
      *
-     * Generated from protobuf field <code>string dbType = 2;</code>
+     * Generated from protobuf field <code>string dbType = 1;</code>
      */
     protected $dbType = '';
     /**
-     * DB Name configuration
-     *
-     * Generated from protobuf field <code>string dbName = 3;</code>
-     */
-    protected $dbName = '';
-    /**
      * DB User configuration
      *
-     * Generated from protobuf field <code>string dbUser = 4;</code>
+     * Generated from protobuf field <code>string dbUser = 2;</code>
      */
     protected $dbUser = '';
     /**
      * DB Password configuration
      *
-     * Generated from protobuf field <code>string dbPass = 5;</code>
+     * Generated from protobuf field <code>string dbPass = 3;</code>
      */
     protected $dbPass = '';
+    /**
+     * DB Host configuration
+     *
+     * Generated from protobuf field <code>string dbHost = 4;</code>
+     */
+    protected $dbHost = '';
+    /**
+     * DB Name configuration
+     *
+     * Generated from protobuf field <code>string dbName = 5;</code>
+     */
+    protected $dbName = '';
     /**
      * DB tables prefix configuration
      *
@@ -98,16 +98,16 @@ class dbConfig extends \Google\Protobuf\Internal\Message
      * @param array $data {
      *     Optional. Data for populating the Message object.
      *
-     *     @type string $dbHost
-     *           DB Host configuration
      *     @type string $dbType
      *           DB Type configuration
-     *     @type string $dbName
-     *           DB Name configuration
      *     @type string $dbUser
      *           DB User configuration
      *     @type string $dbPass
      *           DB Password configuration
+     *     @type string $dbHost
+     *           DB Host configuration
+     *     @type string $dbName
+     *           DB Name configuration
      *     @type string $dbPrefix
      *           DB tables prefix configuration
      *     @type string $iniDbSocket
@@ -132,35 +132,9 @@ class dbConfig extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     * DB Host configuration
-     *
-     * Generated from protobuf field <code>string dbHost = 1;</code>
-     * @return string
-     */
-    public function getDbHost()
-    {
-        return $this->dbHost;
-    }
-
-    /**
-     * DB Host configuration
-     *
-     * Generated from protobuf field <code>string dbHost = 1;</code>
-     * @param string $var
-     * @return $this
-     */
-    public function setDbHost($var)
-    {
-        GPBUtil::checkString($var, True);
-        $this->dbHost = $var;
-
-        return $this;
-    }
-
-    /**
      * DB Type configuration
      *
-     * Generated from protobuf field <code>string dbType = 2;</code>
+     * Generated from protobuf field <code>string dbType = 1;</code>
      * @return string
      */
     public function getDbType()
@@ -171,7 +145,7 @@ class dbConfig extends \Google\Protobuf\Internal\Message
     /**
      * DB Type configuration
      *
-     * Generated from protobuf field <code>string dbType = 2;</code>
+     * Generated from protobuf field <code>string dbType = 1;</code>
      * @param string $var
      * @return $this
      */
@@ -184,35 +158,9 @@ class dbConfig extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     * DB Name configuration
-     *
-     * Generated from protobuf field <code>string dbName = 3;</code>
-     * @return string
-     */
-    public function getDbName()
-    {
-        return $this->dbName;
-    }
-
-    /**
-     * DB Name configuration
-     *
-     * Generated from protobuf field <code>string dbName = 3;</code>
-     * @param string $var
-     * @return $this
-     */
-    public function setDbName($var)
-    {
-        GPBUtil::checkString($var, True);
-        $this->dbName = $var;
-
-        return $this;
-    }
-
-    /**
      * DB User configuration
      *
-     * Generated from protobuf field <code>string dbUser = 4;</code>
+     * Generated from protobuf field <code>string dbUser = 2;</code>
      * @return string
      */
     public function getDbUser()
@@ -223,7 +171,7 @@ class dbConfig extends \Google\Protobuf\Internal\Message
     /**
      * DB User configuration
      *
-     * Generated from protobuf field <code>string dbUser = 4;</code>
+     * Generated from protobuf field <code>string dbUser = 2;</code>
      * @param string $var
      * @return $this
      */
@@ -238,7 +186,7 @@ class dbConfig extends \Google\Protobuf\Internal\Message
     /**
      * DB Password configuration
      *
-     * Generated from protobuf field <code>string dbPass = 5;</code>
+     * Generated from protobuf field <code>string dbPass = 3;</code>
      * @return string
      */
     public function getDbPass()
@@ -249,7 +197,7 @@ class dbConfig extends \Google\Protobuf\Internal\Message
     /**
      * DB Password configuration
      *
-     * Generated from protobuf field <code>string dbPass = 5;</code>
+     * Generated from protobuf field <code>string dbPass = 3;</code>
      * @param string $var
      * @return $this
      */
@@ -257,6 +205,58 @@ class dbConfig extends \Google\Protobuf\Internal\Message
     {
         GPBUtil::checkString($var, True);
         $this->dbPass = $var;
+
+        return $this;
+    }
+
+    /**
+     * DB Host configuration
+     *
+     * Generated from protobuf field <code>string dbHost = 4;</code>
+     * @return string
+     */
+    public function getDbHost()
+    {
+        return $this->dbHost;
+    }
+
+    /**
+     * DB Host configuration
+     *
+     * Generated from protobuf field <code>string dbHost = 4;</code>
+     * @param string $var
+     * @return $this
+     */
+    public function setDbHost($var)
+    {
+        GPBUtil::checkString($var, True);
+        $this->dbHost = $var;
+
+        return $this;
+    }
+
+    /**
+     * DB Name configuration
+     *
+     * Generated from protobuf field <code>string dbName = 5;</code>
+     * @return string
+     */
+    public function getDbName()
+    {
+        return $this->dbName;
+    }
+
+    /**
+     * DB Name configuration
+     *
+     * Generated from protobuf field <code>string dbName = 5;</code>
+     * @param string $var
+     * @return $this
+     */
+    public function setDbName($var)
+    {
+        GPBUtil::checkString($var, True);
+        $this->dbName = $var;
 
         return $this;
     }

@@ -1,12 +1,12 @@
 {
     "settings": [
         {
-            "name": "appdata_path",
-            "value": "appdata_nc-instance-id",
-            "displayName": "Path to folder for packages",
-            "title": "App data path",
-            "description": "Path to appdata folder of current nextcloud instance",
-            "helpUrl": "https://github.com/bigcat88/cloud_py_api/wiki"
+            "name": "python_command",
+            "value": "/usr/bin/python3",
+            "displayName": "Full path to python interpreter",
+            "title": "Python interpreter",
+            "description": "Absolute path to the python runnable (e.g. \"/usr/bin/python3\"). Can be obtained by `which python3` command.",
+            "helpUrl": "http://cloud-py-api.readthedocs.io/"
         }
     ]
 }
