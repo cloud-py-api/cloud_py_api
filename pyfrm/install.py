@@ -259,7 +259,6 @@ def download_pip(url: str, out_path: str) -> bool:
     if not check_local_dir(create_if_absent=True):
         log(LogLvl.ERROR, 'Cant create local dir.')
         return False
-
     for _ in range(2):
         try:
             run(['curl', url, '-o', out_path], timeout=90, stderr=DEVNULL, stdout=DEVNULL, check=True)
