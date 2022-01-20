@@ -32,11 +32,11 @@ enum taskStatus {
 message Empty { }
 
 message dbConfig {
-  string dbHost = 1;                      // DB Host configuration
-  string dbType = 2;                      // DB Type configuration
-  string dbName = 3;                      // DB Name configuration
-  string dbUser = 4;                      // DB User configuration
-  string dbPass = 5;                      // DB Password configuration
+  string dbType = 1;                      // DB Type configuration
+  string dbUser = 2;                      // DB User configuration
+  string dbPass = 3;                      // DB Password configuration
+  string dbHost = 4;                      // DB Host configuration
+  string dbName = 5;                      // DB Name configuration
   string dbPrefix = 6;                    // DB tables prefix configuration
   string iniDbSocket = 7;                 // DB Socket configuration from ini (mysql)
   string iniDbHost = 8;                   // DB Host configuration from ini (mysql)
@@ -64,7 +64,7 @@ message TaskInitReply {
     int32 maxCreateFileContent = 8;       // Maximum chunk size for FS Create operations
   }
   cfgOptions config = 6;
-  dbConfig dbCfg = 7;                    // Database configuration
+  dbConfig dbCfg = 7;                     // Database configuration
   string handler = 8;                     // PHP Callback handler for TaskExit
 }
 

@@ -6,9 +6,9 @@ from concurrent import futures
 from pathlib import Path
 
 import grpc
-from core_pb2 import taskStatus, logLvl, Empty, \
-    TaskInitReply, fsId, FsNodeInfo, FsListReply, fsResultCode, FsReply, FsCreateReply, FsReadReply
-import core_pb2_grpc as core_pb2_grpc
+from py_proto.core_pb2 import taskStatus, logLvl, Empty, TaskInitReply, dbConfig
+from py_proto.fs_pb2 import fsId, FsNodeInfo, FsListReply, fsResultCode, FsReply, FsCreateReply, FsReadReply
+from py_proto.service_pb2_grpc import CloudPyApiCoreServicer, add_CloudPyApiCoreServicer_to_server
 
 
 MAX_CHUNK_SIZE = 4
@@ -41,7 +41,7 @@ class TaskParameters:
         self.maxCreateFileContent = MAX_CREATE_FILE_CONTENT
 
 
-class ServerCloudPA(core_pb2_grpc.CloudPyApiCoreServicer, TaskParameters):
+class ServerCloudPA(CloudPyApiCoreServicer, TaskParameters):
     connection_alive: bool = False
     task_status: taskStatus = taskStatus.ST_UNKNOWN
     task_error: str = ''
@@ -63,7 +63,14 @@ class ServerCloudPA(core_pb2_grpc.CloudPyApiCoreServicer, TaskParameters):
                                    useFileDirect=self.use_file_direct,
                                    useDBDirect=self.use_db_direct,
                                    maxChunkSize=self.maxChunkSize,
-                                   maxCreateFileContent=self.maxCreateFileContent
+                                   maxCreateFileContent=self.maxCreateFileContent),
+                               dbCfg=dbConfig(
+                                   dbType='mysql',
+                                   dbUser='admin',
+                                   dbPass='12345',
+                                   dbHost='nc-deb-min.dnepr99',
+                                   dbName='nextcloud',
+                                   dbPrefix='oc_'
                                ))
         if self.args is not None:
             if isinstance(self.args, (list, tuple)):
@@ -267,14 +274,14 @@ def srv_example(address, port, app_name, module_name, module_path, function_to_c
                              frm_app_data='./../tmp/frm_app_data',
                              user_id='user_name',
                              use_file_direct=False,
-                             use_db_direct=False,
+                             use_db_direct=True,
                              app_name=app_name,
                              mod_name=module_name,
                              mod_path=module_path,
                              func_name=function_to_call,
                              args=args
                              )
-    core_pb2_grpc.add_CloudPyApiCoreServicer_to_server(servicer, server)
+    add_CloudPyApiCoreServicer_to_server(servicer, server)
     connect_address = address
     if not address.startswith('unix:'):
         if not port:
@@ -306,8 +313,8 @@ def srv_example(address, port, app_name, module_name, module_path, function_to_c
 
 
 if __name__ == '__main__':
-    status, error, result, logs = srv_example('unix:./../tmp/test.sock', '0', 'fs_example', 'fs_example',
-                                              '../tests/python/apps_example/fs_example', 'func_fs_read_write')
+    status, error, result, logs = srv_example('unix:./../tmp/test.sock', '0', 'db_example', 'db_example',
+                                              '../tests/python/apps_example/db_example', 'ttt')
     sys.exit(0)
 
 

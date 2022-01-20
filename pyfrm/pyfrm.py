@@ -6,7 +6,7 @@ from importlib import invalidate_caches, import_module
 from traceback import format_exc
 
 from grpc import RpcError
-from core_pb2 import logLvl, taskStatus
+from py_proto.core_pb2 import logLvl, taskStatus
 from helpers import print_err, debug_msg
 from core_proto import ClientCloudPA
 from nc_py_api.cloud_api import _pyfrm_set_conn
@@ -62,6 +62,7 @@ def true_main(connect_address: str, auth: str = '') -> ExitCodes:
             _app_packages = path.abspath(
                 path.join(cloud.task_init_data.config.frameworkAppData, cloud.task_init_data.appName))
             _app_packages_exists = path.isdir(_app_packages)
+            # TODO: if directory does not exist run from default path.
             if not _app_packages_exists:
                 cloud.log(logLvl.FATAL, 'cpa_core',
                           f'App directory({_app_packages}) with python packages cannot be accessed.')
@@ -94,13 +95,13 @@ def true_main(connect_address: str, auth: str = '') -> ExitCodes:
                 result = None
             cloud.set_status(taskStatus.ST_SUCCESS)
         except Exception as exception_info:
-            exception_name = type(exception_info).__name__
+            exception_name = str(type(exception_info).__name__)
             if exception_name in ('RpcError',):
                 raise exception_info from None
             exit_code = ExitCodes.CODE_EXCEPTION
-            cloud.set_status(taskStatus.ST_EXCEPTION, str(type(exception_info).__name__))
+            cloud.set_status(taskStatus.ST_EXCEPTION, exception_name)
             exception_info_str = str(format_exc())
-            cloud.log(logLvl.ERROR, 'cpa_core', f'Exception({type(exception_info).__name__}):`{exception_info_str}`')
+            cloud.log(logLvl.ERROR, 'cpa_core', f'Exception({exception_name}):`{exception_info_str}`')
         finally:
             cloud.exit(result)
     except RpcError as exception_info:

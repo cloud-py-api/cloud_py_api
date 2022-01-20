@@ -1,0 +1,4 @@
+#Build core proto commands for python.
+python -m grpc_tools.protoc -Iproto/ --python_out=pyfrm/py_proto proto/*.proto
+python -m grpc_tools.protoc -Iproto/ --grpc_python_out=pyfrm/py_proto proto/service.proto
+cd pyfrm/py_proto && 2to3 -n -w *

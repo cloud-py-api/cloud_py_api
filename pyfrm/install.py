@@ -61,7 +61,8 @@ RequiredPackagesList = {'google.protobuf': 'protobuf',
 ExtraPackagesList = {'numpy': 'numpy',
                      'PIL': 'pillow',
                      'scipy': 'scipy',
-                     'pywt': 'pywavelets'
+                     'pywt': 'pywavelets',
+                     'sqlalchemy': 'SQLAlchemy'
                      }
 
 

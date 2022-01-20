@@ -4,11 +4,10 @@ from io import BytesIO
 from os import SEEK_SET
 
 import grpc
-from core_pb2 import taskStatus, Empty, \
-    TaskSetStatusRequest, TaskExitRequest, TaskLogRequest, \
-    fsId, FsListRequest, FsGetInfoRequest, FsNodeInfo, FsReadRequest, \
+from py_proto.core_pb2 import taskStatus, Empty, TaskSetStatusRequest, TaskExitRequest, TaskLogRequest
+from py_proto.fs_pb2 import fsId, FsListRequest, FsGetInfoRequest, FsNodeInfo, FsReadRequest, \
     FsCreateRequest, FsWriteRequest, FsDeleteRequest, FsMoveRequest
-import core_pb2_grpc
+from py_proto.service_pb2_grpc import CloudPyApiCoreStub
 from helpers import debug_msg
 from nc_py_api.fs_api import FsObjInfo, FsResultCode
 
@@ -33,7 +32,7 @@ class ClientCloudPA:
         if not self._connected_event.wait(timeout=5.0):
             raise grpc.RpcError('Timeout connecting to the server')
         self._main_channel.unsubscribe(self.__wait_for_server_connect)
-        self._main_stub = core_pb2_grpc.CloudPyApiCoreStub(self._main_channel)
+        self._main_stub = CloudPyApiCoreStub(self._main_channel)
         self.task_init_data = self._main_stub.TaskInit(Empty())
         debug_msg('connected')
 
@@ -95,7 +94,7 @@ class ClientCloudPA:
         if not user_id:
             user_id = self.task_init_data.config.userId
         if self.task_init_data.config.useFileDirect:
-            raise Exception('Not implemented.')
+            raise NotImplementedError()
         _fs_reply = self._main_stub.FsList(FsListRequest(dirId=fsId(userId=user_id, fileId=file_id)))
         _dir_list = []
         for each_obj in _fs_reply.nodes:
@@ -106,7 +105,7 @@ class ClientCloudPA:
         if not user_id:
             user_id = self.task_init_data.config.userId
         if self.task_init_data.config.useFileDirect:
-            raise Exception('Not implemented.')
+            raise NotImplementedError()
         fs_reply = self._main_stub.FsGetInfo(FsGetInfoRequest(fileId=fsId(userId=user_id, fileId=file_id)))
         if not len(fs_reply.nodes):
             return None
@@ -114,7 +113,7 @@ class ClientCloudPA:
 
     def fs_read(self, user_id: str, file_id: int, out_obj: BytesIO, offset: int, bytes_to_read: int) -> FsResultCode:
         if self.task_init_data.config.useFileDirect:
-            raise Exception('Not implemented.')
+            raise NotImplementedError()
         fs_read_response_iterator = self._main_stub.FsRead(FsReadRequest(fileId=fsId(userId=user_id, fileId=file_id),
                                                                          offset=offset, bytes_to_read=bytes_to_read))
         res_code = FsResultCode.NO_ERROR.value
