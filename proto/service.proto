@@ -12,6 +12,7 @@ service CloudPyApiCore {
   rpc TaskStatus (OCA.Cloud_Py_API.Proto.TaskSetStatusRequest) returns (OCA.Cloud_Py_API.Proto.Empty) {}
   rpc TaskExit (OCA.Cloud_Py_API.Proto.TaskExitRequest) returns (OCA.Cloud_Py_API.Proto.Empty) {}
   rpc TaskLog (OCA.Cloud_Py_API.Proto.TaskLogRequest) returns (OCA.Cloud_Py_API.Proto.Empty) {}
+  rpc OccCall (OCA.Cloud_Py_API.Proto.OccRequest) returns (stream OCA.Cloud_Py_API.Proto.OccReply) {}
   rpc FsGetInfo (OCA.Cloud_Py_API.Proto.FsGetInfoRequest) returns (OCA.Cloud_Py_API.Proto.FsListReply) {}
   rpc FsList (OCA.Cloud_Py_API.Proto.FsListRequest) returns (OCA.Cloud_Py_API.Proto.FsListReply) {}
   rpc FsRead (OCA.Cloud_Py_API.Proto.FsReadRequest) returns (stream OCA.Cloud_Py_API.Proto.FsReadReply) {}

@@ -82,3 +82,13 @@ message TaskLogRequest {                  // No reply.
   string module = 2;                      // What module logs belongs to.
   repeated string content = 3;            // One or more strings to put to log.
 }
+
+message OccRequest {
+  repeated string arguments = 1;
+}
+
+message OccReply {
+  bool error = 1;
+  bool last = 2;
+  bytes content = 3;                      // If error=True, this field contains an error description.
+}

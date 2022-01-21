@@ -20,7 +20,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\ncore.proto\x12\x16OCA.Cloud_Py_API.Proto\"\x07\n\x05\x45mpty\"\x8d\x02\n\x08\x64\x62\x43onfig\x12\x0e\n\x06\x64\x62Type\x18\x01 \x01(\t\x12\x0e\n\x06\x64\x62User\x18\x02 \x01(\t\x12\x0e\n\x06\x64\x62Pass\x18\x03 \x01(\t\x12\x0e\n\x06\x64\x62Host\x18\x04 \x01(\t\x12\x0e\n\x06\x64\x62Name\x18\x05 \x01(\t\x12\x10\n\x08\x64\x62Prefix\x18\x06 \x01(\t\x12\x13\n\x0biniDbSocket\x18\x07 \x01(\t\x12\x11\n\tiniDbHost\x18\x08 \x01(\t\x12\x11\n\tiniDbPort\x18\t \x01(\t\x12\x16\n\x0e\x64\x62\x44riverSslKey\x18\n \x01(\t\x12\x17\n\x0f\x64\x62\x44riverSslCert\x18\x0b \x01(\t\x12\x15\n\rdbDriverSslCa\x18\x0c \x01(\t\x12\x1c\n\x14\x64\x62\x44riverSslVerifyCrt\x18\r \x01(\t\"\xc4\x03\n\rTaskInitReply\x12\x0f\n\x07\x61ppName\x18\x01 \x01(\t\x12\x0f\n\x07modName\x18\x02 \x01(\t\x12\x0f\n\x07modPath\x18\x03 \x01(\t\x12\x10\n\x08\x66uncName\x18\x04 \x01(\t\x12\x0c\n\x04\x61rgs\x18\x05 \x03(\t\x12@\n\x06\x63onfig\x18\x06 \x01(\x0b\x32\x30.OCA.Cloud_Py_API.Proto.TaskInitReply.cfgOptions\x12/\n\x05\x64\x62\x43\x66g\x18\x07 \x01(\x0b\x32 .OCA.Cloud_Py_API.Proto.dbConfig\x12\x0f\n\x07handler\x18\x08 \x01(\t\x1a\xdb\x01\n\ncfgOptions\x12/\n\x07log_lvl\x18\x01 \x01(\x0e\x32\x1e.OCA.Cloud_Py_API.Proto.logLvl\x12\x12\n\ndataFolder\x18\x02 \x01(\t\x12\x18\n\x10\x66rameworkAppData\x18\x03 \x01(\t\x12\x0e\n\x06userId\x18\x04 \x01(\t\x12\x15\n\ruseFileDirect\x18\x05 \x01(\x08\x12\x13\n\x0buseDBDirect\x18\x06 \x01(\x08\x12\x14\n\x0cmaxChunkSize\x18\x07 \x01(\x05\x12\x1c\n\x14maxCreateFileContent\x18\x08 \x01(\x05\"Z\n\x14TaskSetStatusRequest\x12\x33\n\x07st_code\x18\x01 \x01(\x0e\x32\".OCA.Cloud_Py_API.Proto.taskStatus\x12\r\n\x05\x65rror\x18\x02 \x01(\t\"!\n\x0fTaskExitRequest\x12\x0e\n\x06result\x18\x01 \x01(\t\"b\n\x0eTaskLogRequest\x12/\n\x07log_lvl\x18\x01 \x01(\x0e\x32\x1e.OCA.Cloud_Py_API.Proto.logLvl\x12\x0e\n\x06module\x18\x02 \x01(\t\x12\x0f\n\x07\x63ontent\x18\x03 \x03(\t*=\n\x06logLvl\x12\t\n\x05\x44\x45\x42UG\x10\x00\x12\x08\n\x04INFO\x10\x01\x12\x08\n\x04WARN\x10\x02\x12\t\n\x05\x45RROR\x10\x03\x12\t\n\x05\x46\x41TAL\x10\x04*s\n\ntaskStatus\x12\x0e\n\nST_SUCCESS\x10\x00\x12\x12\n\x0eST_IN_PROGRESS\x10\x01\x12\x11\n\rST_INIT_ERROR\x10\x02\x12\x10\n\x0cST_EXCEPTION\x10\x03\x12\x0c\n\x08ST_ERROR\x10\x04\x12\x0e\n\nST_UNKNOWN\x10\x05\x62\x06proto3'
+  serialized_pb=b'\n\ncore.proto\x12\x16OCA.Cloud_Py_API.Proto\"\x07\n\x05\x45mpty\"\x8d\x02\n\x08\x64\x62\x43onfig\x12\x0e\n\x06\x64\x62Type\x18\x01 \x01(\t\x12\x0e\n\x06\x64\x62User\x18\x02 \x01(\t\x12\x0e\n\x06\x64\x62Pass\x18\x03 \x01(\t\x12\x0e\n\x06\x64\x62Host\x18\x04 \x01(\t\x12\x0e\n\x06\x64\x62Name\x18\x05 \x01(\t\x12\x10\n\x08\x64\x62Prefix\x18\x06 \x01(\t\x12\x13\n\x0biniDbSocket\x18\x07 \x01(\t\x12\x11\n\tiniDbHost\x18\x08 \x01(\t\x12\x11\n\tiniDbPort\x18\t \x01(\t\x12\x16\n\x0e\x64\x62\x44riverSslKey\x18\n \x01(\t\x12\x17\n\x0f\x64\x62\x44riverSslCert\x18\x0b \x01(\t\x12\x15\n\rdbDriverSslCa\x18\x0c \x01(\t\x12\x1c\n\x14\x64\x62\x44riverSslVerifyCrt\x18\r \x01(\t\"\xc4\x03\n\rTaskInitReply\x12\x0f\n\x07\x61ppName\x18\x01 \x01(\t\x12\x0f\n\x07modName\x18\x02 \x01(\t\x12\x0f\n\x07modPath\x18\x03 \x01(\t\x12\x10\n\x08\x66uncName\x18\x04 \x01(\t\x12\x0c\n\x04\x61rgs\x18\x05 \x03(\t\x12@\n\x06\x63onfig\x18\x06 \x01(\x0b\x32\x30.OCA.Cloud_Py_API.Proto.TaskInitReply.cfgOptions\x12/\n\x05\x64\x62\x43\x66g\x18\x07 \x01(\x0b\x32 .OCA.Cloud_Py_API.Proto.dbConfig\x12\x0f\n\x07handler\x18\x08 \x01(\t\x1a\xdb\x01\n\ncfgOptions\x12/\n\x07log_lvl\x18\x01 \x01(\x0e\x32\x1e.OCA.Cloud_Py_API.Proto.logLvl\x12\x12\n\ndataFolder\x18\x02 \x01(\t\x12\x18\n\x10\x66rameworkAppData\x18\x03 \x01(\t\x12\x0e\n\x06userId\x18\x04 \x01(\t\x12\x15\n\ruseFileDirect\x18\x05 \x01(\x08\x12\x13\n\x0buseDBDirect\x18\x06 \x01(\x08\x12\x14\n\x0cmaxChunkSize\x18\x07 \x01(\x05\x12\x1c\n\x14maxCreateFileContent\x18\x08 \x01(\x05\"Z\n\x14TaskSetStatusRequest\x12\x33\n\x07st_code\x18\x01 \x01(\x0e\x32\".OCA.Cloud_Py_API.Proto.taskStatus\x12\r\n\x05\x65rror\x18\x02 \x01(\t\"!\n\x0fTaskExitRequest\x12\x0e\n\x06result\x18\x01 \x01(\t\"b\n\x0eTaskLogRequest\x12/\n\x07log_lvl\x18\x01 \x01(\x0e\x32\x1e.OCA.Cloud_Py_API.Proto.logLvl\x12\x0e\n\x06module\x18\x02 \x01(\t\x12\x0f\n\x07\x63ontent\x18\x03 \x03(\t\"\x1f\n\nOccRequest\x12\x11\n\targuments\x18\x01 \x03(\t\"8\n\x08OccReply\x12\r\n\x05\x65rror\x18\x01 \x01(\x08\x12\x0c\n\x04last\x18\x02 \x01(\x08\x12\x0f\n\x07\x63ontent\x18\x03 \x01(\x0c*=\n\x06logLvl\x12\t\n\x05\x44\x45\x42UG\x10\x00\x12\x08\n\x04INFO\x10\x01\x12\x08\n\x04WARN\x10\x02\x12\t\n\x05\x45RROR\x10\x03\x12\t\n\x05\x46\x41TAL\x10\x04*s\n\ntaskStatus\x12\x0e\n\nST_SUCCESS\x10\x00\x12\x12\n\x0eST_IN_PROGRESS\x10\x01\x12\x11\n\rST_INIT_ERROR\x10\x02\x12\x10\n\x0cST_EXCEPTION\x10\x03\x12\x0c\n\x08ST_ERROR\x10\x04\x12\x0e\n\nST_UNKNOWN\x10\x05\x62\x06proto3'
 )
 
 _LOGLVL = _descriptor.EnumDescriptor(
@@ -58,8 +58,8 @@ _LOGLVL = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=1001,
-  serialized_end=1062,
+  serialized_start=1092,
+  serialized_end=1153,
 )
 _sym_db.RegisterEnumDescriptor(_LOGLVL)
 
@@ -104,8 +104,8 @@ _TASKSTATUS = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=1064,
-  serialized_end=1179,
+  serialized_start=1155,
+  serialized_end=1270,
 )
 _sym_db.RegisterEnumDescriptor(_TASKSTATUS)
 
@@ -542,6 +542,84 @@ _TASKLOGREQUEST = _descriptor.Descriptor(
   serialized_end=999,
 )
 
+
+_OCCREQUEST = _descriptor.Descriptor(
+  name='OccRequest',
+  full_name='OCA.Cloud_Py_API.Proto.OccRequest',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='arguments', full_name='OCA.Cloud_Py_API.Proto.OccRequest.arguments', index=0,
+      number=1, type=9, cpp_type=9, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=1001,
+  serialized_end=1032,
+)
+
+
+_OCCREPLY = _descriptor.Descriptor(
+  name='OccReply',
+  full_name='OCA.Cloud_Py_API.Proto.OccReply',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='error', full_name='OCA.Cloud_Py_API.Proto.OccReply.error', index=0,
+      number=1, type=8, cpp_type=7, label=1,
+      has_default_value=False, default_value=False,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='last', full_name='OCA.Cloud_Py_API.Proto.OccReply.last', index=1,
+      number=2, type=8, cpp_type=7, label=1,
+      has_default_value=False, default_value=False,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='content', full_name='OCA.Cloud_Py_API.Proto.OccReply.content', index=2,
+      number=3, type=12, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"",
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=1034,
+  serialized_end=1090,
+)
+
 _TASKINITREPLY_CFGOPTIONS.fields_by_name['log_lvl'].enum_type = _LOGLVL
 _TASKINITREPLY_CFGOPTIONS.containing_type = _TASKINITREPLY
 _TASKINITREPLY.fields_by_name['config'].message_type = _TASKINITREPLY_CFGOPTIONS
@@ -554,6 +632,8 @@ DESCRIPTOR.message_types_by_name['TaskInitReply'] = _TASKINITREPLY
 DESCRIPTOR.message_types_by_name['TaskSetStatusRequest'] = _TASKSETSTATUSREQUEST
 DESCRIPTOR.message_types_by_name['TaskExitRequest'] = _TASKEXITREQUEST
 DESCRIPTOR.message_types_by_name['TaskLogRequest'] = _TASKLOGREQUEST
+DESCRIPTOR.message_types_by_name['OccRequest'] = _OCCREQUEST
+DESCRIPTOR.message_types_by_name['OccReply'] = _OCCREPLY
 DESCRIPTOR.enum_types_by_name['logLvl'] = _LOGLVL
 DESCRIPTOR.enum_types_by_name['taskStatus'] = _TASKSTATUS
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
@@ -607,6 +687,20 @@ TaskLogRequest = _reflection.GeneratedProtocolMessageType('TaskLogRequest', (_me
   # @@protoc_insertion_point(class_scope:OCA.Cloud_Py_API.Proto.TaskLogRequest)
   })
 _sym_db.RegisterMessage(TaskLogRequest)
+
+OccRequest = _reflection.GeneratedProtocolMessageType('OccRequest', (_message.Message,), {
+  'DESCRIPTOR' : _OCCREQUEST,
+  '__module__' : 'core_pb2'
+  # @@protoc_insertion_point(class_scope:OCA.Cloud_Py_API.Proto.OccRequest)
+  })
+_sym_db.RegisterMessage(OccRequest)
+
+OccReply = _reflection.GeneratedProtocolMessageType('OccReply', (_message.Message,), {
+  'DESCRIPTOR' : _OCCREPLY,
+  '__module__' : 'core_pb2'
+  # @@protoc_insertion_point(class_scope:OCA.Cloud_Py_API.Proto.OccReply)
+  })
+_sym_db.RegisterMessage(OccReply)
 
 
 # @@protoc_insertion_point(module_scope)

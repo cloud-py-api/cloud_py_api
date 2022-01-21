@@ -36,6 +36,11 @@ class CloudPyApiCoreStub(object):
                 request_serializer=core__pb2.TaskLogRequest.SerializeToString,
                 response_deserializer=core__pb2.Empty.FromString,
                 )
+        self.OccCall = channel.unary_stream(
+                '/OCA.Cloud_Py_API.Proto.CloudPyApiCore/OccCall',
+                request_serializer=core__pb2.OccRequest.SerializeToString,
+                response_deserializer=core__pb2.OccReply.FromString,
+                )
         self.FsGetInfo = channel.unary_unary(
                 '/OCA.Cloud_Py_API.Proto.CloudPyApiCore/FsGetInfo',
                 request_serializer=fs__pb2.FsGetInfoRequest.SerializeToString,
@@ -110,6 +115,12 @@ class CloudPyApiCoreServicer(object):
         raise NotImplementedError('Method not implemented!')
 
     def TaskLog(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def OccCall(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -197,6 +208,11 @@ def add_CloudPyApiCoreServicer_to_server(servicer, server):
                     servicer.TaskLog,
                     request_deserializer=core__pb2.TaskLogRequest.FromString,
                     response_serializer=core__pb2.Empty.SerializeToString,
+            ),
+            'OccCall': grpc.unary_stream_rpc_method_handler(
+                    servicer.OccCall,
+                    request_deserializer=core__pb2.OccRequest.FromString,
+                    response_serializer=core__pb2.OccReply.SerializeToString,
             ),
             'FsGetInfo': grpc.unary_unary_rpc_method_handler(
                     servicer.FsGetInfo,
@@ -323,6 +339,23 @@ class CloudPyApiCore(object):
         return grpc.experimental.unary_unary(request, target, '/OCA.Cloud_Py_API.Proto.CloudPyApiCore/TaskLog',
             core__pb2.TaskLogRequest.SerializeToString,
             core__pb2.Empty.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def OccCall(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_stream(request, target, '/OCA.Cloud_Py_API.Proto.CloudPyApiCore/OccCall',
+            core__pb2.OccRequest.SerializeToString,
+            core__pb2.OccReply.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 

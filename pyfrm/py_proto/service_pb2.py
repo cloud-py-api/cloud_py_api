@@ -22,7 +22,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\rservice.proto\x12\x16OCA.Cloud_Py_API.Proto\x1a\ncore.proto\x1a\x08\x66s.proto\x1a\x08\x64\x62.proto2\xf5\t\n\x0e\x43loudPyApiCore\x12R\n\x08TaskInit\x12\x1d.OCA.Cloud_Py_API.Proto.Empty\x1a%.OCA.Cloud_Py_API.Proto.TaskInitReply\"\x00\x12[\n\nTaskStatus\x12,.OCA.Cloud_Py_API.Proto.TaskSetStatusRequest\x1a\x1d.OCA.Cloud_Py_API.Proto.Empty\"\x00\x12T\n\x08TaskExit\x12\'.OCA.Cloud_Py_API.Proto.TaskExitRequest\x1a\x1d.OCA.Cloud_Py_API.Proto.Empty\"\x00\x12R\n\x07TaskLog\x12&.OCA.Cloud_Py_API.Proto.TaskLogRequest\x1a\x1d.OCA.Cloud_Py_API.Proto.Empty\"\x00\x12\\\n\tFsGetInfo\x12(.OCA.Cloud_Py_API.Proto.FsGetInfoRequest\x1a#.OCA.Cloud_Py_API.Proto.FsListReply\"\x00\x12V\n\x06\x46sList\x12%.OCA.Cloud_Py_API.Proto.FsListRequest\x1a#.OCA.Cloud_Py_API.Proto.FsListReply\"\x00\x12X\n\x06\x46sRead\x12%.OCA.Cloud_Py_API.Proto.FsReadRequest\x1a#.OCA.Cloud_Py_API.Proto.FsReadReply\"\x00\x30\x01\x12\\\n\x08\x46sCreate\x12\'.OCA.Cloud_Py_API.Proto.FsCreateRequest\x1a%.OCA.Cloud_Py_API.Proto.FsCreateReply\"\x00\x12V\n\x07\x46sWrite\x12&.OCA.Cloud_Py_API.Proto.FsWriteRequest\x1a\x1f.OCA.Cloud_Py_API.Proto.FsReply\"\x00(\x01\x12V\n\x08\x46sDelete\x12\'.OCA.Cloud_Py_API.Proto.FsDeleteRequest\x1a\x1f.OCA.Cloud_Py_API.Proto.FsReply\"\x00\x12V\n\x06\x46sMove\x12%.OCA.Cloud_Py_API.Proto.FsMoveRequest\x1a#.OCA.Cloud_Py_API.Proto.FsMoveReply\"\x00\x12\\\n\x08\x44\x62Select\x12\'.OCA.Cloud_Py_API.Proto.DbSelectRequest\x1a%.OCA.Cloud_Py_API.Proto.DbSelectReply\"\x00\x12\\\n\x08\x44\x62\x43ursor\x12\'.OCA.Cloud_Py_API.Proto.DbCursorRequest\x1a%.OCA.Cloud_Py_API.Proto.DbCursorReply\"\x00\x12V\n\x06\x44\x62\x45xec\x12%.OCA.Cloud_Py_API.Proto.DbExecRequest\x1a#.OCA.Cloud_Py_API.Proto.DbExecReply\"\x00\x62\x06proto3'
+  serialized_pb=b'\n\rservice.proto\x12\x16OCA.Cloud_Py_API.Proto\x1a\ncore.proto\x1a\x08\x66s.proto\x1a\x08\x64\x62.proto2\xca\n\n\x0e\x43loudPyApiCore\x12R\n\x08TaskInit\x12\x1d.OCA.Cloud_Py_API.Proto.Empty\x1a%.OCA.Cloud_Py_API.Proto.TaskInitReply\"\x00\x12[\n\nTaskStatus\x12,.OCA.Cloud_Py_API.Proto.TaskSetStatusRequest\x1a\x1d.OCA.Cloud_Py_API.Proto.Empty\"\x00\x12T\n\x08TaskExit\x12\'.OCA.Cloud_Py_API.Proto.TaskExitRequest\x1a\x1d.OCA.Cloud_Py_API.Proto.Empty\"\x00\x12R\n\x07TaskLog\x12&.OCA.Cloud_Py_API.Proto.TaskLogRequest\x1a\x1d.OCA.Cloud_Py_API.Proto.Empty\"\x00\x12S\n\x07OccCall\x12\".OCA.Cloud_Py_API.Proto.OccRequest\x1a .OCA.Cloud_Py_API.Proto.OccReply\"\x00\x30\x01\x12\\\n\tFsGetInfo\x12(.OCA.Cloud_Py_API.Proto.FsGetInfoRequest\x1a#.OCA.Cloud_Py_API.Proto.FsListReply\"\x00\x12V\n\x06\x46sList\x12%.OCA.Cloud_Py_API.Proto.FsListRequest\x1a#.OCA.Cloud_Py_API.Proto.FsListReply\"\x00\x12X\n\x06\x46sRead\x12%.OCA.Cloud_Py_API.Proto.FsReadRequest\x1a#.OCA.Cloud_Py_API.Proto.FsReadReply\"\x00\x30\x01\x12\\\n\x08\x46sCreate\x12\'.OCA.Cloud_Py_API.Proto.FsCreateRequest\x1a%.OCA.Cloud_Py_API.Proto.FsCreateReply\"\x00\x12V\n\x07\x46sWrite\x12&.OCA.Cloud_Py_API.Proto.FsWriteRequest\x1a\x1f.OCA.Cloud_Py_API.Proto.FsReply\"\x00(\x01\x12V\n\x08\x46sDelete\x12\'.OCA.Cloud_Py_API.Proto.FsDeleteRequest\x1a\x1f.OCA.Cloud_Py_API.Proto.FsReply\"\x00\x12V\n\x06\x46sMove\x12%.OCA.Cloud_Py_API.Proto.FsMoveRequest\x1a#.OCA.Cloud_Py_API.Proto.FsMoveReply\"\x00\x12\\\n\x08\x44\x62Select\x12\'.OCA.Cloud_Py_API.Proto.DbSelectRequest\x1a%.OCA.Cloud_Py_API.Proto.DbSelectReply\"\x00\x12\\\n\x08\x44\x62\x43ursor\x12\'.OCA.Cloud_Py_API.Proto.DbCursorRequest\x1a%.OCA.Cloud_Py_API.Proto.DbCursorReply\"\x00\x12V\n\x06\x44\x62\x45xec\x12%.OCA.Cloud_Py_API.Proto.DbExecRequest\x1a#.OCA.Cloud_Py_API.Proto.DbExecReply\"\x00\x62\x06proto3'
   ,
   dependencies=[core__pb2.DESCRIPTOR,fs__pb2.DESCRIPTOR,db__pb2.DESCRIPTOR,])
 
@@ -40,7 +40,7 @@ _CLOUDPYAPICORE = _descriptor.ServiceDescriptor(
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
   serialized_start=74,
-  serialized_end=1343,
+  serialized_end=1428,
   methods=[
   _descriptor.MethodDescriptor(
     name='TaskInit',
@@ -83,9 +83,19 @@ _CLOUDPYAPICORE = _descriptor.ServiceDescriptor(
     create_key=_descriptor._internal_create_key,
   ),
   _descriptor.MethodDescriptor(
+    name='OccCall',
+    full_name='OCA.Cloud_Py_API.Proto.CloudPyApiCore.OccCall',
+    index=4,
+    containing_service=None,
+    input_type=core__pb2._OCCREQUEST,
+    output_type=core__pb2._OCCREPLY,
+    serialized_options=None,
+    create_key=_descriptor._internal_create_key,
+  ),
+  _descriptor.MethodDescriptor(
     name='FsGetInfo',
     full_name='OCA.Cloud_Py_API.Proto.CloudPyApiCore.FsGetInfo',
-    index=4,
+    index=5,
     containing_service=None,
     input_type=fs__pb2._FSGETINFOREQUEST,
     output_type=fs__pb2._FSLISTREPLY,
@@ -95,7 +105,7 @@ _CLOUDPYAPICORE = _descriptor.ServiceDescriptor(
   _descriptor.MethodDescriptor(
     name='FsList',
     full_name='OCA.Cloud_Py_API.Proto.CloudPyApiCore.FsList',
-    index=5,
+    index=6,
     containing_service=None,
     input_type=fs__pb2._FSLISTREQUEST,
     output_type=fs__pb2._FSLISTREPLY,
@@ -105,7 +115,7 @@ _CLOUDPYAPICORE = _descriptor.ServiceDescriptor(
   _descriptor.MethodDescriptor(
     name='FsRead',
     full_name='OCA.Cloud_Py_API.Proto.CloudPyApiCore.FsRead',
-    index=6,
+    index=7,
     containing_service=None,
     input_type=fs__pb2._FSREADREQUEST,
     output_type=fs__pb2._FSREADREPLY,
@@ -115,7 +125,7 @@ _CLOUDPYAPICORE = _descriptor.ServiceDescriptor(
   _descriptor.MethodDescriptor(
     name='FsCreate',
     full_name='OCA.Cloud_Py_API.Proto.CloudPyApiCore.FsCreate',
-    index=7,
+    index=8,
     containing_service=None,
     input_type=fs__pb2._FSCREATEREQUEST,
     output_type=fs__pb2._FSCREATEREPLY,
@@ -125,7 +135,7 @@ _CLOUDPYAPICORE = _descriptor.ServiceDescriptor(
   _descriptor.MethodDescriptor(
     name='FsWrite',
     full_name='OCA.Cloud_Py_API.Proto.CloudPyApiCore.FsWrite',
-    index=8,
+    index=9,
     containing_service=None,
     input_type=fs__pb2._FSWRITEREQUEST,
     output_type=fs__pb2._FSREPLY,
@@ -135,7 +145,7 @@ _CLOUDPYAPICORE = _descriptor.ServiceDescriptor(
   _descriptor.MethodDescriptor(
     name='FsDelete',
     full_name='OCA.Cloud_Py_API.Proto.CloudPyApiCore.FsDelete',
-    index=9,
+    index=10,
     containing_service=None,
     input_type=fs__pb2._FSDELETEREQUEST,
     output_type=fs__pb2._FSREPLY,
@@ -145,7 +155,7 @@ _CLOUDPYAPICORE = _descriptor.ServiceDescriptor(
   _descriptor.MethodDescriptor(
     name='FsMove',
     full_name='OCA.Cloud_Py_API.Proto.CloudPyApiCore.FsMove',
-    index=10,
+    index=11,
     containing_service=None,
     input_type=fs__pb2._FSMOVEREQUEST,
     output_type=fs__pb2._FSMOVEREPLY,
@@ -155,7 +165,7 @@ _CLOUDPYAPICORE = _descriptor.ServiceDescriptor(
   _descriptor.MethodDescriptor(
     name='DbSelect',
     full_name='OCA.Cloud_Py_API.Proto.CloudPyApiCore.DbSelect',
-    index=11,
+    index=12,
     containing_service=None,
     input_type=db__pb2._DBSELECTREQUEST,
     output_type=db__pb2._DBSELECTREPLY,
@@ -165,7 +175,7 @@ _CLOUDPYAPICORE = _descriptor.ServiceDescriptor(
   _descriptor.MethodDescriptor(
     name='DbCursor',
     full_name='OCA.Cloud_Py_API.Proto.CloudPyApiCore.DbCursor',
-    index=12,
+    index=13,
     containing_service=None,
     input_type=db__pb2._DBCURSORREQUEST,
     output_type=db__pb2._DBCURSORREPLY,
@@ -175,7 +185,7 @@ _CLOUDPYAPICORE = _descriptor.ServiceDescriptor(
   _descriptor.MethodDescriptor(
     name='DbExec',
     full_name='OCA.Cloud_Py_API.Proto.CloudPyApiCore.DbExec',
-    index=13,
+    index=14,
     containing_service=None,
     input_type=db__pb2._DBEXECREQUEST,
     output_type=db__pb2._DBEXECREPLY,
