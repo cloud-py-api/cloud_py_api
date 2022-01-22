@@ -368,6 +368,14 @@ def install_extra() -> [bool, int]:
     return True, 0
 
 
+def install_all() -> [bool, int]:
+    __result, __code = install()
+    if not __result:
+        return False, __code
+    __result, __code = install_extra()
+    return True, __code
+
+
 def update_pip() -> [bool, int]:
     if Options['pip']['present']:
         if Options['pip']['local']:
@@ -395,6 +403,8 @@ if __name__ == '__main__':
                        help='Perform installation of basic modules for pyfrm.')
     group.add_argument('--install-extra', dest='install_extra', action='store_true',
                        help='Perform installation of extra modules in shared core folder.')
+    group.add_argument('--install-all', dest='install_all', action='store_true',
+                       help='Perform installation of basic and extra modules.')
     group.add_argument('--update-pip', dest='update_pip', action='store_true',
                        help='Perform built-in or local pip update.')
     # group.add_argument('--update', dest='update', action='store_true',
@@ -402,7 +412,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
     Options['app_data'] = args.appdata
     Options['log_lvl'] = args.loglvl
-    Options['dry_run'] = args.check
+    Options['check'] = args.check
     exit_code = 0
     result = False
     try:
@@ -419,6 +429,8 @@ if __name__ == '__main__':
             result, exit_code = install()
         elif args.install_extra:
             result, exit_code = install_extra()
+        elif args.install_all:
+            result, exit_code = install_all()
         elif args.update_pip:
             result, exit_code = update_pip()
     except Exception as exception_info:

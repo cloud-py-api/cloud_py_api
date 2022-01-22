@@ -62,8 +62,8 @@ def true_main(connect_address: str, auth: str = '') -> ExitCodes:
             _app_packages = path.abspath(
                 path.join(cloud.task_init_data.config.frameworkAppData, cloud.task_init_data.appName))
             _app_packages_exists = path.isdir(_app_packages)
-            # TODO: if directory does not exist run from default path.
             if not _app_packages_exists:
+                # TODO: perform install?
                 cloud.log(logLvl.FATAL, 'cpa_core',
                           f'App directory({_app_packages}) with python packages cannot be accessed.')
                 cloud.set_status(taskStatus.ST_INIT_ERROR, 'Directory with python packages for app cannot be accessed.')
