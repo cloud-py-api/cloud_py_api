@@ -28,7 +28,7 @@ class FsObj:
         if load:
             self.load()
 
-    def init_from(self, data):
+    def init_from(self, data) -> None:
         if isinstance(data, str):
             data = json.loads(data)
         if data.get('id') is not None:
@@ -67,14 +67,14 @@ class FsObj:
     def create(self, name: str, is_dir: bool = False, content: bytes = b''):
         pass
 
-    def delete(self):
+    def delete(self) -> None:
         res_code = FsApi().delete(self)
         self.__code_to_exception(res_code)
 
     def move(self, target, copy: bool = False):
         pass
 
-    def __code_to_exception(self, code: FsResultCode):
+    def __code_to_exception(self, code: FsResultCode) -> None:
         if code == FsResultCode.NOT_PERMITTED:
             raise FsNotPermitted(f'Operation on {str(self.id)} is not permitted.')
         if code == FsResultCode.LOCKED:
