@@ -4,7 +4,15 @@ from io import BytesIO
 import json
 
 from . import _ncc
-from .exceptions import FsNotFound
+from .exceptions import FsNotFound, FsNotPermitted, FsLocked, FsIOError
+
+
+class FsResultCode(Enum):
+    NO_ERROR = 0
+    NOT_PERMITTED = 1
+    LOCKED = 2
+    NOT_FOUND = 3
+    IO_ERROR = 4
 
 
 class FsObj:
@@ -50,28 +58,31 @@ class FsObj:
             _r.append(FsObj(_obj))
         return _r
 
-    def read(self):
+    def read(self, offset: int = 0, bytes_to_read: int = 0) -> BytesIO:
         pass
 
-    def write(self):
+    def write(self, content: BytesIO):
         pass
 
-    def create(self):
+    def create(self, name: str, is_dir: bool = False, content: bytes = b''):
         pass
 
     def delete(self):
+        res_code = FsApi().delete(self)
+        self.__code_to_exception(res_code)
+
+    def move(self, target, copy: bool = False):
         pass
 
-    def move(self):
-        pass
-
-
-class FsResultCode(Enum):
-    NO_ERROR = 0
-    NOT_PERMITTED = 1
-    LOCKED = 2
-    NOT_FOUND = 3
-    IO_ERROR = 4
+    def __code_to_exception(self, code: FsResultCode):
+        if code == FsResultCode.NOT_PERMITTED:
+            raise FsNotPermitted(f'Operation on {str(self.id)} is not permitted.')
+        if code == FsResultCode.LOCKED:
+            raise FsLocked(f'FsObject {str(self.id)} is locked.')
+        if code == FsResultCode.NOT_FOUND:
+            raise FsNotFound(f'FsObject {str(self.id)} can not be found.')
+        if code == FsResultCode.IO_ERROR:
+            raise FsIOError(f'IO error on operation with {str(self.id)}.')
 
 
 class FsApi:
@@ -119,7 +130,7 @@ class FsApi:
     def __arg_to_fs_id(arg: Union[None, dict, FsObj], deny_root: bool = False) -> [str, int]:
         if arg is None:
             if deny_root:
-                raise ValueError('fs_id can not be None for this method.')
+                raise FsNotPermitted('fs_id can not be None for this method.')
             return '', 0
         if not isinstance(arg, (dict, FsObj)):
             raise ValueError('fs_id can be None, dict or FsObj only.')
