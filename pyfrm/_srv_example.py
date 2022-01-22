@@ -348,7 +348,7 @@ def srv_example(address, port, app_name, module_name, module_path, function_to_c
 
 if __name__ == '__main__':
     status, error, result, logs = srv_example('unix:./../tmp/test.sock', '0', 'fs_example', 'fs_example',
-                                              '../tests/python/apps_example/fs_example', 'func_fs_invalid'
+                                              '../tests/python/apps_example/fs_example', 'func_fs_list_info_oop'
                                               )
     sys.exit(0)
 

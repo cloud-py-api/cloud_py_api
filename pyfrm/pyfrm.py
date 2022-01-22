@@ -9,7 +9,7 @@ from grpc import RpcError
 from py_proto.core_pb2 import logLvl, taskStatus
 from helpers import print_err, debug_msg
 from core_proto import ClientCloudPA
-from nc_py_api import cloud_api, _ncc
+from nc_py_api import _ncc
 
 
 class ExitCodes(Enum):

@@ -11,18 +11,24 @@ class FsObj:
     id = {}
     info = {}
 
-    def __init__(self, user_id: str = '', file_id: int = 0, load: bool = False):
-        self.id['user'] = user_id
-        self.id['file'] = file_id
+    def __init__(self, data=None, load: bool = False):
+        if data is None:
+            self.id['user'] = ''
+            self.id['file'] = 0
+        else:
+            self.init_from(data)
         if load:
             self.load()
 
     def init_from(self, data):
-        if not isinstance(data, dict):
+        if isinstance(data, str):
             data = json.loads(data)
-        self.id = data['id']
-        self.info = data['info']
-        return self
+        if data.get('id') is not None:
+            self.id = data.get('id')
+            self.info = data.get('info', {})
+        else:
+            self.id['user'] = data.get('user', '')
+            self.id['file'] = data.get('file', 0)
 
     def __repr__(self):
         return json.dumps({'id': str(self.id), 'info': str(self.info)})
@@ -41,7 +47,7 @@ class FsObj:
                 return _r
         _objs = FsApi().list(self)
         for _obj in _objs:
-            _r.append(FsObj().init_from(_obj))
+            _r.append(FsObj(_obj))
         return _r
 
     def read(self):

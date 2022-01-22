@@ -113,21 +113,23 @@ def func_fs_move_copy(user_id, file_id, target_path, copy):
 
 def func_fs_invalid():
     # This function will fail without cloud_py_api installed in NC instance(_srv_example doesnt emulate this)
-    # TODO
     ca = nc_api.CloudApi()
     _invalid_id = {'user': '', 'file': 999999}
     ca.log(nc_api.LogLvl.DEBUG, "func_fs_invalid", "Listing(fs.list) invalid id...")
     _list = ca.fs.list(_invalid_id)
     ca.log(nc_api.LogLvl.DEBUG, "func_fs_invalid", str(_list))
     ca.log(nc_api.LogLvl.DEBUG, "func_fs_invalid", "Listing(FsObj.list) invalid id...")
-    _list = nc_api.FsObj().init_from(_invalid_id).list()
+    _list = nc_api.FsObj(_invalid_id).list()
     ca.log(nc_api.LogLvl.DEBUG, "func_fs_invalid", str(_list))
     ca.log(nc_api.LogLvl.DEBUG, "func_fs_invalid", "Info(fs.info) invalid id...")
     _info = ca.fs.info(_invalid_id)
     ca.log(nc_api.LogLvl.DEBUG, "func_fs_invalid", str(_info))
     ca.log(nc_api.LogLvl.DEBUG, "func_fs_invalid", "Info(FsObj.info) invalid id...")
-    _info = nc_api.FsObj().init_from(_invalid_id).load()
-    ca.log(nc_api.LogLvl.DEBUG, "func_fs_invalid", str(_info))
+    try:
+        _info = nc_api.FsObj(_invalid_id, load=True)
+        ca.log(nc_api.LogLvl.DEBUG, "func_fs_invalid", 'ERROR!!!')
+    except nc_api.FsNotFound:
+        ca.log(nc_api.LogLvl.DEBUG, "func_fs_invalid", 'GOOD')
 
 
 def fs_complex_test():

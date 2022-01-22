@@ -174,7 +174,8 @@ good-names=a,b,c,d,e,f,i,j,k,
            _,
            fp,
            fs,
-           db
+           db,
+           id
 
 # Include a hint for the correct naming format with invalid-name.
 include-naming-hint=no
