@@ -4,30 +4,25 @@ from urllib.parse import quote_plus
 from sqlalchemy import create_engine, event
 
 from .log_lvl import LogLvl
+from . import _ncc
 
 
 class DbLogHandler(logging.Handler):
-    __ncc: any
-
-    def __init__(self, ncc):
-        self.__ncc = ncc
+    def __init__(self):
         super().__init__()
 
     def emit(self, record):
         self.format(record)
-        self.__ncc.log(LogLvl.DEBUG.value, 'db_api', f'{record.module}:{record.message}')
+        _ncc.NCC.log(LogLvl.DEBUG.value, 'db_api', f'{record.module}:{record.message}')
 
 
 class DbApi:
-    __ncc: any
-
-    def __init__(self, ncc):
-        self.__ncc = ncc
-        if ncc.task_init_data.config.log_lvl == LogLvl.DEBUG.value:
+    def __init__(self):
+        if _ncc.NCC.task_init_data.config.log_lvl == LogLvl.DEBUG.value:
             logging.basicConfig()
             sql_logger = logging.getLogger('sqlalchemy')
             sql_logger.setLevel(logging.INFO)
-            sql_logger.addHandler(DbLogHandler(ncc))
+            sql_logger.addHandler(DbLogHandler())
 
     def create_engine(self, auto_table_prefix: bool = True):
         _exec_options = {}
@@ -35,32 +30,32 @@ class DbApi:
             nc_table_prefix = self.get_table_prefix()
             if nc_table_prefix:
                 _exec_options['table_prefix'] = nc_table_prefix
-        if self.__ncc.task_init_data.config.useDBDirect:
+        if _ncc.NCC.task_init_data.config.useDBDirect:
             connect_params = {}
             socket_dict_name = 'unix_socket'
             spike_socket_end_value = ''
-            if self.__ncc.task_init_data.dbCfg.dbType == 'mysql':
+            if _ncc.NCC.task_init_data.dbCfg.dbType == 'mysql':
                 connect_string = 'mysql+pymysql'
                 connect_params['charset'] = 'utf8mb4'
-            elif self.__ncc.task_init_data.dbCfg.dbType == 'pgsql':
+            elif _ncc.NCC.task_init_data.dbCfg.dbType == 'pgsql':
                 connect_string = 'postgresql+pg8000'
                 socket_dict_name = 'unix_sock'
                 spike_socket_end_value = '.s.PGSQL.5432'
-            elif self.__ncc.task_init_data.dbCfg.dbType == 'oci':
+            elif _ncc.NCC.task_init_data.dbCfg.dbType == 'oci':
                 connect_string = 'oracle+cx_oracle'
             else:
-                raise NotImplementedError(f'Unknown database provider:{self.__ncc.task_init_data.dbCfg.dbType}')
-            _host, _socket = self.__parse_host_value(self.__ncc.task_init_data.dbCfg.dbHost)
+                raise NotImplementedError(f'Unknown database provider:{_ncc.NCC.task_init_data.dbCfg.dbType}')
+            _host, _socket = self.__parse_host_value(_ncc.NCC.task_init_data.dbCfg.dbHost)
             if not _host and not _socket:
-                if self.__ncc.task_init_data.dbCfg.iniDbSocket:
-                    _socket = self.__ncc.task_init_data.dbCfg.iniDbSocket
-                elif self.__ncc.task_init_data.dbCfg.iniDbHost:
-                    _host = self.__ncc.task_init_data.dbCfg.iniDbHost
-                    if self.__ncc.task_init_data.dbCfg.iniDbPort:
-                        _host += ':' + self.__ncc.task_init_data.dbCfg.iniDbPort
-            connect_string += '://' + self.__ncc.task_init_data.dbCfg.dbUser + \
-                              ':' + quote_plus(self.__ncc.task_init_data.dbCfg.dbPass) + \
-                              '@' + _host + '/' + self.__ncc.task_init_data.dbCfg.dbName
+                if _ncc.NCC.task_init_data.dbCfg.iniDbSocket:
+                    _socket = _ncc.NCC.task_init_data.dbCfg.iniDbSocket
+                elif _ncc.NCC.task_init_data.dbCfg.iniDbHost:
+                    _host = _ncc.NCC.task_init_data.dbCfg.iniDbHost
+                    if _ncc.NCC.task_init_data.dbCfg.iniDbPort:
+                        _host += ':' + _ncc.NCC.task_init_data.dbCfg.iniDbPort
+            connect_string += '://' + _ncc.NCC.task_init_data.dbCfg.dbUser + \
+                              ':' + quote_plus(_ncc.NCC.task_init_data.dbCfg.dbPass) + \
+                              '@' + _host + '/' + _ncc.NCC.task_init_data.dbCfg.dbName
             if _socket:
                 if spike_socket_end_value:
                     path.join(_socket, spike_socket_end_value)
@@ -77,8 +72,13 @@ class DbApi:
             return engine
         raise NotImplementedError()
 
-    def get_table_prefix(self) -> str:
-        return self.__ncc.task_init_data.dbCfg.dbPrefix
+    @staticmethod
+    def get_connect_string() -> str:
+        return ''
+
+    @staticmethod
+    def get_table_prefix() -> str:
+        return _ncc.NCC.task_init_data.dbCfg.dbPrefix
 
     @staticmethod
     def __parse_host_value(host_port_socket: str) -> [str, str]:

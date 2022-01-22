@@ -31,10 +31,9 @@ setup(
         "License :: OSI Approved :: GNU Affero General Public License v3",
         "Operating System :: MacOS :: MacOS X",
         "Operating System :: POSIX :: Linux",
-        "Operating System :: POSIX :: Linux",
+        "Operating System :: Microsoft :: Windows",
     ],
     keywords="cloud_py_api nextcloud api",
     url="https://github.com/bigcat88/cloud_py_api",
-    license="GNU Affero General Public License v3",
     zip_safe=False,
 )

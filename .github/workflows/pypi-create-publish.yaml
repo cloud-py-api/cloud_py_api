@@ -90,6 +90,7 @@ jobs:
           path: ./nc_py_api/wheelhouse/*.tar.gz
 
   publish:
+    name: Publish to Pypi
     needs: [sdist, wheels_any]
     runs-on: ubuntu-latest
     steps:

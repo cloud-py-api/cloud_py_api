@@ -60,7 +60,7 @@ message TaskInitReply {
     string userId = 4;                    // Current NC user UID
     bool useFileDirect = 5;               // Use extra direct FS module for python, when possible.
     bool useDBDirect = 6;                 // Use extra direct DB module for python, if possible.
-    int32 maxChunkSize = 7;               // Maximum chunk size for FS operations
+    int32 maxChunkSize = 7;               // Maximum chunk size of RPC stream data.
     int32 maxCreateFileContent = 8;       // Maximum chunk size for FS Create operations
   }
   cfgOptions config = 6;

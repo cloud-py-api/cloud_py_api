@@ -4,9 +4,10 @@ import re
 from subprocess import PIPE, Popen, TimeoutExpired
 from concurrent import futures
 from pathlib import Path
+from io import BytesIO
 
 import grpc
-from py_proto.core_pb2 import taskStatus, logLvl, Empty, TaskInitReply, dbConfig
+from py_proto.core_pb2 import taskStatus, logLvl, Empty, TaskInitReply, dbConfig, OccReply
 from py_proto.fs_pb2 import fsId, FsNodeInfo, FsListReply, fsResultCode, FsReply, FsCreateReply, FsReadReply
 from py_proto.service_pb2_grpc import CloudPyApiCoreServicer, add_CloudPyApiCoreServicer_to_server
 
@@ -105,6 +106,39 @@ class ServerCloudPA(CloudPyApiCoreServicer, TaskParameters):
         print(f'Server: result length = {len(self.result)}, result: {self.result}')
         self.connection_alive = False
         return Empty()
+
+    def OccCall(self, request, context):
+        # This is not a real function, just stuff for development testing.
+        print(f"Server: occ call request with:{' '.join(map(str, request.arguments))}")
+        if True in (elem == '--fail' for elem in request.arguments):
+            virtual_result = str('failed_virtual_result:' + ' '.join(map(str, request.arguments)))
+            success = False
+        else:
+            virtual_result = str('virtual_result:' + ' '.join(map(str, request.arguments)))
+            success = True
+        virtual_result_io = BytesIO()
+        virtual_result_io.write(virtual_result.encode('utf-8'))
+        end_offset = virtual_result_io.tell()
+        virtual_result_io.seek(0)
+
+        def occ_call_reply_generator():
+            _last = False
+            while not _last:
+                if not success:
+                    _nread_now = end_offset
+                    _nbytes_left = 0
+                else:
+                    _nbytes_left = end_offset - virtual_result_io.tell()
+                    _nread_now = self.maxChunkSize if _nbytes_left > self.maxChunkSize else _nbytes_left
+                _data = virtual_result_io.read(_nread_now)
+                if not _data:
+                    _last = True
+                elif _nbytes_left <= self.maxChunkSize:
+                    _last = True
+                _reply = OccReply(error=False, last=_last, content=_data)
+                yield _reply
+
+        return occ_call_reply_generator()
 
     def __fs_add_file(self, obj_path) -> int:
         _new_id = 1 + self._fs_emulation.get('l_id', 0)
@@ -313,8 +347,9 @@ def srv_example(address, port, app_name, module_name, module_path, function_to_c
 
 
 if __name__ == '__main__':
-    status, error, result, logs = srv_example('unix:./../tmp/test.sock', '0', 'db_example', 'db_example',
-                                              '../tests/python/apps_example/db_example', 'ttt')
+    status, error, result, logs = srv_example('unix:./../tmp/test.sock', '0', 'fs_example', 'fs_example',
+                                              '../tests/python/apps_example/fs_example', 'func_fs_invalid'
+                                              )
     sys.exit(0)
 
 

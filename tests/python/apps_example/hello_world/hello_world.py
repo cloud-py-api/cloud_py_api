@@ -25,3 +25,9 @@ def func_no_result():
 
 def func_exception():
     raise ValueError('TEST')
+
+
+def occ_call():
+    ca = nc_api.CloudApi()
+    _result, _data = ca.occ_call('--version', '--fail')
+    return f'{_result}:{_data}'

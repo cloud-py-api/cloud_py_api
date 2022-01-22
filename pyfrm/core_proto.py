@@ -4,12 +4,12 @@ from io import BytesIO
 from os import SEEK_SET
 
 import grpc
-from py_proto.core_pb2 import taskStatus, Empty, TaskSetStatusRequest, TaskExitRequest, TaskLogRequest
+from py_proto.core_pb2 import taskStatus, Empty, TaskSetStatusRequest, TaskExitRequest, TaskLogRequest, OccRequest
 from py_proto.fs_pb2 import fsId, FsListRequest, FsGetInfoRequest, FsNodeInfo, FsReadRequest, \
     FsCreateRequest, FsWriteRequest, FsDeleteRequest, FsMoveRequest
 from py_proto.service_pb2_grpc import CloudPyApiCoreStub
 from helpers import debug_msg
-from nc_py_api.fs_api import FsObjInfo, FsResultCode
+from nc_py_api.fs_api import FsResultCode
 
 
 class ClientCloudPA:
@@ -68,27 +68,43 @@ class ClientCloudPA:
                                                    module=mod_name if mod_name is not None else '',
                                                    content=_log_content))
 
+    def occ_call(self, *params) -> [bool, bytes]:
+        _request = OccRequest()
+        for _each_arg in params:
+            _request.arguments.append(_each_arg)
+        _reply_iterator = self._main_stub.OccCall(_request)
+        _reply = BytesIO()
+        for _reply_part in _reply_iterator:
+            if _reply_part.error:
+                return False, _reply_part.content
+            if len(_reply_part.content):
+                _reply.write(_reply_part.content)
+            if _reply_part.last:
+                break
+        _reply.seek(0, SEEK_SET)
+        return True, _reply.read()
+
     @staticmethod
-    def __node_to_fs_obj_info(fs_info_reply: FsNodeInfo) -> FsObjInfo:
-        obj_info = FsObjInfo()
-        obj_info.user_id = fs_info_reply.fileId.userId
-        obj_info.file_id = fs_info_reply.fileId.fileId
-        obj_info.is_dir = fs_info_reply.is_dir
-        obj_info.is_local = fs_info_reply.is_local
-        obj_info.encrypted = fs_info_reply.encrypted
-        obj_info.mimetype = fs_info_reply.mimetype
-        obj_info.name = fs_info_reply.name
-        obj_info.internal_path = fs_info_reply.internal_path
-        obj_info.abs_path = fs_info_reply.abs_path
-        obj_info.size = fs_info_reply.size
-        obj_info.permissions = fs_info_reply.permissions
-        obj_info.mtime = fs_info_reply.mtime
-        obj_info.checksum = fs_info_reply.checksum
-        obj_info.etag = fs_info_reply.etag
-        obj_info.owner_name = fs_info_reply.ownerName
-        obj_info.storage_id = fs_info_reply.storageId
-        obj_info.mount_id = fs_info_reply.mountId
-        return obj_info
+    def __node_to_fs_obj_info(fs_info_reply: FsNodeInfo) -> dict:
+        return {'id': {
+                    'user': fs_info_reply.fileId.userId,
+                    'file': fs_info_reply.fileId.fileId},
+                'info': {
+                    'is_dir': fs_info_reply.is_dir,
+                    'is_local': fs_info_reply.is_local,
+                    'encrypted': fs_info_reply.encrypted,
+                    'mimetype': fs_info_reply.mimetype,
+                    'name': fs_info_reply.name,
+                    'internal_path': fs_info_reply.internal_path,
+                    'abs_path': fs_info_reply.abs_path,
+                    'size': fs_info_reply.size,
+                    'permissions': fs_info_reply.permissions,
+                    'mtime': fs_info_reply.mtime,
+                    'checksum': fs_info_reply.checksum,
+                    'etag': fs_info_reply.etag,
+                    'owner_name': fs_info_reply.ownerName,
+                    'storage_id': fs_info_reply.storageId,
+                    'mount_id': fs_info_reply.mountId}}
 
     def fs_list(self, user_id: str = '', file_id: int = 0) -> list:
         if not user_id:
@@ -101,14 +117,14 @@ class ClientCloudPA:
             _dir_list.append(self.__node_to_fs_obj_info(each_obj))
         return _dir_list
 
-    def fs_info(self, user_id: str = '', file_id: int = 0) -> Union[FsObjInfo, None]:
+    def fs_info(self, user_id: str = '', file_id: int = 0) -> dict:
         if not user_id:
             user_id = self.task_init_data.config.userId
         if self.task_init_data.config.useFileDirect:
             raise NotImplementedError()
         fs_reply = self._main_stub.FsGetInfo(FsGetInfoRequest(fileId=fsId(userId=user_id, fileId=file_id)))
         if not len(fs_reply.nodes):
-            return None
+            return {}
         return self.__node_to_fs_obj_info(fs_reply.nodes[0])
 
     def fs_read(self, user_id: str, file_id: int, out_obj: BytesIO, offset: int, bytes_to_read: int) -> FsResultCode:

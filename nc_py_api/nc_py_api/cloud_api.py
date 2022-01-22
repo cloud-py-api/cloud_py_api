@@ -4,45 +4,40 @@ File contains class CloudApi to use in applications for working with Nextcloud s
 See the README file for information on usage and redistribution.
 """
 from typing import Union
+from re import sub, IGNORECASE
 
 from .log_lvl import LogLvl
-from .fs_api import FsApi
 from .db_api import DbApi
-
-
-_NCC: any
-"""Private class created by py:module::`pyfrm`"""
-
-
-def _pyfrm_set_conn(cloud_connector):
-    """Private. Used by py:module::`pyfrm` to set class with internal functions implementation."""
-    global _NCC                                                 # pylint: disable=global-statement
-    _NCC = cloud_connector
+from .fs_api import FsApi
+from . import _ncc
 
 
 class CloudApi:
-    fs: FsApi
-    """Class py:currentmodule::fs_api"""
     db: DbApi
     """Class py:currentmodule::db_api"""
+    fs: FsApi
 
-    def __init__(self, create_file_ex: bool = True):
-        """
-        Creates and instance of class for python app to use to work wih Nextcloud.
-        :param create_file_ex: If py:method::`~FsApi.create` functions must invoke write_file,
-         when content to create are greater then maxCreateFileContent.
-        :returns: Connected class instance to Nextcloud cloud_py_api app server part.
-        """
-        self.fs = FsApi(_NCC, create_file_ex)
-        self.db = DbApi(_NCC)
+    def __init__(self):
+        self.db = DbApi()
+        self.fs = FsApi()
 
     @staticmethod
     def log(log_lvl: Union[int, LogLvl], mod_name: str, content: Union[str, list, tuple]) -> None:
         """Send logs to Nextcloud server. Log levels are the same as in Nextcloud and described in LogLvl class."""
         if isinstance(log_lvl, LogLvl):
             log_lvl = log_lvl.value
-        _NCC.log(log_lvl, mod_name, content)
+        _ncc.NCC.log(log_lvl, mod_name, content)
 
     @staticmethod
-    def occ_call():
-        pass
+    def occ_call(occ_task, *params, decode: bool = True) -> [bool, Union[str, bytes]]:
+        """Wrapper for occ calls. If decode=False then raw stdout data will be returned from occ."""
+        success, result = _ncc.NCC.occ_call('--no-warnings', occ_task, *params)
+        if not success:
+            return False, result.decode('utf-8').rstrip('\n')
+        if decode:
+            clear_result = result.decode('utf-8').rstrip('\n')
+            clear_result = sub(r'.*app.*require.*upgrade.*\n?', '', clear_result, flags=IGNORECASE)
+            clear_result = sub(r'.*occ.*upgrade.*command.*\n?', '', clear_result, flags=IGNORECASE)
+            clear_result = clear_result.strip('\n')
+            return True, clear_result
+        return True, result

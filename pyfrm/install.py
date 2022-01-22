@@ -53,11 +53,11 @@ LogsContainer = []
 
 
 RequiredPackagesList = {'google.protobuf': 'protobuf',
-                        'grpc': {'grpc': 'grpcio',
-                                 'grpclib': 'grpclib'},
-                        'pipdeptree': 'pipdeptree'
+                        'grpc': 'grpcio',
+                        'pipdeptree': 'pipdeptree',
+                        'nc_py_api': 'nc_py_api'
                         }
-#                         'nc_py_api': 'nc_py_api',
+
 ExtraPackagesList = {'numpy': 'numpy',
                      'PIL': 'pillow',
                      'scipy': 'scipy',
@@ -397,6 +397,8 @@ if __name__ == '__main__':
                        help='Perform installation of extra modules in shared core folder.')
     group.add_argument('--update-pip', dest='update_pip', action='store_true',
                        help='Perform built-in or local pip update.')
+    # group.add_argument('--update', dest='update', action='store_true',
+    #                    help='Perform update of specified module(s).')
     args = parser.parse_args()
     Options['app_data'] = args.appdata
     Options['log_lvl'] = args.loglvl

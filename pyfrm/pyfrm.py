@@ -9,7 +9,7 @@ from grpc import RpcError
 from py_proto.core_pb2 import logLvl, taskStatus
 from helpers import print_err, debug_msg
 from core_proto import ClientCloudPA
-from nc_py_api.cloud_api import _pyfrm_set_conn
+from nc_py_api import cloud_api, _ncc
 
 
 class ExitCodes(Enum):
@@ -71,7 +71,7 @@ def true_main(connect_address: str, auth: str = '') -> ExitCodes:
             # TODO: expand site_path to frameworkAppData + appName   -> as first element?
             sys.path.append(path.dirname(path.abspath(cloud.task_init_data.modPath)))
             invalidate_caches()
-            _pyfrm_set_conn(cloud)
+            _ncc.NCC = cloud
             try:
                 target_module = import_module(cloud.task_init_data.modName, None)
                 globals()[cloud.task_init_data.modName] = target_module
