@@ -48,7 +48,7 @@ message dbConfig {
 }
 
 message TaskInitReply {
-  string appName = 1;                     // Name of the app(folder in frmAppData must be present with the same name).
+  string appName = 1;                     // Name of the app.
   string modName = 2;                     // Module name to use for `import_module` func.
   string modPath = 3;                     // Path to module root, to be executed.
   string funcName = 4;                    // Which function to execute.

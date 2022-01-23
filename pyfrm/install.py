@@ -400,15 +400,21 @@ if __name__ == '__main__':
     group.add_argument('--check', dest='check', action='store_true',
                        help='Check installation.')
     group.add_argument('--install', dest='install', action='store_true',
-                       help='Perform installation of basic modules for pyfrm.')
+                       help='Perform installation of basic packages for pyfrm.')
     group.add_argument('--install-extra', dest='install_extra', action='store_true',
-                       help='Perform installation of extra modules in shared core folder.')
+                       help='Perform installation of extra packages in shared core folder.')
     group.add_argument('--install-all', dest='install_all', action='store_true',
-                       help='Perform installation of basic and extra modules.')
+                       help='Perform installation of basic and extra packages.')
     group.add_argument('--update-pip', dest='update_pip', action='store_true',
                        help='Perform built-in or local pip update.')
-    # group.add_argument('--update', dest='update', action='store_true',
-    #                    help='Perform update of specified module(s).')
+    group.add_argument('--update-all', dest='update_all', action='store_true',
+                       help='Perform update of all packages.')
+    group.add_argument('--update', dest='update', nargs='+', type=str,
+                       help='Perform update of specified packages.')
+    group.add_argument('--delete', dest='delete', nargs='+', type=str,
+                       help='Delete specified packages.')
+    # group.add_argument('--transfer', dest='transfer', action='store_true',
+    #                    help='Pack python packages for transfer to another computer.')
     args = parser.parse_args()
     Options['app_data'] = args.appdata
     Options['log_lvl'] = args.loglvl
@@ -433,6 +439,12 @@ if __name__ == '__main__':
             result, exit_code = install_all()
         elif args.update_pip:
             result, exit_code = update_pip()
+        elif args.update_all:
+            raise NotImplemented()
+        elif args.update:
+            raise NotImplemented()
+        elif args.deelete:
+            raise NotImplemented()
     except Exception as exception_info:
         exit_code = 2
         exception_name = type(exception_info).__name__
