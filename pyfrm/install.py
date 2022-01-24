@@ -58,7 +58,8 @@ RequiredPackagesList = {'google.protobuf': 'protobuf',
                         'nc_py_api': 'nc_py_api',
                         'pg8000': 'pg8000',
                         'pymysql': 'PyMySQL[rsa,ed25519]',
-                        'sqlalchemy': 'SQLAlchemy'
+                        'sqlalchemy': 'SQLAlchemy',
+                        'requirements': 'requirements-parser'
                         }
 
 
@@ -314,7 +315,8 @@ def install_pip() -> bool:
 
 
 def install_package(package_name, install_name, to_log: bool = False) -> bool:
-    _call_result, _message = pip_call(['install', install_name, '--no-warn-script-location'], add_user_cache=True)
+    _call_result, _message = pip_call(['install', install_name, '--no-warn-script-location', '--prefer-binary'],
+                                      add_user_cache=True)
     if not _call_result:
         if to_log:
             log(LogLvl.WARN, f'Error during install {package_name}:{install_name}:\n', _message)

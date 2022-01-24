@@ -21,6 +21,6 @@ if __name__ == '__main__':
     options['pip'] = get_pip_info()
     add_python_path(get_core_site_packages(), first=True)
     from pyfrm import pyfrm_main
-    r = pyfrm_main(options, sys.argv[1:2][0], sys.argv[2:3][0])
+    r = pyfrm_main(sys.argv[1:2][0], sys.argv[2:3][0])
     debug_msg(f'__main__(pyfrm): finished, exit_code = {r.value}:{r.name}')
     sys.exit(0)

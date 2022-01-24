@@ -75,8 +75,19 @@ message TaskInitReply {
   string handler = 8;                     // PHP Callback handler for TaskExit
 }
 
-message CheckDataRequest {                // TODO.
-
+message CheckDataRequest {                // Framework returns this after TaskInitReply when cmdType != T_RUN.
+  message missing_pckg {
+    string name = 1;
+    string version = 2;
+  }
+  repeated missing_pckg not_installed = 1;
+  message installed_pckg {
+    string name = 1;
+    string version = 2;
+    string location = 3;                  // Path where it is installed.
+    string requires = 4;                  // Depends on. In JSON format, array of string.
+  }
+  repeated installed_pckg installed = 2;
 }
 
 message TaskSetStatusRequest {
