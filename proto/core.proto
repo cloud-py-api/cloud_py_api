@@ -22,11 +22,12 @@ enum logLvl {
 
 enum taskStatus {
     ST_SUCCESS = 0;
-    ST_IN_PROGRESS = 1;                   // pyfrm init done, running target app
-    ST_INIT_ERROR = 2;                    // pyfrm cannot init target app
-    ST_EXCEPTION = 3;                     // Unexpected exception occurred
-    ST_ERROR = 4;                         // Target app return error status
-    ST_UNKNOWN = 5;                       // Default task state at start
+    ST_IN_PROGRESS = 1;                   // pyfrm connected, processing task_init
+    ST_INSTALLING = 2;                    // install is in progress
+    ST_INSTALL_ERROR = 3;                 // install return error
+    ST_INIT_ERROR = 4;                    // error during init target app
+    ST_EXCEPTION = 5;                     // Unexpected exception occurred
+    ST_UNKNOWN = 6;                       // Default task state at start
 }
 
 message Empty { }
@@ -48,24 +49,33 @@ message dbConfig {
 }
 
 message TaskInitReply {
-  string appName = 1;                     // Name of the app.
-  string modName = 2;                     // Module name to use for `import_module` func.
+  enum cmd_type {
+  DEFAULT = 0;                            // install silently if needed and run
+  CHECK = 1;                              // check app and returns it's info.
+  INSTALL = 2;                            // install app and returns result of check.
+  RUN = 3;                                // only run, without any checks.
+}
+  cmd_type cmd = 1;
+  string appName = 2;                     // Name of the app. Installed packages will be stored by this name for app.
   string modPath = 3;                     // Path to module root, to be executed.
   string funcName = 4;                    // Which function to execute.
   repeated string args = 5;               // Optional arguments to pass to target python app's module.
   message cfgOptions {
     logLvl log_lvl = 1;                   // 0-4 , level logs from NC documentation.
     string dataFolder = 2;                // Path to NC data folder.
-    string frameworkAppData = 3;          // Path to cloud_py_api app data folder.
-    string userId = 4;                    // Current NC user UID
-    bool useFileDirect = 5;               // Use extra direct FS module for python, when possible.
-    bool useDBDirect = 6;                 // Use extra direct DB module for python, if possible.
-    int32 maxChunkSize = 7;               // Maximum chunk size of RPC stream data.
-    int32 maxCreateFileContent = 8;       // Maximum chunk size for FS Create operations
+    string userId = 3;                    // Current NC user UID
+    bool useFileDirect = 4;               // Use extra direct FS module for python, when possible.
+    bool useDBDirect = 5;                 // Use extra direct DB module for python, if possible.
+    int32 maxChunkSize = 6;               // Maximum chunk size of RPC stream data.
+    int32 maxCreateFileContent = 7;       // Maximum chunk size for FS Create operations
   }
   cfgOptions config = 6;
   dbConfig dbCfg = 7;                     // Database configuration
   string handler = 8;                     // PHP Callback handler for TaskExit
+}
+
+message CheckDataRequest {                // TODO.
+
 }
 
 message TaskSetStatusRequest {
