@@ -7,7 +7,7 @@ from pathlib import Path
 from io import BytesIO
 
 import grpc
-from py_proto.core_pb2 import taskStatus, logLvl, Empty, TaskInitReply, dbConfig, OccReply
+from py_proto.core_pb2 import taskStatus, taskType, logLvl, Empty, TaskInitReply, dbConfig, OccReply
 from py_proto.fs_pb2 import fsId, FsNodeInfo, FsListReply, fsResultCode, FsReply, FsCreateReply, FsReadReply
 from py_proto.service_pb2_grpc import CloudPyApiCoreServicer, add_CloudPyApiCoreServicer_to_server
 
@@ -25,16 +25,15 @@ def run_python_script(python_script_path, *args):
 
 
 class TaskParameters:
-    def __init__(self, log_lvl, data_folder, frm_app_data, user_id, use_file_direct, use_db_direct,
-                 app_name, mod_name, mod_path, func_name, args):
+    def __init__(self, cmd_type, log_lvl, data_folder, user_id, use_file_direct, use_db_direct,
+                 app_name, mod_path, func_name, args):
+        self.cmd_type = cmd_type
         self.app_name = app_name
-        self.mod_name = mod_name
         self.mod_path = mod_path
         self.func_name = func_name
         self.args = args
         self.log_lvl = log_lvl
         self.data_folder = data_folder
-        self.frm_app_data = frm_app_data
         self.user_id = user_id
         self.use_file_direct = use_file_direct
         self.use_db_direct = use_db_direct
@@ -52,14 +51,13 @@ class ServerCloudPA(CloudPyApiCoreServicer, TaskParameters):
 
     def TaskInit(self, request, context):
         self.connection_alive = True
-        _reply = TaskInitReply(appName=self.app_name,
-                               modName=self.mod_name,
+        _reply = TaskInitReply(cmdType=self.cmd_type,
+                               appName=self.app_name,
                                modPath=self.mod_path,
                                funcName=self.func_name,
                                config=TaskInitReply.cfgOptions(
                                    log_lvl=self.log_lvl,
                                    dataFolder=self.data_folder,
-                                   frameworkAppData=self.frm_app_data,
                                    userId=self.user_id,
                                    useFileDirect=self.use_file_direct,
                                    useDBDirect=self.use_db_direct,
@@ -300,17 +298,17 @@ class ServerCloudPA(CloudPyApiCoreServicer, TaskParameters):
         return FsReply(resCode=fsResultCode.NO_ERROR)
 
 
-def srv_example(address, port, app_name, module_name, module_path, function_to_call, args=None):
+def srv_example(address, port, app_name, module_path, function_to_call, args=None):
     print('')
+    abs_frm_app_data = os.path.abspath('./../tmp/frm_app_data')
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=2))
-    servicer = ServerCloudPA(log_lvl=logLvl.DEBUG,
+    servicer = ServerCloudPA(cmd_type=taskType.T_INSTALL,
+                             log_lvl=logLvl.DEBUG,
                              data_folder='./../tmp/data_folder',
-                             frm_app_data='./../tmp/frm_app_data',
                              user_id='user_name',
                              use_file_direct=False,
                              use_db_direct=True,
                              app_name=app_name,
-                             mod_name=module_name,
                              mod_path=module_path,
                              func_name=function_to_call,
                              args=args
@@ -325,9 +323,9 @@ def srv_example(address, port, app_name, module_name, module_path, function_to_c
     else:
         server.add_insecure_port(address)
     print(f'Server: connect address = {connect_address}')
-    p_obj = run_python_script('pyfrm.py', connect_address)
+    p_obj = run_python_script('main.py', abs_frm_app_data, connect_address)
     server.start()
-    if server.wait_for_termination(timeout=5.0):
+    if server.wait_for_termination(timeout=8.0):
         if servicer.connection_alive:
             while True:
                 if not server.wait_for_termination(timeout=0.5):
@@ -347,13 +345,13 @@ def srv_example(address, port, app_name, module_name, module_path, function_to_c
 
 
 if __name__ == '__main__':
-    status, error, result, logs = srv_example('unix:./../tmp/test.sock', '0', 'pyfrm_techs', 'pyfrm_techs',
+    status, error, result, logs = srv_example('unix:./../tmp/test.sock', '0', 'pyfrm_techs',
                                               '../tests/python/apps_example/pyfrm_techs', 'get_image_difference',
                                               ('path_to_img1', 'path_to_img2')
                                               )
     sys.exit(0)
 
-
+"""
 import pytest
 
 
@@ -475,3 +473,4 @@ def test_other_basics(address, port, app_name, module_name, module_path, functio
     assert _result == expected_result
     if logs_must_contain:
         assert len([s for s in _logs if re.search(logs_must_contain, s) is not None]) > 0
+"""

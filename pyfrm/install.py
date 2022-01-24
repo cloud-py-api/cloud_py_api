@@ -55,29 +55,27 @@ LogsContainer = []
 RequiredPackagesList = {'google.protobuf': 'protobuf',
                         'grpc': 'grpcio',
                         'pipdeptree': 'pipdeptree',
-                        'nc_py_api': 'nc_py_api'
+                        'nc_py_api': 'nc_py_api',
+                        'pg8000': 'pg8000',
+                        'pymysql': 'PyMySQL[rsa,ed25519]',
+                        'sqlalchemy': 'SQLAlchemy'
                         }
-
-ExtraPackagesList = {'numpy': 'numpy',
-                     'PIL': 'pillow',
-                     'scipy': 'scipy',
-                     'pywt': 'pywavelets',
-                     'pg8000': 'pg8000',
-                     'pymysql': 'PyMySQL[rsa,ed25519]',
-                     'sqlalchemy': 'SQLAlchemy'
-                     }
 
 
 def log(log_lvl: Union[int, LogLvl], *msgs: str, help_code: int = 0):
     """Adds logs(s) to global LogsContainer variable."""
     if isinstance(log_lvl, LogLvl):
         log_lvl = log_lvl.value
-    if Options['log_lvl'] <= log_lvl:
+    if Options.get('log_lvl', 9999) <= log_lvl:
         for msg in msgs:
             if help_code:
                 LogsContainer.append({log_lvl: msg, 'help_code': help_code})
             else:
                 LogsContainer.append({log_lvl: msg})
+
+
+def get_options() -> dict:
+    return Options
 
 
 def get_python_info() -> dict:
@@ -248,9 +246,6 @@ def check() -> [bool, int]:
         for package_name, install_info in _missing_required.items():
             log(LogLvl.ERROR, f'Missing {package_name}:{install_info}')
         return False, 1
-    _missing_extra = get_missing_packages(ExtraPackagesList)
-    for package_name, install_info in _missing_extra.items():
-        log(LogLvl.WARN, f'Missing {package_name}:{install_info}')
     return True, 0
 
 
@@ -359,23 +354,6 @@ def install() -> [bool, int]:
     return True, 0
 
 
-def install_extra() -> [bool, int]:
-    if not Options['pip']['present']:
-        log(LogLvl.ERROR, 'Pip required for packages install.')
-        return False, 1
-    if not install_packages(ExtraPackagesList):
-        return False, 1
-    return True, 0
-
-
-def install_all() -> [bool, int]:
-    __result, __code = install()
-    if not __result:
-        return False, __code
-    __result, __code = install_extra()
-    return True, __code
-
-
 def update_pip() -> [bool, int]:
     if Options['pip']['present']:
         if Options['pip']['local']:
@@ -400,25 +378,18 @@ if __name__ == '__main__':
     group.add_argument('--check', dest='check', action='store_true',
                        help='Check installation.')
     group.add_argument('--install', dest='install', action='store_true',
-                       help='Perform installation of basic packages for pyfrm.')
-    group.add_argument('--install-extra', dest='install_extra', action='store_true',
-                       help='Perform installation of extra packages in shared core folder.')
-    group.add_argument('--install-all', dest='install_all', action='store_true',
-                       help='Perform installation of basic and extra packages.')
+                       help='Perform installation of packages needed for pyfrm.')
     group.add_argument('--update-pip', dest='update_pip', action='store_true',
                        help='Perform built-in or local pip update.')
-    group.add_argument('--update-all', dest='update_all', action='store_true',
-                       help='Perform update of all packages.')
-    group.add_argument('--update', dest='update', nargs='+', type=str,
-                       help='Perform update of specified packages.')
-    group.add_argument('--delete', dest='delete', nargs='+', type=str,
-                       help='Delete specified packages.')
+    group.add_argument('--update', dest='update', nargs=1, type=str,
+                       help='Perform update of app packages.')
+    group.add_argument('--delete', dest='delete', nargs=1, type=str,
+                       help='Delete packages of app.')
     # group.add_argument('--transfer', dest='transfer', action='store_true',
     #                    help='Pack python packages for transfer to another computer.')
     args = parser.parse_args()
     Options['app_data'] = args.appdata
     Options['log_lvl'] = args.loglvl
-    Options['check'] = args.check
     exit_code = 0
     result = False
     try:
@@ -433,17 +404,11 @@ if __name__ == '__main__':
             result, exit_code = check()
         elif args.install:
             result, exit_code = install()
-        elif args.install_extra:
-            result, exit_code = install_extra()
-        elif args.install_all:
-            result, exit_code = install_all()
         elif args.update_pip:
             result, exit_code = update_pip()
-        elif args.update_all:
-            raise NotImplemented()
         elif args.update:
             raise NotImplemented()
-        elif args.deelete:
+        elif args.delete:
             raise NotImplemented()
     except Exception as exception_info:
         exit_code = 2

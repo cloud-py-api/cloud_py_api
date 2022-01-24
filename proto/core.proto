@@ -30,6 +30,13 @@ enum taskStatus {
     ST_UNKNOWN = 6;                       // Default task state at start
 }
 
+enum taskType {
+  T_DEFAULT = 0;                           // install silently if needed and run.
+  T_CHECK = 1;                             // check app and returns it's info.
+  T_INSTALL = 2;                           // install app and returns result of check.
+  T_RUN = 3;                               // only run, without any checks.
+}
+
 message Empty { }
 
 message dbConfig {
@@ -49,13 +56,7 @@ message dbConfig {
 }
 
 message TaskInitReply {
-  enum cmd_type {
-  DEFAULT = 0;                            // install silently if needed and run
-  CHECK = 1;                              // check app and returns it's info.
-  INSTALL = 2;                            // install app and returns result of check.
-  RUN = 3;                                // only run, without any checks.
-}
-  cmd_type cmd = 1;
+  taskType cmdType = 1;
   string appName = 2;                     // Name of the app. Installed packages will be stored by this name for app.
   string modPath = 3;                     // Path to module root, to be executed.
   string funcName = 4;                    // Which function to execute.
