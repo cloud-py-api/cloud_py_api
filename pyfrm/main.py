@@ -3,7 +3,7 @@ import sys
 
 
 from helpers import print_err, debug_msg
-from install import get_options, get_python_info, get_pip_info, add_python_path, get_core_site_packages
+from install import get_options, get_python_info, get_pip_info, add_python_path, get_python_site_packages
 
 
 def signal_handler(signum=None, _frame=None):
@@ -19,7 +19,7 @@ if __name__ == '__main__':
     options['app_data'] = sys.argv[1:2][0]
     options['python'] = get_python_info()
     options['pip'] = get_pip_info()
-    add_python_path(get_core_site_packages(), first=True)
+    add_python_path(get_python_site_packages(), first=True)
     from pyfrm import pyfrm_main
     r = pyfrm_main(sys.argv[1:2][0], sys.argv[2:3][0])
     debug_msg(f'__main__(pyfrm): finished, exit_code = {r.value}:{r.name}')

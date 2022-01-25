@@ -26,6 +26,11 @@ class CloudPyApiCoreStub(object):
                 request_serializer=core__pb2.TaskSetStatusRequest.SerializeToString,
                 response_deserializer=core__pb2.Empty.FromString,
                 )
+        self.AppCheck = channel.unary_unary(
+                '/OCA.Cloud_Py_API.Proto.CloudPyApiCore/AppCheck',
+                request_serializer=core__pb2.CheckDataRequest.SerializeToString,
+                response_deserializer=core__pb2.Empty.FromString,
+                )
         self.TaskExit = channel.unary_unary(
                 '/OCA.Cloud_Py_API.Proto.CloudPyApiCore/TaskExit',
                 request_serializer=core__pb2.TaskExitRequest.SerializeToString,
@@ -103,6 +108,12 @@ class CloudPyApiCoreServicer(object):
         raise NotImplementedError('Method not implemented!')
 
     def TaskStatus(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def AppCheck(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -197,6 +208,11 @@ def add_CloudPyApiCoreServicer_to_server(servicer, server):
             'TaskStatus': grpc.unary_unary_rpc_method_handler(
                     servicer.TaskStatus,
                     request_deserializer=core__pb2.TaskSetStatusRequest.FromString,
+                    response_serializer=core__pb2.Empty.SerializeToString,
+            ),
+            'AppCheck': grpc.unary_unary_rpc_method_handler(
+                    servicer.AppCheck,
+                    request_deserializer=core__pb2.CheckDataRequest.FromString,
                     response_serializer=core__pb2.Empty.SerializeToString,
             ),
             'TaskExit': grpc.unary_unary_rpc_method_handler(
@@ -304,6 +320,23 @@ class CloudPyApiCore(object):
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/OCA.Cloud_Py_API.Proto.CloudPyApiCore/TaskStatus',
             core__pb2.TaskSetStatusRequest.SerializeToString,
+            core__pb2.Empty.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def AppCheck(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/OCA.Cloud_Py_API.Proto.CloudPyApiCore/AppCheck',
+            core__pb2.CheckDataRequest.SerializeToString,
             core__pb2.Empty.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

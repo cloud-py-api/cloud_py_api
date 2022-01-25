@@ -1,10 +1,12 @@
-from os import getpid, path
+from os import getpid, path, mkdir
 from enum import Enum
 from importlib import import_module
 from traceback import format_exc
+from json import dumps as to_json
 
 from grpc import RpcError
-from install import add_python_path
+from requirements import parse as req_parse
+from install import add_python_path, get_package_info, get_python_site_packages, pip_call
 from py_proto.core_pb2 import logLvl, taskStatus, taskType
 from helpers import print_err
 from core_proto import ClientCloudPA
@@ -39,15 +41,56 @@ def check_task_init(cloud: ClientCloudPA) -> [bool, str, str]:
     return True, mod_folder, mod_name
 
 
-def check_install_app(options: dict, app_package_dir: str, cc: ClientCloudPA, task_data) -> bool:
-    requirements_path = path.join(task_data.modPath, 'requirements.txt')
-    if not path.isfile(requirements_path):
-        cc.log(logLvl.DEBUG, 'cpa_core', f'Requirements missing for {task_data.appName}, {task_data.modPath}.')
-        return True
+def check_requirements(req_file_path: str, app_package_dir: str, cc: ClientCloudPA) -> bool:
+    try:
+        needed_packages = []
+        with open(req_file_path, 'r') as requirements_file:
+            for requirement in req_parse(requirements_file):
+                depends_on = requirement.specs[0] if len(requirement.specs) == 1 else requirement.specs
+                needed_packages.append({'name': requirement.name, 'version': to_json(depends_on)})
+        installed_packages = []
+        not_installed_packages = []
+        for package in needed_packages:
+            package_info = get_package_info(package['name'], userbase=app_package_dir)
+            if package_info:
+                package_info['version'] = to_json(package_info['version'])
+                installed_packages.append(package_info)
+            else:
+                not_installed_packages.append(package)
+        cc.send_app_info(not_installed=not_installed_packages, installed=installed_packages)
+        if not not_installed_packages:
+            return True
+    except OSError:
+        cc.log(logLvl.ERROR, 'cpa_app_install', f'Error during {req_file_path} read.')
     return False
 
 
-def pyfrm_main(options: dict, framework_data: str, connect_address: str, auth: str = '') -> ExitCodes:
+def install_requirements(req_file_path: str, app_package_dir: str, cc: ClientCloudPA) -> None:
+    _call_result, _message = pip_call(['install', '-r', req_file_path, '--no-warn-script-location',
+                                       '--prefer-binary'], python_userbase=app_package_dir, add_user_cache=True)
+    if not _call_result:
+        cc.log(logLvl.ERROR, 'cpa_app_install', f'install(-r):{_message}')
+
+
+def check_install_app(app_package_dir: str, cc: ClientCloudPA, task_data) -> bool:
+    requirements_path = path.join(task_data.modPath, 'requirements.txt')
+    if not path.isfile(requirements_path):
+        cc.log(logLvl.DEBUG, 'cpa_app_install', f'Requirements missing for {task_data.appName}: {task_data.modPath}')
+        return True
+    cc.log(logLvl.DEBUG, 'cpa_app_install', f'Processing {requirements_path}')
+    if not path.isdir(app_package_dir):
+        cc.log(logLvl.INFO, 'cpa_app_install', f'Creating app directory: {app_package_dir}')
+        try:
+            mkdir(app_package_dir, mode=0o774)
+        except OSError:
+            cc.log(logLvl.ERROR, 'cpa_app_install', f'Cant create directory for application python packages.')
+            return False
+    if task_data.cmdType in (taskType.T_INSTALL, taskType.T_DEFAULT):
+        install_requirements(requirements_path, app_package_dir, cc)
+    return check_requirements(requirements_path, app_package_dir, cc)
+
+
+def pyfrm_main(framework_data: str, connect_address: str, auth: str = '') -> ExitCodes:
     cloud = None
     exit_code = ExitCodes.CODE_OK
     try:
@@ -64,14 +107,27 @@ def pyfrm_main(options: dict, framework_data: str, connect_address: str, auth: s
             _app_packages = path.abspath(path.join(framework_data, cloud.task_init_data.appName))
             if cloud.task_init_data.cmdType != taskType.T_RUN:
                 cloud.set_status(taskStatus.ST_INSTALLING)
-                if not check_install_app(options, _app_packages, cloud, cloud.task_init_data):
+                if not check_install_app(_app_packages, cloud, cloud.task_init_data):
                     cloud.set_status(taskStatus.ST_INSTALL_ERROR)
                     return ExitCodes.CODE_INSTALL_ERR
+                if cloud.task_init_data.cmdType == taskType.T_CHECK:
+                    cloud.set_status(taskStatus.ST_SUCCESS)
+                    return ExitCodes.CODE_OK
+            cloud.set_status(taskStatus.ST_IN_PROGRESS)
             if not path.isdir(_app_packages):
                 cloud.log(logLvl.DEBUG, 'cpa_core',
                           f'App directory({_app_packages}) with python packages cannot be accessed.')
             else:
-                add_python_path(_app_packages, first=True)
+                app_site_packages = get_python_site_packages(_app_packages)
+                if app_site_packages:
+                    if path.isdir(app_site_packages):
+                        add_python_path(app_site_packages, first=True)
+                    else:
+                        cloud.log(logLvl.INFO, 'cpa_core',
+                                  f'App site package directory({app_site_packages}) does not exist.')
+                else:
+                    cloud.log(logLvl.WARNING, 'cpa_core',
+                              f'App({cloud.task_init_data.appName}) site package directory not found.')
             add_python_path(path.abspath(mod_folder), first=True)
             _ncc.NCC = cloud
             try:

@@ -20,7 +20,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\ncore.proto\x12\x16OCA.Cloud_Py_API.Proto\"\x07\n\x05\x45mpty\"\x8d\x02\n\x08\x64\x62\x43onfig\x12\x0e\n\x06\x64\x62Type\x18\x01 \x01(\t\x12\x0e\n\x06\x64\x62User\x18\x02 \x01(\t\x12\x0e\n\x06\x64\x62Pass\x18\x03 \x01(\t\x12\x0e\n\x06\x64\x62Host\x18\x04 \x01(\t\x12\x0e\n\x06\x64\x62Name\x18\x05 \x01(\t\x12\x10\n\x08\x64\x62Prefix\x18\x06 \x01(\t\x12\x13\n\x0biniDbSocket\x18\x07 \x01(\t\x12\x11\n\tiniDbHost\x18\x08 \x01(\t\x12\x11\n\tiniDbPort\x18\t \x01(\t\x12\x16\n\x0e\x64\x62\x44riverSslKey\x18\n \x01(\t\x12\x17\n\x0f\x64\x62\x44riverSslCert\x18\x0b \x01(\t\x12\x15\n\rdbDriverSslCa\x18\x0c \x01(\t\x12\x1c\n\x14\x64\x62\x44riverSslVerifyCrt\x18\r \x01(\t\"\xcc\x03\n\rTaskInitReply\x12\x31\n\x07\x63mdType\x18\x01 \x01(\x0e\x32 .OCA.Cloud_Py_API.Proto.taskType\x12\x0f\n\x07\x61ppName\x18\x02 \x01(\t\x12\x0f\n\x07modPath\x18\x03 \x01(\t\x12\x10\n\x08\x66uncName\x18\x04 \x01(\t\x12\x0c\n\x04\x61rgs\x18\x05 \x03(\t\x12@\n\x06\x63onfig\x18\x06 \x01(\x0b\x32\x30.OCA.Cloud_Py_API.Proto.TaskInitReply.cfgOptions\x12/\n\x05\x64\x62\x43\x66g\x18\x07 \x01(\x0b\x32 .OCA.Cloud_Py_API.Proto.dbConfig\x12\x0f\n\x07handler\x18\x08 \x01(\t\x1a\xc1\x01\n\ncfgOptions\x12/\n\x07log_lvl\x18\x01 \x01(\x0e\x32\x1e.OCA.Cloud_Py_API.Proto.logLvl\x12\x12\n\ndataFolder\x18\x02 \x01(\t\x12\x0e\n\x06userId\x18\x03 \x01(\t\x12\x15\n\ruseFileDirect\x18\x04 \x01(\x08\x12\x13\n\x0buseDBDirect\x18\x05 \x01(\x08\x12\x14\n\x0cmaxChunkSize\x18\x06 \x01(\x05\x12\x1c\n\x14maxCreateFileContent\x18\x07 \x01(\x05\"\x12\n\x10\x43heckDataRequest\"Z\n\x14TaskSetStatusRequest\x12\x33\n\x07st_code\x18\x01 \x01(\x0e\x32\".OCA.Cloud_Py_API.Proto.taskStatus\x12\r\n\x05\x65rror\x18\x02 \x01(\t\"!\n\x0fTaskExitRequest\x12\x0e\n\x06result\x18\x01 \x01(\t\"b\n\x0eTaskLogRequest\x12/\n\x07log_lvl\x18\x01 \x01(\x0e\x32\x1e.OCA.Cloud_Py_API.Proto.logLvl\x12\x0e\n\x06module\x18\x02 \x01(\t\x12\x0f\n\x07\x63ontent\x18\x03 \x03(\t\"\x1f\n\nOccRequest\x12\x11\n\targuments\x18\x01 \x03(\t\"8\n\x08OccReply\x12\r\n\x05\x65rror\x18\x01 \x01(\x08\x12\x0c\n\x04last\x18\x02 \x01(\x08\x12\x0f\n\x07\x63ontent\x18\x03 \x01(\x0c*=\n\x06logLvl\x12\t\n\x05\x44\x45\x42UG\x10\x00\x12\x08\n\x04INFO\x10\x01\x12\x08\n\x04WARN\x10\x02\x12\t\n\x05\x45RROR\x10\x03\x12\t\n\x05\x46\x41TAL\x10\x04*\x8e\x01\n\ntaskStatus\x12\x0e\n\nST_SUCCESS\x10\x00\x12\x12\n\x0eST_IN_PROGRESS\x10\x01\x12\x11\n\rST_INSTALLING\x10\x02\x12\x14\n\x10ST_INSTALL_ERROR\x10\x03\x12\x11\n\rST_INIT_ERROR\x10\x04\x12\x10\n\x0cST_EXCEPTION\x10\x05\x12\x0e\n\nST_UNKNOWN\x10\x06*@\n\x08taskType\x12\r\n\tT_DEFAULT\x10\x00\x12\x0b\n\x07T_CHECK\x10\x01\x12\r\n\tT_INSTALL\x10\x02\x12\t\n\x05T_RUN\x10\x03\x62\x06proto3'
+  serialized_pb=b'\n\ncore.proto\x12\x16OCA.Cloud_Py_API.Proto\"\x07\n\x05\x45mpty\"\x8d\x02\n\x08\x64\x62\x43onfig\x12\x0e\n\x06\x64\x62Type\x18\x01 \x01(\t\x12\x0e\n\x06\x64\x62User\x18\x02 \x01(\t\x12\x0e\n\x06\x64\x62Pass\x18\x03 \x01(\t\x12\x0e\n\x06\x64\x62Host\x18\x04 \x01(\t\x12\x0e\n\x06\x64\x62Name\x18\x05 \x01(\t\x12\x10\n\x08\x64\x62Prefix\x18\x06 \x01(\t\x12\x13\n\x0biniDbSocket\x18\x07 \x01(\t\x12\x11\n\tiniDbHost\x18\x08 \x01(\t\x12\x11\n\tiniDbPort\x18\t \x01(\t\x12\x16\n\x0e\x64\x62\x44riverSslKey\x18\n \x01(\t\x12\x17\n\x0f\x64\x62\x44riverSslCert\x18\x0b \x01(\t\x12\x15\n\rdbDriverSslCa\x18\x0c \x01(\t\x12\x1c\n\x14\x64\x62\x44riverSslVerifyCrt\x18\r \x01(\t\"\xcc\x03\n\rTaskInitReply\x12\x31\n\x07\x63mdType\x18\x01 \x01(\x0e\x32 .OCA.Cloud_Py_API.Proto.taskType\x12\x0f\n\x07\x61ppName\x18\x02 \x01(\t\x12\x0f\n\x07modPath\x18\x03 \x01(\t\x12\x10\n\x08\x66uncName\x18\x04 \x01(\t\x12\x0c\n\x04\x61rgs\x18\x05 \x03(\t\x12@\n\x06\x63onfig\x18\x06 \x01(\x0b\x32\x30.OCA.Cloud_Py_API.Proto.TaskInitReply.cfgOptions\x12/\n\x05\x64\x62\x43\x66g\x18\x07 \x01(\x0b\x32 .OCA.Cloud_Py_API.Proto.dbConfig\x12\x0f\n\x07handler\x18\x08 \x01(\t\x1a\xc1\x01\n\ncfgOptions\x12/\n\x07log_lvl\x18\x01 \x01(\x0e\x32\x1e.OCA.Cloud_Py_API.Proto.logLvl\x12\x12\n\ndataFolder\x18\x02 \x01(\t\x12\x0e\n\x06userId\x18\x03 \x01(\t\x12\x15\n\ruseFileDirect\x18\x04 \x01(\x08\x12\x13\n\x0buseDBDirect\x18\x05 \x01(\x08\x12\x14\n\x0cmaxChunkSize\x18\x06 \x01(\x05\x12\x1c\n\x14maxCreateFileContent\x18\x07 \x01(\x05\"Z\n\x14TaskSetStatusRequest\x12\x33\n\x07st_code\x18\x01 \x01(\x0e\x32\".OCA.Cloud_Py_API.Proto.taskStatus\x12\r\n\x05\x65rror\x18\x02 \x01(\t\"\xc1\x02\n\x10\x43heckDataRequest\x12L\n\rnot_installed\x18\x01 \x03(\x0b\x32\x35.OCA.Cloud_Py_API.Proto.CheckDataRequest.missing_pckg\x12J\n\tinstalled\x18\x02 \x03(\x0b\x32\x37.OCA.Cloud_Py_API.Proto.CheckDataRequest.installed_pckg\x1a-\n\x0cmissing_pckg\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x0f\n\x07version\x18\x02 \x01(\t\x1a\x64\n\x0einstalled_pckg\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x0f\n\x07version\x18\x02 \x01(\t\x12\x10\n\x08location\x18\x03 \x01(\t\x12\x0f\n\x07summary\x18\x04 \x01(\t\x12\x10\n\x08requires\x18\x05 \x01(\t\"!\n\x0fTaskExitRequest\x12\x0e\n\x06result\x18\x01 \x01(\t\"b\n\x0eTaskLogRequest\x12/\n\x07log_lvl\x18\x01 \x01(\x0e\x32\x1e.OCA.Cloud_Py_API.Proto.logLvl\x12\x0e\n\x06module\x18\x02 \x01(\t\x12\x0f\n\x07\x63ontent\x18\x03 \x03(\t\"\x1f\n\nOccRequest\x12\x11\n\targuments\x18\x01 \x03(\t\"8\n\x08OccReply\x12\r\n\x05\x65rror\x18\x01 \x01(\x08\x12\x0c\n\x04last\x18\x02 \x01(\x08\x12\x0f\n\x07\x63ontent\x18\x03 \x01(\x0c*=\n\x06logLvl\x12\t\n\x05\x44\x45\x42UG\x10\x00\x12\x08\n\x04INFO\x10\x01\x12\x08\n\x04WARN\x10\x02\x12\t\n\x05\x45RROR\x10\x03\x12\t\n\x05\x46\x41TAL\x10\x04*\x8e\x01\n\ntaskStatus\x12\x0e\n\nST_SUCCESS\x10\x00\x12\x12\n\x0eST_IN_PROGRESS\x10\x01\x12\x11\n\rST_INSTALLING\x10\x02\x12\x14\n\x10ST_INSTALL_ERROR\x10\x03\x12\x11\n\rST_INIT_ERROR\x10\x04\x12\x10\n\x0cST_EXCEPTION\x10\x05\x12\x0e\n\nST_UNKNOWN\x10\x06*@\n\x08taskType\x12\r\n\tT_DEFAULT\x10\x00\x12\x0b\n\x07T_CHECK\x10\x01\x12\r\n\tT_INSTALL\x10\x02\x12\t\n\x05T_RUN\x10\x03\x62\x06proto3'
 )
 
 _LOGLVL = _descriptor.EnumDescriptor(
@@ -58,8 +58,8 @@ _LOGLVL = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=1120,
-  serialized_end=1181,
+  serialized_start=1424,
+  serialized_end=1485,
 )
 _sym_db.RegisterEnumDescriptor(_LOGLVL)
 
@@ -109,8 +109,8 @@ _TASKSTATUS = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=1184,
-  serialized_end=1326,
+  serialized_start=1488,
+  serialized_end=1630,
 )
 _sym_db.RegisterEnumDescriptor(_TASKSTATUS)
 
@@ -145,8 +145,8 @@ _TASKTYPE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=1328,
-  serialized_end=1392,
+  serialized_start=1632,
+  serialized_end=1696,
 )
 _sym_db.RegisterEnumDescriptor(_TASKTYPE)
 
@@ -465,31 +465,6 @@ _TASKINITREPLY = _descriptor.Descriptor(
 )
 
 
-_CHECKDATAREQUEST = _descriptor.Descriptor(
-  name='CheckDataRequest',
-  full_name='OCA.Cloud_Py_API.Proto.CheckDataRequest',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=782,
-  serialized_end=800,
-)
-
-
 _TASKSETSTATUSREQUEST = _descriptor.Descriptor(
   name='TaskSetStatusRequest',
   full_name='OCA.Cloud_Py_API.Proto.TaskSetStatusRequest',
@@ -524,8 +499,144 @@ _TASKSETSTATUSREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=802,
-  serialized_end=892,
+  serialized_start=782,
+  serialized_end=872,
+)
+
+
+_CHECKDATAREQUEST_MISSING_PCKG = _descriptor.Descriptor(
+  name='missing_pckg',
+  full_name='OCA.Cloud_Py_API.Proto.CheckDataRequest.missing_pckg',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='name', full_name='OCA.Cloud_Py_API.Proto.CheckDataRequest.missing_pckg.name', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='version', full_name='OCA.Cloud_Py_API.Proto.CheckDataRequest.missing_pckg.version', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=1049,
+  serialized_end=1094,
+)
+
+_CHECKDATAREQUEST_INSTALLED_PCKG = _descriptor.Descriptor(
+  name='installed_pckg',
+  full_name='OCA.Cloud_Py_API.Proto.CheckDataRequest.installed_pckg',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='name', full_name='OCA.Cloud_Py_API.Proto.CheckDataRequest.installed_pckg.name', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='version', full_name='OCA.Cloud_Py_API.Proto.CheckDataRequest.installed_pckg.version', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='location', full_name='OCA.Cloud_Py_API.Proto.CheckDataRequest.installed_pckg.location', index=2,
+      number=3, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='summary', full_name='OCA.Cloud_Py_API.Proto.CheckDataRequest.installed_pckg.summary', index=3,
+      number=4, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='requires', full_name='OCA.Cloud_Py_API.Proto.CheckDataRequest.installed_pckg.requires', index=4,
+      number=5, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=1096,
+  serialized_end=1196,
+)
+
+_CHECKDATAREQUEST = _descriptor.Descriptor(
+  name='CheckDataRequest',
+  full_name='OCA.Cloud_Py_API.Proto.CheckDataRequest',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='not_installed', full_name='OCA.Cloud_Py_API.Proto.CheckDataRequest.not_installed', index=0,
+      number=1, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='installed', full_name='OCA.Cloud_Py_API.Proto.CheckDataRequest.installed', index=1,
+      number=2, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[_CHECKDATAREQUEST_MISSING_PCKG, _CHECKDATAREQUEST_INSTALLED_PCKG, ],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=875,
+  serialized_end=1196,
 )
 
 
@@ -556,8 +667,8 @@ _TASKEXITREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=894,
-  serialized_end=927,
+  serialized_start=1198,
+  serialized_end=1231,
 )
 
 
@@ -602,8 +713,8 @@ _TASKLOGREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=929,
-  serialized_end=1027,
+  serialized_start=1233,
+  serialized_end=1331,
 )
 
 
@@ -634,8 +745,8 @@ _OCCREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1029,
-  serialized_end=1060,
+  serialized_start=1333,
+  serialized_end=1364,
 )
 
 
@@ -680,8 +791,8 @@ _OCCREPLY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1062,
-  serialized_end=1118,
+  serialized_start=1366,
+  serialized_end=1422,
 )
 
 _TASKINITREPLY_CFGOPTIONS.fields_by_name['log_lvl'].enum_type = _LOGLVL
@@ -690,12 +801,16 @@ _TASKINITREPLY.fields_by_name['cmdType'].enum_type = _TASKTYPE
 _TASKINITREPLY.fields_by_name['config'].message_type = _TASKINITREPLY_CFGOPTIONS
 _TASKINITREPLY.fields_by_name['dbCfg'].message_type = _DBCONFIG
 _TASKSETSTATUSREQUEST.fields_by_name['st_code'].enum_type = _TASKSTATUS
+_CHECKDATAREQUEST_MISSING_PCKG.containing_type = _CHECKDATAREQUEST
+_CHECKDATAREQUEST_INSTALLED_PCKG.containing_type = _CHECKDATAREQUEST
+_CHECKDATAREQUEST.fields_by_name['not_installed'].message_type = _CHECKDATAREQUEST_MISSING_PCKG
+_CHECKDATAREQUEST.fields_by_name['installed'].message_type = _CHECKDATAREQUEST_INSTALLED_PCKG
 _TASKLOGREQUEST.fields_by_name['log_lvl'].enum_type = _LOGLVL
 DESCRIPTOR.message_types_by_name['Empty'] = _EMPTY
 DESCRIPTOR.message_types_by_name['dbConfig'] = _DBCONFIG
 DESCRIPTOR.message_types_by_name['TaskInitReply'] = _TASKINITREPLY
-DESCRIPTOR.message_types_by_name['CheckDataRequest'] = _CHECKDATAREQUEST
 DESCRIPTOR.message_types_by_name['TaskSetStatusRequest'] = _TASKSETSTATUSREQUEST
+DESCRIPTOR.message_types_by_name['CheckDataRequest'] = _CHECKDATAREQUEST
 DESCRIPTOR.message_types_by_name['TaskExitRequest'] = _TASKEXITREQUEST
 DESCRIPTOR.message_types_by_name['TaskLogRequest'] = _TASKLOGREQUEST
 DESCRIPTOR.message_types_by_name['OccRequest'] = _OCCREQUEST
@@ -734,19 +849,35 @@ TaskInitReply = _reflection.GeneratedProtocolMessageType('TaskInitReply', (_mess
 _sym_db.RegisterMessage(TaskInitReply)
 _sym_db.RegisterMessage(TaskInitReply.cfgOptions)
 
-CheckDataRequest = _reflection.GeneratedProtocolMessageType('CheckDataRequest', (_message.Message,), {
-  'DESCRIPTOR' : _CHECKDATAREQUEST,
-  '__module__' : 'core_pb2'
-  # @@protoc_insertion_point(class_scope:OCA.Cloud_Py_API.Proto.CheckDataRequest)
-  })
-_sym_db.RegisterMessage(CheckDataRequest)
-
 TaskSetStatusRequest = _reflection.GeneratedProtocolMessageType('TaskSetStatusRequest', (_message.Message,), {
   'DESCRIPTOR' : _TASKSETSTATUSREQUEST,
   '__module__' : 'core_pb2'
   # @@protoc_insertion_point(class_scope:OCA.Cloud_Py_API.Proto.TaskSetStatusRequest)
   })
 _sym_db.RegisterMessage(TaskSetStatusRequest)
+
+CheckDataRequest = _reflection.GeneratedProtocolMessageType('CheckDataRequest', (_message.Message,), {
+
+  'missing_pckg' : _reflection.GeneratedProtocolMessageType('missing_pckg', (_message.Message,), {
+    'DESCRIPTOR' : _CHECKDATAREQUEST_MISSING_PCKG,
+    '__module__' : 'core_pb2'
+    # @@protoc_insertion_point(class_scope:OCA.Cloud_Py_API.Proto.CheckDataRequest.missing_pckg)
+    })
+  ,
+
+  'installed_pckg' : _reflection.GeneratedProtocolMessageType('installed_pckg', (_message.Message,), {
+    'DESCRIPTOR' : _CHECKDATAREQUEST_INSTALLED_PCKG,
+    '__module__' : 'core_pb2'
+    # @@protoc_insertion_point(class_scope:OCA.Cloud_Py_API.Proto.CheckDataRequest.installed_pckg)
+    })
+  ,
+  'DESCRIPTOR' : _CHECKDATAREQUEST,
+  '__module__' : 'core_pb2'
+  # @@protoc_insertion_point(class_scope:OCA.Cloud_Py_API.Proto.CheckDataRequest)
+  })
+_sym_db.RegisterMessage(CheckDataRequest)
+_sym_db.RegisterMessage(CheckDataRequest.missing_pckg)
+_sym_db.RegisterMessage(CheckDataRequest.installed_pckg)
 
 TaskExitRequest = _reflection.GeneratedProtocolMessageType('TaskExitRequest', (_message.Message,), {
   'DESCRIPTOR' : _TASKEXITREQUEST,

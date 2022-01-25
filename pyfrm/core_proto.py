@@ -4,7 +4,8 @@ from io import BytesIO
 from os import SEEK_SET
 
 import grpc
-from py_proto.core_pb2 import taskStatus, Empty, TaskSetStatusRequest, TaskExitRequest, TaskLogRequest, OccRequest
+from py_proto.core_pb2 import taskStatus, Empty, TaskSetStatusRequest, TaskExitRequest, TaskLogRequest, \
+    CheckDataRequest, OccRequest
 from py_proto.fs_pb2 import fsId, FsListRequest, FsGetInfoRequest, FsNodeInfo, FsReadRequest, \
     FsCreateRequest, FsWriteRequest, FsDeleteRequest, FsMoveRequest
 from py_proto.service_pb2_grpc import CloudPyApiCoreStub
@@ -67,6 +68,19 @@ class ClientCloudPA:
             self._main_stub.TaskLog(TaskLogRequest(log_lvl=log_lvl,
                                                    module=mod_name if mod_name is not None else '',
                                                    content=_log_content))
+
+    def send_app_info(self, not_installed: list, installed: list):
+        app_check_request = CheckDataRequest()
+        for each in not_installed:
+            app_check_request.not_installed.append(CheckDataRequest.missing_pckg(name=each['name'],
+                                                                                 version=each['version']))
+        for each in installed:
+            app_check_request.installed.append(CheckDataRequest.installed_pckg(name=each.get('name', ''),
+                                                                               version=each.get('version', ''),
+                                                                               location=each.get('location', ''),
+                                                                               summary=each.get('summary', ''),
+                                                                               requires=each.get('requires', '')))
+        self._main_stub.AppCheck(app_check_request)
 
     def occ_call(self, *params) -> [bool, bytes]:
         _request = OccRequest()

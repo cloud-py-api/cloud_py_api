@@ -10,6 +10,7 @@ import "db.proto";
 service CloudPyApiCore {
   rpc TaskInit (OCA.Cloud_Py_API.Proto.Empty) returns (OCA.Cloud_Py_API.Proto.TaskInitReply) {}
   rpc TaskStatus (OCA.Cloud_Py_API.Proto.TaskSetStatusRequest) returns (OCA.Cloud_Py_API.Proto.Empty) {}
+  rpc AppCheck (OCA.Cloud_Py_API.Proto.CheckDataRequest) returns (OCA.Cloud_Py_API.Proto.Empty) {}
   rpc TaskExit (OCA.Cloud_Py_API.Proto.TaskExitRequest) returns (OCA.Cloud_Py_API.Proto.Empty) {}
   rpc TaskLog (OCA.Cloud_Py_API.Proto.TaskLogRequest) returns (OCA.Cloud_Py_API.Proto.Empty) {}
   rpc OccCall (OCA.Cloud_Py_API.Proto.OccRequest) returns (stream OCA.Cloud_Py_API.Proto.OccReply) {}

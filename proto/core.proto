@@ -75,24 +75,25 @@ message TaskInitReply {
   string handler = 8;                     // PHP Callback handler for TaskExit
 }
 
+message TaskSetStatusRequest {
+  taskStatus st_code = 1;                 // Status code of a task.
+  string error = 2;                       // Optional error, if any. Valid only when Status is non success/in_progress.
+}
+
 message CheckDataRequest {                // Framework returns this after TaskInitReply when cmdType != T_RUN.
   message missing_pckg {
     string name = 1;
-    string version = 2;
+    string version = 2;                   // Format JSON: [["<=", "0.1.5"], [">=", "0.1.3"]]
   }
   repeated missing_pckg not_installed = 1;
   message installed_pckg {
     string name = 1;
-    string version = 2;
+    string version = 2;                   // Format JSON: "8.4.0"
     string location = 3;                  // Path where it is installed.
-    string requires = 4;                  // Depends on. In JSON format, array of string.
+    string summary = 4;                   // Description, what this package do.
+    string requires = 5;                  // Depends on. In JSON format, array of string.
   }
   repeated installed_pckg installed = 2;
-}
-
-message TaskSetStatusRequest {
-  taskStatus st_code = 1;                 // Status code of a task.
-  string error = 2;                       // Optional error, if any. Valid only when Status is non success/in_progress.
 }
 
 message TaskExitRequest {                 // No reply. Server must close pipe/socket after this message.

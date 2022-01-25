@@ -18,28 +18,6 @@ from importlib import invalidate_caches, import_module
 EXTRA_PIP_ARGS = []
 
 
-# @copyright Copyright (c) 2022 Andrey Borysenko <andrey18106x@gmail.com>
-#
-# @copyright Copyright (c) 2022 Alexander Piskun <bigcat88@icloud.com>
-#
-# @author 2022 Alexander Piskun <bigcat88@icloud.com>
-#
-# @license AGPL-3.0-or-later
-#
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU Affero General Public License as
-# published by the Free Software Foundation, either version 3 of the
-# License, or (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU Affero General Public License for more details.
-#
-# You should have received a copy of the GNU Affero General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-
 class LogLvl(Enum):
     DEBUG = 0
     INFO = 1
@@ -86,14 +64,7 @@ def get_python_info() -> dict:
 
 
 def get_module_location(module_name: str) -> str:
-    if module_name:
-        _call_result, _message = pip_call(['show', module_name], add_user_cache=False)
-        if _call_result:
-            _line_start = 'Location:'
-            for line in _message.splitlines():
-                if line.startswith(_line_start):
-                    return line[len(_line_start):].strip()
-    return ''
+    return get_package_info(module_name).get('location', '')
 
 
 def get_pip_info() -> dict:
@@ -147,8 +118,8 @@ def get_modified_env(spec_userbase: str = ''):
     return modified_env, modified_env['PYTHONUSERBASE']
 
 
-def get_core_site_packages() -> str:
-    _env, _userbase = get_modified_env()
+def get_python_site_packages(spec_userbase: str = '') -> str:
+    _env, _userbase = get_modified_env(spec_userbase=spec_userbase)
     try:
         _result = run([Options['python']['path'], '-m', 'site', '--user-site'],
                       stderr=PIPE, stdout=PIPE, check=True, env=_env)
@@ -207,6 +178,23 @@ def add_python_path(_path: str, first: bool = False):
     invalidate_caches()
 
 
+def get_package_info(name: str, userbase: str = '') -> dict:
+    package_info = {}
+    if name:
+        _call_result, _message = pip_call(['show', name], python_userbase=userbase, add_user_cache=False)
+        if _call_result:
+            _pip_show_map = {'Name:': 'name',
+                             'Version:': 'version',
+                             'Location:': 'location',
+                             'Summary:': 'summary',
+                             'Requires:': 'requires'}
+            for _line in _message.splitlines():
+                for _map_key in _pip_show_map:
+                    if _line.startswith(_map_key):
+                        package_info[_pip_show_map[_map_key]] = _line[len(_map_key):].strip()
+    return package_info
+
+
 def import_package(name: str, dest_sym_table=None, package=None) -> bool:
     try:
         if dest_sym_table is None:
@@ -241,7 +229,7 @@ def check() -> [bool, int]:
     if not Options['pip']['present']:
         log(LogLvl.ERROR, 'Python pip not found or has too low version.')
         return False, 1
-    add_python_path(get_core_site_packages(), first=True)
+    add_python_path(get_python_site_packages(), first=True)
     _missing_required = get_missing_packages(RequiredPackagesList)
     if _missing_required:
         for package_name, install_info in _missing_required.items():
