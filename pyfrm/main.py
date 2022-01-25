@@ -12,6 +12,29 @@ def signal_handler(signum=None, _frame=None):
 
 
 if __name__ == '__main__':
+    # import subprocess
+    # import os
+    # print('main')
+    # import site
+    # site.main()
+    # print(site.getsitepackages())
+    # print(site.getusersitepackages())
+    # print(sys.prefix)
+    # print(sys.exec_prefix)
+    # print(sys.path)
+    # sys.path.insert(0, '/var/www/nextcloud/data/appdata_ocs30ydgi7y8/cloud_py_api/local/bin/')
+    # sys.path.insert(0, '/var/www/nextcloud/data/appdata_ocs30ydgi7y8/cloud_py_api/local/lib/python3.7/site-packages/')
+    # print('A:', sys.path)
+    # child_env = dict(os.environ)
+    # child_env["PYTHONPATH"] = '/var/www/nextcloud/data/appdata_ocs30ydgi7y8/cloud_py_api/local/lib/python3.7/site-packages'
+    # print(child_env)
+    # try:
+    #     _result = subprocess.run([sys.executable, '-m', 'pip', '--version'],
+    #                              stderr=subprocess.PIPE, stdout=subprocess.PIPE, check=True, env=child_env)
+    #     print(_result.stdout.decode('utf-8').rstrip('\n'))
+    # except (OSError, ValueError, TypeError) as _exception_info:
+    #     print(_exception_info)
+    # sys.exit(0)
     debug_msg('__main__: started')
     for sig in [signal.SIGINT, signal.SIGQUIT, signal.SIGTERM, signal.SIGHUP]:
         signal.signal(sig, signal_handler)

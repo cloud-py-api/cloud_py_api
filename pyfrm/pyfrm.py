@@ -50,8 +50,9 @@ def check_requirements(req_file_path: str, app_package_dir: str, cc: ClientCloud
                 needed_packages.append({'name': requirement.name, 'version': to_json(depends_on)})
         installed_packages = []
         not_installed_packages = []
+        python_path = get_python_site_packages()
         for package in needed_packages:
-            package_info = get_package_info(package['name'], userbase=app_package_dir)
+            package_info = get_package_info(package['name'], userbase=app_package_dir, python_path=python_path)
             if package_info:
                 package_info['version'] = to_json(package_info['version'])
                 installed_packages.append(package_info)
@@ -66,10 +67,13 @@ def check_requirements(req_file_path: str, app_package_dir: str, cc: ClientCloud
 
 
 def install_requirements(req_file_path: str, app_package_dir: str, cc: ClientCloudPA) -> None:
-    _call_result, _message = pip_call(['install', '-r', req_file_path, '--no-warn-script-location',
-                                       '--prefer-binary'], python_userbase=app_package_dir, add_user_cache=True)
+    _call_result, _message = pip_call(['install', '-r', req_file_path, '--no-warn-script-location', '--prefer-binary'],
+                                      python_userbase=app_package_dir, python_path=get_python_site_packages(),
+                                      user_cache=True)
     if not _call_result:
-        cc.log(logLvl.ERROR, 'cpa_app_install', f'install(-r):{_message}')
+        cc.log(logLvl.ERROR, 'cpa_req_install', f'pip_call:{_message}')
+    else:
+        cc.log(logLvl.DEBUG, 'cpa_req_install', f'pip_call:{_message}')
 
 
 def check_install_app(app_package_dir: str, cc: ClientCloudPA, task_data) -> bool:

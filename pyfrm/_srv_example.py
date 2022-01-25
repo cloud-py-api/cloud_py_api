@@ -91,6 +91,15 @@ class ServerCloudPA(CloudPyApiCoreServicer, TaskParameters):
         self.task_error = request.error
         return Empty()
 
+    def AppCheck(self, request, context):
+        print('Client: not installed:')
+        for not_installed in request.not_installed:
+            print({not_installed.name: not_installed.version})
+        print('Client: installed:')
+        for installed in request.installed:
+            print({installed.name: installed.version, 'location': installed.location})
+        return Empty()
+
     def TaskLog(self, request, context):
         mod_name = request.module if len(request.module) else 'Unknown'
         for record in request.content:
@@ -300,9 +309,10 @@ class ServerCloudPA(CloudPyApiCoreServicer, TaskParameters):
 
 def srv_example(address, port, app_name, module_path, function_to_call, args=None):
     print('')
-    abs_frm_app_data = os.path.abspath('./../tmp/frm_app_data')
+    abs_frm_app_data = '/var/www/nextcloud/data/appdata_ocs30ydgi7y8/cloud_py_api'
+    # abs_frm_app_data = os.path.abspath('./../tmp/frm_app_data')
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=2))
-    servicer = ServerCloudPA(cmd_type=taskType.T_INSTALL,
+    servicer = ServerCloudPA(cmd_type=taskType.T_DEFAULT,
                              log_lvl=logLvl.DEBUG,
                              data_folder='./../tmp/data_folder',
                              user_id='user_name',

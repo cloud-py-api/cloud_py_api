@@ -106,16 +106,18 @@ def get_core_userbase() -> str:
     return ''
 
 
-def get_modified_env(spec_userbase: str = ''):
-    modified_env = environ
+def get_modified_env(spec_userbase: str = '', spec_path: str = ''):
+    modified_env = dict(environ)
     if spec_userbase:
         modified_env['PYTHONUSERBASE'] = spec_userbase
     else:
-        modified_env['PYTHONUSERBASE'] = get_core_userbase()
-        if not modified_env['PYTHONUSERBASE']:
-            return None, ''
+        def_userbase = get_core_userbase()
+        if def_userbase:
+            modified_env['PYTHONUSERBASE'] = def_userbase
+    if spec_path:
+        modified_env['PYTHONPATH'] = spec_path
     modified_env['_PIP_LOCATIONS_NO_WARN_ON_MISMATCH'] = '1'
-    return modified_env, modified_env['PYTHONUSERBASE']
+    return modified_env, modified_env.get('PYTHONUSERBASE', '')
 
 
 def get_python_site_packages(spec_userbase: str = '') -> str:
@@ -131,7 +133,7 @@ def get_python_site_packages(spec_userbase: str = '') -> str:
 
 def check_pip() -> tuple:
     _ret = (0, 0, 0)
-    _call_result, _message = pip_call(['--version'], add_user_cache=False)
+    _call_result, _message = pip_call(['--version'], user_cache=False)
     log(LogLvl.DEBUG, 'Pip version:', _message)
     if _call_result:
         m_groups = search(r'pip\s*(\d+(\.\d+){0,2})', _message, flags=MULTILINE + IGNORECASE)
@@ -142,14 +144,14 @@ def check_pip() -> tuple:
     return _ret
 
 
-def pip_call(parameters, python_userbase: str = '', add_user_cache: bool = False) -> [bool, str]:
+def pip_call(parameters, python_userbase: str = '', python_path: str = '', user_cache: bool = False) -> [bool, str]:
     log(LogLvl.DEBUG, f"pip_call(userbase={python_userbase}):\n{str(parameters)}")
     try:
         etc = ['--disable-pip-version-check']
         etc += EXTRA_PIP_ARGS
-        _env, _userbase = get_modified_env(spec_userbase=python_userbase)
+        _env, _userbase = get_modified_env(spec_userbase=python_userbase, spec_path=python_path)
         if _userbase:
-            if add_user_cache:
+            if user_cache:
                 etc += ['--user', '--cache-dir', _userbase]
         _result = run([Options['python']['path'], '-m', 'pip'] + parameters + etc,
                       stderr=PIPE, stdout=PIPE, check=False, env=_env)
@@ -178,10 +180,11 @@ def add_python_path(_path: str, first: bool = False):
     invalidate_caches()
 
 
-def get_package_info(name: str, userbase: str = '') -> dict:
+def get_package_info(name: str, userbase: str = '', python_path: str = '') -> dict:
     package_info = {}
     if name:
-        _call_result, _message = pip_call(['show', name], python_userbase=userbase, add_user_cache=False)
+        _call_result, _message = pip_call(['show', name],
+                                          python_userbase=userbase, python_path=python_path, user_cache=False)
         if _call_result:
             _pip_show_map = {'Name:': 'name',
                              'Version:': 'version',
@@ -304,7 +307,7 @@ def install_pip() -> bool:
 
 def install_package(package_name, install_name, to_log: bool = False) -> bool:
     _call_result, _message = pip_call(['install', install_name, '--no-warn-script-location', '--prefer-binary'],
-                                      add_user_cache=True)
+                                      user_cache=True)
     if not _call_result:
         if to_log:
             log(LogLvl.WARN, f'Error during install {package_name}:{install_name}:\n', _message)
@@ -348,7 +351,7 @@ def update_pip() -> [bool, int]:
     if Options['pip']['present']:
         if Options['pip']['local']:
             _call_result, _message = pip_call(['install', '--upgrade', 'pip', '--no-warn-script-location'],
-                                              add_user_cache=True)
+                                              user_cache=True)
             if _call_result:
                 return True, 0
     else:
@@ -397,9 +400,9 @@ if __name__ == '__main__':
         elif args.update_pip:
             result, exit_code = update_pip()
         elif args.update:
-            raise NotImplemented()
+            raise NotImplementedError()
         elif args.delete:
-            raise NotImplemented()
+            raise NotImplementedError()
     except Exception as exception_info:
         exit_code = 2
         exception_name = type(exception_info).__name__
