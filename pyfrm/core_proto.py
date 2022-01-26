@@ -1,19 +1,24 @@
 from typing import Union
 from threading import Event
 from io import BytesIO
-from os import SEEK_SET
+from os import path, SEEK_SET
+import logging
 
 import grpc
-from py_proto.core_pb2 import taskStatus, Empty, TaskSetStatusRequest, TaskExitRequest, TaskLogRequest, \
+from py_proto.core_pb2 import logLvl, taskStatus, Empty, TaskSetStatusRequest, TaskExitRequest, TaskLogRequest, \
     CheckDataRequest, OccRequest
 from py_proto.fs_pb2 import fsId, FsListRequest, FsGetInfoRequest, FsNodeInfo, FsReadRequest, \
     FsCreateRequest, FsWriteRequest, FsDeleteRequest, FsMoveRequest
 from py_proto.service_pb2_grpc import CloudPyApiCoreStub
 from nc_py_api.fs_api import FsResultCode
+from nc_py_api import _ncc
 
 
 class ClientCloudPA:
     task_init_data = None
+    logger = None
+    mod_folder = ''
+    mod_name = ''
     _main_channel = None
     _main_stub = None
     _exit_sent: bool = False
@@ -34,6 +39,28 @@ class ClientCloudPA:
         self._main_channel.unsubscribe(self.__wait_for_server_connect)
         self._main_stub = CloudPyApiCoreStub(self._main_channel)
         self.task_init_data = self._main_stub.TaskInit(Empty())
+
+    def perform_init(self) -> bool:
+        __fatal = logLvl.FATAL
+        if not self.task_init_data.appName:
+            self.log(__fatal, 'cpa_ccpa', 'invalid task`s appName')
+            return False
+        if not self.task_init_data.modPath:
+            self.log(__fatal, 'cpa_ccpa', 'invalid task`s modPath')
+            return False
+        if not self.task_init_data.funcName:
+            self.log(__fatal, 'cpa_ccpa', 'invalid task`s funcName')
+            return False
+        self.mod_folder, self.mod_name = path.split(self.task_init_data.modPath)
+        if not self.mod_name:
+            self.log(__fatal, 'cpa_ccpa', 'invalid task`s modPath, extracted module name is empty.')
+            return False
+        self.logger = logging.getLogger(self.mod_name)
+        self.logger.propagate = False
+        __log_levels = {0: 10, 1: 20, 2: 30, 3: 40, 4: 50}
+        self.logger.setLevel(level=__log_levels[self.task_init_data.config.log_lvl])
+        self.logger.addHandler(CloudLogHandler())
+        return True
 
     def __del__(self):
         if not self._exit_sent:
@@ -181,3 +208,25 @@ class ClientCloudPA:
         fs_reply = self._main_stub.FsMove(FsMoveRequest(fileId=fsId(userId=user_id, fileId=file_id),
                                                         targetPath=target_path, copy=copy))
         return FsResultCode(fs_reply.resCode), fs_reply.fileId.userId, fs_reply.fileId.fileId
+
+
+class CloudLogHandler(logging.Handler):
+    __log_levels = {'DEBUG': 0, 'INFO': 1, 'WARN': 2, 'ERROR': 3, 'FATAL': 4}
+    __logs_disabled = False
+
+    def emit(self, record):
+        if self.__logs_disabled:
+            return
+        self.format(record)
+        __content = record.message if record.funcName == '<module>' else record.funcName + ': ' + record.message
+        if record.exc_text is not None:
+            __content += '\n' + record.exc_text
+        __log_lvl = self.__log_levels.get(record.levelname)
+        __module = record.module if record.name == 'root' else record.name
+        if record.filename == 'pyfrm.py':
+            __module = 'pyfrm_core'
+        try:
+            _ncc.NCC.log(log_lvl=__log_lvl, mod_name=__module, content=__content)
+        except Exception as exception_info:
+            self.__logs_disabled = True
+            logging.getLogger('pyfrm').exception(f'Exception {type(exception_info).__name__} during logging.')

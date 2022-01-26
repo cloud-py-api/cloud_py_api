@@ -5,9 +5,9 @@ import nc_py_api as nc_api
 
 def func_fs_list_info():
     ca = nc_api.CloudApi()
-    ca.log(nc_api.LogLvl.DEBUG, 'fs_example', 'listing root...')
+    ca.log.debug('listing root...')
     fs_objects = ca.fs.list()
-    ca.log(nc_api.LogLvl.DEBUG, 'fs_example', f'{len(fs_objects)} objects in user root directory')
+    ca.log.debug(f'{len(fs_objects)} objects in user root directory')
     for fs_object in fs_objects:
         fs_same_object = ca.fs.info(fs_object['id'])
         if fs_same_object is None:
@@ -19,49 +19,49 @@ def func_fs_list_info():
             return 'BAD'
         if fs_object != fs_same_object:
             return 'BAD'
-        ca.log(nc_api.LogLvl.DEBUG, 'fs_example', f'\n\t{str(fs_object)}')
+        ca.log.debug(f'\n\t{str(fs_object)}')
     return 'GOOD'
 
 
 def func_fs_list_info_oop():
     ca = nc_api.CloudApi()
-    ca.log(nc_api.LogLvl.DEBUG, 'fs_example', 'listing root...')
+    ca.log.debug('fs_example', 'listing root...')
     fs_objects = nc_api.FsObj().list()
-    ca.log(nc_api.LogLvl.DEBUG, 'fs_example', f'{len(fs_objects)} objects in user root directory')
+    ca.log.debug(f'{len(fs_objects)} objects in user root directory')
     for fs_object in fs_objects:
-        ca.log(nc_api.LogLvl.DEBUG, 'fs_example', f'\n\t{str(fs_object)}')
+        ca.log.debug('fs_example', f'\n\t{str(fs_object)}')
     return 'GOOD'
 
 
 def func_fs_create_delete():
     ca = nc_api.CloudApi()
-    ca.log(nc_api.LogLvl.DEBUG, 'fs_example', 'creating dir at root...')
+    ca.log.debug('creating dir at root...')
     res, new_id = ca.fs.create('TEST_CREATING_DIR', is_dir=True)
     if res != nc_api.FsResultCode.NO_ERROR:
         return 'BAD'
-    ca.log(nc_api.LogLvl.DEBUG, 'fs_example', 'creating sub dir...')
+    ca.log.debug('creating sub dir...')
     res, new_id2 = ca.fs.create('TEST_CREATING_SUBDIR', is_dir=True, parent_dir=new_id)
     if res != nc_api.FsResultCode.NO_ERROR:
         return 'BAD'
-    ca.log(nc_api.LogLvl.DEBUG, 'fs_example', 'creating file at root...')
+    ca.log.debug('creating file at root...')
     res, new_id3 = ca.fs.create('TEST_CREATING_NO_CONTENT.txt', is_dir=False)
     if res != nc_api.FsResultCode.NO_ERROR:
         return 'BAD'
-    ca.log(nc_api.LogLvl.DEBUG, 'fs_example', 'creating file at subdir...')
+    ca.log.debug('creating file at subdir...')
     res, new_id4 = ca.fs.create('TEST_CREATING_FILE_CONTENT.txt', is_dir=False, content=b'Hello world!',
                                 parent_dir=new_id2)
     if res != nc_api.FsResultCode.NO_ERROR:
         return 'BAD'
-    ca.log(nc_api.LogLvl.DEBUG, 'fs_example', 'deleting file at subdir...')
+    ca.log.debug('deleting file at subdir...')
     if ca.fs.delete(fs_obj=new_id4) != nc_api.FsResultCode.NO_ERROR:
         return 'BAD'
-    ca.log(nc_api.LogLvl.DEBUG, 'fs_example', 'deleting sub dir...')
+    ca.log.debug('deleting sub dir...')
     if ca.fs.delete(fs_obj=new_id2) != nc_api.FsResultCode.NO_ERROR:
         return 'BAD'
-    ca.log(nc_api.LogLvl.DEBUG, 'fs_example', 'deleting file at root...')
+    ca.log.debug('deleting file at root...')
     if ca.fs.delete(fs_obj=new_id3) != nc_api.FsResultCode.NO_ERROR:
         return 'BAD'
-    ca.log(nc_api.LogLvl.DEBUG, 'fs_example', 'deleting dir at root...')
+    ca.log.debug('deleting dir at root...')
     if ca.fs.delete(fs_obj=new_id) != nc_api.FsResultCode.NO_ERROR:
         return 'BAD'
     return 'GOOD'
@@ -115,21 +115,21 @@ def func_fs_invalid():
     # This function will fail without cloud_py_api installed in NC instance(_srv_example doesnt emulate this)
     ca = nc_api.CloudApi()
     _invalid_id = {'user': '', 'file': 999999}
-    ca.log(nc_api.LogLvl.DEBUG, "func_fs_invalid", "Listing(fs.list) invalid id...")
+    ca.log.debug('Listing(fs.list) invalid id...')
     _list = ca.fs.list(_invalid_id)
-    ca.log(nc_api.LogLvl.DEBUG, "func_fs_invalid", str(_list))
-    ca.log(nc_api.LogLvl.DEBUG, "func_fs_invalid", "Listing(FsObj.list) invalid id...")
+    ca.log.debug(str(_list))
+    ca.log.debug('Listing(FsObj.list) invalid id...')
     _list = nc_api.FsObj(_invalid_id).list()
-    ca.log(nc_api.LogLvl.DEBUG, "func_fs_invalid", str(_list))
-    ca.log(nc_api.LogLvl.DEBUG, "func_fs_invalid", "Info(fs.info) invalid id...")
+    ca.log.debug(str(_list))
+    ca.log.debug('Info(fs.info) invalid id...')
     _info = ca.fs.info(_invalid_id)
-    ca.log(nc_api.LogLvl.DEBUG, "func_fs_invalid", str(_info))
-    ca.log(nc_api.LogLvl.DEBUG, "func_fs_invalid", "Info(FsObj.info) invalid id...")
+    ca.log.debug(str(_info))
+    ca.log.debug('Info(FsObj.info) invalid id...')
     try:
         _info = nc_api.FsObj(_invalid_id, load=True)
-        ca.log(nc_api.LogLvl.DEBUG, "func_fs_invalid", 'ERROR!!!')
+        ca.log.debug('ERROR!!!')
     except nc_api.FsNotFound:
-        ca.log(nc_api.LogLvl.DEBUG, "func_fs_invalid", 'GOOD')
+        ca.log.debug('GOOD')
 
 
 def fs_complex_test():

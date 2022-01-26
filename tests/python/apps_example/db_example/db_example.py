@@ -68,3 +68,20 @@ def ttt():
 
 if __name__ == '__main__':
     ttt()
+
+
+
+# class DbLogHandler(logging.Handler):
+#     def __init__(self):
+#         super().__init__()
+#
+#     def emit(self, record):
+#         self.format(record)
+#         _ncc.NCC.log(LogLvl.DEBUG.value, 'db_api', f'{record.module}:{record.message}')
+#
+#     def __init__(self):
+#         if _ncc.NCC.task_init_data.config.log_lvl == LogLvl.DEBUG.value:
+#             logging.basicConfig()
+#             sql_logger = logging.getLogger('sqlalchemy')
+#             sql_logger.setLevel(logging.INFO)
+#             sql_logger.addHandler(DbLogHandler())

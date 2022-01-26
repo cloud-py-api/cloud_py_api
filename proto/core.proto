@@ -22,12 +22,13 @@ enum logLvl {
 
 enum taskStatus {
     ST_SUCCESS = 0;
-    ST_IN_PROGRESS = 1;                   // pyfrm connected, processing task_init
+    ST_INITIALIZING = 1;                  // initialization is in progress
     ST_INSTALLING = 2;                    // install is in progress
     ST_INSTALL_ERROR = 3;                 // install return error
-    ST_INIT_ERROR = 4;                    // error during init target app
-    ST_EXCEPTION = 5;                     // Unexpected exception occurred
-    ST_UNKNOWN = 6;                       // Default task state at start
+    ST_INIT_ERROR = 4;                    // error during initialization target app
+    ST_IN_PROGRESS = 5;                   // target app is running
+    ST_EXCEPTION = 6;                     // Unexpected exception occurred
+    ST_UNKNOWN = 7;                       // Default task state at start
 }
 
 enum taskType {

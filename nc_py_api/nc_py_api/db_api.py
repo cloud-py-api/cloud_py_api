@@ -1,29 +1,11 @@
-import logging
 from os import path
 from urllib.parse import quote_plus
 from sqlalchemy import create_engine, event
 
-from .log_lvl import LogLvl
 from . import _ncc
 
 
-class DbLogHandler(logging.Handler):
-    def __init__(self):
-        super().__init__()
-
-    def emit(self, record):
-        self.format(record)
-        _ncc.NCC.log(LogLvl.DEBUG.value, 'db_api', f'{record.module}:{record.message}')
-
-
 class DbApi:
-    def __init__(self):
-        if _ncc.NCC.task_init_data.config.log_lvl == LogLvl.DEBUG.value:
-            logging.basicConfig()
-            sql_logger = logging.getLogger('sqlalchemy')
-            sql_logger.setLevel(logging.INFO)
-            sql_logger.addHandler(DbLogHandler())
-
     def create_engine(self, auto_table_prefix: bool = True):
         _exec_options = {}
         if auto_table_prefix:

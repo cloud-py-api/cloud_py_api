@@ -307,10 +307,9 @@ class ServerCloudPA(CloudPyApiCoreServicer, TaskParameters):
         return FsReply(resCode=fsResultCode.NO_ERROR)
 
 
-def srv_example(address, port, app_name, module_path, function_to_call, args=None):
+def srv_example(pyfrm_app_data, address, port, app_name, module_path, function_to_call, args=None):
     print('')
-    abs_frm_app_data = '/var/www/nextcloud/data/appdata_ocs30ydgi7y8/cloud_py_api'
-    # abs_frm_app_data = os.path.abspath('./../tmp/frm_app_data')
+    abs_pyfrm_app_data = os.path.abspath(pyfrm_app_data)
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=2))
     servicer = ServerCloudPA(cmd_type=taskType.T_DEFAULT,
                              log_lvl=logLvl.DEBUG,
@@ -333,7 +332,7 @@ def srv_example(address, port, app_name, module_path, function_to_call, args=Non
     else:
         server.add_insecure_port(address)
     print(f'Server: connect address = {connect_address}')
-    p_obj = run_python_script('main.py', abs_frm_app_data, connect_address)
+    p_obj = run_python_script('main.py', abs_pyfrm_app_data, connect_address)
     server.start()
     if server.wait_for_termination(timeout=8.0):
         if servicer.connection_alive:
@@ -355,10 +354,15 @@ def srv_example(address, port, app_name, module_path, function_to_call, args=Non
 
 
 if __name__ == '__main__':
-    status, error, result, logs = srv_example('unix:./../tmp/test.sock', '0', 'pyfrm_techs',
-                                              '../tests/python/apps_example/pyfrm_techs', 'get_image_difference',
-                                              ('path_to_img1', 'path_to_img2')
+    # frm_app_data = '/var/www/nextcloud/data/appdata_ocs30ydgi7y8/cloud_py_api'
+    frm_app_data = os.path.abspath('./../tmp/frm_app_data')
+    status, error, result, logs = srv_example(frm_app_data, 'unix:./../tmp/test.sock', '0', 'hello_world',
+                                              '../tests/python/apps_example/hello_world', 'func_hello_world'
                                               )
+    # status, error, result, logs = srv_example('unix:./../tmp/test.sock', '0', 'pyfrm_techs',
+    #                                           '../tests/python/apps_example/pyfrm_techs', 'get_image_difference',
+    #                                           ('path_to_img1', 'path_to_img2')
+    #                                           )
     sys.exit(0)
 
 """
