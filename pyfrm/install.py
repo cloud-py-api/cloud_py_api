@@ -8,28 +8,13 @@ from subprocess import run, PIPE, DEVNULL, TimeoutExpired, CalledProcessError
 from os import chdir, path, mkdir, environ, remove
 from argparse import ArgumentParser
 from json import dumps as to_json
-from traceback import format_exc
-from typing import Union
-from enum import Enum
 from re import search, sub, MULTILINE, IGNORECASE
 from importlib import invalidate_caches, import_module
+import logging
 
 
 EXTRA_PIP_ARGS = []
-
-
-class LogLvl(Enum):
-    DEBUG = 0
-    INFO = 1
-    WARN = 2
-    ERROR = 3
-
-
 Options = {}
-
-LogsContainer = []
-
-
 RequiredPackagesList = {'google.protobuf': 'protobuf',
                         'grpc': 'grpcio',
                         'pipdeptree': 'pipdeptree',
@@ -39,18 +24,22 @@ RequiredPackagesList = {'google.protobuf': 'protobuf',
                         'sqlalchemy': 'SQLAlchemy',
                         'requirements': 'requirements-parser'
                         }
+LogsContainer = []
+Log = logging.getLogger('pyfrm.install')
+Log.propagate = False
 
 
-def log(log_lvl: Union[int, LogLvl], *msgs: str, help_code: int = 0):
-    """Adds logs(s) to global LogsContainer variable."""
-    if isinstance(log_lvl, LogLvl):
-        log_lvl = log_lvl.value
-    if Options.get('log_lvl', 9999) <= log_lvl:
-        for msg in msgs:
-            if help_code:
-                LogsContainer.append({log_lvl: msg, 'help_code': help_code})
-            else:
-                LogsContainer.append({log_lvl: msg})
+class InstallLogHandler(logging.Handler):
+    __log_levels = {'DEBUG': 0, 'INFO': 1, 'WARN': 2, 'ERROR': 3, 'FATAL': 4}
+
+    def emit(self, record):
+        self.format(record)
+        __content = record.message if record.funcName == '<module>' else record.funcName + ': ' + record.message
+        if record.exc_text is not None:
+            __content += '\n' + record.exc_text
+        __log_lvl = self.__log_levels.get(record.levelname)
+        __module = record.module if record.name == 'root' else record.name
+        LogsContainer.append({'log_lvl': __log_lvl, 'module': __module, 'content': __content})
 
 
 def get_options() -> dict:
@@ -77,7 +66,7 @@ def get_pip_info() -> dict:
             if _location.startswith(Options['app_data']):
                 _local = True
         else:
-            log(LogLvl.WARN, f"Cant determine pip location, assume that it is global.")
+            Log.warning('Cant determine pip location, assume that it is global.')
     return {'present': _pip, 'version': _version, 'local': _local}
 
 
@@ -127,14 +116,13 @@ def get_python_site_packages(spec_userbase: str = '') -> str:
                       stderr=PIPE, stdout=PIPE, check=True, env=_env)
         return _result.stdout.decode('utf-8').rstrip('\n')
     except (OSError, ValueError, TypeError, TimeoutExpired) as _exception_info:
-        log(LogLvl.ERROR, f'python -m site raised {type(_exception_info).__name__}: {str(_exception_info)}')
+        Log.exception(f'Exception {type(_exception_info).__name__}:')
         return ''
 
 
 def check_pip() -> tuple:
     _ret = (0, 0, 0)
     _call_result, _message = pip_call(['--version'], user_cache=False)
-    log(LogLvl.DEBUG, 'Pip version:', _message)
     if _call_result:
         m_groups = search(r'pip\s*(\d+(\.\d+){0,2})', _message, flags=MULTILINE + IGNORECASE)
         if m_groups is None:
@@ -145,7 +133,7 @@ def check_pip() -> tuple:
 
 
 def pip_call(parameters, python_userbase: str = '', python_path: str = '', user_cache: bool = False) -> [bool, str]:
-    log(LogLvl.DEBUG, f"pip_call(userbase={python_userbase}):\n{str(parameters)}")
+    Log.debug(f"userbase={python_userbase}\npath={python_path}:\n{str(parameters)}")
     try:
         etc = ['--disable-pip-version-check']
         etc += EXTRA_PIP_ARGS
@@ -155,15 +143,15 @@ def pip_call(parameters, python_userbase: str = '', python_path: str = '', user_
                 etc += ['--user', '--cache-dir', _userbase]
         _result = run([Options['python']['path'], '-m', 'pip'] + parameters + etc,
                       stderr=PIPE, stdout=PIPE, check=False, env=_env)
-        log(LogLvl.DEBUG, f"pip_call(stderr):\n{_result.stderr.decode('utf-8')}")
-        log(LogLvl.DEBUG, f"pip_call(stdout):\n{_result.stdout.decode('utf-8')}")
+        Log.debug(f"pip.stderr:\n{_result.stderr.decode('utf-8')}")
+        Log.debug(f"pip.stdout:\n{_result.stdout.decode('utf-8')}")
         full_reply = _result.stderr.decode('utf-8')
         reply = sub(r'^\s*WARNING:.*\n?', '', full_reply, flags=MULTILINE + IGNORECASE)
         if len(reply) == 0:
             return True, _result.stdout.decode('utf-8')
         return False, _result.stderr.decode('utf-8')
     except (OSError, ValueError, TypeError, TimeoutExpired) as _exception_info:
-        return False, f'pip_call raised {type(_exception_info).__name__}: {str(_exception_info)}'
+        return False, f'Exception {type(_exception_info).__name__}: {str(_exception_info)}'
 
 
 def add_python_path(_path: str, first: bool = False):
@@ -230,13 +218,13 @@ def get_missing_packages(packages_info: dict, any_of: bool = False) -> dict:
 
 def check() -> [bool, int]:
     if not Options['pip']['present']:
-        log(LogLvl.ERROR, 'Python pip not found or has too low version.')
+        Log.error('Python pip not found or has too low version.')
         return False, 1
     add_python_path(get_python_site_packages(), first=True)
     _missing_required = get_missing_packages(RequiredPackagesList)
     if _missing_required:
         for package_name, install_info in _missing_required.items():
-            log(LogLvl.ERROR, f'Missing {package_name}:{install_info}')
+            Log.error(f'Missing {package_name}:{install_info}')
         return False, 1
     return True, 0
 
@@ -244,12 +232,12 @@ def check() -> [bool, int]:
 def download_pip(url: str, out_path: str) -> bool:
     n_download_clients = 2
     if not check_local_dir(create_if_absent=True):
-        log(LogLvl.ERROR, 'Cant create local dir.')
+        Log.error('Cant create local dir.')
         return False
     for _ in range(2):
         try:
             run(['curl', url, '-o', out_path], timeout=90, stderr=DEVNULL, stdout=DEVNULL, check=True)
-            log(LogLvl.DEBUG, f'`{out_path}` finished downloading.')
+            Log.debug(f'`{out_path}` finished downloading.')
             return True
         except CalledProcessError:
             break
@@ -261,7 +249,7 @@ def download_pip(url: str, out_path: str) -> bool:
     for _ in range(2):
         try:
             run(['wget', url, '-O', out_path], timeout=90, stderr=DEVNULL, stdout=DEVNULL, check=True)
-            log(LogLvl.DEBUG, f'`{out_path}` finished downloading.')
+            Log.debug(f'`{out_path}` finished downloading.')
             return True
         except CalledProcessError:
             break
@@ -271,37 +259,37 @@ def download_pip(url: str, out_path: str) -> bool:
         except TimeoutExpired:
             pass
     if not n_download_clients:
-        log(LogLvl.ERROR, 'Both curl and wget cannot be found.')
+        Log.error('Both curl and wget cannot be found.')
     return False
 
 
 def install_pip() -> bool:
-    log(LogLvl.INFO, 'Start installing local pip.')
+    Log.info('Start installing local pip.')
     get_pip_path = str(path.join(get_local_dir_path(), 'get-pip.py'))
     if not download_pip('https://bootstrap.pypa.io/get-pip.py', get_pip_path):
-        log(LogLvl.ERROR, 'Cant download pip installer.')
+        Log.error('Cant download pip installer.')
         return False
     try:
-        log(LogLvl.INFO, 'Running get-pip.py...')
+        Log.info('Running get-pip.py...')
         _env, _userbase = get_modified_env(get_local_dir_path())
         _result = run([Options['python']['path'], get_pip_path,
                        '--user', '--cache-dir', get_local_dir_path(), '--no-warn-script-location'],
                       stderr=PIPE, stdout=PIPE, check=False, env=_env
                       )
-        log(LogLvl.DEBUG, f"get-pip.py(stderr):\n{_result.stderr.decode('utf-8')}")
-        log(LogLvl.DEBUG, f"get-pip.py(stdout):\n{_result.stdout.decode('utf-8')}")
+        Log.debug(f"get-pip.stderr:\n{_result.stderr.decode('utf-8')}")
+        Log.debug(f"get-pip.stdout:\n{_result.stdout.decode('utf-8')}")
         full_reply = _result.stderr.decode('utf-8')
         reply = sub(r'^\s*WARNING:.*\n?', '', full_reply, flags=MULTILINE + IGNORECASE)
         if len(reply) == 0:
             return True
-        log(LogLvl.ERROR, f'get-pip returned:\n{full_reply}')
+        Log.error(f'get-pip returned:\n{full_reply}')
     except (OSError, ValueError, TypeError, TimeoutExpired) as _exception_info:
-        log(LogLvl.ERROR, f'install_pip raised {type(_exception_info).__name__}: {str(_exception_info)}')
+        Log.exception(f'Exception {type(_exception_info).__name__}:')
     finally:
         try:
             remove(get_pip_path)
         except OSError:
-            log(LogLvl.WARN, f'Cant remove `{get_pip_path}`')
+            Log.warning(f'Cant remove `{get_pip_path}`')
     return False
 
 
@@ -310,7 +298,7 @@ def install_package(package_name, install_name, to_log: bool = False) -> bool:
                                       user_cache=True)
     if not _call_result:
         if to_log:
-            log(LogLvl.WARN, f'Error during install {package_name}:{install_name}:\n', _message)
+            Log.warning(f'Error during install {package_name}:{install_name}:\n', _message)
     return _call_result
 
 
@@ -329,18 +317,18 @@ def install_packages(packages_info: dict, any_of: bool = False) -> bool:
         elif not _result:
             break
     if not _result:
-        log(LogLvl.ERROR, f'Cant install {_last_package_name}')
+        Log.error(f'Cant install {_last_package_name}')
     return _result
 
 
 def install() -> [bool, int]:
     if not Options['pip']['present']:
         if not install_pip():
-            log(LogLvl.ERROR, 'Cant install local pip.')
+            Log.error('Cant install local pip.')
             return False, 1
         Options['pip'] = get_pip_info()
         if not Options['pip']['present']:
-            log(LogLvl.ERROR, 'Cant run pip after local install.')
+            Log.error('Cant run pip after local install.')
             return False, 1
     if not install_packages(RequiredPackagesList):
         return False, 1
@@ -355,7 +343,7 @@ def update_pip() -> [bool, int]:
             if _call_result:
                 return True, 0
     else:
-        log(LogLvl.ERROR, 'No local compatible pip found to make update.')
+        Log.error('No local compatible pip found.')
     return False, 1
 
 
@@ -365,8 +353,10 @@ if __name__ == '__main__':
                             add_help=True)
     parser.add_argument('appdata', action='store', type=str,
                         help='Absolute path to cloud_py_api folder in appdata_xxx.')
-    parser.add_argument('--loglvl', action='store', type=int, default=2,
-                        help='Log level for output from 0(debug) to 3(errors). Default = 2.')
+    levels = ('DEBUG', 'INFO', 'WARN', 'ERROR', 'FATAL')
+    logging.addLevelName(30, 'WARN')
+    logging.addLevelName(50, 'FATAL')
+    parser.add_argument('--loglvl', default='INFO', type=str, choices=levels)
     group = parser.add_mutually_exclusive_group()
     group.add_argument('--check', dest='check', action='store_true',
                        help='Check installation.')
@@ -375,24 +365,25 @@ if __name__ == '__main__':
     group.add_argument('--update-pip', dest='update_pip', action='store_true',
                        help='Perform built-in or local pip update.')
     group.add_argument('--update', dest='update', nargs=1, type=str,
-                       help='Perform update of app packages.')
+                       help='Perform update of app`s packages.')
     group.add_argument('--delete', dest='delete', nargs=1, type=str,
                        help='Delete packages of app.')
     # group.add_argument('--transfer', dest='transfer', action='store_true',
     #                    help='Pack python packages for transfer to another computer.')
     args = parser.parse_args()
+    Log.setLevel(level=args.loglvl)
+    Log.addHandler(InstallLogHandler())
     Options['app_data'] = args.appdata
-    Options['log_lvl'] = args.loglvl
     exit_code = 0
     result = False
     try:
-        log(LogLvl.DEBUG, f'Path to python: {sys.executable}')
-        log(LogLvl.DEBUG, f'Python version: {sys.version}')
-        log(LogLvl.DEBUG, f'Platform: {platform.system(), platform.release(), platform.version(), platform.machine()}')
+        Log.debug(f'Path to python: {sys.executable}')
+        Log.debug(f'Python version: {sys.version}')
+        Log.debug(f'Platform: {platform.system(), platform.release(), platform.version(), platform.machine()}')
         Options['python'] = get_python_info()
         Options['pip'] = get_pip_info()
-        log(LogLvl.INFO, f"Python info: {Options.get('python')}")
-        log(LogLvl.INFO, f"Pip info: {Options.get('pip')}")
+        Log.info(f"Python info: {Options.get('python')}")
+        Log.info(f"Pip info: {Options.get('pip')}")
         if args.check:
             result, exit_code = check()
         elif args.install:
@@ -405,10 +396,9 @@ if __name__ == '__main__':
             raise NotImplementedError()
     except Exception as exception_info:
         exit_code = 2
-        exception_name = type(exception_info).__name__
-        log(LogLvl.ERROR, f'Unexpected Exception: {exception_name}')
-        exception_info_str = str(format_exc())
-        log(LogLvl.ERROR, exception_info_str)
-    print(to_json({'Installed': result,
+        Log.exception(f'Unexpected Exception: {type(exception_info).__name__}')
+    print(to_json({'Result': result,
+                   'Installed': '',
+                   'NotInstalled': '',
                    'Logs': LogsContainer}))
     sys.exit(exit_code)

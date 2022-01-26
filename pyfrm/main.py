@@ -1,49 +1,57 @@
 import signal
 import sys
+import logging
+from argparse import ArgumentParser
 
-
-from helpers import print_err, debug_msg
 from install import get_options, get_python_info, get_pip_info, add_python_path, get_python_site_packages
 
 
+Log = logging.getLogger('pyfrm')
+Log.propagate = False
+
+
+class PyFrmLogHandler(logging.Handler):
+    __log_levels = {'DEBUG': 0, 'INFO': 1, 'WARN': 2, 'ERROR': 3, 'FATAL': 4}
+
+    def emit(self, record):
+        self.format(record)
+        __content = record.message if record.funcName == '<module>' else record.funcName + ': ' + record.message
+        if record.exc_text is not None:
+            __content += '\n' + record.exc_text
+        __log_lvl = self.__log_levels.get(record.levelname)
+        __module = record.module if record.name == 'root' else record.name
+        print({'log_lvl': __log_lvl, 'module': __module, 'content': __content}, file=sys.stderr)
+
+
 def signal_handler(signum=None, _frame=None):
-    print_err('Got signal:', signum)
+    print(f'Got signal:{signum}', file=sys.stderr)
     sys.exit(0)
 
 
 if __name__ == '__main__':
-    # import subprocess
-    # import os
-    # print('main')
-    # import site
-    # site.main()
-    # print(site.getsitepackages())
-    # print(site.getusersitepackages())
-    # print(sys.prefix)
-    # print(sys.exec_prefix)
-    # print(sys.path)
-    # sys.path.insert(0, '/var/www/nextcloud/data/appdata_ocs30ydgi7y8/cloud_py_api/local/bin/')
-    # sys.path.insert(0, '/var/www/nextcloud/data/appdata_ocs30ydgi7y8/cloud_py_api/local/lib/python3.7/site-packages/')
-    # print('A:', sys.path)
-    # child_env = dict(os.environ)
-    # child_env["PYTHONPATH"] = '/var/www/nextcloud/data/appdata_ocs30ydgi7y8/cloud_py_api/local/lib/python3.7/site-packages'
-    # print(child_env)
-    # try:
-    #     _result = subprocess.run([sys.executable, '-m', 'pip', '--version'],
-    #                              stderr=subprocess.PIPE, stdout=subprocess.PIPE, check=True, env=child_env)
-    #     print(_result.stdout.decode('utf-8').rstrip('\n'))
-    # except (OSError, ValueError, TypeError) as _exception_info:
-    #     print(_exception_info)
-    # sys.exit(0)
-    debug_msg('__main__: started')
+    parser = ArgumentParser(description='Module for executing NC python apps.', add_help=True)
+    parser.add_argument('appdata', action='store', type=str,
+                        help='Absolute path to cloud_py_api folder in appdata_xxx.')
+    levels = ('DEBUG', 'INFO', 'WARN', 'ERROR', 'FATAL')
+    logging.addLevelName(30, 'WARN')
+    logging.addLevelName(50, 'FATAL')
+    parser.add_argument('connect_address', action='store', type=str,
+                        help='Address[:port] of php server to connect to(network or unix socket).')
+    parser.add_argument('--loglvl', default='ERROR', type=str, choices=levels, help='Default=ERROR')
+    args = parser.parse_args()
+    Log.setLevel(level=args.loglvl)
+    Log.addHandler(PyFrmLogHandler())
+    logging.getLogger('pyfrm.install').setLevel(level=args.loglvl)
+    logging.getLogger('pyfrm.install').addHandler(PyFrmLogHandler())
+    Log.debug('__main__: started')
     for sig in [signal.SIGINT, signal.SIGQUIT, signal.SIGTERM, signal.SIGHUP]:
         signal.signal(sig, signal_handler)
     options = get_options()
-    options['app_data'] = sys.argv[1:2][0]
+    options['app_data'] = args.appdata
     options['python'] = get_python_info()
     options['pip'] = get_pip_info()
     add_python_path(get_python_site_packages(), first=True)
     from pyfrm import pyfrm_main
-    r = pyfrm_main(sys.argv[1:2][0], sys.argv[2:3][0])
-    debug_msg(f'__main__(pyfrm): finished, exit_code = {r.value}:{r.name}')
+    r = pyfrm_main(args.appdata, args.connect_address)
+    Log.debug(f'__main__: finished, exit_code = {r.value}:{r.name}')
     sys.exit(0)

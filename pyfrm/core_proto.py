@@ -9,7 +9,6 @@ from py_proto.core_pb2 import taskStatus, Empty, TaskSetStatusRequest, TaskExitR
 from py_proto.fs_pb2 import fsId, FsListRequest, FsGetInfoRequest, FsNodeInfo, FsReadRequest, \
     FsCreateRequest, FsWriteRequest, FsDeleteRequest, FsMoveRequest
 from py_proto.service_pb2_grpc import CloudPyApiCoreStub
-from helpers import debug_msg
 from nc_py_api.fs_api import FsResultCode
 
 
@@ -35,10 +34,8 @@ class ClientCloudPA:
         self._main_channel.unsubscribe(self.__wait_for_server_connect)
         self._main_stub = CloudPyApiCoreStub(self._main_channel)
         self.task_init_data = self._main_stub.TaskInit(Empty())
-        debug_msg('connected')
 
     def __del__(self):
-        debug_msg('destructor')
         if not self._exit_sent:
             self.exit()
 
@@ -47,13 +44,12 @@ class ClientCloudPA:
                                                         error=error))
 
     def exit(self, result=None) -> None:
-        debug_msg('exit()')
         self._exit_sent = True
         try:
             self._main_stub.TaskExit(TaskExitRequest(result=result))
             self._main_channel.close()
-        except grpc.RpcError as exc:
-            debug_msg(str(exc))
+        except grpc.RpcError:
+            pass
 
     def log(self, log_lvl: int, mod_name: str, content: Union[str, list, tuple]) -> None:
         if content is None:

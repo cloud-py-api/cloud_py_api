@@ -3,12 +3,12 @@ from enum import Enum
 from importlib import import_module
 from traceback import format_exc
 from json import dumps as to_json
+import logging
 
 from grpc import RpcError
 from requirements import parse as req_parse
 from install import add_python_path, get_package_info, get_python_site_packages, pip_call
 from py_proto.core_pb2 import logLvl, taskStatus, taskType
-from helpers import print_err
 from core_proto import ClientCloudPA
 from nc_py_api import _ncc
 
@@ -48,21 +48,22 @@ def check_requirements(req_file_path: str, app_package_dir: str, cc: ClientCloud
             for requirement in req_parse(requirements_file):
                 depends_on = requirement.specs[0] if len(requirement.specs) == 1 else requirement.specs
                 needed_packages.append({'name': requirement.name, 'version': to_json(depends_on)})
-        installed_packages = []
-        not_installed_packages = []
-        python_path = get_python_site_packages()
-        for package in needed_packages:
-            package_info = get_package_info(package['name'], userbase=app_package_dir, python_path=python_path)
-            if package_info:
-                package_info['version'] = to_json(package_info['version'])
-                installed_packages.append(package_info)
-            else:
-                not_installed_packages.append(package)
-        cc.send_app_info(not_installed=not_installed_packages, installed=installed_packages)
-        if not not_installed_packages:
-            return True
     except OSError:
         cc.log(logLvl.ERROR, 'cpa_app_install', f'Error during {req_file_path} read.')
+        return False
+    installed_packages = []
+    not_installed_packages = []
+    python_path = get_python_site_packages()
+    for package in needed_packages:
+        package_info = get_package_info(package['name'], userbase=app_package_dir, python_path=python_path)
+        if package_info:
+            package_info['version'] = to_json(package_info['version'])
+            installed_packages.append(package_info)
+        else:
+            not_installed_packages.append(package)
+    cc.send_app_info(not_installed=not_installed_packages, installed=installed_packages)
+    if not not_installed_packages:
+        return True
     return False
 
 
@@ -169,7 +170,7 @@ def pyfrm_main(framework_data: str, connect_address: str, auth: str = '') -> Exi
     except RpcError as exception_info:
         exit_code = ExitCodes.CODE_CONN_BROKE
         if cloud is None:
-            print_err('Cant establish connect to server')
+            logging.getLogger('pyfrm').error('Cant establish connect to server')
             exit_code = ExitCodes.CODE_CONN_IMP
-        print_err(str(exception_info))
+        logging.getLogger('pyfrm').exception(f'Exception: {type(exception_info).__name__}')
     return exit_code

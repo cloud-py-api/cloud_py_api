@@ -1,8 +1,10 @@
+# import logging
 import nc_py_api as nc_api
 
 
 def func_hello_world():
     ca = nc_api.CloudApi()
+    # logging.info('HelloWorld')
     ca.log(nc_api.LogLvl.INFO, 'hello_world', 'HelloWorld')
     return 'OK'
 
