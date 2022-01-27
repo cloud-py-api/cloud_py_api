@@ -354,15 +354,15 @@ def srv_example(pyfrm_app_data, address, port, app_name, module_path, function_t
 
 
 if __name__ == '__main__':
-    # frm_app_data = os.path.abspath('./../tmp/frm_app_data')
-    # status, error, result, logs = srv_example(frm_app_data, 'unix:./../tmp/test.sock', '0', 'hello_world',
-    #                                           '../tests/python/apps_example/hello_world', 'func_hello_world'
-    #                                           )
-    frm_app_data = '/var/www/nextcloud/data/appdata_ocs30ydgi7y8/cloud_py_api'
-    status, error, result, logs = srv_example(frm_app_data, f'unix:{frm_app_data}/test.sock', '0', 'pyfrm_techs',
-                                              '../tests/python/apps_example/pyfrm_techs', 'get_image_difference',
-                                              ('path_to_img1', 'path_to_img2')
+    frm_app_data = os.path.abspath('./../tmp/frm_app_data')
+    status, error, result, logs = srv_example(frm_app_data, 'unix:./../tmp/test.sock', '0', 'db_example',
+                                              '../tests/python/apps_example/db_example', 'mediadc_list_tasks_with_custom_log_sender'
                                               )
+    # frm_app_data = '/var/www/nextcloud/data/appdata_ocs30ydgi7y8/cloud_py_api'
+    # status, error, result, logs = srv_example(frm_app_data, f'unix:{frm_app_data}/test.sock', '0', 'pyfrm_techs',
+    #                                           '../tests/python/apps_example/pyfrm_techs', 'get_image_difference',
+    #                                           ('path_to_img1', 'path_to_img2')
+    #                                           )
     sys.exit(0)
 
 """

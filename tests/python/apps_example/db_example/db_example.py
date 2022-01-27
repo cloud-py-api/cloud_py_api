@@ -1,7 +1,85 @@
+import logging
+
 import nc_py_api as nc_api
-import sqlalchemy
+from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, Integer, String, JSON
+from sqlalchemy import Column, Integer, String, JSON, MetaData
+from sqlalchemy.orm import Session
+
+
+def list_tables():
+    cc = nc_api.CloudApi()
+    base = automap_base()
+    cc.log.debug('Creating engine')
+    engine = cc.db.create_engine()
+    base.prepare(engine, reflect=True)
+    for table in base.metadata.sorted_tables:
+        cc.log.debug(f"Table {table.name} with columns [{' '.join(str(column.name) for column in table.columns)}]")
+
+
+def list_mounts_table_orm():
+    cc = nc_api.CloudApi()
+    cc.log.debug('Creating engine')
+    engine = cc.db.create_engine()
+    metadata = MetaData()
+    table_name = cc.db.table_prefix + 'mounts'
+    metadata.reflect(engine, only=[table_name])
+    base = automap_base(metadata=metadata)
+    base.prepare()
+    mounts_class = base.classes[table_name]
+    with Session(engine) as sess:
+        mounts = sess.query(mounts_class).all()
+        cc.log.debug('ID storage_id root_id user_id mount_point mount_id')
+        for mount in mounts:
+            cc.log.debug(
+                f'{mount.id} {mount.storage_id} {mount.root_id} {mount.user_id} {mount.mount_point} {mount.mount_id}')
+
+
+class MyDbCustomLogHandler(logging.Handler):
+    this_module_logger: logging.Logger
+
+    def __init__(self, logger):
+        super().__init__()
+        self.this_module_logger = logger
+
+    def emit(self, record):
+        self.this_module_logger.callHandlers(record)       # In this example we just call default CloudLogHandler
+
+
+class Storages(declarative_base()):
+    __tablename__ = "*PREFIX*storages"
+    numeric_id = Column(Integer, primary_key=True)
+    id = Column(String(length=64))
+    available = Column(Integer)
+    last_checked = Column(Integer)
+
+
+def list_storages_with_logs():
+    cc = nc_api.CloudApi()
+    for logger_name in ('sqlalchemy.orm', 'sqlalchemy.engine', 'sqlalchemy.pool'):
+        __logger = logging.getLogger(logger_name)
+        __logger.setLevel(logging.DEBUG)
+        __logger.addHandler(MyDbCustomLogHandler(logging.getLogger('db_example')))
+    engine = cc.db.create_engine()
+    with engine.connect() as e_connect:
+        result = e_connect.execution_options(stream_results=True).execute(Storages.__table__.select())
+        storages = result.fetchall()
+        for numeric_id, id, available, last_checked in storages:
+            cc.log.debug(f'num_id={numeric_id}, id={id}, available={available}, last_checked={last_checked}')
+
+
+class MyDbCustomRawLogHandler(logging.Handler):
+    cloud: nc_api.CloudApi
+
+    def __init__(self, cloud: nc_api.CloudApi):
+        super().__init__()
+        self.cloud = cloud
+
+    def filter(self, record):
+        self.format(record)             # Do any formatting you want, like usual.
+        my_formatted_message = 'YX!-->' + record.message
+        self.cloud.to_log(nc_api.cloud_api.LogLvl.INFO, "db_example", my_formatted_message)
+        return False                    # We don't remove parent log handler, return False to not log twice.
 
 
 class Task(declarative_base()):
@@ -17,71 +95,15 @@ class Task(declarative_base()):
     py_pid = Column(Integer)
 
 
-def ttt():
-    aaa = nc_api.CloudApi()
-    aaa.log(nc_api.LogLvl.DEBUG, '111', '222...')
-    bbb = aaa.db.create_engine()
-    with bbb.connect() as conn:
-        result = conn.execution_options(stream_results=True).execute(Task.__table__.select())
-        chunk = result.fetchmany(1)
-        aaa.log(nc_api.LogLvl.DEBUG, '111', str(chunk))
-    exit()
-    engine = sqlalchemy.create_engine("postgresql+pg8000://admin:12345@nc-ubnt-min.dnepr99/nextcloud",
-                                      echo=True, future=True)
-    with engine.connect() as conn:
-        result = conn.execution_options(stream_results=True).execute(Task.__table__.select())
-        chunk = result.fetchmany(2)
-
-    engine = sqlalchemy.create_engine("mysql+pymysql://admin:12345@nc-deb-min.dnepr99/nextcloud",
-                                      echo=True, future=True)
-    with engine.connect() as conn:
-        result = conn.execution_options(stream_results=True).execute(Task.__table__.select())
-        chunk = result.fetchmany(2)
-
-        # with Session(conn) as sess:
-        #     aaa = sess.query(Task).limit(1)
-        #     result = conn.execute(sqlalchemy.text("select 'hello world'"))
-        #     print(result.all())
-    exit(0)
-
-    #  [
-    #  (2, ['191'],
-    #  {'user': {'mask': [], 'fileid': []}, 'admin': {'mask': [], 'fileid': []}},
-    #  {'hashing_algorithm': 'dhash', 'similarity_threshold': 90, 'hash_size': 16, 'target_mtype': 0},
-    #  91, 1639584865, 1639584866, '', 0),
-    #  (1, ['190'],
-    #  {'user': {'mask': [], 'fileid': []}, 'admin': {'mask': [], 'fileid': []}},
-    #  {'hashing_algorithm': 'dhash', 'similarity_threshold': 90, 'hash_size': 16, 'target_mtype': 0},
-    #  91, 1639080237, 1639080238, '', 0)
-    #  ]
-    #  [
-    #  (11, ['5824'],
-    #  {'user': {'mask': [], 'fileid': []}, 'admin': {'mask': [], 'fileid': []}},
-    #  {'hash_size': 16, 'target_mtype': 0, 'hashing_algorithm': 'dhash', 'similarity_threshold': 90},
-    #  74, 1639480937, 1639480937, '', 0),
-    #  (12, ['5829'],
-    #  {'user': {'mask': [], 'fileid': []}, 'admin': {'mask': [], 'fileid': []}},
-    #  {'hash_size': 16, 'target_mtype': 0, 'hashing_algorithm': 'dhash', 'similarity_threshold': 90},
-    #  91, 1639401096, 1639401096, '', 0)
-    #  ]
-
-
-if __name__ == '__main__':
-    ttt()
-
-
-
-# class DbLogHandler(logging.Handler):
-#     def __init__(self):
-#         super().__init__()
-#
-#     def emit(self, record):
-#         self.format(record)
-#         _ncc.NCC.log(LogLvl.DEBUG.value, 'db_api', f'{record.module}:{record.message}')
-#
-#     def __init__(self):
-#         if _ncc.NCC.task_init_data.config.log_lvl == LogLvl.DEBUG.value:
-#             logging.basicConfig()
-#             sql_logger = logging.getLogger('sqlalchemy')
-#             sql_logger.setLevel(logging.INFO)
-#             sql_logger.addHandler(DbLogHandler())
+def mediadc_list_tasks_with_custom_log_sender():
+    cc = nc_api.CloudApi()
+    logging.getLogger('sqlalchemy').setLevel(logging.INFO)
+    logging.getLogger('sqlalchemy').addHandler(MyDbCustomRawLogHandler(cc))
+    raw_log_handler = MyDbCustomRawLogHandler(cc)
+    logging.getLogger('db_example').addHandler(raw_log_handler)        # This is not recommended way, but possible.
+    engine = cc.db.create_engine()
+    with Session(engine) as sess:
+        tasks = sess.query(Task).all()
+        for task in tasks:
+            cc.log.info(f'{task.id}, {task.target_directory_ids}, {task.collector_settings}')
+    logging.getLogger('db_example').removeHandler(raw_log_handler)     # Remove our custom log handler.
