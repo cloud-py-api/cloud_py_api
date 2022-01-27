@@ -29,6 +29,7 @@ class ClientCloudPA:
             self._connected_event.set()
 
     def __init__(self, connect_address: str, auth: str):
+        logging.getLogger('pyfrm').debug('<<--ClientCloudPA')
         self._main_channel = grpc.insecure_channel(target=connect_address,
                                                    options=[('grpc.enable_retries', 1),
                                                             ('grpc.keepalive_timeout_ms', 10000)
@@ -62,6 +63,7 @@ class ClientCloudPA:
         return True
 
     def __del__(self):
+        logging.getLogger('pyfrm').debug('<<--ClientCloudPA')
         if not self._exit_sent:
             self.exit()
 

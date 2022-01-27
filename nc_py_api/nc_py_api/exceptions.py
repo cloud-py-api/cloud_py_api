@@ -2,6 +2,10 @@ class NcException(Exception):
     """Exception related to all operations with NC."""
 
 
+class NcNotImplementedError(NcException):
+    """Exception related to not yet implemented functionality."""
+
+
 class FsException(NcException):
     """Exception related to operation with FS."""
 
