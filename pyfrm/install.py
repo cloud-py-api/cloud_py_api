@@ -52,16 +52,12 @@ def get_python_info() -> dict:
     return {'local': _local, 'path': _interpreter}
 
 
-def get_module_location(module_name: str) -> str:
-    return get_package_info(module_name).get('location', '')
-
-
 def get_pip_info() -> dict:
     _local = False
     _version = check_pip()
     _pip = True if _version[0] > 20 else False
     if _pip:
-        _location = get_module_location('pip')
+        _location = get_package_info('pip').get('location', '')
         if _location:
             if _location.startswith(Options['app_data']):
                 _local = True
@@ -193,27 +189,9 @@ def import_package(name: str, dest_sym_table=None, package=None) -> bool:
         else:
             dest_sym_table[name] = import_module(name, package)
         return True
-    except (ModuleNotFoundError, AttributeError, ImportError, ValueError) as e:
-        print(e)
+    except (ModuleNotFoundError, AttributeError, ImportError, ValueError):
         pass
     return False
-
-
-def get_missing_packages(packages_info: dict, any_of: bool = False) -> dict:
-    missing = {}
-    for package_name, install_info in packages_info.items():
-        if isinstance(install_info, dict):
-            _result = get_missing_packages(install_info, any_of=True)
-            if _result:
-                missing[package_name] = install_info
-        else:
-            _result = import_package(package_name)
-            if _result:
-                if any_of:
-                    return {}
-            else:
-                missing[package_name] = install_info
-    return missing
 
 
 def check(installed_list: dict, not_installed_list: dict) -> [bool, int]:
@@ -221,10 +199,33 @@ def check(installed_list: dict, not_installed_list: dict) -> [bool, int]:
         Log.error('Python pip not found or has too low version.')
         return False, 1
     add_python_path(get_site_packages(), first=True)
-    _missing_required = get_missing_packages(RequiredPackagesList)
-    if _missing_required:
-        for package_name, install_info in _missing_required.items():
-            Log.error(f'Missing {package_name}:{install_info}')
+    modules = {}
+    for import_name, install_name in RequiredPackagesList.items():
+        _result = import_package(import_name, dest_sym_table=modules)
+        if _result:
+            location = ''
+            if hasattr(modules[import_name], '__version__'):
+                version = modules[import_name].__version__
+            else:
+                version = get_package_info(install_name).get('version', '')
+            if hasattr(modules[import_name], '__spec__'):
+                __spec = modules[import_name].__spec__
+                if __spec is not None and hasattr(__spec, 'has_location'):
+                    if __spec.has_location:
+                        location = __spec.origin
+            if not location and hasattr(modules[import_name], '__path__'):
+                location = modules[import_name].__path__
+            if location and not path.isdir(location):
+                location = path.dirname(location)
+            installed_list[import_name] = {'package': install_name,
+                                           'location': location,
+                                           'version': version}
+        else:
+            not_installed_list[import_name] = {'package': install_name,
+                                               'location': '',
+                                               'version': ''}
+            Log.error(f'Missing {import_name}:{install_name}')
+    if not_installed_list:
         return False, 1
     return True, 0
 
@@ -293,34 +294,6 @@ def install_pip() -> bool:
     return False
 
 
-def install_package(package_name, install_name, to_log: bool = False) -> bool:
-    _call_result, _message = pip_call(['install', install_name, '--no-warn-script-location', '--prefer-binary'],
-                                      user_cache=True)
-    if not _call_result:
-        if to_log:
-            Log.warning(f'Error during install {package_name}:{install_name}:\n', _message)
-    return _call_result
-
-
-def install_packages(packages_info: dict, any_of: bool = False) -> bool:
-    _result = True
-    _last_package_name = ''
-    for package_name, install_info in packages_info.items():
-        _last_package_name = package_name
-        if isinstance(install_info, dict):
-            _result = install_packages(install_info, any_of=True)
-        else:
-            _result = install_package(package_name, install_info, to_log=False if any_of else True)
-        if any_of:
-            if _result:
-                return _result
-        elif not _result:
-            break
-    if not _result:
-        Log.error(f'Cant install {_last_package_name}')
-    return _result
-
-
 def install() -> [bool, int]:
     if not Options['pip']['present']:
         if not install_pip():
@@ -330,8 +303,12 @@ def install() -> [bool, int]:
         if not Options['pip']['present']:
             Log.error('Cant run pip after local install.')
             return False, 1
-    if not install_packages(RequiredPackagesList):
-        return False, 1
+    for import_name, install_name in RequiredPackagesList.items():
+        _result, _message = pip_call(['install', install_name, '--no-warn-script-location', '--prefer-binary'],
+                                     user_cache=True)
+        if not _result:
+            Log.error(f'Cant install {install_name}. Pip output:\n{_message}')
+            return False, 1
     return True, 0
 
 
