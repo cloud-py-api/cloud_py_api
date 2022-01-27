@@ -6,9 +6,9 @@ import logging
 
 from grpc import RpcError
 from requirements import parse as req_parse
-from install import add_python_path, get_package_info, get_python_site_packages, pip_call
+from install import add_python_path, get_package_info, get_site_packages, pip_call
 from py_proto.core_pb2 import taskStatus, taskType
-from core_proto import ClientCloudPA
+from core_proto import ClientCloudPA, CloudLogHandler
 from nc_py_api import _ncc
 
 
@@ -34,7 +34,7 @@ def check_requirements(req_file_path: str, app_package_dir: str, cc: ClientCloud
         return False
     installed_packages = []
     not_installed_packages = []
-    python_path = get_python_site_packages()
+    python_path = get_site_packages()
     for package in needed_packages:
         package_info = get_package_info(package['name'], userbase=app_package_dir, python_path=python_path)
         if package_info:
@@ -50,7 +50,7 @@ def check_requirements(req_file_path: str, app_package_dir: str, cc: ClientCloud
 
 def install_requirements(req_file_path: str, app_package_dir: str, cc: ClientCloudPA) -> None:
     _call_result, _message = pip_call(['install', '-r', req_file_path, '--no-warn-script-location', '--prefer-binary'],
-                                      python_userbase=app_package_dir, python_path=get_python_site_packages(),
+                                      userbase=app_package_dir, python_path=get_site_packages(),
                                       user_cache=True)
     if not _call_result:
         cc.logger.error(f'pip_call:{_message}')
@@ -87,6 +87,8 @@ def pyfrm_main(framework_data: str, connect_address: str, auth: str = '') -> Exi
             cloud.set_status(taskStatus.ST_INIT_ERROR)
             return ExitCodes.CODE_INIT_ERR
         _ncc.NCC = cloud
+        logging.getLogger('pyfrm.install').setLevel(cloud.nc_to_python_loglvl(cloud.task_init_data.config.log_lvl))
+        logging.getLogger('pyfrm.install').addHandler(CloudLogHandler())
         try:
             cloud.logger.debug(f'Started with pid={getpid()}')
             cloud.logger.debug(f'Start loading target app: {cloud.task_init_data.appName}')
@@ -103,7 +105,7 @@ def pyfrm_main(framework_data: str, connect_address: str, auth: str = '') -> Exi
             if not path.isdir(_app_packages):
                 cloud.logger.debug(f'App directory({_app_packages}) with python packages cannot be accessed.')
             else:
-                app_site_packages = get_python_site_packages(_app_packages)
+                app_site_packages = get_site_packages(_app_packages)
                 if app_site_packages:
                     if path.isdir(app_site_packages):
                         add_python_path(app_site_packages, first=True)

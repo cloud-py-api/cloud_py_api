@@ -17,8 +17,8 @@ MAX_CREATE_FILE_CONTENT = 1
 
 
 def run_python_script(python_script_path, *args):
-    fd = os.open('./../tmp/errors.log', os.O_WRONLY + os.O_CREAT + os.O_TRUNC)
-    process = Popen([sys.executable, python_script_path, *args],
+    fd = os.open(f'{args[0]}/errors.log', os.O_WRONLY + os.O_CREAT + os.O_TRUNC)
+    process = Popen([sys.executable, python_script_path, *args, '--loglvl=DEBUG'],
                     bufsize=0, stdin=PIPE, stdout=PIPE, stderr=fd, text=False)
     os.close(fd)
     return process
@@ -354,15 +354,15 @@ def srv_example(pyfrm_app_data, address, port, app_name, module_path, function_t
 
 
 if __name__ == '__main__':
-    # frm_app_data = '/var/www/nextcloud/data/appdata_ocs30ydgi7y8/cloud_py_api'
-    frm_app_data = os.path.abspath('./../tmp/frm_app_data')
-    status, error, result, logs = srv_example(frm_app_data, 'unix:./../tmp/test.sock', '0', 'hello_world',
-                                              '../tests/python/apps_example/hello_world', 'func_hello_world'
-                                              )
-    # status, error, result, logs = srv_example('unix:./../tmp/test.sock', '0', 'pyfrm_techs',
-    #                                           '../tests/python/apps_example/pyfrm_techs', 'get_image_difference',
-    #                                           ('path_to_img1', 'path_to_img2')
+    # frm_app_data = os.path.abspath('./../tmp/frm_app_data')
+    # status, error, result, logs = srv_example(frm_app_data, 'unix:./../tmp/test.sock', '0', 'hello_world',
+    #                                           '../tests/python/apps_example/hello_world', 'func_hello_world'
     #                                           )
+    frm_app_data = '/var/www/nextcloud/data/appdata_ocs30ydgi7y8/cloud_py_api'
+    status, error, result, logs = srv_example(frm_app_data, f'unix:{frm_app_data}/test.sock', '0', 'pyfrm_techs',
+                                              '../tests/python/apps_example/pyfrm_techs', 'get_image_difference',
+                                              ('path_to_img1', 'path_to_img2')
+                                              )
     sys.exit(0)
 
 """

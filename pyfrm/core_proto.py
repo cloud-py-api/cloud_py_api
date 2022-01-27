@@ -57,8 +57,7 @@ class ClientCloudPA:
             return False
         self.logger = logging.getLogger(self.mod_name)
         self.logger.propagate = False
-        __log_levels = {0: 10, 1: 20, 2: 30, 3: 40, 4: 50}
-        self.logger.setLevel(level=__log_levels[self.task_init_data.config.log_lvl])
+        self.logger.setLevel(level=self.nc_to_python_loglvl(self.task_init_data.config.log_lvl))
         self.logger.addHandler(CloudLogHandler())
         return True
 
@@ -77,6 +76,11 @@ class ClientCloudPA:
             self._main_channel.close()
         except grpc.RpcError:
             pass
+
+    @staticmethod
+    def nc_to_python_loglvl(log_lvl: int) -> int:
+        __log_levels = {0: 10, 1: 20, 2: 30, 3: 40, 4: 50}
+        return __log_levels[log_lvl]
 
     def log(self, log_lvl: int, mod_name: str, content: Union[str, list, tuple]) -> None:
         if content is None:

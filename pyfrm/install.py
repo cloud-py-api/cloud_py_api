@@ -95,27 +95,27 @@ def get_core_userbase() -> str:
     return ''
 
 
-def get_modified_env(spec_userbase: str = '', spec_path: str = ''):
+def get_modified_env(userbase: str = '', python_path: str = ''):
     modified_env = dict(environ)
-    if spec_userbase:
-        modified_env['PYTHONUSERBASE'] = spec_userbase
+    if userbase:
+        modified_env['PYTHONUSERBASE'] = userbase
     else:
         def_userbase = get_core_userbase()
         if def_userbase:
             modified_env['PYTHONUSERBASE'] = def_userbase
-    if spec_path:
-        modified_env['PYTHONPATH'] = spec_path
+    if python_path:
+        modified_env['PYTHONPATH'] = python_path
     modified_env['_PIP_LOCATIONS_NO_WARN_ON_MISMATCH'] = '1'
     return modified_env, modified_env.get('PYTHONUSERBASE', '')
 
 
-def get_python_site_packages(spec_userbase: str = '') -> str:
-    _env, _userbase = get_modified_env(spec_userbase=spec_userbase)
+def get_site_packages(userbase: str = '') -> str:
+    _env, _userbase = get_modified_env(userbase=userbase)
     try:
         _result = run([Options['python']['path'], '-m', 'site', '--user-site'],
                       stderr=PIPE, stdout=PIPE, check=True, env=_env)
         return _result.stdout.decode('utf-8').rstrip('\n')
-    except (OSError, ValueError, TypeError, TimeoutExpired) as _exception_info:
+    except (OSError, ValueError, TypeError, TimeoutExpired, CalledProcessError) as _exception_info:
         Log.exception(f'Exception {type(_exception_info).__name__}:')
         return ''
 
@@ -132,12 +132,12 @@ def check_pip() -> tuple:
     return _ret
 
 
-def pip_call(parameters, python_userbase: str = '', python_path: str = '', user_cache: bool = False) -> [bool, str]:
-    Log.debug(f"userbase={python_userbase}\npath={python_path}:\n{str(parameters)}")
+def pip_call(parameters, userbase: str = '', python_path: str = '', user_cache: bool = False) -> [bool, str]:
+    Log.debug(f"userbase={userbase}\npath={python_path}:\n{str(parameters)}")
     try:
         etc = ['--disable-pip-version-check']
         etc += EXTRA_PIP_ARGS
-        _env, _userbase = get_modified_env(spec_userbase=python_userbase, spec_path=python_path)
+        _env, _userbase = get_modified_env(userbase=userbase, python_path=python_path)
         if _userbase:
             if user_cache:
                 etc += ['--user', '--cache-dir', _userbase]
@@ -172,7 +172,7 @@ def get_package_info(name: str, userbase: str = '', python_path: str = '') -> di
     package_info = {}
     if name:
         _call_result, _message = pip_call(['show', name],
-                                          python_userbase=userbase, python_path=python_path, user_cache=False)
+                                          userbase=userbase, python_path=python_path, user_cache=False)
         if _call_result:
             _pip_show_map = {'Name:': 'name',
                              'Version:': 'version',
@@ -216,11 +216,11 @@ def get_missing_packages(packages_info: dict, any_of: bool = False) -> dict:
     return missing
 
 
-def check() -> [bool, int]:
+def check(installed_list: dict, not_installed_list: dict) -> [bool, int]:
     if not Options['pip']['present']:
         Log.error('Python pip not found or has too low version.')
         return False, 1
-    add_python_path(get_python_site_packages(), first=True)
+    add_python_path(get_site_packages(), first=True)
     _missing_required = get_missing_packages(RequiredPackagesList)
     if _missing_required:
         for package_name, install_info in _missing_required.items():
@@ -376,6 +376,8 @@ if __name__ == '__main__':
     Options['app_data'] = args.appdata
     exit_code = 0
     result = False
+    checked_installed_list = {}
+    checked_not_installed_list = {}
     try:
         Log.debug(f'Path to python: {sys.executable}')
         Log.debug(f'Python version: {sys.version}')
@@ -385,9 +387,10 @@ if __name__ == '__main__':
         Log.info(f"Python info: {Options.get('python')}")
         Log.info(f"Pip info: {Options.get('pip')}")
         if args.check:
-            result, exit_code = check()
+            result, exit_code = check(checked_installed_list, checked_not_installed_list)
         elif args.install:
             result, exit_code = install()
+            check(checked_installed_list, checked_not_installed_list)
         elif args.update_pip:
             result, exit_code = update_pip()
         elif args.update:
@@ -398,7 +401,7 @@ if __name__ == '__main__':
         exit_code = 2
         Log.exception(f'Unexpected Exception: {type(exception_info).__name__}')
     print(to_json({'Result': result,
-                   'Installed': '',
-                   'NotInstalled': '',
+                   'Installed': checked_installed_list,
+                   'NotInstalled': checked_not_installed_list,
                    'Logs': LogsContainer}))
     sys.exit(exit_code)

@@ -3,7 +3,7 @@ import sys
 import logging
 from argparse import ArgumentParser
 
-from install import get_options, get_python_info, get_pip_info, add_python_path, get_python_site_packages
+from install import get_options, get_python_info, get_pip_info, add_python_path, get_site_packages
 
 
 Log = logging.getLogger('pyfrm')
@@ -50,7 +50,7 @@ if __name__ == '__main__':
     options['app_data'] = args.appdata
     options['python'] = get_python_info()
     options['pip'] = get_pip_info()
-    add_python_path(get_python_site_packages(), first=True)
+    add_python_path(get_site_packages(), first=True)
     from pyfrm import pyfrm_main
     r = pyfrm_main(args.appdata, args.connect_address)
     Log.debug(f'__main__: finished, exit_code = {r.value}:{r.name}')
