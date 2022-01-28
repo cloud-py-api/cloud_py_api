@@ -356,7 +356,7 @@ def srv_example(pyfrm_app_data, address, port, app_name, module_path, function_t
 if __name__ == '__main__':
     frm_app_data = os.path.abspath('./../tmp/frm_app_data')
     status, error, result, logs = srv_example(frm_app_data, 'unix:./../tmp/test.sock', '0', 'db_example',
-                                              '../tests/python/apps_example/db_example', 'mediadc_list_tasks_with_custom_log_sender'
+                                              '../tests/python/apps_example/db_example', 'list_mounts_table_orm'
                                               )
     # frm_app_data = '/var/www/nextcloud/data/appdata_ocs30ydgi7y8/cloud_py_api'
     # status, error, result, logs = srv_example(frm_app_data, f'unix:{frm_app_data}/test.sock', '0', 'pyfrm_techs',

@@ -2,7 +2,7 @@ class NcException(Exception):
     """Exception related to all operations with NC."""
 
 
-class NcNotImplementedError(NcException):
+class NcNotImplementedError(NcException, NotImplementedError):
     """Exception related to not yet implemented functionality."""
 
 

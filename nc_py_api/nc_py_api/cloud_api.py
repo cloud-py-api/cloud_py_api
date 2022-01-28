@@ -32,9 +32,9 @@ class CloudApi:
     log: Logger         # CloudLogHandler
 
     def __init__(self):
+        self.log = _ncc.NCC.logger
         self.db = DbApi()
         self.fs = FsApi()
-        self.log = _ncc.NCC.logger
 
     @property
     def nc_loglvl(self):
