@@ -1,0 +1,7 @@
+core\_proto module
+==================
+
+.. automodule:: core_proto
+   :members:
+   :undoc-members:
+   :show-inheritance:

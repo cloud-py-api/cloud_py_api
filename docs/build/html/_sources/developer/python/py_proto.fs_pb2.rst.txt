@@ -1,0 +1,7 @@
+py\_proto.fs\_pb2 module
+========================
+
+.. automodule:: py_proto.fs_pb2
+   :members:
+   :undoc-members:
+   :show-inheritance:

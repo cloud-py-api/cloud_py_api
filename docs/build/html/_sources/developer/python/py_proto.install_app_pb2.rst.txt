@@ -1,0 +1,7 @@
+py\_proto.install\_app\_pb2 module
+==================================
+
+.. automodule:: py_proto.install_app_pb2
+   :members:
+   :undoc-members:
+   :show-inheritance:

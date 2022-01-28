@@ -1,0 +1,7 @@
+py\_proto.service\_pb2\_grpc module
+===================================
+
+.. automodule:: py_proto.service_pb2_grpc
+   :members:
+   :undoc-members:
+   :show-inheritance:

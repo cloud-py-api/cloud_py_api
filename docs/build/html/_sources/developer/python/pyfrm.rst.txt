@@ -1,0 +1,7 @@
+pyfrm module
+============
+
+.. automodule:: pyfrm
+   :members:
+   :undoc-members:
+   :show-inheritance:

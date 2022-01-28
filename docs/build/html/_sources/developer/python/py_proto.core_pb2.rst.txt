@@ -1,0 +1,7 @@
+py\_proto.core\_pb2 module
+==========================
+
+.. automodule:: py_proto.core_pb2
+   :members:
+   :undoc-members:
+   :show-inheritance:

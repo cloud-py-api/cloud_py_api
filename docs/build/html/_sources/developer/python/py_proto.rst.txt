@@ -1,0 +1,23 @@
+py\_proto package
+=================
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 4
+
+   py_proto.core_pb2
+   py_proto.db_pb2
+   py_proto.fs_pb2
+   py_proto.install_app_pb2
+   py_proto.service_pb2
+   py_proto.service_pb2_grpc
+
+Module contents
+---------------
+
+.. automodule:: py_proto
+   :members:
+   :undoc-members:
+   :show-inheritance:

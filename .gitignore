@@ -14,7 +14,7 @@ yarn-error.log*
 
 .marginalia
 
-build/
+./build/
 coverage/
 vendor
 .php_cs.cache
@@ -25,3 +25,4 @@ venv
 tmp
 /.run/
 /nc_py_api/nc_py_api.egg-info/
+./.phpdoc/cache

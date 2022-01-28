@@ -1,0 +1,7 @@
+py\_proto.db\_pb2 module
+========================
+
+.. automodule:: py_proto.db_pb2
+   :members:
+   :undoc-members:
+   :show-inheritance:
