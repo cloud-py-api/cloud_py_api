@@ -39,13 +39,33 @@ use OCA\Cloud_Py_API\Service\PythonService;
 
 class PythonController extends Controller {
 
-	/** @var SettingsService */
+	/** @var PythonService */
 	private $service;
 
 	public function __construct(IRequest $request, PythonService $service) {
 		parent::__construct(Application::APP_ID, $request);
 
 		$this->service = $service;
+	}
+
+	/**
+	 * @NoCSRFRequired
+	 * 
+	 * @return JSONResponse array of python output
+	 */
+	public function checkPyFrmInit() {
+		return new JSONResponse($this->service->checkPyFrmInit(), Http::STATUS_OK);
+	}
+
+	/**
+	 * @NoCSRFRequired
+	 * 
+	 * @param string $type basic or with extra packages
+	 * 
+	 * @return JSONResponse array of python output
+	 */
+	public function pyFrmInstall(string $type) {
+		return new JSONResponse($this->service->pyFrmInstall($type), Http::STATUS_OK);
 	}
 
 }

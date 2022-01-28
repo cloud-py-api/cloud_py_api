@@ -45,6 +45,20 @@ class CloudPyApiCoreClient extends \Grpc\BaseStub {
     }
 
     /**
+     * @param \OCA\Cloud_Py_API\Proto\CheckDataRequest $argument input argument
+     * @param array $metadata metadata
+     * @param array $options call options
+     * @return \Grpc\UnaryCall
+     */
+    public function AppCheck(\OCA\Cloud_Py_API\Proto\CheckDataRequest $argument,
+      $metadata = [], $options = []) {
+        return $this->_simpleRequest('/OCA.Cloud_Py_API.Proto.CloudPyApiCore/AppCheck',
+        $argument,
+        ['\OCA\Cloud_Py_API\Proto\PBEmpty', 'decode'],
+        $metadata, $options);
+    }
+
+    /**
      * @param \OCA\Cloud_Py_API\Proto\TaskExitRequest $argument input argument
      * @param array $metadata metadata
      * @param array $options call options
@@ -69,6 +83,20 @@ class CloudPyApiCoreClient extends \Grpc\BaseStub {
         return $this->_simpleRequest('/OCA.Cloud_Py_API.Proto.CloudPyApiCore/TaskLog',
         $argument,
         ['\OCA\Cloud_Py_API\Proto\PBEmpty', 'decode'],
+        $metadata, $options);
+    }
+
+    /**
+     * @param \OCA\Cloud_Py_API\Proto\OccRequest $argument input argument
+     * @param array $metadata metadata
+     * @param array $options call options
+     * @return \Grpc\ServerStreamingCall
+     */
+    public function OccCall(\OCA\Cloud_Py_API\Proto\OccRequest $argument,
+      $metadata = [], $options = []) {
+        return $this->_serverStreamRequest('/OCA.Cloud_Py_API.Proto.CloudPyApiCore/OccCall',
+        $argument,
+        ['\OCA\Cloud_Py_API\Proto\OccReply', 'decode'],
         $metadata, $options);
     }
 

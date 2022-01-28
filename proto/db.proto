@@ -14,7 +14,7 @@ enum exprType {
   LIKE = 8;
   NOT_LINE = 9;
   IN = 10;
-  NOT_IN = 11;l
+  NOT_IN = 11;
 }
 
 enum pType {

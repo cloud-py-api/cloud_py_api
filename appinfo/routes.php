@@ -26,6 +26,7 @@ return [
 	'routes' => [
 		// PAGES
 		['name' => 'page#configuration', 'url' => '/', 'verb' => 'GET'],
+		['name' => 'page#configuration', 'url' => '/apps/{appId}', 'verb' => 'GET', 'postfix' => 'apps'],
 		['name' => 'page#configuration', 'url' => '/configuration', 'verb' => 'GET', 'postfix' => 'configuration'],
 
 		// SETTINGS API
@@ -33,8 +34,15 @@ return [
 
 		// APPS API
 		['name' => 'api#apps', 'url' => '/api/v1/apps', 'verb' => 'GET'],
+		['name' => 'api#appInfo', 'url' => '/api/v1/apps/{appId}', 'verb' => 'GET'],
+
+		['name' => 'api#systemInfo', 'url' => '/api/v1/system-info', 'verb' => 'GET'],
 
 		// PACKAGES API
 		['name' => 'api#packages', 'url' => '/api/v1/packages', 'verb' => 'GET'],
+
+		// PYTHON API
+		['name' => 'python#checkPyFrmInit', 'url' => '/api/v1/python/check_frm_init', 'verb' => 'GET'],
+		['name' => 'python#pyFrmInstall', 'url' => '/api/v1/python/py_frm_install/{type}', 'verb' => 'GET'],
 	]
 ];

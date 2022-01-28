@@ -28,6 +28,7 @@ declare(strict_types=1);
 
 namespace OCA\Cloud_Py_API\Framework;
 
+use OCA\Cloud_Py_API\Framework\Handle\AppHandle;
 use OCA\Cloud_Py_API\Proto\CloudPyApiCoreStub;
 
 use OCA\Cloud_Py_API\Framework\Handle\TaskHandle;
@@ -82,6 +83,20 @@ class CloudPyApiCore extends CloudPyApiCoreStub {
 	}
 
 	/**
+	 * @param \OCA\Cloud_Py_API\Proto\CheckDataRequest $request client request
+	 * @param \Grpc\ServerContext $context server request context
+	 * @return \OCA\Cloud_Py_API\Proto\PBEmpty for response data, null if if error occured
+	 *     initial metadata (if any) and status (if not ok) should be set to $context
+	 */
+	public function AppCheck(
+		\OCA\Cloud_Py_API\Proto\CheckDataRequest $request,
+		\Grpc\ServerContext $context
+	): ?\OCA\Cloud_Py_API\Proto\PBEmpty {
+		$context->setStatus(\Grpc\Status::ok());
+		return $this->task->appCheck($request);
+	}
+
+	/**
 	 * @param \OCA\Cloud_Py_API\Proto\TaskExitRequest $request client request
 	 * @param \Grpc\ServerContext $context server request context
 	 * @return \OCA\Cloud_Py_API\Proto\PBEmpty for response data, null if if error occured
@@ -107,6 +122,21 @@ class CloudPyApiCore extends CloudPyApiCoreStub {
 	): ?\OCA\Cloud_Py_API\Proto\PBEmpty {
 		$context->setStatus(\Grpc\Status::ok());
 		return $this->task->log($request);
+	}
+
+	/**
+	 * @param \OCA\Cloud_Py_API\Proto\OccRequest $request client request
+	 * @param \Grpc\ServerCallWriter $writer write response data of \OCA\Cloud_Py_API\Proto\OccReply
+	 * @param \Grpc\ServerContext $context server request context
+	 * @return void
+	 */
+	public function OccCall(
+		\OCA\Cloud_Py_API\Proto\OccRequest $request,
+		\Grpc\ServerCallWriter $writer,
+		\Grpc\ServerContext $context
+	): void {
+		$context->setStatus(\Grpc\Status::ok());
+		$this->task->occCall($request, $writer);
 	}
 
 	/**

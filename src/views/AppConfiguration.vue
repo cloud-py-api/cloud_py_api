@@ -24,18 +24,19 @@
 
 <template>
 	<div class="cloud_py_api-configuration">
-		<h2>{{ t('cloud_py_api', 'Cloud Py API Configuration') }}</h2>
-		<p>{{ t('cloud_py_api', 'Here will be list of registered apps, that using Python (via this Framework)') }}</p>
-		<div v-if="apps && apps.length > 0" class="apps-list">
-			<a v-for="app of apps"
-				:key="app.id"
-				class="registered-app"
-				:href="getAppConfigurationUrl(app)">
-				{{ app.id }}. {{ app.app_id }} (token: {{ app.token }})
-			</a>
-		</div>
-		<div v-else>
-			<b>{{ t('cloud_py_api', 'No apps registered') }}</b>
+		<h2>{{ t('cloud_py_api', 'Cloud Py API App Configuration') }}</h2>
+		<p>{{ t('cloud_py_api', 'Here will be configuration steps after installing app, that using this Framework') }}</p>
+		<span v-if="loading" class="icon-loading" />
+		<div v-else-if="app" class="app-info">
+			<p>id: {{ app.id }}</p>
+			<p>appId: {{ app.app_id }}</p>
+			<p>token: {{ app.token }}</p>
+			<div class="actions">
+				<p>Actions for Python requirements (will be listed requirements.txt)</p>
+				<button>{{ t('cloud_py_api', 'Install') }}</button>
+				<button>{{ t('cloud_py_api', 'Update') }}</button>
+				<button>{{ t('cloud_py_api', 'Delete') }}</button>
+			</div>
 		</div>
 	</div>
 </template>
@@ -45,31 +46,29 @@ import axios from '@nextcloud/axios'
 import { generateUrl } from '@nextcloud/router'
 
 export default {
-	name: 'Configuration',
+	name: 'AppConfiguration',
 	data() {
 		return {
-			apps: [],
+			loading: false,
+			app: null,
 		}
 	},
 	beforeMount() {
-		this.getApps()
+		this.getApp()
 	},
 	mounted() {
 		this.$emit('update:loading', false)
 	},
 	methods: {
-		getApps() {
-			this.$emit('update:loading', true)
-			axios.get(generateUrl('/apps/cloud_py_api/api/v1/apps')).then(res => {
-				this.apps = res.data
-				this.$emit('update:loading', false)
+		getApp() {
+			this.loading = true
+			axios.get(generateUrl(`/apps/cloud_py_api/api/v1/apps/${this.$route.params.appId}`)).then(res => {
+				this.app = res.data
+				this.loading = false
 			}).catch(err => {
 				console.debug(err)
-				this.$emit('update:loading', false)
+				this.loading = false
 			})
-		},
-		getAppConfigurationUrl(app) {
-			return generateUrl(`/apps/cloud_py_api/apps/${app.id}`)
 		},
 	},
 }
@@ -83,16 +82,5 @@ export default {
 
 h2 {
 	margin: 20px 0;
-}
-
-.apps-list {
-	margin: 20px 0;
-}
-
-.registered-app {
-	border: 1px solid #eee;
-	padding: 10px 15px;
-	margin: 10px 0;
-	border-radius: 5px;
 }
 </style>

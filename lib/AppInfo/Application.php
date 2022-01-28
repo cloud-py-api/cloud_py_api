@@ -33,8 +33,8 @@ use OCP\AppFramework\Bootstrap\IBootContext;
 use OCP\AppFramework\Bootstrap\IBootstrap;
 use OCP\AppFramework\Bootstrap\IRegistrationContext;
 
-use OCA\Cloud_Py_API\Event\SyncAppConfigEvent;
-use OCA\Cloud_Py_API\Listener\SyncAppConfigListener;
+use OCA\Cloud_Py_API\Event\RegisterAppEvent;
+use OCA\Cloud_Py_API\Listener\RegisterAppListener;
 
 include_once __DIR__ . '/../../vendor/autoload.php';
 
@@ -47,8 +47,11 @@ class Application extends App implements IBootstrap {
 	}
 
 	public function register(IRegistrationContext $context): void {
-		$context->registerEventListener(SyncAppConfigEvent::class, SyncAppConfigListener::class);
+		$context->registerEventListener(RegisterAppEvent::class, RegisterAppListener::class);
 		require_once __DIR__ . '/../Proto/GPBMetadata/Core.php';
+		require_once __DIR__ . '/../Proto/GPBMetadata/Fs.php';
+		require_once __DIR__ . '/../Proto/GPBMetadata/Db.php';
+		require_once __DIR__ . '/../Proto/GPBMetadata/Service.php';
 	}
 
 	public function boot(IBootContext $context): void {

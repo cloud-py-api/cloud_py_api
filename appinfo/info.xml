@@ -54,5 +54,7 @@ Nextcloud Python API Framework
 		<command>OCA\Cloud_Py_API\Command\RunGrpcClientDbSelectCommand</command>
 		<command>OCA\Cloud_Py_API\Command\RunGrpcClientDbExecCommand</command>
 		<command>OCA\Cloud_Py_API\Command\RunGrpcClientDbCursorCommand</command>
+		<command>OCA\Cloud_Py_API\Command\RunGrpcClientOccCallCommand</command>
+		<command>OCA\Cloud_Py_API\Command\RunGrpcClientAppCheckCommand</command>
 	</commands>
 </info>

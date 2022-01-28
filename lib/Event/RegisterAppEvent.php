@@ -26,47 +26,34 @@ declare(strict_types=1);
  *
  */
 
-namespace OCA\Cloud_Py_API\Service;
+namespace OCA\Cloud_Py_API\Event;
 
-use OCP\Files\IAppData;
-use OCP\IConfig;
-
-use OCA\Cloud_Py_API\Db\AppMapper;
-use OCA\Cloud_Py_API\AppInfo\Application;
+use JsonSerializable;
+use OCP\EventDispatcher\Event;
 
 
-class ConfigService {
+class RegisterAppEvent extends Event implements JsonSerializable {
 
-	/** @var AppMapper */
-	private $mapper;
+	private $params;
 
-	/** @var IAppData */
-	private $appData;
+	private $appId;
 
-	/** @var IConfig */
-	private $config;
-
-	public function __construct(AppMapper $appMapper, IAppData $appData, IConfig $config)
-	{
-		$this->mapper = $appMapper;
-		$this->appData = $appData;
-		$this->config = $config;
+	public function __construct($params = []) {
+		parent::__construct();
+		$this->params = $params;
+		if (isset($params['appId'])) {
+			$this->appId = $params['appId'];
+		}
 	}
 
-	public function scanAppsForConfig() {
-		// TODO Scan all apps directories (custom_apps, apps, etc.) for appinfo/cloud_py_api_config
+	public function getAppId(): string {
+		return $this->appId;
 	}
 
-	public function validateConfig(string $appId, string $config) {
-		// TODO
-	}
-
-	public function syncAppConfig(string $appId, array $config) {
-		// TODO
-	}
-
-	public function writeAppConfig(string $appId, array $config) {
-		// TODO Write updated config to PHP config file
+	public function jsonSerialize(): array {
+		return [
+			'params' => $this->params
+		];
 	}
 
 }

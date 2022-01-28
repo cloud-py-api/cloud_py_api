@@ -28,12 +28,13 @@ declare(strict_types=1);
 
 namespace OCA\Cloud_Py_API\Migration;
 
+use OCP\Migration\IOutput;
+use OCP\Migration\IRepairStep;
+
 use OCA\Cloud_Py_API\AppInfo\Application;
 use OCA\Cloud_Py_API\Db\Setting;
 use OCA\Cloud_Py_API\Db\SettingMapper;
-use OCP\IConfig;
-use OCP\Migration\IOutput;
-use OCP\Migration\IRepairStep;
+use OCA\Cloud_Py_API\Service\UtilsService;
 
 
 class AppDataInitializationStep implements IRepairStep {
@@ -41,12 +42,12 @@ class AppDataInitializationStep implements IRepairStep {
 	/** @var SettingsMapper */
 	private $settingMapper;
 
-	/** @var IConfig */
-	private $config;
+	/** @var UtilsService */
+	private $utils;
 
-	public function __construct(SettingMapper $settingMapper, IConfig $config) {
+	public function __construct(SettingMapper $settingMapper, UtilsService $utils) {
 		$this->settingMapper = $settingMapper;
-		$this->config = $config;
+		$this->utils = $utils;
 	}
 
 	public function getName(): string {
@@ -55,7 +56,7 @@ class AppDataInitializationStep implements IRepairStep {
 
 	public function run(IOutput $output) {
 		$output->startProgress(1);
-		$data_file = $this->getCustomAppsDirectory() . Application::APP_ID . "/lib/Migration/data/app_data_Version0001Date20211028154433.json";
+		$data_file = $this->utils->getCustomAppsDirectory() . Application::APP_ID . "/lib/Migration/data/app_data_Version0001Date20211028154433.json";
 		$app_data = json_decode(file_get_contents($data_file), true);
 
 		if (count($this->settingMapper->findAll()) === 0) {
@@ -75,20 +76,6 @@ class AppDataInitializationStep implements IRepairStep {
 
 		$output->advance(1);
 		$output->finishProgress();
-	}
-
-	private function getCustomAppsDirectory() {
-		$apps_directory = $this->config->getSystemValue('apps_paths');
-		if ($apps_directory !== "" && is_array($apps_directory) && count($apps_directory) > 0) {
-			foreach ($apps_directory as $custom_apps_dir) {
-				$mediadcDir = $custom_apps_dir['path'] . '/' . Application::APP_ID;
-				if (file_exists($custom_apps_dir['path']) && is_dir($custom_apps_dir['path']) && $custom_apps_dir['writable'] 
-					&& file_exists($mediadcDir) && is_dir($mediadcDir)) {
-					return $custom_apps_dir['path'] . '/';
-				}
-			}
-		}
-		return getcwd() . '/apps/';
 	}
 
 }

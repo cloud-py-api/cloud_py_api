@@ -65,15 +65,14 @@ class FsHandle {
 	/** @var IRootFolder */
 	private $rootFolder;
 
-	public function __construct(IRootFolder $rootFolder)
-	{
+	public function __construct(IRootFolder $rootFolder) {
 		$this->rootFolder = $rootFolder;
 	}
 
 	/**
 	 * FS Get File info
 	 * 
-	 * @param FsGetInfoRequest $request
+	 * @param \OCA\Cloud_Py_API\Proto\FsGetInfoRequest $request
 	 * 
 	 * @return FsListReply|null FS FileInfo result
 	 */
@@ -98,7 +97,7 @@ class FsHandle {
 	/**
 	 * FS List directory
 	 * 
-	 * @param FsListRequest $request
+	 * @param \OCA\Cloud_Py_API\Proto\FsListRequest $request
 	 * 
 	 * @return FsListReply|null FS List directory result
 	 */
@@ -133,6 +132,13 @@ class FsHandle {
 		return $response;
 	}
 
+	/**
+	 * Service function for creating \OCA\Cloud_Py_API\Proto\FsNodeInfo for GRPC requests
+	 * 
+	 * @param \OCP\Files\Node $node
+	 * 
+	 * @return \OCA\Cloud_Py_API\Proto\FsNodeInfo
+	 */
 	private function getFsNodeInfo(Node $node): FsNodeInfo {
 		$fsGetInfoReply = new FsNodeInfo();
 		$nodeFsId = new fsId();
@@ -162,8 +168,10 @@ class FsHandle {
 	/**
 	 * FS Read file
 	 * 
-	 * @param FsReadRequest $request
-	 * @param ServerCallWriter $writer
+	 * @param \OCA\Cloud_Py_API\Proto\FsReadRequest $request
+	 * @param \Grpc\ServerCallWriter $writer
+	 * 
+	 * @return void
 	 */
 	public function read(FsReadRequest $request, ServerCallWriter $writer): void {
 		$fsId = $request->getFileId();
@@ -232,7 +240,7 @@ class FsHandle {
 	/**
 	 * FS Write file
 	 * 
-	 * @param ServerCallReader $reader
+	 * @param \Grpc\ServerCallReader $reader
 	 * 
 	 * @return FsReply|null FS Write file results
 	 */
@@ -285,9 +293,9 @@ class FsHandle {
 	/**
 	 * FS Create method
 	 * 
-	 * @param FsCreateRequest $params
+	 * @param \OCA\Cloud_Py_API\Proto\FsCreateRequest $params
 	 * 
-	 * @return FsCreateReply|null FS Create results
+	 * @return \OCA\Cloud_Py_API\Proto\FsCreateReply|null FS Create results
 	 */
 	public function create(FsCreateRequest $request): ?FsCreateReply {
 		/** @var fsId */
@@ -336,9 +344,9 @@ class FsHandle {
 	/**
 	 * FS Delete method
 	 * 
-	 * @param FsDeleteRequest $request
+	 * @param \OCA\Cloud_Py_API\Proto\FsDeleteRequest $request
 	 * 
-	 * @return FsReply|null FS Delete results
+	 * @return \OCA\Cloud_Py_API\Proto\FsReply|null FS Delete results
 	 */
 	public function delete(FsDeleteRequest $request): ?FsReply {
 		$fsId = $request->getFileId();
@@ -369,9 +377,9 @@ class FsHandle {
 	/**
 	 * FS Move method
 	 * 
-	 * @param FsMoveRequest $request
+	 * @param \OCA\Cloud_Py_API\Proto\FsMoveRequest $request
 	 * 
-	 * @return FsMoveReply FS Move results
+	 * @return \OCA\Cloud_Py_API\Proto\FsMoveReply FS Move results
 	 */
 	public function move(FsMoveRequest $request): ?FsMoveReply {
 		$fsId = $request->getFileId();

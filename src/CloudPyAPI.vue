@@ -24,16 +24,24 @@
 
 <template>
 	<Content app-name="app-cloud_py_api">
-		<AppNavigation>
+		<AppNavigation v-if="isAdmin">
 			<template #list>
 				<AppNavigationItem :to="{name: 'configuration'}"
 					class="app-navigation__cloud_py_api"
-					:title="t('cloud_py_api', 'Configuration')"
-					icon="icon-user-admin" />
+					:title="t('cloud_py_api', 'Registered Apps')"
+					icon="icon-toggle-filelist" />
+				<AppNavigationItem class="app-navigation__cloud_py_api"
+					:title="t('cloud_py_api', 'Admin settings')"
+					icon="icon-user-admin"
+					@click="goToAdminSettingsUrl()" />
 			</template>
 		</AppNavigation>
 		<AppContent :class="{ 'icon-loading': loading }">
-			<router-view v-show="!loading" :loading.sync="loading" />
+			<router-view v-if="isAdmin" v-show="!loading" :loading.sync="loading" />
+			<div v-else style="margin: 20px; text-align: center; padding: 5px;">
+				<h2>{{ t('cloud_py_api', 'Cloud Py Api Configuration') }}</h2>
+				<p>{{ t('cloud_py_api', 'Configuration allowed only for administrator') }}</p>
+			</div>
 		</AppContent>
 	</Content>
 </template>
@@ -46,6 +54,7 @@ import AppContent from '@nextcloud/vue/dist/Components/AppContent'
 import AppNavigation from '@nextcloud/vue/dist/Components/AppNavigation'
 import AppNavigationItem from '@nextcloud/vue/dist/Components/AppNavigationItem'
 import { getCurrentUser } from '@nextcloud/auth'
+import { generateUrl } from '@nextcloud/router'
 
 export default {
 	name: 'CloudPyAPI',
@@ -61,8 +70,18 @@ export default {
 	data() {
 		return {
 			loading: true,
-			showConfiguration: getCurrentUser() === null ? false : getCurrentUser().isAdmin,
+			isAdmin: getCurrentUser() === null ? false : getCurrentUser().isAdmin,
 		}
+	},
+	beforeMount() {
+		if (!this.isAdmin) {
+			this.loading = false
+		}
+	},
+	methods: {
+		goToAdminSettingsUrl() {
+			window.location.href = generateUrl('/settings/admin/cloud_py_api')
+		},
 	},
 }
 </script>

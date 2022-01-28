@@ -56,24 +56,27 @@ class PythonService {
 	/** @var UtilsService */
 	private $utils;
 
-	public function __construct(SettingMapper $settingMapper, IConfig $config, 
+	/** @var AppsService */
+	private $appsService;
+
+	public function __construct(SettingMapper $settingMapper, IConfig $config,
 								IAppData $appData, LoggerInterface $logger,
-								UtilsService $utils)
-	{
+								UtilsService $utils, AppsService $appsService) {
 		$this->appData = $appData;
 		$this->config = $config;
 		$this->logger = $logger;
+		$this->appsService = $appsService;
 		/** @var Setting */
 		$pythonCommand = $settingMapper->findByName('python_command');
 		$this->pythonCommand = $pythonCommand->getValue();
 		$this->utils = $utils;
-		$this->cwd = $this->utils->getCustomAppsDirectory() . Application::APP_ID . '/lib/Service/python';
+		$this->cwd = $this->utils->getCustomAppsDirectory() . Application::APP_ID;
 	}
 
 	/**
 	 * Runs Python script with given script relative path and script params
 	 * 
-	 * @param string $scriptName relative path to the Python script
+	 * @param string $scriptName relative (to app root: /path/to/nc/apps/cloud_py_api/) path to the Python script
 	 * @param array $scriptParams params to script in array (`['-param1' => value1, '--param2' => value2]`)
 	 * @param boolean $nonBlocking flag that determines how to run Python script.
 	 * @param array $env env variables for python script
@@ -84,15 +87,19 @@ class PythonService {
 	 * If `$nonBlocking = false` - function will return array with the `result_code` 
 	 * and `output` of the script after Python script finish executing.
 	 */
-	public function run($scriptName, $scriptParams, $nonBlocking = false, $env = []) {
+	public function run($scriptName, $scriptParams = [], $nonBlocking = false, $env = []) {
 		if (count($scriptParams) > 0) {
-			$params = array_map('\OCA\Cloud_Py_API\Service\PythonService::scriptParamsCallback', array_keys($scriptParams), array_values($scriptParams));
+			$params = array_map(function ($key, $value) {
+				return $value !== '' ? "$key $value " : "$key";
+			}, array_keys($scriptParams), array_values($scriptParams));
 			$cmd = $this->pythonCommand . ' ' . $this->cwd . $scriptName . ' ' . join(' ', $params);
 		} else {
 			$cmd = $this->pythonCommand . ' ' .  $this->cwd . $scriptName;
 		}
 		if (count($env) > 0) {
-			$envVariables = join(' ', array_map('\OCA\Cloud_Py_API\Service\PythonService::scriptEnvsCallback', array_keys($env), array_values($env)));
+			$envVariables = join(' ', array_map(function ($key, $value) {
+				return "$key=\"$value\" ";
+			}, array_keys($env), array_values($env)));
 		} else {
 			$envVariables = '';
 		}
@@ -122,28 +129,34 @@ class PythonService {
 		}
 	}
 
-	/**
-	 * Callback for concatinating Python script params
-	 * 
-	 * @param string $key
-	 * @param string $value
-	 * 
-	 * @return string
-	 */
-	static function scriptParamsCallback($key, $value) {
-		return $value !== '' ? "$key $value " : "$key";
+	public function pyFrmInstall(string $type) {
+		$pythonOutput = $this->run('/pyfrm/install.py', [
+			$this->appsService->getAppDataFolderAbsPath(Application::APP_ID) => '', 
+			$type === 'basic' ? '--install' : '--install-extra' => ''
+		]);
+		return [
+			'success' => $pythonOutput['result_code'] === 0,
+			'output' => $pythonOutput['output'],
+		];
 	}
 
-	/**
-	 * Callback for concatinating Python environment variables
-	 * 
-	 * @param string $key
-	 * @param string $value
-	 * 
-	 * @return string
-	 */
-	static function scriptEnvsCallback($key, $value) {
-		return "$key=\"$value\" ";
+	public function checkPyFrmInit(): array {
+		$pythonOutput = $this->run('/pyfrm/install.py', [
+			$this->appsService->getAppDataFolderAbsPath(Application::APP_ID) => '', 
+			'--check' => ''
+		]);
+		return [
+			'success' => $pythonOutput['result_code'] === 0,
+			'output' => $pythonOutput['output'],
+		];
+	}
+
+	public function initPythonFramework(string $pathToFrameworkAppData): array {
+		return $this->run('/pyfrm/install.py', [$pathToFrameworkAppData, '--check']);
+	}
+
+	public function installStandalonePython() {
+		// TODO Try to install standalone python
 	}
 
 	/**
@@ -153,10 +166,6 @@ class PythonService {
 	 */
 	private function parsePythonOutput($pythonResult) {
 		// TODO
-	}
-
-	public function installStandalonePython() {
-		// TODO Try to install standalone python
 	}
 
 }

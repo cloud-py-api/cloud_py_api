@@ -14,17 +14,15 @@ use Google\Protobuf\Internal\GPBUtil;
 class TaskInitReply extends \Google\Protobuf\Internal\Message
 {
     /**
-     * Name of the app(folder in frmAppData must be present with the same name).
+     * Generated from protobuf field <code>.OCA.Cloud_Py_API.Proto.taskType cmdType = 1;</code>
+     */
+    protected $cmdType = 0;
+    /**
+     * Name of the app. Installed packages will be stored by this name for app.
      *
-     * Generated from protobuf field <code>string appName = 1;</code>
+     * Generated from protobuf field <code>string appName = 2;</code>
      */
     protected $appName = '';
-    /**
-     * Module name to use for `import_module` func.
-     *
-     * Generated from protobuf field <code>string modName = 2;</code>
-     */
-    protected $modName = '';
     /**
      * Path to module root, to be executed.
      *
@@ -66,10 +64,9 @@ class TaskInitReply extends \Google\Protobuf\Internal\Message
      * @param array $data {
      *     Optional. Data for populating the Message object.
      *
+     *     @type int $cmdType
      *     @type string $appName
-     *           Name of the app(folder in frmAppData must be present with the same name).
-     *     @type string $modName
-     *           Module name to use for `import_module` func.
+     *           Name of the app. Installed packages will be stored by this name for app.
      *     @type string $modPath
      *           Path to module root, to be executed.
      *     @type string $funcName
@@ -89,9 +86,31 @@ class TaskInitReply extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     * Name of the app(folder in frmAppData must be present with the same name).
+     * Generated from protobuf field <code>.OCA.Cloud_Py_API.Proto.taskType cmdType = 1;</code>
+     * @return int
+     */
+    public function getCmdType()
+    {
+        return $this->cmdType;
+    }
+
+    /**
+     * Generated from protobuf field <code>.OCA.Cloud_Py_API.Proto.taskType cmdType = 1;</code>
+     * @param int $var
+     * @return $this
+     */
+    public function setCmdType($var)
+    {
+        GPBUtil::checkEnum($var, \OCA\Cloud_Py_API\Proto\taskType::class);
+        $this->cmdType = $var;
+
+        return $this;
+    }
+
+    /**
+     * Name of the app. Installed packages will be stored by this name for app.
      *
-     * Generated from protobuf field <code>string appName = 1;</code>
+     * Generated from protobuf field <code>string appName = 2;</code>
      * @return string
      */
     public function getAppName()
@@ -100,9 +119,9 @@ class TaskInitReply extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     * Name of the app(folder in frmAppData must be present with the same name).
+     * Name of the app. Installed packages will be stored by this name for app.
      *
-     * Generated from protobuf field <code>string appName = 1;</code>
+     * Generated from protobuf field <code>string appName = 2;</code>
      * @param string $var
      * @return $this
      */
@@ -110,32 +129,6 @@ class TaskInitReply extends \Google\Protobuf\Internal\Message
     {
         GPBUtil::checkString($var, True);
         $this->appName = $var;
-
-        return $this;
-    }
-
-    /**
-     * Module name to use for `import_module` func.
-     *
-     * Generated from protobuf field <code>string modName = 2;</code>
-     * @return string
-     */
-    public function getModName()
-    {
-        return $this->modName;
-    }
-
-    /**
-     * Module name to use for `import_module` func.
-     *
-     * Generated from protobuf field <code>string modName = 2;</code>
-     * @param string $var
-     * @return $this
-     */
-    public function setModName($var)
-    {
-        GPBUtil::checkString($var, True);
-        $this->modName = $var;
 
         return $this;
     }

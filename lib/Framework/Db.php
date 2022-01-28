@@ -42,8 +42,7 @@ use Psr\Log\LoggerInterface;
  */
 class Db {
 
-	public function __construct(LoggerInterface $logger)
-	{
+	public function __construct(LoggerInterface $logger) {
 		$this->logger = $logger;
 	}
 

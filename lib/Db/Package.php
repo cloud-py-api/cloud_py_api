@@ -69,8 +69,8 @@ class Package extends Entity implements JsonSerializable {
 		if (isset($params['id'])) {
 			$this->setId($params['id']);
 		}
-		if (isset($params['app_id'])) {
-			$this->setAppId($params['app_id']);
+		if (isset($params['appId'])) {
+			$this->setAppId($params['appId']);
 		}
 		if (isset($params['name'])) {
 			$this->setName($params['name']);

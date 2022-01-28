@@ -27,6 +27,7 @@ import Router from 'vue-router'
 import Vue from 'vue'
 
 const Configuration = () => import('../views/Configuration')
+const AppConfiguration = () => import('../views/AppConfiguration')
 
 Vue.use(Router)
 
@@ -38,6 +39,11 @@ export default new Router({
 		{
 			path: '/',
 			component: Configuration,
+			name: 'configuration',
+		},
+		{
+			path: '/apps/:appId',
+			component: AppConfiguration,
 			name: 'configuration',
 		},
 	],

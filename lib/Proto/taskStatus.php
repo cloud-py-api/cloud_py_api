@@ -16,42 +16,56 @@ class taskStatus
      */
     const ST_SUCCESS = 0;
     /**
-     * pyfrm init done, running target app
+     * initialization is in progress
      *
-     * Generated from protobuf enum <code>ST_IN_PROGRESS = 1;</code>
+     * Generated from protobuf enum <code>ST_INITIALIZING = 1;</code>
      */
-    const ST_IN_PROGRESS = 1;
+    const ST_INITIALIZING = 1;
     /**
-     * pyfrm cannot init target app
+     * install is in progress
      *
-     * Generated from protobuf enum <code>ST_INIT_ERROR = 2;</code>
+     * Generated from protobuf enum <code>ST_INSTALLING = 2;</code>
      */
-    const ST_INIT_ERROR = 2;
+    const ST_INSTALLING = 2;
+    /**
+     * install return error
+     *
+     * Generated from protobuf enum <code>ST_INSTALL_ERROR = 3;</code>
+     */
+    const ST_INSTALL_ERROR = 3;
+    /**
+     * error during initialization target app
+     *
+     * Generated from protobuf enum <code>ST_INIT_ERROR = 4;</code>
+     */
+    const ST_INIT_ERROR = 4;
+    /**
+     * target app is running
+     *
+     * Generated from protobuf enum <code>ST_IN_PROGRESS = 5;</code>
+     */
+    const ST_IN_PROGRESS = 5;
     /**
      * Unexpected exception occurred
      *
-     * Generated from protobuf enum <code>ST_EXCEPTION = 3;</code>
+     * Generated from protobuf enum <code>ST_EXCEPTION = 6;</code>
      */
-    const ST_EXCEPTION = 3;
-    /**
-     * Target app return error status
-     *
-     * Generated from protobuf enum <code>ST_ERROR = 4;</code>
-     */
-    const ST_ERROR = 4;
+    const ST_EXCEPTION = 6;
     /**
      * Default task state at start
      *
-     * Generated from protobuf enum <code>ST_UNKNOWN = 5;</code>
+     * Generated from protobuf enum <code>ST_UNKNOWN = 7;</code>
      */
-    const ST_UNKNOWN = 5;
+    const ST_UNKNOWN = 7;
 
     private static $valueToName = [
         self::ST_SUCCESS => 'ST_SUCCESS',
-        self::ST_IN_PROGRESS => 'ST_IN_PROGRESS',
+        self::ST_INITIALIZING => 'ST_INITIALIZING',
+        self::ST_INSTALLING => 'ST_INSTALLING',
+        self::ST_INSTALL_ERROR => 'ST_INSTALL_ERROR',
         self::ST_INIT_ERROR => 'ST_INIT_ERROR',
+        self::ST_IN_PROGRESS => 'ST_IN_PROGRESS',
         self::ST_EXCEPTION => 'ST_EXCEPTION',
-        self::ST_ERROR => 'ST_ERROR',
         self::ST_UNKNOWN => 'ST_UNKNOWN',
     ];
 

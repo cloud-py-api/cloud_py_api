@@ -102,46 +102,46 @@ class Version0001Date20211028154433 extends SimpleMigrationStep {
 			$table->addIndex(['app_id'], 'py_api_app_id__index');
 		}
 
-		if (!$schema->hasTable(Application::APP_ID . '_packages')) {
-			$table = $schema->createTable(Application::APP_ID . '_packages');
+		// if (!$schema->hasTable(Application::APP_ID . '_packages')) {
+		// 	$table = $schema->createTable(Application::APP_ID . '_packages');
 
-			$table->addColumn('id', 'bigint', [
-				'autoincrement' => true,
-				'notnull' => true
-			]);
-			$table->addColumn('app_id', 'string', [
-				'notnull' => true,
-				'default' => ''
-			]);
-			$table->addColumn('name', 'string', [
-				'notnull' => true,
-				'default' => ''
-			]);
-			$table->addColumn('source', 'string', [
-				'notnull' => true,
-				'default' => ''
-			]);
-			$table->addColumn('location', 'string', [
-				'notnull' => true,
-				'default' => ''
-			]);
-			$table->addColumn('version', 'string', [
-				'notnull' => true,
-				'default' => ''
-			]);
-			$table->addColumn('installed_time', 'bigint', [
-				'notnull' => true,
-				'default' => 0
-			]);
-			$table->addColumn('status', 'string', [
-				'notnull' => true,
-				'default' => ''
-			]);
+		// 	$table->addColumn('id', 'bigint', [
+		// 		'autoincrement' => true,
+		// 		'notnull' => true
+		// 	]);
+		// 	$table->addColumn('app_id', 'string', [
+		// 		'notnull' => true,
+		// 		'default' => ''
+		// 	]);
+		// 	$table->addColumn('name', 'string', [
+		// 		'notnull' => true,
+		// 		'default' => ''
+		// 	]);
+		// 	$table->addColumn('source', 'string', [
+		// 		'notnull' => true,
+		// 		'default' => ''
+		// 	]);
+		// 	$table->addColumn('location', 'string', [
+		// 		'notnull' => true,
+		// 		'default' => ''
+		// 	]);
+		// 	$table->addColumn('version', 'string', [
+		// 		'notnull' => true,
+		// 		'default' => ''
+		// 	]);
+		// 	$table->addColumn('installed_time', 'bigint', [
+		// 		'notnull' => true,
+		// 		'default' => 0
+		// 	]);
+		// 	$table->addColumn('status', 'string', [
+		// 		'notnull' => true,
+		// 		'default' => ''
+		// 	]);
 
-			$table->setPrimaryKey(['id']);
-			$table->addIndex(['app_id'], 'py_api_apps_id__index');
-			$table->addIndex(['name'], 'py_api_p_name__index');
-		}
+		// 	$table->setPrimaryKey(['id']);
+		// 	$table->addIndex(['app_id'], 'py_api_apps_id__index');
+		// 	$table->addIndex(['name'], 'py_api_p_name__index');
+		// }
 
 		return $schema;
 	}

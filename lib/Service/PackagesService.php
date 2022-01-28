@@ -42,28 +42,67 @@ class PackagesService {
 	/** @var IAppData */
 	private $appData;
 
-	public function __construct(PackageMapper $packageMapper, IAppData $appData)
+	/** @var PythonService */
+	private $pythonService;
+
+	public function __construct(PackageMapper $packageMapper, IAppData $appData,
+								PythonService $pythonService)
 	{
 		$this->mapper = $packageMapper;
 		$this->appData = $appData;
+		$this->pythonService = $pythonService;
 	}
 
 	public function getPackages() {
 		return $this->mapper->findAll();
 	}
 
-	public function registerPackage(string $appId, array $packageData) {
-		// TODO
-	}
-
 	public function getPackage(string $appId, string $packageName) {
 		return $this->mapper->findAppPackageByName($appId, $packageName);
 	}
 
-	public function removePackage(string $appId, string $packageName) {
+	/**
+	 * Install and register Python package
+	 * 
+	 * @param string $appId
+	 * @param string $packageName
+	 * 
+	 * @return Package|null Registered package or `null` on failure
+	 */
+	public function installPackage(string $appId, string $packageName): ?Package {
+		// TODO Add call to Python to install package to local app's appdata folder
+		// TODO Add registering package in database
+		$packageInstallInfo = [ // Package info after Python part execution for install
+			'success' => true, 
+			// ...
+		];
+		if ($packageInstallInfo['success']) {
+			$package = $this->mapper->insert(new Package([
+				'appId' => $appId,
+				// ...
+			]));
+			return $package;
+		}
+		return null;
+	}
+
+	/**
+	 * Removes package from database
+	 * 
+	 * @param string $appId
+	 * @param string $packageName
+	 * 
+	 * @return Package|null deleted package or `null` on exception
+	 */
+	public function deletePackage(string $appId, string $packageName): ?Package {
+		// TODO Add call to Python to delete package from app appdata folder
 		/** @var Package */
 		$package = $this->mapper->findAppPackageByName($appId, $packageName);
-		return $this->mapper->delete($package);
+		try {
+			return $this->mapper->delete($package);
+		} catch (\Exception $e) {
+			return null;
+		}
 	}
 
 }

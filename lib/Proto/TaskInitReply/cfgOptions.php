@@ -26,39 +26,33 @@ class cfgOptions extends \Google\Protobuf\Internal\Message
      */
     protected $dataFolder = '';
     /**
-     * Path to cloud_py_api app data folder.
-     *
-     * Generated from protobuf field <code>string frameworkAppData = 3;</code>
-     */
-    protected $frameworkAppData = '';
-    /**
      * Current NC user UID
      *
-     * Generated from protobuf field <code>string userId = 4;</code>
+     * Generated from protobuf field <code>string userId = 3;</code>
      */
     protected $userId = '';
     /**
      * Use extra direct FS module for python, when possible.
      *
-     * Generated from protobuf field <code>bool useFileDirect = 5;</code>
+     * Generated from protobuf field <code>bool useFileDirect = 4;</code>
      */
     protected $useFileDirect = false;
     /**
      * Use extra direct DB module for python, if possible.
      *
-     * Generated from protobuf field <code>bool useDBDirect = 6;</code>
+     * Generated from protobuf field <code>bool useDBDirect = 5;</code>
      */
     protected $useDBDirect = false;
     /**
-     * Maximum chunk size for FS operations
+     * Maximum chunk size of RPC stream data.
      *
-     * Generated from protobuf field <code>int32 maxChunkSize = 7;</code>
+     * Generated from protobuf field <code>int32 maxChunkSize = 6;</code>
      */
     protected $maxChunkSize = 0;
     /**
      * Maximum chunk size for FS Create operations
      *
-     * Generated from protobuf field <code>int32 maxCreateFileContent = 8;</code>
+     * Generated from protobuf field <code>int32 maxCreateFileContent = 7;</code>
      */
     protected $maxCreateFileContent = 0;
 
@@ -72,8 +66,6 @@ class cfgOptions extends \Google\Protobuf\Internal\Message
      *           0-4 , level logs from NC documentation.
      *     @type string $dataFolder
      *           Path to NC data folder.
-     *     @type string $frameworkAppData
-     *           Path to cloud_py_api app data folder.
      *     @type string $userId
      *           Current NC user UID
      *     @type bool $useFileDirect
@@ -81,7 +73,7 @@ class cfgOptions extends \Google\Protobuf\Internal\Message
      *     @type bool $useDBDirect
      *           Use extra direct DB module for python, if possible.
      *     @type int $maxChunkSize
-     *           Maximum chunk size for FS operations
+     *           Maximum chunk size of RPC stream data.
      *     @type int $maxCreateFileContent
      *           Maximum chunk size for FS Create operations
      * }
@@ -144,35 +136,9 @@ class cfgOptions extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     * Path to cloud_py_api app data folder.
-     *
-     * Generated from protobuf field <code>string frameworkAppData = 3;</code>
-     * @return string
-     */
-    public function getFrameworkAppData()
-    {
-        return $this->frameworkAppData;
-    }
-
-    /**
-     * Path to cloud_py_api app data folder.
-     *
-     * Generated from protobuf field <code>string frameworkAppData = 3;</code>
-     * @param string $var
-     * @return $this
-     */
-    public function setFrameworkAppData($var)
-    {
-        GPBUtil::checkString($var, True);
-        $this->frameworkAppData = $var;
-
-        return $this;
-    }
-
-    /**
      * Current NC user UID
      *
-     * Generated from protobuf field <code>string userId = 4;</code>
+     * Generated from protobuf field <code>string userId = 3;</code>
      * @return string
      */
     public function getUserId()
@@ -183,7 +149,7 @@ class cfgOptions extends \Google\Protobuf\Internal\Message
     /**
      * Current NC user UID
      *
-     * Generated from protobuf field <code>string userId = 4;</code>
+     * Generated from protobuf field <code>string userId = 3;</code>
      * @param string $var
      * @return $this
      */
@@ -198,7 +164,7 @@ class cfgOptions extends \Google\Protobuf\Internal\Message
     /**
      * Use extra direct FS module for python, when possible.
      *
-     * Generated from protobuf field <code>bool useFileDirect = 5;</code>
+     * Generated from protobuf field <code>bool useFileDirect = 4;</code>
      * @return bool
      */
     public function getUseFileDirect()
@@ -209,7 +175,7 @@ class cfgOptions extends \Google\Protobuf\Internal\Message
     /**
      * Use extra direct FS module for python, when possible.
      *
-     * Generated from protobuf field <code>bool useFileDirect = 5;</code>
+     * Generated from protobuf field <code>bool useFileDirect = 4;</code>
      * @param bool $var
      * @return $this
      */
@@ -224,7 +190,7 @@ class cfgOptions extends \Google\Protobuf\Internal\Message
     /**
      * Use extra direct DB module for python, if possible.
      *
-     * Generated from protobuf field <code>bool useDBDirect = 6;</code>
+     * Generated from protobuf field <code>bool useDBDirect = 5;</code>
      * @return bool
      */
     public function getUseDBDirect()
@@ -235,7 +201,7 @@ class cfgOptions extends \Google\Protobuf\Internal\Message
     /**
      * Use extra direct DB module for python, if possible.
      *
-     * Generated from protobuf field <code>bool useDBDirect = 6;</code>
+     * Generated from protobuf field <code>bool useDBDirect = 5;</code>
      * @param bool $var
      * @return $this
      */
@@ -248,9 +214,9 @@ class cfgOptions extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     * Maximum chunk size for FS operations
+     * Maximum chunk size of RPC stream data.
      *
-     * Generated from protobuf field <code>int32 maxChunkSize = 7;</code>
+     * Generated from protobuf field <code>int32 maxChunkSize = 6;</code>
      * @return int
      */
     public function getMaxChunkSize()
@@ -259,9 +225,9 @@ class cfgOptions extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     * Maximum chunk size for FS operations
+     * Maximum chunk size of RPC stream data.
      *
-     * Generated from protobuf field <code>int32 maxChunkSize = 7;</code>
+     * Generated from protobuf field <code>int32 maxChunkSize = 6;</code>
      * @param int $var
      * @return $this
      */
@@ -276,7 +242,7 @@ class cfgOptions extends \Google\Protobuf\Internal\Message
     /**
      * Maximum chunk size for FS Create operations
      *
-     * Generated from protobuf field <code>int32 maxCreateFileContent = 8;</code>
+     * Generated from protobuf field <code>int32 maxCreateFileContent = 7;</code>
      * @return int
      */
     public function getMaxCreateFileContent()
@@ -287,7 +253,7 @@ class cfgOptions extends \Google\Protobuf\Internal\Message
     /**
      * Maximum chunk size for FS Create operations
      *
-     * Generated from protobuf field <code>int32 maxCreateFileContent = 8;</code>
+     * Generated from protobuf field <code>int32 maxCreateFileContent = 7;</code>
      * @param int $var
      * @return $this
      */

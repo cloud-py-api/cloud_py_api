@@ -25,6 +25,10 @@
 <template>
 	<div class="admin-settings">
 		<h2>{{ t('cloud_py_api', 'Cloud Python API (Framework)') }}</h2>
+		<p>
+			Apps configuration available
+			<a :href="getRegisteredAppUrl()" style="text-decoration: underline;">here</a>
+		</p>
 		<div v-if="settings.length > 0">
 			<h3>Settings</h3>
 			<p v-for="setting of settings" :key="setting.id" style="border-top: 1px solid #eee; border-bottom: 1px solid #eee; padding: 10px 0;">
@@ -36,6 +40,18 @@
 				Help url: Read <a style="text-decoration: underline" :href="setting.help_url">the docs</a>
 			</p>
 		</div>
+		<div class="py_frm_init">
+			<button v-if="!pyFrmInitLoading" class="check_frm_init_btn" @click="checkPyFrmInit">
+				Check Python Framework installation
+			</button>
+			<button v-else class="check_frm_init_btn" disabled>
+				<span class="icon-loading" />
+			</button>
+			<div v-if="pyFrmInit" class="py_frm_init_output">
+				{{ pyFrmInit }}
+			</div>
+		</div>
+		<BugReport />
 	</div>
 </template>
 
@@ -44,8 +60,18 @@ import axios from '@nextcloud/axios'
 import { generateUrl } from '@nextcloud/router'
 import { mapGetters } from 'vuex'
 
+import BugReport from './BugReport'
+
 export default {
 	name: 'AdminSettings',
+	components: { BugReport },
+	data() {
+		return {
+			pyFrmInitLoading: false,
+			pyFrmInit: null,
+			apps: [],
+		}
+	},
 	computed: {
 		...mapGetters([
 			'settings',
@@ -53,12 +79,34 @@ export default {
 	},
 	beforeMount() {
 		this.getSettings()
+		this.getApps()
 	},
 	methods: {
 		getSettings() {
 			axios.get(generateUrl('/apps/cloud_py_api/api/v1/settings')).then(res => {
 				this.$store.dispatch('setSettings', res.data)
 			})
+		},
+		getApps() {
+			axios.get(generateUrl('/apps/cloud_py_api/api/v1/apps')).then(res => {
+				this.apps = res.data
+			})
+		},
+		checkPyFrmInit() {
+			this.pyFrmInitLoading = true
+			axios.get(generateUrl('/apps/cloud_py_api/api/v1/python/check_frm_init')).then(res => {
+				this.pyFrmInit = res.data
+				this.pyFrmInitLoading = false
+			}).catch(err => {
+				console.debug(err)
+				this.pyFrmInitLoading = false
+			})
+		},
+		getAppUrl(appId) {
+			return generateUrl(`/apps/cloud_py_api/apps/${appId}`)
+		},
+		getRegisteredAppUrl() {
+			return generateUrl('/apps/cloud_py_api')
 		},
 	},
 }
@@ -67,5 +115,29 @@ export default {
 <style scoped>
 .admin-settings {
 	margin: 20px;
+}
+
+.check_frm_init_btn {
+	margin: 20px 0;
+}
+
+.py_frm_init_output {
+	border: 1px solid #eee;
+	border-radius: 5px;
+	padding: 10px 15px;
+	margin: 10px 0;
+}
+
+.apps-list {
+	display: flex;
+	flex-direction: column;
+	border: 1px solid #eee;
+	border-radius: 5px;
+	padding: 10px 15px;
+	margin: 10px 0;
+}
+
+.apps-list h3 {
+	margin: 0;
 }
 </style>

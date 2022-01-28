@@ -36,6 +36,20 @@ class CloudPyApiCoreStub {
     }
 
     /**
+     * @param \OCA\Cloud_Py_API\Proto\CheckDataRequest $request client request
+     * @param \Grpc\ServerContext $context server request context
+     * @return \OCA\Cloud_Py_API\Proto\PBEmpty for response data, null if if error occured
+     *     initial metadata (if any) and status (if not ok) should be set to $context
+     */
+    public function AppCheck(
+        \OCA\Cloud_Py_API\Proto\CheckDataRequest $request,
+        \Grpc\ServerContext $context
+    ): ?\OCA\Cloud_Py_API\Proto\PBEmpty {
+        $context->setStatus(\Grpc\Status::unimplemented());
+        return null;
+    }
+
+    /**
      * @param \OCA\Cloud_Py_API\Proto\TaskExitRequest $request client request
      * @param \Grpc\ServerContext $context server request context
      * @return \OCA\Cloud_Py_API\Proto\PBEmpty for response data, null if if error occured
@@ -61,6 +75,21 @@ class CloudPyApiCoreStub {
     ): ?\OCA\Cloud_Py_API\Proto\PBEmpty {
         $context->setStatus(\Grpc\Status::unimplemented());
         return null;
+    }
+
+    /**
+     * @param \OCA\Cloud_Py_API\Proto\OccRequest $request client request
+     * @param \Grpc\ServerCallWriter $writer write response data of \OCA\Cloud_Py_API\Proto\OccReply
+     * @param \Grpc\ServerContext $context server request context
+     * @return void
+     */
+    public function OccCall(
+        \OCA\Cloud_Py_API\Proto\OccRequest $request,
+        \Grpc\ServerCallWriter $writer,
+        \Grpc\ServerContext $context
+    ): void {
+        $context->setStatus(\Grpc\Status::unimplemented());
+        $writer->finish();
     }
 
     /**
@@ -224,6 +253,12 @@ class CloudPyApiCoreStub {
                 '\OCA\Cloud_Py_API\Proto\TaskSetStatusRequest',
                 \Grpc\MethodDescriptor::UNARY_CALL
             ),
+            '/OCA.Cloud_Py_API.Proto.CloudPyApiCore/AppCheck' => new \Grpc\MethodDescriptor(
+                $this,
+                'AppCheck',
+                '\OCA\Cloud_Py_API\Proto\CheckDataRequest',
+                \Grpc\MethodDescriptor::UNARY_CALL
+            ),
             '/OCA.Cloud_Py_API.Proto.CloudPyApiCore/TaskExit' => new \Grpc\MethodDescriptor(
                 $this,
                 'TaskExit',
@@ -235,6 +270,12 @@ class CloudPyApiCoreStub {
                 'TaskLog',
                 '\OCA\Cloud_Py_API\Proto\TaskLogRequest',
                 \Grpc\MethodDescriptor::UNARY_CALL
+            ),
+            '/OCA.Cloud_Py_API.Proto.CloudPyApiCore/OccCall' => new \Grpc\MethodDescriptor(
+                $this,
+                'OccCall',
+                '\OCA\Cloud_Py_API\Proto\OccRequest',
+                \Grpc\MethodDescriptor::SERVER_STREAMING_CALL
             ),
             '/OCA.Cloud_Py_API.Proto.CloudPyApiCore/FsGetInfo' => new \Grpc\MethodDescriptor(
                 $this,

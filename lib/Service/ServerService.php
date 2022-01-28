@@ -51,6 +51,7 @@ use OCA\Cloud_Py_API\Proto\DbExecRequest\rType;
 use OCA\Cloud_Py_API\Proto\exprType;
 use OCA\Cloud_Py_API\Proto\pType;
 use OCA\Cloud_Py_API\Proto\pValueType;
+use OCA\Cloud_Py_API\Proto\taskType;
 
 use OCA\Cloud_Py_API\Framework\Core;
 use OCA\Cloud_Py_API\Framework\Db;
@@ -76,8 +77,7 @@ class ServerService {
 	private $cpaDb;
 
 	public function __construct(IAppData $appData, LoggerInterface $logger,
-								Core $cpaCore, Fs $cpaFs, Db $cpaDb)
-	{
+								Core $cpaCore, Fs $cpaFs, Db $cpaDb) {
 		$this->appData = $appData;
 		$this->cpaCore = $cpaCore;
 		$this->cpaFs = $cpaFs;
@@ -94,27 +94,19 @@ class ServerService {
 			'port' => $port
 		]);
 		// TODO Add running pyfrm
+		// $pyfrmResult = $this->cpaCore->runPyfrm();
 		$server->run();
+		// $this->logger->info('[' . self::class . '] pyfrmResult: ' . json_encode($pyfrmResult));
 	}
 
-	public static function testHandler($params = []) {
-		self::$staticLogger->info('[' . self::class . '] testHandler executed, result: ' . json_decode($params['result']));
+	public static function testHandler(string $result = null) {
+		self::$staticLogger->info('[' . self::class . '] testHandler executed, result: ' . $result);
 	}
 
 	public function testTaskInit(InputInterface $input, OutputInterface $output) {
 		$hostname = $input->getArgument('hostname');
 		$port = $input->getArgument('port');
-		$pid = $this->cpaCore->runBgGrpcServer([
-			'hostname' => '0.0.0.0',
-			'port' => $port,
-			'userid' => 'admin',
-			'appname' => 'mediadc',
-			'handler' => '"\OCA\Cloud_Py_API\Service\ServerService::testHandler"',
-			'modname' => 'install',
-			'modpath' => '/var/www/html/nextcloud/apps/mediadc/lib/Service/python/install.py',
-			'funcname' => 'check',
-			'args' => null,
-		]);
+		$pid = $this->createServerMock($hostname, $port);
 		if ($pid !== -1) {
 			sleep(1);
 			$output->writeln('Server started [pid:' . $pid . '] ... Creating client.');
@@ -129,9 +121,9 @@ class ServerService {
 			}
 			if (isset($response)) {
 				$output->writeln('Response: ');
+				$output->writeln('cmdType: ' . taskType::name($response->getCmdType()));
 				$output->writeln('appname: ' . $response->getAppName());
 				$output->writeln('handler: ' . $response->getHandler());
-				$output->writeln('modname: ' . $response->getModName());
 				$output->writeln('modpath: ' . $response->getModPath());
 				$output->writeln('funcname: ' . $response->getFuncName());
 				if ($response->getArgs() !== null) {
@@ -146,27 +138,26 @@ class ServerService {
 				$cfg = $response->getConfig();
 				$output->writeln('userId: ' . $cfg->getUserId());
 				$output->writeln('logLvl: ' . $cfg->getLogLvl());
-				$output->writeln('datafolder: ' . $cfg->getDataFolder());
-				$output->writeln('frameworkAppData: ' . $cfg->getFrameworkAppData());
+				$output->writeln('frameworkAppData: ' . $cfg->getDataFolder());
 				$output->writeln('useFileDirect: ' . json_encode($cfg->getUseFileDirect()));
 				$output->writeln('useDBDirect: ' . json_encode($cfg->getUseDBDirect()));
 				$dbCfg = $response->getDbCfg();
-				$output->writeln('dbhost: ' . json_encode($dbCfg->getDbHost()));
-				$output->writeln('dbtype: ' . json_encode($dbCfg->getDbType()));
-				$output->writeln('dbname: ' . json_encode($dbCfg->getDbName()));
-				$output->writeln('dbuser: ' . json_encode($dbCfg->getDbUser()));
-				$output->writeln('dbpass: ' . json_encode($dbCfg->getDbPass()));
-				$output->writeln('dbprefix: ' . json_encode($dbCfg->getDbPrefix()));
-				$output->writeln('iniHost: ' . json_encode($dbCfg->getIniDbHost()));
-				$output->writeln('iniPort: ' . json_encode($dbCfg->getIniDbPort()));
-				$output->writeln('iniSocket: ' . json_encode($dbCfg->getIniDbSocket()));
-				$output->writeln('dbDriverSslKey: ' . json_encode($dbCfg->getDbDriverSslKey()));
-				$output->writeln('dbDriverSslCert: ' . json_encode($dbCfg->getDbDriverSslCert()));
-				$output->writeln('dbDriverSslCa: ' . json_encode($dbCfg->getDbDriverSslCa()));
-				$output->writeln('dbDriverSslVerifyCrt: ' . json_encode($dbCfg->getDbDriverSslVerifyCrt()));
+				$output->writeln('dbhost: ' . $dbCfg->getDbHost());
+				$output->writeln('dbtype: ' . $dbCfg->getDbType());
+				$output->writeln('dbname: ' . $dbCfg->getDbName());
+				$output->writeln('dbuser: ' . $dbCfg->getDbUser());
+				$output->writeln('dbpass: ' . $dbCfg->getDbPass());
+				$output->writeln('dbprefix: ' . $dbCfg->getDbPrefix());
+				$output->writeln('iniHost: ' . $dbCfg->getIniDbHost());
+				$output->writeln('iniPort: ' . $dbCfg->getIniDbPort());
+				$output->writeln('iniSocket: ' . $dbCfg->getIniDbSocket());
+				$output->writeln('dbDriverSslKey: ' . $dbCfg->getDbDriverSslKey());
+				$output->writeln('dbDriverSslCert: ' . $dbCfg->getDbDriverSslCert());
+				$output->writeln('dbDriverSslCa: ' . $dbCfg->getDbDriverSslCa());
+				$output->writeln('dbDriverSslVerifyCrt: ' . $dbCfg->getDbDriverSslVerifyCrt());
 			}
 			$output->writeln('Closing server...');
-			$this->cpaCore->TaskExit($client, ['result' => json_encode('"TaskInit successfull"')]);
+			$this->cpaCore->TaskExit($client, ['result' => 'TaskInit successfull']);
 		} else {
 			$output->writeln('Server not started...');
 		}
@@ -461,4 +452,88 @@ class ServerService {
 			$output->writeln('');
 		}
 	}
+
+	public function testAppCheck(InputInterface $input, OutputInterface $output) {
+		$hostname = $input->getArgument('hostname');
+		$port = $input->getArgument('port');
+		$client = $this->cpaCore->createClient(['hostname' => $hostname, 'port' => $port]);
+		// TODO Print TaskInit response. Run pyfrm part and accept AppCheck request and save it to
+		// TODO display the result here in output
+		$pid = $this->createServerMock($hostname, $port);
+		if ($pid !== -1) {
+			sleep(1);
+			list ($response, $status) = $this->cpaCore->AppCheck($client, [
+				'not_installed' => [
+					['name' => 'pckg1', 'version' => '0.0.1'],
+					['name' => 'pckg2', 'version' => '0.0.2'],
+					['name' => 'pckg3', 'version' => '0.0.3'],
+				],
+				'installed' => [
+					[
+						'name' => 'installed_pckg_1',
+						'version' => '0.0.1',
+						'location' => '/path/to/pckg',
+						'summary' => 'pckg short description',
+						'requires' => json_encode(['some' => ['json' => 'deps'], 'tree' => '']),
+					],
+				],
+			]);
+			$output->writeln('Response status' . json_encode($status));
+		}
+	}
+
+	public function testOccCall(InputInterface $input, OutputInterface $output) {
+		$hostname = $input->getArgument('hostname');
+		$port = $input->getArgument('port');
+		$client = $this->cpaCore->createClient(['hostname' => $hostname, 'port' => $port]);
+		$pid = $this->createServerMock($hostname, $port);
+		if ($pid !== -1) {
+			$pid2 = $this->createServerMock('unix:/tmp/test2.sock', 50052);
+			if ($pid2 !== -1) {
+				sleep(1);
+				$client2 = $this->cpaCore->createClient(['hostname' => 'unix:/tmp/test2.sock', 'port' => 50052]);
+				/** @var ServerStreamingCall */
+				$call = $this->cpaCore->OccCall($client, ['arguments' => [
+					'cloud_py_api:grpc:client:fs:list', 'unix:/tmp/test2.sock', 50052, 'admin'
+				]]);
+				/** @var \OCA\Cloud_Py_API\Proto\OccReply $response */
+				foreach ($call->responses() as $response) {
+					$output->writeln($response->getContent());
+				}
+				$this->cpaCore->TaskExit($client2, ['result' => 'OccCall second successfull']);
+			} else {
+				$output->writeln('Second GRPC server for OccCall not stared');
+			}
+			$this->cpaCore->TaskExit($client, ['result' => 'OccCall main call successfull']);
+		} else {
+			$output->writeln('GRPC Server not stared');
+		}
+	}
+
+	/** 
+	 * Service function for creating test gRPC server
+	 * 
+	 * @param string $hostname
+	 * @param string|int $port
+	 * 
+	 * @return int PID or `-1` on failure
+	 */
+	private function createServerMock($hostname, $port): int {
+		return $this->cpaCore->runBgGrpcServer([
+			'hostname' => $hostname,
+			'port' => $port,
+			'cmd' => taskType::T_CHECK,
+			'userid' => 'admin',
+			'appname' => 'mediadc',
+			'handler' => '"\OCA\Cloud_Py_API\Service\ServerService::testHandler"',
+			'modpath' => '/var/www/html/nextcloud/apps/mediadc/lib/Service/python/install.py',
+			'funcname' => 'check',
+			'args' => null,
+			// 'args' => json_encode([
+			// 	'arg1' => 'arg1_value', // for arg=value pair
+			// 	'arg2' => '', // for positional arg
+			// ]),
+		]);
+	}
+
 }

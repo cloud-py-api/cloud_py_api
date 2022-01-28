@@ -26,27 +26,29 @@ declare(strict_types=1);
  *
  */
 
-namespace OCA\Cloud_Py_API\Event;
+namespace OCA\Cloud_Py_API\Listener;
 
-use JsonSerializable;
 use OCP\EventDispatcher\Event;
+use OCP\EventDispatcher\IEventListener;
+
+use OCA\Cloud_Py_API\Event\RegisterAppEvent;
+use OCA\Cloud_Py_API\Service\AppsService;
 
 
-class SyncAppConfigEvent extends Event implements JsonSerializable {
+class RegisterAppListener implements IEventListener {
 
-	private $params;
+	/** @var AppsService */
+	private $appsService;
 
-	public function __construct($params = []) {
-		parent::__construct();
-		$this->params = $params;
-		// TODO: Event for synchronization of cloud_py_api config
-		// TODO: Construct params (sender app_id, sender app config)
+	public function __construct(AppsService $appsService) {
+		$this->appsService = $appsService;
 	}
 
-	public function jsonSerialize(): array {
-		return [
-			'params' => $this->params
-		];
+	public function handle(Event $event): void {
+		if (!$event instanceof RegisterAppEvent) {
+			return;
+		}
+		$this->appsService->registerApp($event->getAppId());
 	}
 
 }

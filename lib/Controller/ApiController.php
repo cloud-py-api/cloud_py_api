@@ -36,6 +36,7 @@ use OCP\AppFramework\Http\JSONResponse;
 use OCA\Cloud_Py_API\AppInfo\Application;
 use OCA\Cloud_Py_API\Service\AppsService;
 use OCA\Cloud_Py_API\Service\PackagesService;
+use OCA\Cloud_Py_API\Service\UtilsService;
 
 
 class ApiController extends Controller {
@@ -46,11 +47,16 @@ class ApiController extends Controller {
 	/** @var PackagesService */
 	private $packagesService;
 
-	public function __construct(IRequest $request, AppsService $appsService, PackagesService $packagesService) {
+	/** @var UtilsService */
+	private $utils;
+
+	public function __construct(IRequest $request, AppsService $appsService, 
+								PackagesService $packagesService, UtilsService $utils) {
 		parent::__construct(Application::APP_ID, $request);
 
 		$this->appsService = $appsService;
 		$this->packagesService = $packagesService;
+		$this->utils = $utils;
 	}
 
 	/**
@@ -67,10 +73,31 @@ class ApiController extends Controller {
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
 	 * 
+	 * @param int $appId
+	 * 
+	 * @return JSONResponse array of all settings
+	 */
+	public function appInfo(int $appId) {
+		return new JSONResponse($this->appsService->getApp($appId), Http::STATUS_OK);
+	}
+
+	/**
+	 * @NoAdminRequired
+	 * @NoCSRFRequired
+	 * 
 	 * @return JSONResponse array of all settings
 	 */
 	public function packages() {
 		return new JSONResponse($this->packagesService->getPackages(), Http::STATUS_OK);
+	}
+
+	/**
+	 * @NoCSRFRequired
+	 * 
+	 * @return JSONResponse array of system configuration
+	 */
+	public function systemInfo() {
+		return new JSONResponse($this->utils->getSystemInfo(), Http::STATUS_OK);
 	}
 
 

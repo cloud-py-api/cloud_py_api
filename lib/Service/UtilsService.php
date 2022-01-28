@@ -29,8 +29,11 @@ declare(strict_types=1);
 namespace OCA\Cloud_Py_API\Service;
 
 use OCP\IConfig;
+use OCP\App\IAppManager;
 
 use OCA\Cloud_Py_API\AppInfo\Application;
+use OCA\Cloud_Py_API\Db\Setting;
+use OCA\Cloud_Py_API\Db\SettingMapper;
 
 
 class UtilsService {
@@ -38,9 +41,23 @@ class UtilsService {
 	/** @var IConfig */
 	private $config;
 
-	public function __construct(IConfig $config)
-	{
+	/** @var SettingMapper */
+	private $settingMapper;
+
+	/** @var string */
+	private $pythonCommand;
+
+	/** @var IAppManager */
+	private $appManager;
+
+	public function __construct(IConfig $config, SettingMapper $settingMapper,
+								IAppManager $appManager) {
 		$this->config = $config;
+		$this->settingMapper = $settingMapper;
+		$this->appManager = $appManager;
+		/** @var Setting */
+		$pythonCommandSetting = $this->settingMapper->findByName('python_command');
+		$this->pythonCommand = $pythonCommandSetting->getValue();
 	}
 
 	/**
@@ -122,6 +139,14 @@ class UtilsService {
 		return true;
 	}
 
+	public function getPythonVersion() {
+		exec($this->pythonCommand . ' --version', $output, $result_code);
+		if ($result_code === 0 && isset($output[0]) && preg_match_all("/\d{1}\.\d{1,2}(\.\d{1,2}){0,1}/s", $output[0], $matches)) {
+			return isset($matches[0][0]) ? $matches[0][0] : null;
+		}
+		return null;
+	}
+
 	public function getCustomAppsDirectory() {
 		$apps_directory = $this->config->getSystemValue('apps_paths');
 		if ($apps_directory !== "" && is_array($apps_directory) && count($apps_directory) > 0) {
@@ -134,6 +159,20 @@ class UtilsService {
 			}
 		}
 		return getcwd() . '/apps/';
+	}
+
+	public function getSystemInfo(): array {
+		$result = [
+			'php-version' => phpversion(),
+			'php-interpreter' => $this->getPhpInterpreter(),
+			'python-version' => $this->getPythonVersion(),
+			'python-interpretter' => json_decode($this->pythonCommand),
+			'os' => php_uname('s'),
+			'os-release' => php_uname('r'),
+			'machine-type' => php_uname('m'),
+			'cloud_py_api-version' => $this->appManager->getAppVersion(Application::APP_ID),
+		];
+		return $result;
 	}
 
 }

@@ -28,6 +28,7 @@ declare(strict_types=1);
 
 namespace OCA\Cloud_Py_API\Framework\Handle;
 
+use Grpc\ServerCallWriter;
 use OCP\IConfig;
 
 use OCA\Cloud_Py_API\Proto\PBEmpty;
@@ -39,10 +40,14 @@ use OCA\Cloud_Py_API\Proto\TaskSetStatusRequest;
 
 use OCA\Cloud_Py_API\AppInfo\Application;
 use OCA\Cloud_Py_API\Framework\Manager\QueriesManager;
+use OCA\Cloud_Py_API\Proto\CheckDataRequest;
 use OCA\Cloud_Py_API\Proto\dbConfig;
 use OCA\Cloud_Py_API\Proto\logLvl;
+use OCA\Cloud_Py_API\Proto\OccReply;
+use OCA\Cloud_Py_API\Proto\OccRequest;
 use OCA\Cloud_Py_API\Service\AppsService;
 use OCA\Cloud_Py_API\Service\ServerService;
+use OCA\Cloud_Py_API\Service\UtilsService;
 use Psr\Log\LoggerInterface;
 
 
@@ -57,10 +62,15 @@ class TaskHandle {
 	/** @var LoggerInterface */
 	private $logger;
 
-	public function __construct(IConfig $config, AppsService $appsService, LoggerInterface $logger) {
+	/** @var UtilsService */
+	private $utils;
+
+	public function __construct(IConfig $config, AppsService $appsService, LoggerInterface $logger,
+								UtilsService $utils) {
 		$this->config = $config;
 		$this->appsService = $appsService;
 		$this->logger = $logger;
+		$this->utils = $utils;
 	}
 
 	/**
@@ -73,11 +83,11 @@ class TaskHandle {
 	public function init(PBEmpty $request): ?TaskInitReply {
 		$taskInitReply = new TaskInitReply();
 		if (ServerService::$APP !== null) {
+			if (isset(ServerService::$APP['cmd'])) {
+				$taskInitReply->setCmdType(ServerService::$APP['cmd']);
+			}
 			if (isset(ServerService::$APP['appname'])) {
 				$taskInitReply->setAppName(ServerService::$APP['appname']);
-			}
-			if (isset(ServerService::$APP['modname'])) {
-				$taskInitReply->setModName(ServerService::$APP['modname']);
 			}
 			if (isset(ServerService::$APP['modpath'])) {
 				$taskInitReply->setModPath(ServerService::$APP['modpath']);
@@ -91,7 +101,7 @@ class TaskHandle {
 			$cfg = new cfgOptions();
 			$cfg->setLogLvl(logLvl::value(logLvl::name($this->config->getSystemValue('loglevel'))));
 			$cfg->setDataFolder($this->config->getSystemValue('datadirectory'));
-			$cfg->setFrameworkAppData($this->appsService->getAppDataFolderAbsPath(Application::APP_ID));
+			$cfg->setDataFolder($this->appsService->getAppDataFolderAbsPath(Application::APP_ID));
 			if (isset(ServerService::$APP['userid'])) {
 				$cfg->setUserId(ServerService::$APP['userid']);
 			}
@@ -108,7 +118,7 @@ class TaskHandle {
 			$dbCfg->setIniDbPort(ini_get('mysqli.default_port'));
 			$dbCfg->setIniDbSocket(ini_get('pdo_mysql.default_socket'));
 			$dbdriveroptions = $this->config->getSystemValue('dbdriveroptions');
-			if (isset($dbdriveroptions)) {
+			if (isset($dbdriveroptions) && $dbdriveroptions !== '') {
 				$dbCfg->setDbDriverSslKey($dbdriveroptions[\PDO::MYSQL_ATTR_SSL_KEY]);
 				$dbCfg->setDbDriverSslCert($dbdriveroptions[\PDO::MYSQL_ATTR_SSL_CERT]);
 				$dbCfg->setDbDriverSslCa($dbdriveroptions[\PDO::MYSQL_ATTR_SSL_CA]);
@@ -144,7 +154,7 @@ class TaskHandle {
 	 */
 	public function exit(TaskExitRequest $request): ?PBEmpty {
 		if (isset(ServerService::$APP['handler'])) {
-			call_user_func(ServerService::$APP['handler'], ['result' => $request->getResult()]);
+			call_user_func(ServerService::$APP['handler'], $request->getResult());
 		}
 		QueriesManager::closeAllQueries(); // Close possible opened cursors on shutdown
 		exit(0); // Temporal workaround, because of bad GRPC implementation for PHP
@@ -180,6 +190,87 @@ class TaskHandle {
 			$this->logger->emergency('[' . $request->getModule() . '] ' . $msg);
 		}
 		return new PBEmpty(null);
+	}
+
+	/**
+	 * App requirements installation check
+	 * 
+	 * @param \OCA\Cloud_Py_Api\Proto\CheckDataRequest $request
+	 * 
+	 * @return \OCA\Cloud_Py_API\Proto\PBEmpty|null
+	 */
+	public function appCheck(CheckDataRequest $request): ?PBEmpty {
+		// TODO Handle call from framework python part
+		$this->logger->info('[' . self::class . '] appCheck accepted');
+		$not_installed = [];
+		foreach ($request->getNotInstalled() as $not_installed_pckg) {
+			array_push($not_installed, [
+				'name' => $not_installed_pckg->getName(),
+				'version' => $not_installed_pckg->getVersion(),
+			]);
+		}
+		$this->logger->info('[' . self::class . '] appCheck not_installed: ' . json_encode($not_installed));
+		$installed = [];
+		foreach ($request->getInstalled() as $installed_pckg) {
+			array_push($installed, [
+				'name' => $installed_pckg->getName(),
+				'version' => $installed_pckg->getVersion(),
+				'location' => $installed_pckg->getLocation(),
+				'summary' => $installed_pckg->getSummary(),
+				'requires' => $installed_pckg->getRequires(),
+			]);
+		}
+		$this->logger->info('[' . self::class . '] appCheck installed: ' . json_encode($installed));
+		return new PBEmpty();
+	}
+
+	/**
+	 * Nextcloud OCC CLI call
+	 * 
+	 * @param \OCA\Cloud_Py_Api\Proto\OccRequest $request
+	 * @param \Grpc\ServerCallWriter $writer
+	 * 
+	 * @return void
+	 */
+	public function occCall(OccRequest $request, ServerCallWriter $writer): void {
+		$cmd = $this->utils->getPhpInterpreter() . ' ' . getcwd() . '/occ';
+		$arguments = [];
+		foreach ($request->getArguments() as $argument) {
+			array_push($arguments, $argument);
+		}
+		if (count($arguments) > 0) {
+			$cmd .= ' ' . join(' ', $arguments);
+		}
+		exec($cmd, $output, $result_code);
+		for ($i = 0; $i < count($output); $i++) {
+			$writer->write($this->createOccReply([
+				'error' => $result_code !== 0,
+				'last' => $i === count($output) - 1,
+				'content' => $output[$i],
+			]));
+		}
+		$writer->finish();
+	}
+
+	/**
+	 * Service function for creating \OCA\Cloud_Py_API\Proto\OccReply
+	 * 
+	 * @param array $params
+	 * 
+	 * @return \OCA\Cloud_Py_API\Proto\OccReply
+	 */
+	private function createOccReply($params = []): OccReply {
+		$occReply = new OccReply();
+		if (isset($params['error'])) {
+			$occReply->setError($params['error']);
+		}
+		if (isset($params['last'])) {
+			$occReply->setLast($params['last']);
+		}
+		if (isset($params['content'])) {
+			$occReply->setContent($params['content']);
+		}
+		return $occReply;
 	}
 
 }

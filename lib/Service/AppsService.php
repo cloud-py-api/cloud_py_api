@@ -52,16 +52,10 @@ class AppsService {
 	/** @var IConfig */
 	private $config;
 
-	/** @var UtilsService */
-	private $utils;
-
-	public function __construct(AppMapper $appMapper, IAppData $appData, IConfig $config,
-								UtilsService $utils)
-	{
+	public function __construct(AppMapper $appMapper, IAppData $appData, IConfig $config) {
 		$this->mapper = $appMapper;
 		$this->appData = $appData;
 		$this->config = $config;
-		$this->utils = $utils;
 	}
 
 	/**
@@ -97,29 +91,8 @@ class AppsService {
 		return $this->mapper->findAll();
 	}
 
-	/**
-	 * Get app's cloud config (appinfo/cloud_py_config.php)
-	 * 
-	 * @param string $appId app's id
-	 * 
-	 * @return array|null
-	 */
-	public function getAppConfig(string $appId) {
-		// TODO: Build path to config, ensure it exists, try to parse and return result
-		$appConfig = $this->utils->getCustomAppsDirectory() . $appId . '/appinfo/cloud_py_api_config.php';
-		if (file_exists($appConfig) && is_readable($appConfig)) {
-			include $appConfig;
-			return $cloudConfig;
-		}
-		return null;
-	}
-
-	public function syncAppsConfigs() {
-		// TODO
-	}
-
-	public function syncAppConfig(string $appId) {
-		// TODO
+	public function getApp($appId) {
+		return $this->mapper->find($appId);
 	}
 
 	/**
@@ -184,6 +157,26 @@ class AppsService {
 		} catch (NotFoundException | RuntimeException $e) {
 			return null;
 		}
+	}
+
+	/**
+	 * Create cloud_py_api appdata folder
+	 * 
+	 * @return bool
+	 */
+	public function createFrameworkAppDataFolder(): bool {
+		$ncInstanceId = $this->config->getSystemValue('instanceid');
+		$ncDataFolder = $this->config->getSystemValue('datadirectory');
+		$appDataFolder = $ncDataFolder . '/appdata_' . $ncInstanceId . '/' . Application::APP_ID;
+		if (!file_exists($appDataFolder)) {
+			try	{
+				$this->appData->newFolder(Application::APP_ID);
+				return true;
+			} catch (NotPermittedException $e) {
+				return false;
+			}
+		}
+		return false;
 	}
 
 }

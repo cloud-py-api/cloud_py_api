@@ -134,7 +134,7 @@ class Fs {
 	/**
 	 * Send FsCreate request
 	 * 
-	 * @param CloudPyApiCoreClient $client
+	 * @param \OCA\Cloud_Py_API\Proto\CloudPyApiCoreClient $client
 	 * @param array $params
 	 * 
 	 * @return array [
@@ -161,7 +161,7 @@ class Fs {
 	/**
 	 * Send FsDelete request
 	 * 
-	 * @param CloudPyApiCoreClient $client
+	 * @param \OCA\Cloud_Py_API\Proto\CloudPyApiCoreClient $client
 	 * @param array $params
 	 * 
 	 * @return array [
@@ -179,7 +179,7 @@ class Fs {
 	/**
 	 * Send FsMove request
 	 * 
-	 * @param CloudPyApiCoreClient $client
+	 * @param \OCA\Cloud_Py_API\Proto\CloudPyApiCoreClient $client
 	 * @param array $params
 	 * 
 	 * @return array [

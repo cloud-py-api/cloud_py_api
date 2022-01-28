@@ -32,9 +32,12 @@ use OCP\EventDispatcher\IEventDispatcher;
 use OCP\Migration\IOutput;
 use OCP\Migration\IRepairStep;
 
-use OCA\Cloud_Py_API\Db\App;
+use OCA\Cloud_Py_API\AppInfo\Application;
+use OCA\Cloud_Py_API\Event\RegisterAppEvent;
 use OCA\Cloud_Py_API\Event\SyncAppConfigEvent;
 use OCA\Cloud_Py_API\Service\AppsService;
+use OCA\Cloud_Py_API\Service\PythonService;
+use Psr\Log\LoggerInterface;
 
 
 class AppUpdateStep implements IRepairStep {
@@ -45,9 +48,15 @@ class AppUpdateStep implements IRepairStep {
 	/** @var AppsService */
 	private $appsService;
 
-	public function __construct(IEventDispatcher $eventDispatcher, AppsService $appsService) {
+	/** @var PythonService */
+	private $pythonService;
+
+	public function __construct(IEventDispatcher $eventDispatcher, AppsService $appsService,
+								PythonService $pythonService, LoggerInterface $logger) {
 		$this->eventDispatcher = $eventDispatcher;
 		$this->appsService = $appsService;
+		$this->pythonService = $pythonService;
+		$this->logger = $logger;
 	}
 
 	public function getName(): string {
@@ -56,11 +65,17 @@ class AppUpdateStep implements IRepairStep {
 
 	public function run(IOutput $output) {
 		$output->startProgress(1);
-		$this->eventDispatcher->dispatchTyped(new SyncAppConfigEvent([
-			'apps_id' => array_map(function (App $app) {
-				return $app->getAppId();
-			}, $this->appsService->getApps())
-		]));
+		// $this->eventDispatcher->dispatchTyped(new RegisterAppEvent([
+		// 	'appId' => 'mediadc',
+		// ])); // Required register event for apps, that using cloud_py_api framework
+		if ($this->appsService->createFrameworkAppDataFolder()) {
+			$this->logger->info('[' . self::class . '] pythonOutput: ' . $this->appsService->getAppDataFolderAbsPath(Application::APP_ID));
+			$pythonOutput = $this->pythonService->run('/pyfrm/main.py', [
+				$this->appsService->getAppDataFolderAbsPath(Application::APP_ID) => '',
+				'--install' => '',
+			]);
+			$this->logger->info('[' . self::class . '] pythonOutput: ' . json_encode($pythonOutput));
+		}
 		$output->advance(1);
 		$output->finishProgress();
 	}

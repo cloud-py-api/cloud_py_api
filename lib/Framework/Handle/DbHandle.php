@@ -49,8 +49,6 @@ use OCA\Cloud_Py_API\Proto\exprType;
 use OCA\Cloud_Py_API\Proto\pType;
 use OCA\Cloud_Py_API\Proto\whereExpr;
 use OCP\DB\QueryBuilder\IParameter;
-use OCP\IConfig;
-use PDO;
 use Psr\Log\LoggerInterface;
 
 
@@ -61,8 +59,7 @@ class DbHandle {
 	/** @var IDBConnection */
 	private $dbConnection;
 
-	public function __construct(IDBConnection $dbConnection, IConfig $config, LoggerInterface $logger)
-	{
+	public function __construct(IDBConnection $dbConnection, LoggerInterface $logger) {
 		$this->dbConnection = $dbConnection;
 		$this->logger = $logger;
 	}
