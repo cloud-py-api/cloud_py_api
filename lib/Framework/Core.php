@@ -124,20 +124,23 @@ class Core {
 	 * 
 	 * @param array $params hostname and port
 	 * 
-	 * @return \Grpc\RpcServer
+	 * @return \Grpc\RpcServer|null
 	 */
-	public function createServer(array $params = []): \Grpc\RpcServer {
-		$server = new \Grpc\RpcServer();
-		$hostname = '0.0.0.0';
-		if (isset($params['hostname'])) {
-			$hostname = $params['hostname'];
+	public function createServer(array $params = []): ?\Grpc\RpcServer {
+		if (extension_loaded('grpc')) {
+			$server = new \Grpc\RpcServer();
+			$hostname = '0.0.0.0';
+			if (isset($params['hostname'])) {
+				$hostname = $params['hostname'];
+			}
+			if (isset($params['port'])) {
+				$hostname .= ':' . $params['port'];
+			}
+			$server->addHttp2Port($hostname);
+			$server->handle($this->cpa);
+			return $server;
 		}
-		if (isset($params['port'])) {
-			$hostname .= ':' . $params['port'];
-		}
-		$server->addHttp2Port($hostname);
-		$server->handle($this->cpa);
-		return $server;
+		return null;
 	}
 
 	/**
@@ -145,19 +148,22 @@ class Core {
 	 * 
 	 * @param array $params hostname and port
 	 * 
-	 * @return \OCA\Cloud_Py_API\Proto\CloudPyApiCoreClient
+	 * @return \OCA\Cloud_Py_API\Proto\CloudPyApiCoreClient|null
 	 */
-	public function createClient(array $params = []): CloudPyApiCoreClient {
+	public function createClient(array $params = []): ?CloudPyApiCoreClient {
 		if (isset($params['hostname'])) {
 			$hostname = $params['hostname'];
 		}
 		if (isset($params['port'])) {
 			$hostname .= ':' . $params['port'];
 		}
-		$client = new CloudPyApiCoreClient($hostname, [
-			'credentials' => \Grpc\ChannelCredentials::createInsecure()
-		]);
-		return $client;
+		if (extension_loaded('grpc')) {
+			$client = new CloudPyApiCoreClient($hostname, [
+				'credentials' => \Grpc\ChannelCredentials::createInsecure()
+			]);
+			return $client;
+		}
+		return null;
 	}
 
 	public function runPyfrm(): array {

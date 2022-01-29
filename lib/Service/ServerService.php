@@ -190,7 +190,7 @@ class ServerService {
 		$this->cpaCore->TaskLog($client, [
 			'logLvl' => $logLvl,
 			'module' => $module,
-			'content' => json_decode($content)
+			'content' => json_decode($content) !== null ? json_decode($content) : [$content],
 		]);
 	}
 

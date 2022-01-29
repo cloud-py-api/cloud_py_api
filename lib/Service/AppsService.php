@@ -141,7 +141,7 @@ class AppsService {
 	 */
 	public function getAppDataFolderAbsPath(string $appId): ?string {
 		try {
-			$appDataFolderName = $this->appData->getFolder($appId)->getName();
+			// $appDataFolderName = $this->appData->getFolder($appId)->getName();
 			$ncInstanceId = $this->config->getSystemValue('instanceid');
 			$ncDataFolder = $this->config->getSystemValue('datadirectory');
 			if ($appId !== Application::APP_ID) {
@@ -149,7 +149,8 @@ class AppsService {
 			} else {
 				$appDataFolder = $ncDataFolder . '/appdata_' . $ncInstanceId . '/' . Application::APP_ID;
 			}
-			if (file_exists($appDataFolder) && $appDataFolderName === $appId) {
+			// if (file_exists($appDataFolder) && $appDataFolderName === $appId) {
+			if (file_exists($appDataFolder)) {
 				return $appDataFolder;
 			} else {
 				return null;

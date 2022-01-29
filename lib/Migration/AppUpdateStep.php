@@ -70,7 +70,7 @@ class AppUpdateStep implements IRepairStep {
 		// ])); // Required register event for apps, that using cloud_py_api framework
 		if ($this->appsService->createFrameworkAppDataFolder()) {
 			$this->logger->info('[' . self::class . '] pythonOutput: ' . $this->appsService->getAppDataFolderAbsPath(Application::APP_ID));
-			$pythonOutput = $this->pythonService->run('/pyfrm/main.py', [
+			$pythonOutput = $this->pythonService->run('/pyfrm/install.py', [
 				$this->appsService->getAppDataFolderAbsPath(Application::APP_ID) => '',
 				'--install' => '',
 			]);

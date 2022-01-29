@@ -169,25 +169,31 @@ class TaskHandle {
 	 * @return PBEmpty|null
 	 */
 	public function log(TaskLogRequest $request): ?PBEmpty {
+		$appDataFolder = $this->appsService->getAppDataFolderAbsPath(Application::APP_ID);
+		$handle = fopen($appDataFolder . '/pyfrm_log.log', 'a+');
 		$logLvl = $request->getLogLvl();
-		$msg = '';
-		foreach ($request->getContent() as $row) {
-			$msg .= $row . '\n';
-		}
-		if ($logLvl === logLvl::DEBUG) {
-			$this->logger->debug('[' . $request->getModule() . '] ' . $msg);
-		}
-		if ($logLvl === logLvl::INFO) {
-			$this->logger->info('[' . $request->getModule() . '] ' . $msg);
-		}
-		if ($logLvl === logLvl::WARN) {
-			$this->logger->warning('[' . $request->getModule() . '] ' . $msg);
-		}
-		if ($logLvl === logLvl::ERROR) {
-			$this->logger->error('[' . $request->getModule() . '] ' . $msg);
-		}
-		if ($logLvl === logLvl::FATAL) {
-			$this->logger->emergency('[' . $request->getModule() . '] ' . $msg);
+		if ($handle) {
+			$logLvl = $request->getLogLvl();
+			fwrite($handle, PHP_EOL . '[' . date('H:i:s d-m-Y') . '] ' . logLvl::name($logLvl) . ':' . PHP_EOL . PHP_EOL);
+			$msg = '';
+			/** @var string $row */
+			foreach ($request->getContent() as $row) {
+				fwrite($handle, $row . PHP_EOL);
+				$msg .= $row . PHP_EOL;
+			}
+			if ($logLvl === logLvl::DEBUG) {
+				$this->logger->debug('[' . $request->getModule() . '] ' . $msg !== '' ? $msg : $request->getContent());
+			}
+			if ($logLvl === logLvl::INFO) {
+				$this->logger->info('[' . $request->getModule() . '] ' . $msg !== '' ? $msg : $request->getContent());
+			}
+			if ($logLvl === logLvl::ERROR) {
+				$this->logger->error('[' . $request->getModule() . '] ' . $msg !== '' ? $msg : $request->getContent());
+			}
+			if ($logLvl === logLvl::FATAL) {
+				$this->logger->emergency('[' . $request->getModule() . '] ' . $msg !== '' ? $msg : $request->getContent());
+			}
+			fclose($handle);
 		}
 		return new PBEmpty(null);
 	}
