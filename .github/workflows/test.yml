@@ -39,6 +39,8 @@ jobs:
       - name: Run unit tests
         working-directory: nextcloud/apps/cloud_py_api
         run: composer test:unit
+        env:
+          XDEBUG_MODE: coverage
 
 
   js-unit:
