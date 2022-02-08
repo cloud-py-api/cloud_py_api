@@ -14,7 +14,7 @@ yarn-error.log*
 
 .marginalia
 
-./build/
+/build/
 coverage/
 vendor
 .php_cs.cache

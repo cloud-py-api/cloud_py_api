@@ -31,9 +31,11 @@ use PHPUnit\Framework\MockObject\MockObject;
 
 use OCP\IConfig;
 use OCP\Files\IAppData;
+use OCP\App\IAppManager;
 
 use OCA\Cloud_Py_API\Db\App;
 use OCA\Cloud_Py_API\Db\AppMapper;
+use OCA\Cloud_Py_API\Db\SettingMapper;
 use OCA\Cloud_Py_API\Service\AppsService;
 use OCA\Cloud_Py_API\Service\UtilsService;
 use OCP\AppFramework\Db\DoesNotExistException;
@@ -56,14 +58,22 @@ class AppsServiceTest extends TestCase {
 	/** @var AppsService|MockObject */
 	private $appsService;
 
+	/** @var SettingMapper|MockObject */
+	private $settingMapper;
+
+	/** @var IAppManager|MockObject */
+	private $appManager;
+
 	protected function setUp(): void {
 		parent::setUp();
 
 		$this->appMapper = $this->createMock(AppMapper::class);
 		$this->appData = $this->createMock(IAppData::class);
 		$this->config = $this->createMock(IConfig::class);
+		$this->settingMapper = $this->createMock(SettingMapper::class);
+		$this->appManager = $this->createMock(IAppManager::class);
 
-		$this->utils = new UtilsService($this->config);
+		$this->utils = new UtilsService($this->config, $this->settingMapper, $this->appManager);
 		$this->appsService = new AppsService(
 			$this->appMapper,
 			$this->appData,
