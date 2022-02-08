@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php-versions: [7.3, 7.4, 8.0]
+        php-versions: [7.4, 8.0]
         nextcloud-versions: ['stable21', 'stable22', 'stable23', 'master']
 
     name: Nextcloud ${{ matrix.nextcloud-versions }} php ${{ matrix.php-versions }} unit tests
@@ -27,17 +27,17 @@ jobs:
       - name: Install Nextcloud
         run: php -f nextcloud/occ maintenance:install --database-name oc_autotest --database-user oc_autotest --admin-user admin --admin-pass admin --database sqlite --database-pass=''
 
-      - name: Checkout MediaDC
+      - name: Checkout Cloud_Py_API
         uses: actions/checkout@v2
         with:
-          path: nextcloud/apps/mediadc
+          path: nextcloud/apps/cloud_py_api
 
       - name: Install dependecies
-        working-directory: nextcloud/apps/mediadc
+        working-directory: nextcloud/apps/cloud_py_api
         run: composer install
 
       - name: Run unit tests
-        working-directory: nextcloud/apps/mediadc
+        working-directory: nextcloud/apps/cloud_py_api
         run: composer test:unit
 
 
@@ -45,6 +45,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout Cloud_Py_API
+        uses: actions/checkout@v2
+        with:
+          path: nextcloud/apps/cloud_py_api
+
       - name: Setup Node
         uses: actions/setup-node@v2
         with:
@@ -62,7 +67,7 @@ jobs:
     strategy:
       matrix:
         python-versions: [3.7, 3.8, 3.9]
-        php-versions: [7.3, 7.4, 8.0]
+        php-versions: [7.4, 8.0]
         nextcloud-versions: ['stable21', 'stable22', 'stable23', 'master']
 
     name: Nextcloud ${{ matrix.nextcloud-versions }} (php${{ matrix.php-versions }}) python ${{ matrix.python-versions }} unit tests
@@ -80,10 +85,10 @@ jobs:
       - name: Install Nextcloud
         run: php -f nextcloud/occ maintenance:install --database-name oc_autotest --database-user oc_autotest --admin-user admin --admin-pass admin --database sqlite --database-pass=''
 
-      - name: Checkout MediaDC
+      - name: Checkout Cloud_Py_API
         uses: actions/checkout@v2
         with:
-          path: nextcloud/apps/mediadc
+          path: nextcloud/apps/cloud_py_api
 
       - name: Setup python${{ matrix.python-versions }}
         uses: actions/setup-python@v1
@@ -91,7 +96,7 @@ jobs:
           python-version: ${{ matrix.python-versions }}
 
       - name: PyTest installation
-        uses: actions/pip-action@v1
+        uses: BSFishy/pip-action@v1
         with:
           packages: pytest
 
