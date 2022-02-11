@@ -9,20 +9,20 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php-versions: [7.4, 8.0]
-        nextcloud-versions: ['master']
+        php-version: [7.4, 8.0]
+        nextcloud-version: ['master']
 
-    name: Nextcloud ${{ matrix.nextcloud-versions }} php ${{ matrix.php-versions }} unit tests
+    name: Nextcloud ${{ matrix.nextcloud-version }} php ${{ matrix.php-version }} unit tests
     steps:
-      - name: Set up php${{ matrix.php-versions }}
+      - name: Set up php${{ matrix.php-version }}
         uses: shivammathur/setup-php@master
         with:
-          php-version: ${{ matrix.php-versions }}
+          php-version: ${{ matrix.php-version }}
           tools: composer:v1
           extensions: curl, json, zip, openssl
 
       - name: Checkout Nextcloud
-        run: git clone https://github.com/nextcloud/server.git --recursive --depth 1 -b ${{ matrix.nextcloud-versions }} nextcloud
+        run: git clone https://github.com/nextcloud/server.git --recursive --depth 1 -b ${{ matrix.nextcloud-version }} nextcloud
 
       - name: Install Nextcloud
         run: php -f nextcloud/occ maintenance:install --database-name oc_autotest --database-user oc_autotest --admin-user admin --admin-pass admin --database sqlite --database-pass=''
@@ -118,11 +118,11 @@ jobs:
 
     strategy:
       matrix:
-        php-versions: [7.4, 8.0]
-        nextcloud-versions: ['master']
-        python-versions: ['3.7', '3.10', 'standalone']
+        php-version: [7.4, 8.0]
+        nextcloud-version: ['master']
+        python-version: ['3.7', '3.10', 'standalone']
         db: ['mysql', 'pgsql']
-    name: php${{ matrix.php-versions }}-${{ matrix.db }}-Python-${{ matrix.python-versions }} integration tests
+    name: php${{ matrix.php-version }}-${{ matrix.db }}-Python-${{ matrix.python-version }} integration tests
 
     services:
         mysql-service:
@@ -154,22 +154,22 @@ jobs:
             --health-retries 5
 
     steps:
-      - name: Set up php${{ matrix.php-versions }}
+      - name: Set up php${{ matrix.php-version }}
         uses: shivammathur/setup-php@master 
         with:
-          php-version: ${{ matrix.php-versions }}
+          php-version: ${{ matrix.php-version }}
           tools: composer:v1
           extensions: ctype,curl,dom,gd,iconv,intl,json,mbstring,openssl,posix,sqlite,xml,zip,gmp
           coverage: xdebug
 
-      - name: Setup Python-${{ matrix.python-versions }}
+      - name: Setup Python-${{ matrix.python-version }}
         if: ${{ matrix.python-version }} != 'standalone'
         uses: actions/setup-python@v1
         with:
-          python-version: ${{ matrix.python-versions }}
+          python-version: ${{ matrix.python-version }}
 
       - name: Checkout Nextcloud
-        run: git clone https://github.com/nextcloud/server.git --recursive --depth 1 -b ${{ matrix.nextcloud-versions }} nextcloud
+        run: git clone https://github.com/nextcloud/server.git --recursive --depth 1 -b ${{ matrix.nextcloud-version }} nextcloud
 
       - name: Install Nextcloud
         run: php -f nextcloud/occ maintenance:install --database-host 127.0.0.1 --database-name nextcloud --database-user nextcloud --database-pass nextcloud --admin-user admin --admin-pass admin --database ${{ matrix.db }}
