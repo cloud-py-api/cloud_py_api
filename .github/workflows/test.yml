@@ -120,7 +120,7 @@ jobs:
       matrix:
         php-versions: [7.4, 8.0]
         nextcloud-versions: ['master']
-        python-versions: [3.7, 3.10, 'standalone']
+        python-versions: ['3.7', '3.10', 'standalone']
         db: ['mysql', 'pgsql']
     name: php${{ matrix.php-versions }}-${{ matrix.db }}-Python-${{ matrix.python-versions }} integration tests
 
