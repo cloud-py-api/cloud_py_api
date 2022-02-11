@@ -122,7 +122,7 @@ jobs:
         nextcloud-versions: ['master']
         python-versions: [3.7, 3.10, 'standalone']
         db: ['mysql', 'pgsql']
-      name: php${{ matrix.php-versions }}-${{ matrix.db }}-Python-${{ matrix.python-versions }} integration tests
+    name: php${{ matrix.php-versions }}-${{ matrix.db }}-Python-${{ matrix.python-versions }} integration tests
 
     services:
         mysql-service:
