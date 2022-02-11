@@ -12,7 +12,8 @@
 		"cs:check": "php-cs-fixer fix --dry-run --diff",
 		"lint": "find . -name \\*.php -not -path './vendor/*' -print0 | xargs -0 -n1 php -l",
 		"psalm": "psalm.phar",
-		"test:unit": "phpunit -c tests/phpunit.unit.xml --fail-on-warning"
+		"test:unit": "phpunit -c tests/phpunit.unit.xml --fail-on-warning --coverage-html tests/coverage/html --coverage-xml tests/coverage/xml",
+		"test:integration": "phpunit -c tests/phpunit.integration.xml --fail-on-warning"
 	},
 	"require-dev": {
 		"christophwurst/nextcloud": "v21.0.0",

@@ -36,6 +36,7 @@ use OCP\AppFramework\Bootstrap\IRegistrationContext;
 use OCA\Cloud_Py_API\Event\RegisterAppEvent;
 use OCA\Cloud_Py_API\Listener\RegisterAppListener;
 
+require_once __DIR__ . '/../../vendor/autoload.php';
 
 class Application extends App implements IBootstrap {
 
@@ -48,7 +49,6 @@ class Application extends App implements IBootstrap {
 	public function register(IRegistrationContext $context): void {
 		$context->registerEventListener(RegisterAppEvent::class, RegisterAppListener::class);
 
-		include_once __DIR__ . '/../../vendor/autoload.php';
 		require_once __DIR__ . '/../Proto/GPBMetadata/Core.php';
 		require_once __DIR__ . '/../Proto/GPBMetadata/Fs.php';
 		require_once __DIR__ . '/../Proto/GPBMetadata/Db.php';

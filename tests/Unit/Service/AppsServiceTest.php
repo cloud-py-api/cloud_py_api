@@ -33,6 +33,8 @@ use OCP\IConfig;
 use OCP\Files\IAppData;
 use OCP\App\IAppManager;
 
+use OCA\ServerInfo\DatabaseStatistics;
+
 use OCA\Cloud_Py_API\Db\App;
 use OCA\Cloud_Py_API\Db\AppMapper;
 use OCA\Cloud_Py_API\Db\SettingMapper;
@@ -64,6 +66,9 @@ class AppsServiceTest extends TestCase {
 	/** @var IAppManager|MockObject */
 	private $appManager;
 
+	/** @var DatabaseStatistics|MockObject */
+	private $databaseStatistics;
+
 	protected function setUp(): void {
 		parent::setUp();
 
@@ -72,8 +77,9 @@ class AppsServiceTest extends TestCase {
 		$this->config = $this->createMock(IConfig::class);
 		$this->settingMapper = $this->createMock(SettingMapper::class);
 		$this->appManager = $this->createMock(IAppManager::class);
+		$this->databaseStatistics = $this->createMock(DatabaseStatistics::class);
 
-		$this->utils = new UtilsService($this->config, $this->settingMapper, $this->appManager);
+		$this->utils = new UtilsService($this->config, $this->settingMapper, $this->appManager, $this->databaseStatistics);
 		$this->appsService = new AppsService(
 			$this->appMapper,
 			$this->appData,

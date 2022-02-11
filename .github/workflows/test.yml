@@ -1,4 +1,4 @@
-name: Testing
+name: Tests
 
 on:
   workflow_dispatch:
@@ -10,7 +10,7 @@ jobs:
     strategy:
       matrix:
         php-versions: [7.4, 8.0]
-        nextcloud-versions: ['stable21', 'stable22', 'stable23', 'master']
+        nextcloud-versions: ['master']
 
     name: Nextcloud ${{ matrix.nextcloud-versions }} php ${{ matrix.php-versions }} unit tests
     steps:
@@ -42,6 +42,13 @@ jobs:
         env:
           XDEBUG_MODE: coverage
 
+      - name: Report coverage
+        uses: codecov/codecov-action@v2.1.0
+        with:
+          file: ./nextcloud/apps/cloud_py_api/tests/clover.unit.xml
+          flags: unittests
+          fail_ci_if_error: true
+
 
   js-unit:
     runs-on: ubuntu-latest
@@ -61,6 +68,7 @@ jobs:
 
       - name: Run unit tests
         run: npm run test
+
 
   # python-unit:
   #   runs-on: ubuntu-latest
@@ -104,4 +112,102 @@ jobs:
   #     - name: PyTest
   #       run: pytest
 
-  # TODO: Add integration tests
+
+  integration-tests:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        php-versions: [7.4, 8.0]
+        nextcloud-versions: ['master']
+        python-versions: [3.7, 3.10, 'standalone']
+        db: ['mysql', 'pgsql']
+      name: php${{ matrix.php-versions }}-${{ matrix.db }}-Python-${{ matrix.python-versions }} integration tests
+
+    services:
+        mysql-service:
+          image: mariadb:10.5
+          env:
+            MYSQL_ROOT_PASSWORD: my-secret-pw
+            MYSQL_DATABASE: nextcloud
+            MYSQL_USER: nextcloud
+            MYSQL_PASSWORD: nextcloud
+          ports:
+            - 3306:3306
+          options: >-
+            --health-cmd="mysqladmin ping"
+            --health-interval=10s
+            --health-timeout=5s
+            --health-retries=3
+        postgres-service:
+          image: postgres
+          env:
+            POSTGRES_USER: nextcloud
+            POSTGRES_DB: nextcloud
+            POSTGRES_PASSWORD: nextcloud
+          ports:
+            - 5432:5432
+          options: >-
+            --health-cmd pg_isready
+            --health-interval 10s
+            --health-timeout 5s
+            --health-retries 5
+
+    steps:
+      - name: Set up php${{ matrix.php-versions }}
+        uses: shivammathur/setup-php@master 
+        with:
+          php-version: ${{ matrix.php-versions }}
+          tools: composer:v1
+          extensions: ctype,curl,dom,gd,iconv,intl,json,mbstring,openssl,posix,sqlite,xml,zip,gmp
+          coverage: xdebug
+
+      - name: Setup Python-${{ matrix.python-versions }}
+        if: ${{ matrix.python-version }} != 'standalone'
+        uses: actions/setup-python@v1
+        with:
+          python-version: ${{ matrix.python-versions }}
+
+      - name: Checkout Nextcloud
+        run: git clone https://github.com/nextcloud/server.git --recursive --depth 1 -b ${{ matrix.nextcloud-versions }} nextcloud
+
+      - name: Install Nextcloud
+        run: php -f nextcloud/occ maintenance:install --database-host 127.0.0.1 --database-name nextcloud --database-user nextcloud --database-pass nextcloud --admin-user admin --admin-pass admin --database ${{ matrix.db }}
+
+      - name: Checkout Cloud_Py_API
+        uses: actions/checkout@master
+        with:
+          path: nextcloud/apps/cloud_py_api
+
+      - name: Install dependencies
+        working-directory: nextcloud/apps/cloud_py_api
+        run: composer install
+
+      - name: Enable cloud_py_api
+        run: php -f nextcloud/occ app:enable cloud_py_api
+
+      - name: Install pyfrm
+        run: php -f nextcloud/occ cloud_py_api:framework:install
+
+      - name: Configure Nextcloud for testing
+        run: |
+          php -f nextcloud/occ config:system:set debug --type bool --value true
+          php -f nextcloud/occ config:system:set app.mail.verify-tls-peer --type bool --value false
+
+      - name: Run integration tests
+        working-directory: nextcloud/apps/cloud_py_api
+        run: |
+          ss -tunlp
+          compose run test:integration
+        env:
+          XDEBUG_MODE: coverage
+
+      - name: Print debug logs
+        run: cat nextcloud/data/nextcloud.log
+
+      - name: Report coverage
+        uses: codecov/codecov-action@v2.1.0
+        with:
+          file: ./nextcloud/apps/cloud_py_api/tests/clover.integration.xml
+          flags: integrationtests
+          fail_ci_if_error: true

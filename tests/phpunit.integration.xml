@@ -4,7 +4,7 @@
          bootstrap="bootstrap.php"
          failOnWarning="true"
          verbose="true">
-    <testsuite name="Cloud Python API app tests">
+    <testsuite name="Cloud_Py_API app tests">
         <directory suffix="Test.php">./Integration</directory>
     </testsuite>
 
@@ -12,6 +12,9 @@
         <include>
             <directory suffix=".php">../lib</directory>
         </include>
+        <exclude>
+            <directory suffix=".php">../lib/Proto</directory>
+        </exclude>
         <report>
             <clover outputFile="./clover.integration.xml"/>
         </report>
