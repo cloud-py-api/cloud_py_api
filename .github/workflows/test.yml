@@ -36,6 +36,9 @@ jobs:
         working-directory: nextcloud/apps/cloud_py_api
         run: composer install
 
+      - name: Install serverinfo
+        run: php -f nextcloud/occ app:install serverinfo
+
       - name: Run unit tests
         working-directory: nextcloud/apps/cloud_py_api
         run: composer test:unit
@@ -182,6 +185,9 @@ jobs:
       - name: Install dependencies
         working-directory: nextcloud/apps/cloud_py_api
         run: composer install
+
+      - name: Install serverinfo
+        run: php -f nextcloud/occ app:install serverinfo
 
       - name: Enable cloud_py_api
         run: php -f nextcloud/occ app:enable cloud_py_api
