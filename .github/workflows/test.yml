@@ -163,7 +163,7 @@ jobs:
           coverage: xdebug
 
       - name: Setup Python-${{ matrix.python-version }}
-        if: ${{ matrix.python-version }} != 'standalone'
+        if: matrix.python-version != 'standalone'
         uses: actions/setup-python@v1
         with:
           python-version: ${{ matrix.python-version }}
