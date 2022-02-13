@@ -1,0 +1,28 @@
+name: Test PyFrm install
+
+on:
+  workflow_dispatch:
+
+jobs:
+  macos_linux:
+    strategy:
+      fail-fast: true
+      matrix:
+        python_minor: [ "3.7" , "3.8" , "3.9" , "3.10" , "standalone"]
+        os: [ macos-11, ubuntu-20.04 ]
+        arch: [ x86_64 ]
+        alpine: [ false ]
+        include:
+          - python_minor: ["3.9", "standalone"]
+            os: [ ubuntu-20.04 ]
+            arch: [ aarch64 ]
+            alpine: [ false ]
+          - python_minor: ["3.9", "standalone"]
+            os: [ ubuntu-20.04 ]
+            arch: [ x86_64, aarch64 ]
+            alpine: [ false, true]
+    name: Python ${{ matrix.python_minor }}-${{ matrix.arch }}-${{ matrix.os }} Alpine=${{ matrix.alpine }}
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v2

@@ -6,6 +6,10 @@ class NcNotImplementedError(NcException, NotImplementedError):
     """Exception related to not yet implemented functionality."""
 
 
+class NcValueError(NcException, ValueError):
+    """Exception raises when input values are invalid."""
+
+
 class FsException(NcException):
     """Exception related to operation with FS."""
 
