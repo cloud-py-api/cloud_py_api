@@ -1,0 +1,53 @@
+#[build-system]
+#requires = [
+#    "setuptools>=41.2.0",
+#    "cffi>=1.14.0",
+#]
+#build-backend = "setuptools.build_meta"
+#
+#[metadata]
+
+#[tool.coverage.run]
+#cover_pylib = true
+#include = ["*/pillow_heif/*"]
+#omit = ["*/tests/*"]
+#
+#[tool.coverage.report]
+#exclude_lines = [
+#    "pragma: no cover",
+#    "raise NotImplementedError",
+#    "DeprecationWarning"
+#]
+
+[tool.black]
+line-length = 120
+target-versions = ["py38"]
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.eggs
+  | \.git
+  | \.venv
+  | \.vienv
+  | \.env
+  | \.mypy_cache
+  | \.pytest_cache
+  | __pycache__
+  | build
+  | dist
+  | wheelhouse
+)\
+'''
+
+#[tool.mypy]
+#ignore_missing_imports = true
+#allow_redefinition = true
+#warn_no_return = true
+#strict_optional = true
+
+#[tool.pytest.ini_options]
+#minversion = "6.0"
+#testpaths = [
+#    "tests",
+#]
+#addopts = "--ignore=memory_leaks.py"
