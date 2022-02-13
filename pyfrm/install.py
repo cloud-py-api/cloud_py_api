@@ -2,27 +2,31 @@
 Cloud_Py_Api self install module.
 """
 
+# TODO: https://docs.python.org/3/library/subprocess.html#subprocess.CompletedProcess.stdout
 import sys
 import platform
 from subprocess import run, PIPE, DEVNULL, TimeoutExpired, CalledProcessError
 from os import chdir, path, mkdir, environ, remove
 from argparse import ArgumentParser
-from json import dumps as to_json
+from json import dumps as to_json, loads as from_json
 from re import search, sub, MULTILINE, IGNORECASE
 from importlib import invalidate_caches, import_module
+from urllib.parse import unquote_plus
 import logging
+
+from exceptions import FrmProgrammingError
 
 
 EXTRA_PIP_ARGS = []
 Options = {}
-RequiredPackagesList = {'google.protobuf': 'protobuf',
-                        'grpc': 'grpcio',
-                        'pipdeptree': 'pipdeptree',
+RequiredPackagesList = {'pipdeptree': 'pipdeptree',
                         'nc_py_api': 'nc_py_api',
                         'pg8000': 'pg8000',
                         'pymysql': 'PyMySQL[rsa,ed25519]',
                         'sqlalchemy': 'SQLAlchemy',
-                        'requirements': 'requirements-parser'
+                        'requirements': 'requirements-parser',
+                        'google.protobuf': 'protobuf',
+                        'grpc': 'grpcio'
                         }
 LogsContainer = []
 Log = logging.getLogger('pyfrm.install')
@@ -194,12 +198,14 @@ def import_package(name: str, dest_sym_table=None, package=None) -> bool:
     return False
 
 
-def check(installed_list: dict, not_installed_list: dict) -> [bool, int]:
+def frm_check() -> [dict, dict]:
     if not Options['pip']['present']:
         Log.error('Python pip not found or has too low version.')
-        return False, 1
+        return {}, {}
     add_python_path(get_site_packages(), first=True)
     modules = {}
+    installed_list = {}
+    not_installed_list = {}
     for import_name, install_name in RequiredPackagesList.items():
         _result = import_package(import_name, dest_sym_table=modules)
         if _result:
@@ -225,9 +231,7 @@ def check(installed_list: dict, not_installed_list: dict) -> [bool, int]:
                                                'location': '',
                                                'version': ''}
             Log.error(f'Missing {import_name}:{install_name}')
-    if not_installed_list:
-        return False, 1
-    return True, 0
+    return installed_list, not_installed_list
 
 
 def download_pip(url: str, out_path: str) -> bool:
@@ -294,67 +298,102 @@ def install_pip() -> bool:
     return False
 
 
-def install() -> [bool, int]:
+def install() -> bool:
     if not Options['pip']['present']:
         if not install_pip():
             Log.error('Cant install local pip.')
-            return False, 1
+            return False
         Options['pip'] = get_pip_info()
         if not Options['pip']['present']:
             Log.error('Cant run pip after local install.')
-            return False, 1
+            return False
     for import_name, install_name in RequiredPackagesList.items():
         _result, _message = pip_call(['install', install_name, '--no-warn-script-location', '--prefer-binary'],
                                      user_cache=True)
         if not _result:
             Log.error(f'Cant install {install_name}. Pip output:\n{_message}')
-            return False, 1
-    return True, 0
+            return False
+    return True
 
 
-def update_pip() -> [bool, int]:
+def update_pip() -> bool:
     if Options['pip']['present']:
-        if Options['pip']['local']:
-            _call_result, _message = pip_call(['install', '--upgrade', 'pip', '--no-warn-script-location'],
-                                              user_cache=True)
-            if _call_result:
-                return True, 0
-    else:
         Log.error('No local compatible pip found.')
-    return False, 1
+        return False
+    if Options['pip']['local']:
+        _call_result, _message = pip_call(['install', '--upgrade', 'pip', '--no-warn-script-location'],
+                                          user_cache=True)
+        if not _call_result:
+            return False
+    return True
+
+
+def check_target(target: str) -> [dict, dict]:
+    if target == "framework":
+        return frm_check()
+    return {}, {}
+
+
+def frm_perform(action: str) -> bool:
+    if action == "delete":
+        raise FrmProgrammingError("Target `framework` can not be specified for delete operation.")
+    if action == "install":
+        return install()
+    if action == "update":
+        if not update_pip():
+            return False
+        for import_name, install_name in RequiredPackagesList.items():
+            _result, _message = pip_call(['install', '--upgrade', install_name,
+                                          '--no-warn-script-location', '--prefer-binary'],
+                                         user_cache=True)
+            if not _result:
+                Log.error(f'Cant update {install_name}. Pip output:\n{_message}')
+                return False
+        return True
+    raise FrmProgrammingError(f"Unknown action: {action}.")
+
+
+def app_perform(app_id: str, action: str) -> bool:
+    return False
+
+
+def perform_action(target: str, action: str) -> bool:
+    if target == "framework":
+        return frm_perform(action)
+    return app_perform(target, action)
 
 
 if __name__ == '__main__':
     chdir(path.dirname(path.abspath(__file__)))
     parser = ArgumentParser(description='Module for checking/installing packages for NC pyfrm.',
                             add_help=True)
-    parser.add_argument('appdata', action='store', type=str,
-                        help='Absolute path to cloud_py_api folder in appdata_xxx.')
+    parser.add_argument('--config', dest='config', type=str,
+                        help='JSON with loglvl, frmAppData and dbConfig.')
+    parser.add_argument('--target', dest='target', nargs=1, type=str,
+                        help="'framework' or 'AppId' from table `cloud_py_api` if it is app.")
+    group = parser.add_mutually_exclusive_group()
+    group.add_argument('--check', dest='check', action='store_true',
+                       help='Check installation of specified target.')
+    group.add_argument('--install', dest='install', action='store_true',
+                       help="Perform installation of specified target's packages.")
+    group.add_argument('--update', dest='update', action='store_true',
+                       help="Perform update of specified target's packages.")
+    group.add_argument('--delete', dest='delete', action='store_true',
+                       help="Perform delete of specified target's packages. Cannot be applied to framework itself.")
+    args = parser.parse_args()
+    args.target = str(args.target).lower()
+    config = from_json(unquote_plus(args.config))
+    Options['app_data'] = config["frmAppData"]
+    Options["db_config"] = config["dbConfig"]
     levels = ('DEBUG', 'INFO', 'WARN', 'ERROR', 'FATAL')
     logging.addLevelName(30, 'WARN')
     logging.addLevelName(50, 'FATAL')
-    parser.add_argument('--loglvl', default='INFO', type=str, choices=levels)
-    group = parser.add_mutually_exclusive_group()
-    group.add_argument('--check', dest='check', action='store_true',
-                       help='Check installation.')
-    group.add_argument('--install', dest='install', action='store_true',
-                       help='Perform installation of packages needed for pyfrm.')
-    group.add_argument('--update-pip', dest='update_pip', action='store_true',
-                       help='Perform built-in or local pip update.')
-    group.add_argument('--update', dest='update', nargs=1, type=str,
-                       help='Perform update of app`s packages.')
-    group.add_argument('--delete', dest='delete', nargs=1, type=str,
-                       help='Delete packages of app.')
-    # group.add_argument('--transfer', dest='transfer', action='store_true',
-    #                    help='Pack python packages for transfer to another computer.')
-    args = parser.parse_args()
-    Log.setLevel(level=args.loglvl)
+    Log.setLevel(level=config["loglvl"])
     Log.addHandler(InstallLogHandler())
-    Options['app_data'] = args.appdata
     exit_code = 0
     result = False
-    checked_installed_list = {}
-    checked_not_installed_list = {}
+    r_installed_list = {}
+    r_not_installed_list = {}
     try:
         Log.debug(f'Path to python: {sys.executable}')
         Log.debug(f'Python version: {sys.version}')
@@ -363,22 +402,27 @@ if __name__ == '__main__':
         Options['pip'] = get_pip_info()
         Log.info(f"Python info: {Options.get('python')}")
         Log.info(f"Pip info: {Options.get('pip')}")
-        if args.check:
-            result, exit_code = check(checked_installed_list, checked_not_installed_list)
-        elif args.install:
-            result, exit_code = install()
-            check(checked_installed_list, checked_not_installed_list)
-        elif args.update_pip:
-            result, exit_code = update_pip()
+        if args.target != "framework":
+            r_installed_list, r_not_installed_list = check_target("framework")
+            if r_not_installed_list:
+                raise FrmProgrammingError("Install framework before targeting app.")
+            r_installed_list.clear()
+            r_not_installed_list.clear()
+        if args.install:
+            result = perform_action(args.target, "install")
         elif args.update:
-            raise NotImplementedError()
+            result = perform_action(args.target, "update")
         elif args.delete:
-            raise NotImplementedError()
+            result = perform_action(args.target, "delete")
+        r_installed_list, r_not_installed_list = check_target(args.target)
     except Exception as exception_info:
+        if type(exception_info) is FrmProgrammingError:
+            Log.error(str(exception_info))
+        else:
+            Log.exception(f'Unexpected Exception: {type(exception_info).__name__}')
         exit_code = 2
-        Log.exception(f'Unexpected Exception: {type(exception_info).__name__}')
     print(to_json({'Result': result,
-                   'Installed': checked_installed_list,
-                   'NotInstalled': checked_not_installed_list,
+                   'Installed': r_installed_list,
+                   'NotInstalled': r_not_installed_list,
                    'Logs': LogsContainer}))
     sys.exit(exit_code)
