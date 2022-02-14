@@ -4,25 +4,40 @@ on:
   workflow_dispatch:
 
 jobs:
-  macos_linux:
+  on_linux:
     strategy:
       fail-fast: true
       matrix:
-        python_minor: [ "3.7" , "3.8" , "3.9" , "3.10" , "standalone"]
-        os: [ macos-11, ubuntu-20.04 ]
-        arch: [ x86_64 ]
-        alpine: [ false ]
-        include:
-          - python_minor: ["3.9", "standalone"]
-            os: [ ubuntu-20.04 ]
-            arch: [ aarch64 ]
-            alpine: [ false ]
-          - python_minor: ["3.9", "standalone"]
-            os: [ ubuntu-20.04 ]
-            arch: [ x86_64, aarch64 ]
-            alpine: [ false, true]
-    name: Python ${{ matrix.python_minor }}-${{ matrix.arch }}-${{ matrix.os }} Alpine=${{ matrix.alpine }}
-    runs-on: ${{ matrix.os }}
+        python: [ "3.7" , "3.8" , "3.9" , "3.10" , "standalone"]
+        arch: [ x86_64 , aarch64 ]
+        exclude:
+          - python: "3.7"
+            arch: aarch64
+    runs-on: ubuntu-latest
+    name: 🐍 • Linux • ${{ matrix.python }} • ${{ matrix.arch }}
+
+    steps:
+      - uses: actions/checkout@v2
+
+  on_alpine:
+    strategy:
+      fail-fast: true
+      matrix:
+        python: [ "3.8" , "3.9" , "3.10" , "standalone" ]
+        arch: [ x86_64 , aarch64 ]
+    runs-on: ubuntu-latest
+    name: 🐍 • Alpine • ${{ matrix.python }} • ${{ matrix.arch }}
+
+    steps:
+      - uses: actions/checkout@v2
+
+  on_macos:
+    strategy:
+      fail-fast: true
+      matrix:
+        python: [ "3.9" , "3.10" , "standalone"]
+    runs-on: macos-latest
+    name: 🐍 • macOS • ${{ matrix.python }}  • x86_64
 
     steps:
       - uses: actions/checkout@v2
