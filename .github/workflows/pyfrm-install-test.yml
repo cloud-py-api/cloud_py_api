@@ -15,6 +15,8 @@ jobs:
         image: [ "debian10" ]
     runs-on: ubuntu-latest
     name: 🐍 • ${{ matrix.image }} • x86_64
+    env:
+      dockerfile: ${{ env.DOCKER_TEST_FILES_PATH }}${{ matrix.image }}${{ env.TEST_FILES_EXT }}
 
     steps:
       - name: Set up Docker Buildx
@@ -32,7 +34,7 @@ jobs:
         with:
           context: .
           load: true
-          file: ${{ env.DOCKER_TEST_FILES_PATH }}${{ matrix.image }}${{ env.TEST_FILES_EXT }}
+          file: dockerfile
           tags: blablabla
 
       - name: Test
