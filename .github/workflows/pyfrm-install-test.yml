@@ -34,10 +34,11 @@ jobs:
           context: .
           load: true
           file: ${{ format('{0}{1}{2}', env.DOCKERFILE_DIR,  matrix.image, env.DOCKERFILE_EXT) }}
-          tags: blablabla
+          tags: bigcat88/blablabla:test
+          platforms: linux/amd64
 
       - name: Test
-        run: docker run --rm blablabla
+        run: docker run --rm bigcat88/blablabla:test
 
 #      - name: Run tests2
 #        run: docker run -it self_install_test
