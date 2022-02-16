@@ -32,7 +32,7 @@ jobs:
         with:
           context: .
           load: true
-          file: ${{ format('{0}{1}{2}', env.DOCKERFILE_DIR,  env.matrix.image, env.DOCKERFILE_EXT) }}
+          file: ${{ format('{0}{1}{2}', env.DOCKERFILE_DIR,  matrix.image, env.DOCKERFILE_EXT) }}
           tags: blablabla
 
       - name: Test
