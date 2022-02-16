@@ -12,8 +12,14 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        i: [ {"os": "debian", "ver": "buster", "arch": "amd64", "dfile": "debian", "ep": "debian.sh"},
-             {"os": "debian", "ver": "buster", "arch": "arm64", "dfile": "debian", "ep": "debian.sh"} ]
+        i: [ { "os": "debian", "ver": "10.11", "arch": "amd64", "dfile": "debian", "ep": "debian.sh" },
+             { "os": "debian", "ver": "10.11", "arch": "arm64", "dfile": "debian", "ep": "debian.sh" },
+             { "os": "debian", "ver": "11.2", "arch": "amd64", "dfile": "debian", "ep": "debian.sh" },
+             { "os": "debian", "ver": "11.2", "arch": "arm64", "dfile": "debian", "ep": "debian.sh" },
+             { "os": "debian", "ver": "21.10", "arch": "amd64", "dfile": "debian", "ep": "debian.sh" },
+             { "os": "debian", "ver": "21.10", "arch": "arm64", "dfile": "debian", "ep": "debian.sh" },
+             { "os": "debian", "ver": "22.04", "arch": "amd64", "dfile": "debian", "ep": "debian.sh" },
+             { "os": "debian", "ver": "22.04", "arch": "arm64", "dfile": "debian", "ep": "debian.sh" } ]
     runs-on: ubuntu-latest
     name: 🐍 • ${{ matrix.i['os'] }} • ${{ matrix.i['ver'] }} • ${{ matrix.i['arch'] }}
     env:
@@ -68,37 +74,6 @@ jobs:
       - name: Test
         run: docker run --rm ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.D_TAG }}
 
-#      - name: Run tests2
-#        run: docker run -it self_install_test
-
-#  on_linux_aarch64:
-#    strategy:
-#      fail-fast: true
-#      matrix:
-#        image: [ "debian10" ]
-#    runs-on: ubuntu-latest
-#    name: 🐍 • ${{ matrix.image }} • aarch64
-#
-#    steps:
-#      - uses: actions/checkout@v
-#      - name: Set up Docker Buildx
-#        uses: docker/setup-buildx-action@v1
-#        with:
-#          buildkitd-flags: --debug
-#          install: true
-#      - name: Login to DockerHub
-#        uses: docker/login-action@v1
-#        with:
-#          username: ${{ secrets.DOCKERHUB_USERNAME }}
-#          password: ${{ secrets.DOCKERHUB_TOKEN }}
-#
-#      - name: Run tests
-#        run: docker build --file ${{ env.docker_file }} --platform arm64 -t self_install_test .
-#        env:
-#          docker_file: ${{ env.DOCKER_TEST_FILES_PATH }}${{ matrix.image }}${{ env.TEST_FILES_EXT }}
-#
-#      - name: Run tests2
-#        run: docker run -it self_install_test
 
 # , "debian:bullseye", "ubuntu:21.10", "ubuntu:latest", "alpine:latest", "fedora:latest"
 # wih pip
