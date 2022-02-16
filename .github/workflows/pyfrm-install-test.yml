@@ -8,7 +8,7 @@ env:
   D_EXT: ".Dockerfile"
 
 jobs:
-  on_linux_x86_64:
+  on_linux:
     strategy:
       fail-fast: true
       matrix:
@@ -20,6 +20,10 @@ jobs:
              { "os": "ubuntu", "ver": "21.10", "arch": "arm64", "dfile": "debian", "ep": "debian.sh" },
              { "os": "ubuntu", "ver": "22.04", "arch": "amd64", "dfile": "debian", "ep": "debian.sh" },
              { "os": "ubuntu", "ver": "22.04", "arch": "arm64", "dfile": "debian", "ep": "debian.sh" } ]
+#             { "os": "alpine", "ver": "3.15", "arch": "amd64", "dfile": "alpine", "ep": "alpine.sh" },
+#             { "os": "alpine", "ver": "3.15", "arch": "arm64", "dfile": "alpine", "ep": "alpine.sh" },
+#             { "os": "fedora", "ver": "35", "arch": "amd64", "dfile": "fedora", "ep": "fedora.sh" },
+#             { "os": "fedora", "ver": "35", "arch": "arm64", "dfile": "fedora", "ep": "fedora.sh" } ]
     runs-on: ubuntu-latest
     name: 🐍 • ${{ matrix.i['os'] }} • ${{ matrix.i['ver'] }} • ${{ matrix.i['arch'] }}
     env:
@@ -74,21 +78,9 @@ jobs:
       - name: Test
         run: docker run --rm ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.D_TAG }}
 
-
-# , "debian:bullseye", "ubuntu:21.10", "ubuntu:latest", "alpine:latest", "fedora:latest"
-# wih pip
-# without pip
-#  on_alpine:
-#    strategy:
-#      fail-fast: true
-#      matrix:
-#        python: [ "3.8" , "3.9" , "3.10" , "standalone" ]
-#        arch: [ x86_64 , aarch64 ]
-#    runs-on: ubuntu-latest
-#    name: 🐍 • Alpine • ${{ matrix.python }} • ${{ matrix.arch }}
-#
-#    steps:
-#      - uses: actions/checkout@v2
+# COPY pyfrm ./pyfrm
+# Debian:
+# 3.7(minimal,+pip) + standalone
 #
 #  on_macos:
 #    strategy:
