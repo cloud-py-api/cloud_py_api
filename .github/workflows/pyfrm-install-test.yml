@@ -23,7 +23,7 @@ jobs:
              { "os": "fedora", "ver": "35", "arch": "amd64", "dfile": "fedora", "ep": "fedora.sh" },
              { "os": "fedora", "ver": "35", "arch": "arm64", "dfile": "fedora", "ep": "fedora.sh" },
              { "os": "alpine", "ver": "3.15", "arch": "amd64", "dfile": "alpine", "ep": "alpine.sh" },
-             { "os": "alpine", "ver": "3.15", "arch": "arm64", "dfile": "alpine", "ep": "alpine.sh" } ]
+             { "os": "alpine", "ver": "3.14", "arch": "arm64", "dfile": "alpine", "ep": "alpine.sh" } ]
     runs-on: ubuntu-latest
     name: 🐍 • ${{ matrix.i['os'] }} • ${{ matrix.i['ver'] }} • ${{ matrix.i['arch'] }}
     env:
@@ -76,7 +76,7 @@ jobs:
           mv /tmp/.buildx-cache-new /tmp/.buildx-cache
 
       - name: Test
-        run: docker run --rm ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.D_TAG }} --platform linux/${{ matrix.i['arch'] }}
+        run: docker run --rm ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.D_TAG }} }}
 
 
 #
