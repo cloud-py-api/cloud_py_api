@@ -1,4 +1,4 @@
-name: Tests
+name: Unit&Integration Tests
 
 on:
   workflow_dispatch:
@@ -42,6 +42,8 @@ jobs:
           repository: nextcloud/serverinfo
           ref: v23.0.2
           path: nextcloud/apps/serverinfo
+
+      - name: Enable serverinfo
         run: php -f nextcloud/occ app:enable serverinfo
 
       - name: Run unit tests
@@ -76,49 +78,6 @@ jobs:
 
       - name: Run unit tests
         run: npm run test
-
-
-  # python-unit:
-  #   runs-on: ubuntu-latest
-
-  #   strategy:
-  #     matrix:
-  #       python-versions: [3.7, 3.8, 3.9]
-  #       php-versions: [7.4, 8.0]
-  #       nextcloud-versions: ['stable21', 'stable22', 'stable23', 'master']
-
-  #   name: Nextcloud ${{ matrix.nextcloud-versions }} (php${{ matrix.php-versions }}) python ${{ matrix.python-versions }} unit tests
-  #   steps:
-  #     - name: Set up php${{ matrix.php-versions }}
-  #       uses: shivammathur/setup-php@master
-  #       with:
-  #         php-version: ${{ matrix.php-versions }}
-  #         tools: composer:v1
-  #         extensions: curl, json, zip, openssl
-
-  #     - name: Checkout Nextcloud
-  #       run: git clone https://github.com/nextcloud/server.git --recursive --depth 1 -b ${{ matrix.nextcloud-versions }} nextcloud
-
-  #     - name: Install Nextcloud
-  #       run: php -f nextcloud/occ maintenance:install --database-name oc_autotest --database-user oc_autotest --admin-user admin --admin-pass admin --database sqlite --database-pass=''
-
-  #     - name: Checkout Cloud_Py_API
-  #       uses: actions/checkout@v2
-  #       with:
-  #         path: nextcloud/apps/cloud_py_api
-
-  #     - name: Setup python${{ matrix.python-versions }}
-  #       uses: actions/setup-python@v1
-  #       with:
-  #         python-version: ${{ matrix.python-versions }}
-
-  #     - name: PyTest installation
-  #       uses: BSFishy/pip-action@v1
-  #       with:
-  #         packages: pytest
-
-  #     - name: PyTest
-  #       run: pytest
 
 
   integration-tests:
@@ -197,6 +156,8 @@ jobs:
           repository: nextcloud/serverinfo
           ref: v23.0.2
           path: nextcloud/apps/serverinfo
+
+      - name: Enable serverinfo
         run: php -f nextcloud/occ app:enable serverinfo
 
       - name: Enable cloud_py_api
