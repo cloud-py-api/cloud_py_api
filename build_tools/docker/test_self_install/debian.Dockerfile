@@ -9,19 +9,7 @@ ENV SP_ARM64="https://github.com/indygreg/python-build-standalone/releases/downl
 
 RUN set -ex && apt update && apt install -y python3-minimal zstd wget && chmod +x /entrypoint.sh && python3 -V
 ARG TARGETARCH
-RUN if [ "$TARGETARCH" = "linux/amd64" ] ; then echo "see $TARGETARCH" ; else echo "not see $TARGETARCH" ; fi
-ARG TARGETPLATFORM
-ARG TARGETVARIANT
-ARG BUILDPLATFORM
-ARG BUILDPLATFORM
-RUN echo $TARGETPLATFORM $TARGETVARIANT $BUILDPLATFORM $BUILDARCH
+RUN if [ "$TARGETARCH" = "amd64" ] ; then SP_URL=$SP_AMD64 ; else SP_URL=SP_ARM64 ; fi
+RUN wget -q --no-check-certificate -O standalone.zst $SP_URL && zstd -d standalone.zst && ls -la .
 
 CMD ["sh", "-c", "/entrypoint.sh"]
-
-#
-#
-#    wget -q --no-check-certificate -O "standalone.zstd"
-
-# zstd -d
-#
-
