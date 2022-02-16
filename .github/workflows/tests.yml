@@ -40,7 +40,7 @@ jobs:
         uses: actions/checkout@master
         with:
           repository: nextcloud/serverinfo
-          ref: v23.0.2
+          ref: master
           path: nextcloud/apps/serverinfo
 
       - name: Enable serverinfo
@@ -154,7 +154,7 @@ jobs:
         uses: actions/checkout@master
         with:
           repository: nextcloud/serverinfo
-          ref: v23.0.2
+          ref: master
           path: nextcloud/apps/serverinfo
 
       - name: Enable serverinfo
