@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 
 env:
-  DOCKER_TEST_FILES_PATH: "build_tools/docker/test/"
+  DOCKER_TEST_FILES_PATH: "./build_tools/docker/test/"
   TEST_FILES_EXT: ".Dockerfile"
 
 jobs:
@@ -20,7 +20,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - run: ls -la .
+      - run: |
+          ls -la .
+          ls -la ${{ env.DOCKER_TEST_FILES_PATH }}
 
       - name: Build image
         run: |
