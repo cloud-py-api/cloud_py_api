@@ -20,7 +20,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Set up QEMU
-        if: matrix.cibw_arch == 'aarch64'
+        if: matrix.arch == 'aarch64'
         uses: docker/setup-qemu-action@v1
         with:
           platforms: arm64
@@ -32,7 +32,7 @@ jobs:
       - name: Build image
         run: |
           echo ${{ env.DOCKER_TEST_FILES_PATH }}${{ matrix.image }}${{ env.TEST_FILES_EXT }}
-          docker build --file ${{ env.DOCKER_FILE_PATH }}${{ matrix.image }}${{ env.TEST_FILES_EXT }}
+          docker build --file ${{ env.DOCKER_FILE_PATH }}${{ matrix.image }}${{ env.TEST_FILES_EXT }} .
 
 
 
