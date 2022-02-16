@@ -24,7 +24,7 @@ jobs:
           buildkitd-flags: --debug
           install: true
 
-      - name: Build image
+      - name: Run tests
         run: docker build --file ${{ env.docker_file }} .
         env:
           docker_file: ${{ env.DOCKER_TEST_FILES_PATH }}${{ matrix.image }}${{ env.TEST_FILES_EXT }}
@@ -49,13 +49,11 @@ jobs:
           buildkitd-flags: --debug
           install: true
 
-      - name: Build image
+      - name: Run tests
         run: docker build --file ${{ env.docker_file }} --platform arm64 .
         env:
           docker_file: ${{ env.DOCKER_TEST_FILES_PATH }}${{ matrix.image }}${{ env.TEST_FILES_EXT }}
 
-      - name: Run tests
-        run: docker run
 
 
 # , "debian:bullseye", "ubuntu:21.10", "ubuntu:latest", "alpine:latest", "fedora:latest"
