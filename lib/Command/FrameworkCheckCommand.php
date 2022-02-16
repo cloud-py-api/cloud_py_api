@@ -35,7 +35,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use OCA\Cloud_Py_API\Service\PythonService;
 
 
-class FrameworkInstallCommand extends Command {
+class FrameworkCheckCommand extends Command {
 
 	/** @var PythonService */
 	private $pythonService;
@@ -47,14 +47,14 @@ class FrameworkInstallCommand extends Command {
 	}
 
 	protected function configure(): void {
-		$this->setName("cloud_py_api:framework:install");
-		$this->setDescription("Install cloud_py_api python framework dependencies");
+		$this->setName("cloud_py_api:framework:check");
+		$this->setDescription("Check cloud_py_api python framework installation");
 	}
 
 	protected function execute(InputInterface $input, OutputInterface $output): int {
 		$pythonOutput = $this->pythonService->run('/pyfrm/install.py', [
 			'--config' => rawurlencode(json_encode($this->pythonService->getPyFrmConfig())),
-			'--install' => '',
+			'--check' => '',
 			'--target' => 'framework',
 		]);
 		$output->writeln(json_encode($pythonOutput));

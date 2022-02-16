@@ -13,10 +13,10 @@
 		"lint": "find . -name \\*.php -not -path './vendor/*' -print0 | xargs -0 -n1 php -l",
 		"psalm": "psalm.phar",
 		"test:unit": "phpunit -c tests/phpunit.unit.xml --fail-on-warning --coverage-html tests/coverage/html --coverage-xml tests/coverage/xml",
-		"test:integration": "phpunit -c tests/phpunit.integration.xml --fail-on-warning"
+		"test:integration": "phpunit -c tests/phpunit.integration.xml --fail-on-warning --coverage-html tests/coverage/html --coverage-xml tests/coverage/xml"
 	},
 	"require-dev": {
-		"christophwurst/nextcloud": "v21.0.0",
+		"christophwurst/nextcloud": "v23.0.0-RC1",
 		"roave/security-advisories": "dev-master",
 		"psalm/phar": "^4.6",
 		"phpunit/phpunit": "^9.5",

@@ -37,7 +37,12 @@ jobs:
         run: composer install
 
       - name: Install serverinfo
-        run: php -f nextcloud/occ app:install serverinfo
+        uses: actions/checkout@master
+        with:
+          repository: nextcloud/serverinfo
+          ref: v23.0.2
+          path: nextcloud/apps/serverinfo
+        run: php -f nextcloud/occ app:enable serverinfo
 
       - name: Run unit tests
         working-directory: nextcloud/apps/cloud_py_api
@@ -187,7 +192,12 @@ jobs:
         run: composer install
 
       - name: Install serverinfo
-        run: php -f nextcloud/occ app:install serverinfo
+        uses: actions/checkout@master
+        with:
+          repository: nextcloud/serverinfo
+          ref: v23.0.2
+          path: nextcloud/apps/serverinfo
+        run: php -f nextcloud/occ app:enable serverinfo
 
       - name: Enable cloud_py_api
         run: php -f nextcloud/occ app:enable cloud_py_api

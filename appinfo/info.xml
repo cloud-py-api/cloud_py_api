@@ -57,5 +57,6 @@ Nextcloud Python API Framework
 		<command>OCA\Cloud_Py_API\Command\RunGrpcClientOccCallCommand</command>
 		<command>OCA\Cloud_Py_API\Command\RunGrpcClientAppCheckCommand</command>
 		<command>OCA\Cloud_Py_API\Command\FrameworkInstallCommand</command>
+		<command>OCA\Cloud_Py_API\Command\FrameworkCheckCommand</command>
 	</commands>
 </info>

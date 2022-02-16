@@ -26,39 +26,55 @@ declare(strict_types=1);
  *
  */
 
-namespace OCA\Cloud_Py_API\Command;
 
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
+namespace OCA\Cloud_Py_API\Tests\Integration\Framework;
 
+use ChristophWurst\Nextcloud\Testing\TestCase;
+
+use OC;
+use OCP\IConfig;
+use Psr\Log\LoggerInterface;
+
+use OCA\Cloud_Py_API\AppInfo\Application;
+use OCA\Cloud_Py_API\Db\SettingMapper;
+use OCA\Cloud_Py_API\Service\AppsService;
 use OCA\Cloud_Py_API\Service\PythonService;
+use OCA\Cloud_Py_API\Service\UtilsService;
 
 
-class FrameworkInstallCommand extends Command {
+class FrameworkInstallTest extends TestCase {
+
+	/** @var IConfig */
+	private $config;
 
 	/** @var PythonService */
 	private $pythonService;
 
-	public function __construct(PythonService $pythonService) {
-		parent::__construct();
+	public function setUp(): void {
+		parent::setUp();
 
-		$this->pythonService = $pythonService;
+		$this->config = OC::$server->get(IConfig::class);
+
+		$this->pythonService = new PythonService(
+			OC::$server->get(SettingMapper::class),
+			$this->config,
+			OC::$server->getAppDataDir(Application::APP_ID),
+			OC::$server->get(LoggerInterface::class),
+			OC::$server->get(UtilsService::class),
+			OC::$server->get(AppsService::class),
+			true,
+		);
 	}
 
-	protected function configure(): void {
-		$this->setName("cloud_py_api:framework:install");
-		$this->setDescription("Install cloud_py_api python framework dependencies");
-	}
-
-	protected function execute(InputInterface $input, OutputInterface $output): int {
+	public function testFrameworkInstall() {
 		$pythonOutput = $this->pythonService->run('/pyfrm/install.py', [
 			'--config' => rawurlencode(json_encode($this->pythonService->getPyFrmConfig())),
 			'--install' => '',
-			'--target' => 'framework',
+			'--target' => 'framework'
 		]);
-		$output->writeln(json_encode($pythonOutput));
-		return 0;
+		echo PHP_EOL . rawurlencode(json_encode($this->pythonService->getPyFrmConfig())) . PHP_EOL;
+		echo PHP_EOL. json_encode($pythonOutput) . PHP_EOL;
+		$this->assertTrue($pythonOutput['result_code'] === 0 && isset($pythonOutput['output'][0]) && json_decode($pythonOutput['output'][0], true)['Result'] === 'true' && count($pythonOutput['errors']) === 0);
 	}
 
 }
