@@ -38,6 +38,7 @@ if __name__ == '__main__':
     parser.add_argument('connect_address', action='store', type=str,
                         help='Address[:port] of php server to connect to(network or unix socket).')
     parser.add_argument('--loglvl', default='ERROR', type=str, choices=levels, help='Default=ERROR')
+    # parser.add_argument('--taskinit', default='', type=str, help='Light version when grpc for php is not available.')
     args = parser.parse_args()
     Log.setLevel(level=args.loglvl)
     Log.addHandler(PyFrmLogHandler())

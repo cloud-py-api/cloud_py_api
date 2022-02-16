@@ -194,11 +194,13 @@ class ClientCloudPA:
                                                             name=name, is_file=is_file, content=content))
         return FsResultCode(fs_reply.resCode), fs_reply.fileId.userId, fs_reply.fileId.fileId
 
-    def fs_write(self, user_id: str, file_id: int, content: BytesIO) -> FsResultCode:
+    def fs_write(self, user_id: str, file_id: int, content: Union[BytesIO, bytes]) -> FsResultCode:
+        _content = content if isinstance(content, BytesIO) else BytesIO(content)
+
         def fs_write_request_generator():
             _last = False
             while not _last:
-                data = content.read(self.task_init_data.config.maxChunkSize)
+                data = _content.read(self.task_init_data.config.maxChunkSize)
                 _last = True if len(data) < self.task_init_data.config.maxChunkSize else False
                 _request = FsWriteRequest(fileId=fsId(userId=user_id, fileId=file_id), last=_last, content=data)
                 yield _request

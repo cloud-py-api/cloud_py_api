@@ -10,16 +10,16 @@ from sqlalchemy.orm import Session
 def list_tables():
     cc = nc_api.CloudApi()
     base = automap_base()
-    cc.log.debug('Creating engine')
+    cc.log.info('Creating engine')
     engine = cc.db.create_engine()
     base.prepare(engine, reflect=True)
     for table in base.metadata.sorted_tables:
-        cc.log.debug(f"Table {table.name} with columns [{' '.join(str(column.name) for column in table.columns)}]")
+        cc.log.info(f"Table {table.name} with columns [{' '.join(str(column.name) for column in table.columns)}]")
 
 
 def list_mounts_table_orm():
     cc = nc_api.CloudApi()
-    cc.log.debug('Creating engine')
+    cc.log.info('Creating engine')
     engine = cc.db.create_engine()
     metadata = MetaData()
     table_name = cc.db.table_prefix + 'mounts'
@@ -29,9 +29,9 @@ def list_mounts_table_orm():
     mounts_class = base.classes[table_name]
     with Session(engine) as sess:
         mounts = sess.query(mounts_class).all()
-        cc.log.debug('ID storage_id root_id user_id mount_point mount_id')
+        cc.log.info('ID storage_id root_id user_id mount_point mount_id')
         for mount in mounts:
-            cc.log.debug(
+            cc.log.info(
                 f'{mount.id} {mount.storage_id} {mount.root_id} {mount.user_id} {mount.mount_point} {mount.mount_id}')
 
 
@@ -65,7 +65,7 @@ def list_storages_with_logs():
         result = e_connect.execution_options(stream_results=True).execute(Storages.__table__.select())
         storages = result.fetchall()
         for numeric_id, id, available, last_checked in storages:
-            cc.log.debug(f'num_id={numeric_id}, id={id}, available={available}, last_checked={last_checked}')
+            cc.log.info(f'num_id={numeric_id}, id={id}, available={available}, last_checked={last_checked}')
 
 
 class MyDbCustomRawLogHandler(logging.Handler):

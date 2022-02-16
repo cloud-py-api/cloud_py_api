@@ -4,7 +4,7 @@ from io import BytesIO
 import json
 
 from . import _ncc
-from .exceptions import FsNotFound, FsNotPermitted, FsLocked, FsIOError
+from .exceptions import NcValueError, FsNotFound, FsNotPermitted, FsLocked, FsIOError
 
 
 class FsResultCode(Enum):
@@ -95,7 +95,7 @@ class FsApi:
     def create(self, name: str, is_dir: bool = False, parent_dir: Union[None, dict, FsObj] = None,
                content: bytes = b'') -> [FsResultCode, dict]:
         if is_dir and len(content) > 0:
-            raise ValueError('Content can be specified only for files.')
+            raise NcValueError('Content can be specified only for files.')
         __write_after = False
         if len(content) > _ncc.NCC.task_init_data.config.maxCreateFileContent:
             __write_after = True
@@ -120,7 +120,7 @@ class FsApi:
 
     def move(self, fs_obj: Union[dict, FsObj], target_path: str, copy: bool = False) -> [FsResultCode, dict]:
         if target_path:
-            raise ValueError('target_path must be specified.')
+            raise NcValueError('target_path must be specified.')
         _result, _user_id, _file_id = _ncc.NCC.fs_move(*self.__arg_to_fs_id(fs_obj, deny_root=True), target_path, copy)
         if _result != FsResultCode.NO_ERROR:
             return _result, {}
@@ -133,7 +133,7 @@ class FsApi:
                 raise FsNotPermitted('fs_id can not be None for this method.')
             return '', 0
         if not isinstance(arg, (dict, FsObj)):
-            raise ValueError('fs_id can be None, dict or FsObj only.')
+            raise NcValueError('fs_id can be None, dict or FsObj only.')
         if isinstance(arg, FsObj):
             arg = arg.id
         elif arg.get('id') is not None:

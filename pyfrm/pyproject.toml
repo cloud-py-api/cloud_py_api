@@ -1,8 +1,16 @@
-#[build-system]
-#requires = [
-#    "setuptools>=41.2.0",
-#    "cffi>=1.14.0",
-#]
+[build-system]
+requires = [
+    "pipdeptree >= 2.2.1",
+    "nc_py_api >= 0.0.4",
+    "pg8000 >= 1.24.0",
+    "cryptography",
+    "PyNaCl >= 1.4.0",
+    "PyMySQL >= 1.0.2",
+    "SQLAlchemy == 1.4.31",
+    "requirements >= 0.5.0",
+    "protobuf >= 3.19.4",
+    "grpcio >= 1.43.0"
+]
 #build-backend = "setuptools.build_meta"
 #
 #[metadata]
@@ -18,6 +26,10 @@
 #    "raise NotImplementedError",
 #    "DeprecationWarning"
 #]
+
+[project]
+name = "cloud-py-frm"
+requires-python = ">=3.7.1"
 
 [tool.black]
 line-length = 120

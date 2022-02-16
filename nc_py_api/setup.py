@@ -33,6 +33,7 @@ setup(
         "Operating System :: POSIX :: Linux",
         "Operating System :: Microsoft :: Windows",
     ],
+    license="AGPL-3.0",
     keywords="cloud_py_api nextcloud api",
     url="https://github.com/bigcat88/cloud_py_api",
     zip_safe=False,
