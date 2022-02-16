@@ -393,10 +393,7 @@ if __name__ == "__main__":
         "--update", dest="update", action="store_true", help="Perform update of specified target's packages."
     )
     group.add_argument(
-        "--delete",
-        dest="delete",
-        action="store_true",
-        help="Perform delete of specified target's packages. Cannot be applied to framework itself.",
+        "--delete", dest="delete", action="store_true", help="Perform delete of specified target's packages.",
     )
     args = parser.parse_args()
     args.target = str(args.target).lower()
