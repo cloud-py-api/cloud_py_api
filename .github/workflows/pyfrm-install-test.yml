@@ -32,7 +32,7 @@ jobs:
       - name: Build image
         run: |
           echo ${{ env.DOCKER_TEST_FILES_PATH }}${{ matrix.image }}${{ env.TEST_FILES_EXT }}
-          docker build --file ${{ env.DOCKER_FILE_PATH }}${{ matrix.image }}${{ env.TEST_FILES_EXT }} .
+          docker build --file ${{ env.DOCKER_TEST_FILES_PATH }}${{ matrix.image }}${{ env.TEST_FILES_EXT }} .
 
 
 
