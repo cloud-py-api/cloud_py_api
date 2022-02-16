@@ -12,13 +12,12 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        image: [ {"os": "debian", "ver": "buster", "dockfile": "debian", "ep": "debian.sh"} ]
+        i: [ {"os": "debian", "ver": "buster", "dockfile": "debian", "ep": "debian.sh"} ]
     runs-on: ubuntu-latest
-    name: 🐍 • ${{ matrix.image['os'] }} • ${{ matrix.image['ver'] }} • x86_64
+    name: 🐍 • ${{ matrix.i['os'] }} • ${{ matrix.i['ver'] }} • x86_64
     env:
-      KEY_HEAD: ${{ matrix.image['os'] }}-${{ matrix.image['ver'] }}-x86_64
-# -${{ hashFiles(matrix.image['ep']) }}
-      DOCK_TAG: ${{ matrix.image['os'] }}-${{ matrix.image['ver'] }}-x86_64
+      KEY_HEAD: ${{ matrix.i['os'] }}-${{ matrix.i['ver'] }}-x86_64-${{ hashFiles(format('{0}', matrix.i['ep'])) }}
+      DOCK_TAG: ${{ matrix.i['os'] }}-${{ matrix.i['ver'] }}-x86_64
 
     steps:
       - uses: actions/checkout@v2
@@ -44,14 +43,14 @@ jobs:
         with:
           context: .
           push: true
-          file: ${{ format('{0}{1}{2}', env.DOCKERFILE_DIR,  matrix.image['dockfile'], env.DOCKERFILE_EXT) }}
+          file: ${{ format('{0}{1}{2}', env.DOCKERFILE_DIR,  matrix.i['dockfile'], env.DOCKERFILE_EXT) }}
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.DOCK_TAG }}:cpa_pyfrm_test_sfinst
           platforms: linux/amd64
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
           build-args: |
-            BASE_IMAGE=${{ matrix.image['os'] }}:${{ matrix.image['ver'] }}
-            ENTRY_POINT=${{ env.DOCKERFILE_DIR }}${{ matrix.image['ep'] }}
+            BASE_IMAGE=${{ matrix.i['os'] }}:${{ matrix.i['ver'] }}
+            ENTRY_POINT=${{ env.DOCKERFILE_DIR }}${{ matrix.i['ep'] }}
 
 # https://github.com/docker/build-push-action/issues/252
 # https://github.com/moby/buildkit/issues/1896
