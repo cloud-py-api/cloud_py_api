@@ -8,19 +8,36 @@ env:
   TEST_FILES_EXT: ".Dockerfile"
 
 jobs:
-  on_linux:
+  on_linux_x86_64:
     strategy:
       fail-fast: true
       matrix:
         image: [ "debian10" ]
-        arch: [ "x86_64", "aarch64" ]
     runs-on: ubuntu-latest
-    name: 🐍 • ${{ matrix.image }} • ${{ matrix.arch }}
+    name: 🐍 • ${{ matrix.image }} • x86_64
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: docker/setup-buildx-action@v1
+        with:
+          buildkitd-flags: --debug
+          install: true
+
+      - run: docker build --file ${{ env.docker_file }} .
+        env:
+          docker_file: ${{ env.DOCKER_TEST_FILES_PATH }}${{ matrix.image }}${{ env.TEST_FILES_EXT }}
+
+  on_linux_aarch64:
+    strategy:
+      fail-fast: true
+      matrix:
+        image: [ "debian10" ]
+    runs-on: ubuntu-latest
+    name: 🐍 • ${{ matrix.image }} • aarch64
 
     steps:
       - uses: actions/checkout@v2
       - name: Set up QEMU
-        if: matrix.arch == 'aarch64'
         uses: docker/setup-qemu-action@v1
         with:
           platforms: arm64
@@ -31,12 +48,9 @@ jobs:
           install: true
 
       - name: Build image
-        run: |
-          docker build --file ${{ env.docker_file }} --platform arm64 .
+        run: docker build --file ${{ env.docker_file }} --platform arm64 .
         env:
           docker_file: ${{ env.DOCKER_TEST_FILES_PATH }}${{ matrix.image }}${{ env.TEST_FILES_EXT }}
-
-
 
 #      - name: Set up QEMU
 #        if: matrix.arch == 'aarch64'
