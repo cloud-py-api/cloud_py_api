@@ -16,7 +16,8 @@ jobs:
     runs-on: ubuntu-latest
     name: 🐍 • ${{ matrix.image['os'] }} • {{ matrix.image['ver'] }} • x86_64
     env:
-      KEY_HEAD: ${{ matrix.image['os'] }}-${{ matrix.image['ver'] }}-x86_64-${{ hashFiles(matrix.image['ep']) }}
+      KEY_HEAD: ${{ matrix.image['os'] }}-${{ matrix.image['ver'] }}-x86_64
+# -${{ hashFiles(matrix.image['ep']) }}
       DOCK_TAG: ${{ matrix.image['os'] }}-${{ matrix.image['ver'] }}-x86_64
 
     steps:
