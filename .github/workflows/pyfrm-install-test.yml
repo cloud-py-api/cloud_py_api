@@ -3,41 +3,58 @@ name: Test PyFrm install
 on:
   workflow_dispatch:
 
+env:
+  DOCKER_TEST_FILES_PATH: "build_tools/docker/test/"
+  TEST_FILES_EXT: ".Dockerfile"
+
 jobs:
-  on_linux:
+  on_linux_x86_64:
     strategy:
       fail-fast: true
       matrix:
-        python: [ "3.7" , "3.8" , "3.9" , "3.10" , "standalone"]
-        arch: [ x86_64 , aarch64 ]
-        exclude:
-          - python: "3.7"
-            arch: aarch64
+        image: ["debian10"]
     runs-on: ubuntu-latest
-    name: 🐍 • Linux • ${{ matrix.python }} • ${{ matrix.arch }}
+    name: 🐍 • ${{ matrix.image }} • ${{ matrix.arch }}
 
     steps:
       - uses: actions/checkout@v2
 
-  on_alpine:
-    strategy:
-      fail-fast: true
-      matrix:
-        python: [ "3.8" , "3.9" , "3.10" , "standalone" ]
-        arch: [ x86_64 , aarch64 ]
-    runs-on: ubuntu-latest
-    name: 🐍 • Alpine • ${{ matrix.python }} • ${{ matrix.arch }}
+      - run: ls -la .
 
-    steps:
-      - uses: actions/checkout@v2
+      - name: Build image
+        run: |
+          echo ${{ env.DOCKER_FILE_PATH }}${{ matrix.image }}${{ env.TEST_FILES_EXT }}
+          docker build - < ${{ env.DOCKER_FILE_PATH }}${{ matrix.image }}${{ env.TEST_FILES_EXT }}
 
-  on_macos:
-    strategy:
-      fail-fast: true
-      matrix:
-        python: [ "3.9" , "3.10" , "standalone"]
-    runs-on: macos-latest
-    name: 🐍 • macOS • ${{ matrix.python }}  • x86_64
 
-    steps:
-      - uses: actions/checkout@v2
+
+#      - name: Set up QEMU
+#        if: matrix.arch == 'aarch64'
+#        uses: docker/setup-qemu-action@v1
+#        with:
+#          platforms: arm64
+# , "debian:bullseye", "ubuntu:21.10", "ubuntu:latest", "alpine:latest", "fedora:latest"
+# wih pip
+# without pip
+#  on_alpine:
+#    strategy:
+#      fail-fast: true
+#      matrix:
+#        python: [ "3.8" , "3.9" , "3.10" , "standalone" ]
+#        arch: [ x86_64 , aarch64 ]
+#    runs-on: ubuntu-latest
+#    name: 🐍 • Alpine • ${{ matrix.python }} • ${{ matrix.arch }}
+#
+#    steps:
+#      - uses: actions/checkout@v2
+#
+#  on_macos:
+#    strategy:
+#      fail-fast: true
+#      matrix:
+#        python: [ "3.9" , "3.10" , "standalone"]
+#    runs-on: macos-latest
+#    name: 🐍 • macOS • ${{ matrix.python }}  • x86_64
+#
+#    steps:
+#      - uses: actions/checkout@v2
