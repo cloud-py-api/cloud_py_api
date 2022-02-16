@@ -12,9 +12,9 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        image: [ "debian10" ]
+        image: [ {"os": "debian:buster", "file": "debian"} ]
     runs-on: ubuntu-latest
-    name: 🐍 • ${{ matrix.image }} • x86_64
+    name: 🐍 • ${{ matrix.image.*.os }} • x86_64
 
     steps:
       - uses: actions/checkout@v2
@@ -23,6 +23,14 @@ jobs:
         with:
           buildkitd-flags: --debug
           install: true
+
+      - name: Cache Docker layers
+        uses: actions/cache@v2
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ matrix.image }}-buildx-${{ github.sha }}
+          restore-keys: ${{ runner.os }}-buildx-
+
       - uses: docker/login-action@v1
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
@@ -32,13 +40,22 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: .
-          load: true
+          push: true
           file: ${{ format('{0}{1}{2}', env.DOCKERFILE_DIR,  matrix.image, env.DOCKERFILE_EXT) }}
-          tags: bigcat88/blablabla:test
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/blablabla:test
           platforms: linux/amd64
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
+
+# https://github.com/docker/build-push-action/issues/252
+# https://github.com/moby/buildkit/issues/1896
+      - name: Temp fix - Move cache
+        run: |
+          rm -rf /tmp/.buildx-cache
+          mv /tmp/.buildx-cache-new /tmp/.buildx-cache
 
       - name: Test
-        run: docker run --rm bigcat88/blablabla:test
+        run: docker run --rm ${{ secrets.DOCKERHUB_USERNAME }}/blablabla:test
 
 #      - name: Run tests2
 #        run: docker run -it self_install_test
