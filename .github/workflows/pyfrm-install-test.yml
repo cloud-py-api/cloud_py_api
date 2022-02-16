@@ -4,8 +4,8 @@ on:
   workflow_dispatch:
 
 env:
-  DOCKER_TEST_FILES_PATH: "./build_tools/docker/test/"
-  TEST_FILES_EXT: ".Dockerfile"
+  DOCKERFILE_DIR: "./build_tools/docker/test/"
+  DOCKERFILE_EXT: ".Dockerfile"
 
 jobs:
   on_linux_x86_64:
@@ -15,8 +15,6 @@ jobs:
         image: [ "debian10" ]
     runs-on: ubuntu-latest
     name: 🐍 • ${{ matrix.image }} • x86_64
-    env:
-      dockerfile: ${{ format('{0}', ${{ matrix.image }}) }}
 
     steps:
       - name: Set up Docker Buildx
@@ -34,7 +32,7 @@ jobs:
         with:
           context: .
           load: true
-          file: dockerfile
+          file: ${{ format('{0}{1}{2}', env.DOCKERFILE_DIR,  env.matrix.image, env.DOCKERFILE_EXT) }}
           tags: blablabla
 
       - name: Test
