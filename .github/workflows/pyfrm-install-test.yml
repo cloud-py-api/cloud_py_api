@@ -16,10 +16,10 @@ jobs:
              { "os": "debian", "ver": "10.11", "arch": "arm64", "dfile": "debian", "ep": "debian.sh" },
              { "os": "debian", "ver": "11.2", "arch": "amd64", "dfile": "debian", "ep": "debian.sh" },
              { "os": "debian", "ver": "11.2", "arch": "arm64", "dfile": "debian", "ep": "debian.sh" },
-             { "os": "debian", "ver": "21.10", "arch": "amd64", "dfile": "debian", "ep": "debian.sh" },
-             { "os": "debian", "ver": "21.10", "arch": "arm64", "dfile": "debian", "ep": "debian.sh" },
-             { "os": "debian", "ver": "22.04", "arch": "amd64", "dfile": "debian", "ep": "debian.sh" },
-             { "os": "debian", "ver": "22.04", "arch": "arm64", "dfile": "debian", "ep": "debian.sh" } ]
+             { "os": "ubuntu", "ver": "21.10", "arch": "amd64", "dfile": "debian", "ep": "debian.sh" },
+             { "os": "ubuntu", "ver": "21.10", "arch": "arm64", "dfile": "debian", "ep": "debian.sh" },
+             { "os": "ubuntu", "ver": "22.04", "arch": "amd64", "dfile": "debian", "ep": "debian.sh" },
+             { "os": "ubuntu", "ver": "22.04", "arch": "arm64", "dfile": "debian", "ep": "debian.sh" } ]
     runs-on: ubuntu-latest
     name: 🐍 • ${{ matrix.i['os'] }} • ${{ matrix.i['ver'] }} • ${{ matrix.i['arch'] }}
     env:
