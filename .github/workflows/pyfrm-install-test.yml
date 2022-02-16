@@ -32,7 +32,7 @@ jobs:
 
       - name: Build image
         run: |
-          docker build --file ${{ docker_file }} --platform arm64 .
+          docker build --file ${{ env.docker_file }} --platform arm64 .
         env:
           docker_file: ${{ env.DOCKER_TEST_FILES_PATH }}${{ matrix.image }}${{ env.TEST_FILES_EXT }}
 
