@@ -4,20 +4,20 @@ on:
   workflow_dispatch:
 
 env:
-  DOCKERFILE_DIR: "./build_tools/docker/test_self_install/"
-  DOCKERFILE_EXT: ".Dockerfile"
+  D_DIR: "./build_tools/docker/test_self_install/"
+  D_EXT: ".Dockerfile"
 
 jobs:
   on_linux_x86_64:
     strategy:
       fail-fast: true
       matrix:
-        i: [ {"os": "debian", "ver": "buster", "dockfile": "debian", "ep": "debian.sh"} ]
+        i: [ {"os": "debian", "ver": "buster", "dfile": "debian", "ep": "debian.sh"} ]
     runs-on: ubuntu-latest
     name: 🐍 • ${{ matrix.i['os'] }} • ${{ matrix.i['ver'] }} • x86_64
     env:
       KEY_HEAD: ${{ matrix.i['os'] }}-${{ matrix.i['ver'] }}-x86_64-cpa_pyfrm_test_sfinst
-      DOCK_TAG: ${{ matrix.i['os'] }}-${{ matrix.i['ver'] }}-x86_64
+      D_TAG: ${{ matrix.i['os'] }}-${{ matrix.i['ver'] }}-x86_64
 
     steps:
       - uses: actions/checkout@v2
@@ -31,7 +31,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: /tmp/.buildx-cache
-          key: ${{ env.KEY_HEAD }}-${{ hashFiles(format('{0}{1}', env.DOCKERFILE_DIR, matrix.i['ep'])) }}
+          key: ${{ env.KEY_HEAD }}-${{ hashFiles(format('{0}{1}{2}', env.D_DIR, matrix.i['dfile'], env.D_EXT)) }}
 
       - uses: docker/login-action@v1
         with:
@@ -43,14 +43,14 @@ jobs:
         with:
           context: .
           push: true
-          file: ${{ format('{0}{1}{2}', env.DOCKERFILE_DIR,  matrix.i['dockfile'], env.DOCKERFILE_EXT) }}
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.DOCK_TAG }}:cpa_pyfrm_test_sfinst
+          file: ${{ format('{0}{1}{2}', env.D_DIR,  matrix.i['dfile'], env.D_EXT) }}
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.D_TAG }}:cpa_pyfrm_test_sfinst
           platforms: linux/amd64
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
           build-args: |
             BASE_IMAGE=${{ matrix.i['os'] }}:${{ matrix.i['ver'] }}
-            ENTRY_POINT=${{ env.DOCKERFILE_DIR }}${{ matrix.i['ep'] }}
+            ENTRY_POINT=${{ env.D_DIR }}${{ matrix.i['ep'] }}
 
 # https://github.com/docker/build-push-action/issues/252
 # https://github.com/moby/buildkit/issues/1896
@@ -60,7 +60,7 @@ jobs:
           mv /tmp/.buildx-cache-new /tmp/.buildx-cache
 
       - name: Test
-        run: docker run --rm ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.DOCK_TAG }}:cpa_pyfrm_test_sfinst
+        run: docker run --rm ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.D_TAG }}:cpa_pyfrm_test_sfinst
 
 #      - name: Run tests2
 #        run: docker run -it self_install_test
