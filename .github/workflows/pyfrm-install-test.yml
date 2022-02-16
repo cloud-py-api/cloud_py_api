@@ -12,13 +12,18 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        image: ["debian10"]
-        arch: ["x86_64"]
+        image: [ "debian10" ]
+        arch: [ "x86_64", "aarch64" ]
     runs-on: ubuntu-latest
     name: 🐍 • ${{ matrix.image }} • ${{ matrix.arch }}
 
     steps:
       - uses: actions/checkout@v2
+      - name: Set up QEMU
+        if: matrix.cibw_arch == 'aarch64'
+        uses: docker/setup-qemu-action@v1
+        with:
+          platforms: arm64
 
       - run: |
           ls -la .
@@ -27,7 +32,7 @@ jobs:
       - name: Build image
         run: |
           echo ${{ env.DOCKER_TEST_FILES_PATH }}${{ matrix.image }}${{ env.TEST_FILES_EXT }}
-          docker build - < ${{ env.DOCKER_FILE_PATH }}${{ matrix.image }}${{ env.TEST_FILES_EXT }}
+          docker build --file ${{ env.DOCKER_FILE_PATH }}${{ matrix.image }}${{ env.TEST_FILES_EXT }}
 
 
 
