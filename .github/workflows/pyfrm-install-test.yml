@@ -16,8 +16,9 @@ jobs:
     runs-on: ubuntu-latest
     name: 🐍 • ${{ matrix.i['os'] }} • ${{ matrix.i['ver'] }} • x86_64
     env:
-      KEY_HEAD: ${{ matrix.i['os'] }}-${{ matrix.i['ver'] }}-x86_64-${{ hashFiles(format('{0}', matrix.i['ep'])) }}
+      KEY_HEAD: ${{ matrix.i['os'] }}-${{ matrix.i['ver'] }}-x86_64
       DOCK_TAG: ${{ matrix.i['os'] }}-${{ matrix.i['ver'] }}-x86_64
+      ENTRY_POINT: ${{ env.DOCKERFILE_DIR }}${{ matrix.i['ep'] }}
 
     steps:
       - uses: actions/checkout@v2
@@ -31,7 +32,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: /tmp/.buildx-cache
-          key: ${{ env.KEY_HEAD }}-buildx
+          key: ${{ env.KEY_HEAD }}-buildx-${{ hashFiles(ENTRY_POINT) }}
 
       - uses: docker/login-action@v1
         with:
@@ -50,7 +51,7 @@ jobs:
           cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
           build-args: |
             BASE_IMAGE=${{ matrix.i['os'] }}:${{ matrix.i['ver'] }}
-            ENTRY_POINT=${{ env.DOCKERFILE_DIR }}${{ matrix.i['ep'] }}
+            ENTRY_POINT=$ENTRY_POINT
 
 # https://github.com/docker/build-push-action/issues/252
 # https://github.com/moby/buildkit/issues/1896
