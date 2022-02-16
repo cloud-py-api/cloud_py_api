@@ -11,7 +11,7 @@ ENV WGET_CMD="wget -q --no-check-certificate -O standalone.zst"
 
 RUN set -ex && apt update && apt install -y python3-minimal zstd wget && chmod +x /entrypoint.sh && python3 -V
 ARG TARGETARCH
-RUN if [ "$TARGETARCH" = "amd64" ] ; then $WGET_CMD $SP_AMD64 ; else $WGET_CMD $SP_ARM64 ; fi  \
+RUN if [ "$TARGETARCH" = "amd64" ] ; then $WGET_CMD $SP_AMD64 ; else $WGET_CMD $SP_ARM64 ; fi
 RUN zstd -d standalone.zst && ls -la .
 
 CMD ["sh", "-c", "/entrypoint.sh"]
