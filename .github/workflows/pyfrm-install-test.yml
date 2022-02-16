@@ -25,14 +25,10 @@ jobs:
         with:
           platforms: arm64
 
-      - run: |
-          ls -la .
-          ls -la ${{ env.DOCKER_TEST_FILES_PATH }}
-
       - name: Build image
         run: |
           echo ${{ env.DOCKER_TEST_FILES_PATH }}${{ matrix.image }}${{ env.TEST_FILES_EXT }}
-          docker build --file ${{ env.DOCKER_TEST_FILES_PATH }}${{ matrix.image }}${{ env.TEST_FILES_EXT }} .
+          docker buildx --file ${{ env.DOCKER_TEST_FILES_PATH }}${{ matrix.image }}${{ env.TEST_FILES_EXT }} .
 
 
 
