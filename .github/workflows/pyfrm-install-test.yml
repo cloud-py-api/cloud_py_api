@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     name: 🐍 • ${{ matrix.image }} • x86_64
     env:
-      dockerfile: ${{ format('{0}{1}{2}', env.DOCKER_TEST_FILES_PATH, env.matrix.image, env.TEST_FILES_EXT) }}
+      dockerfile: ${{ format('{0}', ${{ matrix.image }}) }}
 
     steps:
       - name: Set up Docker Buildx
