@@ -1,4 +1,5 @@
-FROM debian:buster
+ARG BASE_IMAGE
+FROM BASE_IMAGE
 
 COPY tests/python/install/debian.sh /entrypoint.sh
 
