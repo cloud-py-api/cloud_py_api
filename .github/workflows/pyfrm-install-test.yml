@@ -25,9 +25,12 @@ jobs:
           install: true
 
       - name: Run tests
-        run: docker build --file ${{ env.docker_file }} .
+        run: docker build --file ${{ env.docker_file }} -t self_install_test .
         env:
           docker_file: ${{ env.DOCKER_TEST_FILES_PATH }}${{ matrix.image }}${{ env.TEST_FILES_EXT }}
+
+      - name: Run tests2
+        run: docker run self_install_test
 
   on_linux_aarch64:
     strategy:
@@ -50,11 +53,12 @@ jobs:
           install: true
 
       - name: Run tests
-        run: docker build --file ${{ env.docker_file }} --platform arm64 .
+        run: docker build --file ${{ env.docker_file }} --platform arm64 -t self_install_test .
         env:
           docker_file: ${{ env.DOCKER_TEST_FILES_PATH }}${{ matrix.image }}${{ env.TEST_FILES_EXT }}
 
-
+      - name: Run tests2
+        run: docker run self_install_test
 
 # , "debian:bullseye", "ubuntu:21.10", "ubuntu:latest", "alpine:latest", "fedora:latest"
 # wih pip
