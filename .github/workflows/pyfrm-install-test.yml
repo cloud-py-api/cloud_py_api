@@ -16,10 +16,8 @@ jobs:
     runs-on: ubuntu-latest
     name: 🐍 • ${{ matrix.i['os'] }} • ${{ matrix.i['ver'] }} • x86_64
     env:
-      KEY_HEAD: ${{ matrix.i['os'] }}-${{ matrix.i['ver'] }}-x86_64
+      KEY_HEAD: ${{ matrix.i['os'] }}-${{ matrix.i['ver'] }}-x86_64-cpa_pyfrm_test_sfinst
       DOCK_TAG: ${{ matrix.i['os'] }}-${{ matrix.i['ver'] }}-x86_64
-      ENTRY_POINT: env.DOCKERFILE_DIR
-# ${{ matrix.i['ep'] }}
 
     steps:
       - uses: actions/checkout@v2
@@ -33,7 +31,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: /tmp/.buildx-cache
-          key: ${{ env.KEY_HEAD }}-buildx-${{ hashFiles(env.ENTRY_POINT) }}
+          key: ${{ env.KEY_HEAD }}-${{ hashFiles(format('{0}{1}', env.DOCKERFILE_DIR, matrix.i['ep'])) }}
 
       - uses: docker/login-action@v1
         with:
@@ -52,7 +50,7 @@ jobs:
           cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
           build-args: |
             BASE_IMAGE=${{ matrix.i['os'] }}:${{ matrix.i['ver'] }}
-            ENTRY_POINT=${{ env.ENTRY_POINT }}
+            ENTRY_POINT=${{ env.DOCKERFILE_DIR }}${{ matrix.i['ep'] }}
 
 # https://github.com/docker/build-push-action/issues/252
 # https://github.com/moby/buildkit/issues/1896
