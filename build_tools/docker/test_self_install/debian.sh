@@ -17,7 +17,7 @@ if python3 -V; then
   echo "Checking on system python as user."
   if ! sudo -u www-data python3 /pyfrm/install.py --config "$FRM_CONFIG" --check --target framework --dev; then
     $ECHO_LINE_BREAK && echo "Installing" && $ECHO_LINE_BREAK
-    python3 /pyfrm/install.py --config "$FRM_CONFIG" --install --target framework --dev || exit 101
+    sudo -u www-data python3 /pyfrm/install.py --config "$FRM_CONFIG" --install --target framework --dev || exit 101
   fi
   rm -rf /cloud_py_api/local && ls -la /cloud_py_api && ls -la /var/www
   echo "Checking on system python as root."
