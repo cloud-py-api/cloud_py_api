@@ -89,7 +89,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: clover.js-unit.xml
-          path: ./nextcloud/apps/cloud_py_api/tests/javascript/clover.xml
+          path: ./nextcloud/apps/cloud_py_api/tests/javascript/coverage/clover.xml
 
 
   integration-tests:
