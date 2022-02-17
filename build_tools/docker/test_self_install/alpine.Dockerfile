@@ -4,6 +4,10 @@ FROM $BASE_IMAGE
 ARG ENTRY_POINT
 COPY $ENTRY_POINT /entrypoint.sh
 
-RUN set -ex && apk update && apk --no-cache add python3 zstd wget && chmod +x /entrypoint.sh && python3 -V
+RUN mkdir /cloud_py_api
+RUN set -ex && apk update && apk \
+    --no-cache add python3 zstd wget apache \
+    && chmod +x /entrypoint.sh && python3 -V
+RUN chown -R apache:apache /cloud_py_api
 
 CMD ["sh", "-c", "/entrypoint.sh"]
