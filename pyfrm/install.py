@@ -45,7 +45,12 @@ class InstallLogHandler(logging.Handler):
             __content += "\n" + record.exc_text
         __log_lvl = self.__log_levels.get(record.levelname)
         __module = record.module if record.name == "root" else record.name
-        LogsContainer.append({"log_lvl": __log_lvl, "module": __module, "content": __content})
+        if Options["dev"]:
+            LogsContainer.append(
+                {"log_lvl": __log_lvl, "module": f"{record.filename}:{record.lineno}", "content": __content}
+            )
+        else:
+            LogsContainer.append({"log_lvl": __log_lvl, "module": __module, "content": __content})
 
 
 def get_options() -> dict:
@@ -136,7 +141,7 @@ def check_pip() -> tuple:
 
 
 def pip_call(parameters, userbase: str = "", python_path: str = "", user_cache: bool = False) -> [bool, str]:
-    Log.debug(f"userbase={userbase}\npath={python_path}:\n{str(parameters)}")
+    Log.debug(f"\nuserbase={userbase}\npath={python_path}:\n{str(parameters)}")
     try:
         etc = ["--disable-pip-version-check"]
         etc += EXTRA_PIP_ARGS
@@ -381,10 +386,10 @@ if __name__ == "__main__":
     parser.add_argument(
         "--target",
         dest="target",
-        nargs=1,
         type=str,
-        help="'framework' or 'AppId' from table `cloud_py_api` if it is app.",
+        help="'framework' or 'AppId' from table `cloud_py_api`(for app).",
     )
+    parser.add_argument("--dev", dest="dev", action="store_true", default=False)
     group = parser.add_mutually_exclusive_group()
     group.add_argument("--check", dest="check", action="store_true", help="Check installation of specified target.")
     group.add_argument(
@@ -394,9 +399,13 @@ if __name__ == "__main__":
         "--update", dest="update", action="store_true", help="Perform update of specified target's packages."
     )
     group.add_argument(
-        "--delete", dest="delete", action="store_true", help="Perform delete of specified target's packages.",
+        "--delete",
+        dest="delete",
+        action="store_true",
+        help="Perform delete of specified target's packages.",
     )
     args = parser.parse_args()
+    Options["dev"] = args.dev
     args.target = str(args.target).lower()
     config = from_json(unquote_plus(args.config))
     Options["app_data"] = config["frmAppData"]
@@ -415,6 +424,8 @@ if __name__ == "__main__":
             Log.debug(f"User name: {getuser()}")
         except Exception as _exception:
             Log.warning(f"Exception during `getuser`:\n{str(_exception)}")
+        Log.debug(f"target: {args.target}")
+        Log.debug(f"app_data: {Options['app_data']}")
         Log.debug(f"Path to python: {sys.executable}")
         Log.debug(f"Python version: {sys.version}")
         Log.debug(f"Platform: {platform.system(), platform.release(), platform.version(), platform.machine()}")
@@ -441,14 +452,22 @@ if __name__ == "__main__":
         else:
             Log.exception(f"Unexpected Exception: {type(exception_info).__name__}")
         exit_code = 2
-    print(
-        to_json(
-            {
-                "Result": result,
-                "Installed": r_installed_list,
-                "NotInstalled": r_not_installed_list,
-                "Logs": LogsContainer,
-            }
+    if Options["dev"]:
+        print("Logs:")
+        for log_record in LogsContainer:
+            print(str(log_record["log_lvl"]) + " : " + log_record["module"] + " : " + log_record["content"])
+        print(f"Result: {result}")
+        print(f"Installed:\n{r_installed_list}")
+        print(f"NotInstalled:\n{r_not_installed_list}")
+    else:
+        print(
+            to_json(
+                {
+                    "Result": result,
+                    "Installed": r_installed_list,
+                    "NotInstalled": r_not_installed_list,
+                    "Logs": LogsContainer,
+                }
+            )
         )
-    )
     sys.exit(exit_code)
