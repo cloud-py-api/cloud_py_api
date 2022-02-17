@@ -309,7 +309,7 @@ def install_pip() -> bool:
                 Options["python"]["path"],
                 get_pip_path,
                 "--user",
-                "--no-cache-dir",
+                "--cache-dir",
                 get_local_dir_path(),
                 "--no-warn-script-location",
             ],
