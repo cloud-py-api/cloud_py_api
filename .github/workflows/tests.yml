@@ -167,7 +167,11 @@ jobs:
         run: php -f nextcloud/occ app:enable serverinfo
 
       - name: Enable cloud_py_api
-        run: php -f nextcloud/occ app:enable cloud_py_api
+        run: |
+          ls nextcloud/data/appdata_$(php -f nextcloud/occ config:system:get instanceid)
+          php -f nextcloud/occ app:enable cloud_py_api
+          mkdir -p nextcloud/data/appdata_$(php -f nextcloud/occ config:system:get instanceid)/cloud_py_api/cloud_py_api
+          ls nextcloud/data/appdata_$(php -f nextcloud/occ config:system:get instanceid)/cloud_py_api
 
       # - name: Install pyfrm
       #   run: php -f nextcloud/occ cloud_py_api:framework:install
@@ -186,6 +190,7 @@ jobs:
           ls -l
           ls -l nextcloud/
           ls -l nextcloud/data
+          ls -l nextcloud/data/appdata_$(php -f nextcloud/occ config:system:get instanceid)
           cat nextcloud/config/config.php
           cat nextcloud/data/nextcloud.log
 
