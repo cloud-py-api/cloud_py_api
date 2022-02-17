@@ -24,6 +24,8 @@ jobs:
              { "os": "centos", "ver": "7", "arch": "arm64", "dfile": "centos", "ep": "fedora.sh" },
              { "os": "fedora", "ver": "35", "arch": "amd64", "dfile": "fedora", "ep": "fedora.sh" },
              { "os": "fedora", "ver": "35", "arch": "arm64", "dfile": "fedora", "ep": "fedora.sh" },
+             { "os": "amazonlinux", "ver": "latest", "arch": "amd64", "dfile": "amazonlinux", "ep": "amazonlinux.sh" },
+             { "os": "amazonlinux", "ver": "latest", "arch": "arm64", "dfile": "amazonlinux", "ep": "amazonlinux.sh" },
              { "os": "alpine", "ver": "3.15", "arch": "amd64", "dfile": "alpine", "ep": "alpine.sh" },
              { "os": "alpine", "ver": "3.14", "arch": "arm64", "dfile": "alpine", "ep": "alpine.sh" } ]
     runs-on: ubuntu-latest
