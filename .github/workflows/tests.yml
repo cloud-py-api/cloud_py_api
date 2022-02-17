@@ -87,7 +87,7 @@ jobs:
 
       - name: Print debug info
         run: |
-          ./nextcloud/apps/cloud_py_api/tests/javascript
+          ls -l ./nextcloud/apps/cloud_py_api/tests/javascript
 
       - name: Upload js-unit coverage clover file artifact
         uses: actions/upload-artifact@v2
