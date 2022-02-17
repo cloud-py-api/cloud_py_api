@@ -79,12 +79,6 @@ jobs:
       - name: Test
         run: docker run --rm ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.D_TAG }}
 
-
-#
-# COPY pyfrm ./pyfrm
-# Debian:
-# 3.7(minimal,+pip) + standalone
-#
 #  on_macos:
 #    strategy:
 #      fail-fast: true
