@@ -141,7 +141,7 @@ def check_pip() -> tuple:
 
 
 def pip_call(parameters, userbase: str = "", python_path: str = "", user_cache: bool = False) -> [bool, str]:
-    Log.debug(f"\nuserbase={userbase}\npath={python_path}:\n{str(parameters)}")
+    Log.debug(f"(USERBASE<{userbase}> PATH<{python_path}>): {str(parameters)}")
     try:
         etc = ["--disable-pip-version-check"]
         etc += EXTRA_PIP_ARGS
@@ -152,13 +152,16 @@ def pip_call(parameters, userbase: str = "", python_path: str = "", user_cache: 
         _result = run(
             [Options["python"]["path"], "-m", "pip"] + parameters + etc, stderr=PIPE, stdout=PIPE, check=False, env=_env
         )
-        Log.debug(f"pip.stderr:\n{_result.stderr.decode('utf-8')}")
-        Log.debug(f"pip.stdout:\n{_result.stdout.decode('utf-8')}")
-        full_reply = _result.stderr.decode("utf-8")
-        reply = sub(r"^\s*WARNING:.*\n?", "", full_reply, flags=MULTILINE + IGNORECASE)
+        _stderr = _result.stderr.decode("utf-8")
+        _stdout = _result.stdout.decode("utf-8")
+        if _stderr:
+            Log.debug(f"pip.stderr:\n{_stderr}")
+        if _stdout:
+            Log.debug(f"pip.stdout:\n{_stdout}")
+        reply = sub(r"^\s*WARNING:.*\n?", "", _stderr, flags=MULTILINE + IGNORECASE)
         if len(reply) == 0:
-            return True, _result.stdout.decode("utf-8")
-        return False, _result.stderr.decode("utf-8")
+            return True, _stdout
+        return False, _stderr
     except (OSError, ValueError, TypeError, TimeoutExpired) as _exception_info:
         return False, f"Exception {type(_exception_info).__name__}: {str(_exception_info)}"
 
@@ -211,7 +214,7 @@ def import_package(name: str, dest_sym_table=None, package=None) -> bool:
 def frm_check() -> [dict, dict]:
     if not Options["pip"]["present"]:
         Log.error("Python pip not found or has too low version.")
-        return {}, {}
+        return {}, {"package": "pip3", "location": "", "version": ""}
     add_python_path(get_site_packages(), first=True)
     modules = {}
     installed_list = {}
@@ -446,12 +449,17 @@ if __name__ == "__main__":
         elif args.delete:
             result = perform_action(args.target, "delete")
         r_installed_list, r_not_installed_list = check_target(args.target)
+        if args.check and not r_not_installed_list:
+            result = True
+        if not result:
+            exit_code = 1
     except Exception as exception_info:
         if type(exception_info) is FrmProgrammingError:
             Log.error(str(exception_info))
         else:
             Log.exception(f"Unexpected Exception: {type(exception_info).__name__}")
         exit_code = 2
+    Log.debug(f"ExitCode: {exit_code}")
     if Options["dev"]:
         print("Logs:")
         for log_record in LogsContainer:
