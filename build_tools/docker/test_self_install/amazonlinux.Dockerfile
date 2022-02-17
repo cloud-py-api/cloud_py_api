@@ -9,7 +9,7 @@ ENV SP_AMD64="$SP_BASE_URL-x86_64-unknown-linux-gnu-lto-20211017T1616.tar.zst"
 ENV SP_ARM64="$SP_BASE_URL-aarch64-unknown-linux-gnu-lto-20211017T1616.tar.zst"
 ENV WGET_CMD="wget -q --no-check-certificate -O standalone.tar.zst"
 
-RUN set -ex && yum update -y && yum install -y python3 zstd wget && chmod +x /entrypoint.sh && python3 -V
+RUN set -ex && yum update -y && yum install -y tar python3 zstd wget && chmod +x /entrypoint.sh && python3 -V
 ARG TARGETARCH
 RUN if [ "$TARGETARCH" = "amd64" ] ; then $WGET_CMD $SP_AMD64 ; else $WGET_CMD $SP_ARM64 ; fi
 RUN zstd -d standalone.tar.zst && tar xf standalone.tar && rm standalone.tar standalone.tar.zst
