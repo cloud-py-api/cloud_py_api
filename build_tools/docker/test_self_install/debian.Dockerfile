@@ -10,7 +10,9 @@ ENV SP_ARM64="$SP_BASE_URL-aarch64-unknown-linux-gnu-lto-20211017T1616.tar.zst"
 ENV WGET_CMD="wget -q --no-check-certificate -O standalone.tar.zst"
 
 RUN mkdir /cloud_py_api
-RUN set -ex && apt update && apt install -y python3-minimal zstd wget sudo && chmod +x /entrypoint.sh && python3 -V
+RUN set -ex && apt update && apt install -y \
+    python3-minimal python3-distutils zstd wget sudo \
+    && chmod +x /entrypoint.sh && python3 -V
 ARG TARGETARCH
 RUN if [ "$TARGETARCH" = "amd64" ] ; then $WGET_CMD $SP_AMD64 ; else $WGET_CMD $SP_ARM64 ; fi
 RUN zstd -d standalone.tar.zst && tar xf standalone.tar && rm standalone.tar standalone.tar.zst
