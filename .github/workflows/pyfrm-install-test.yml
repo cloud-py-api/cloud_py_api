@@ -12,22 +12,26 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        i: [ { "os": "debian", "ver": "10.11", "arch": "amd64", "dfile": "debian", "ep": "debian.sh" },
-             { "os": "debian", "ver": "10.11", "arch": "arm64", "dfile": "debian", "ep": "debian.sh" },
-             { "os": "debian", "ver": "11.2", "arch": "amd64", "dfile": "debian", "ep": "debian.sh" },
-             { "os": "debian", "ver": "11.2", "arch": "arm64", "dfile": "debian", "ep": "debian.sh" },
-             { "os": "ubuntu", "ver": "21.10", "arch": "amd64", "dfile": "debian", "ep": "debian.sh" },
-             { "os": "ubuntu", "ver": "21.10", "arch": "arm64", "dfile": "debian", "ep": "debian.sh" },
-             { "os": "ubuntu", "ver": "22.04", "arch": "amd64", "dfile": "debian", "ep": "debian.sh" },
-             { "os": "ubuntu", "ver": "22.04", "arch": "arm64", "dfile": "debian", "ep": "debian.sh" },
-             { "os": "centos", "ver": "7", "arch": "amd64", "dfile": "centos", "ep": "centos.sh" },
-             { "os": "centos", "ver": "7", "arch": "arm64", "dfile": "centos", "ep": "centos.sh" },
-             { "os": "fedora", "ver": "35", "arch": "amd64", "dfile": "fedora", "ep": "fedora.sh" },
-             { "os": "fedora", "ver": "35", "arch": "arm64", "dfile": "fedora", "ep": "fedora.sh" },
-             { "os": "amazonlinux", "ver": "latest", "arch": "amd64", "dfile": "amazonlinux", "ep": "amazonlinux.sh" },
-             { "os": "amazonlinux", "ver": "latest", "arch": "arm64", "dfile": "amazonlinux", "ep": "amazonlinux.sh" },
-             { "os": "alpine", "ver": "3.15", "arch": "amd64", "dfile": "alpine", "ep": "alpine.sh" },
-             { "os": "alpine", "ver": "3.14", "arch": "arm64", "dfile": "alpine", "ep": "alpine.sh" } ]
+        i: [ { "os": "debian", "ver": "10.11", "arch": "amd64", "ep_dfile": "debian" },
+             { "os": "debian", "ver": "10.11", "arch": "arm64", "ep_dfile": "debian" },
+             { "os": "debian", "ver": "11.2", "arch": "amd64", "ep_dfile": "debian" },
+             { "os": "debian", "ver": "11.2", "arch": "arm64", "ep_dfile": "debian" },
+             { "os": "ubuntu", "ver": "21.10", "arch": "amd64", "ep_dfile": "debian" },
+             { "os": "ubuntu", "ver": "21.10", "arch": "arm64", "ep_dfile": "debian" },
+             { "os": "ubuntu", "ver": "22.04", "arch": "amd64", "ep_dfile": "debian" },
+             { "os": "ubuntu", "ver": "22.04", "arch": "arm64", "ep_dfile": "debian" },
+             { "os": "centos", "ver": "7", "arch": "amd64", "ep_dfile": "centos" },
+             { "os": "centos", "ver": "7", "arch": "arm64", "ep_dfile": "centos" },
+             { "os": "fedora", "ver": "35", "arch": "amd64", "ep_dfile": "fedora" },
+             { "os": "fedora", "ver": "35", "arch": "arm64", "ep_dfile": "fedora" },
+             { "os": "amazonlinux", "ver": "latest", "arch": "amd64", "ep_dfile": "amazon" },
+             { "os": "amazonlinux", "ver": "latest", "arch": "arm64", "ep_dfile": "amazon" },
+             { "os": "alpine", "ver": "3.15", "arch": "amd64", "ep_dfile": "alpine" },
+             { "os": "alpine", "ver": "3.14", "arch": "arm64", "ep_dfile": "alpine" },
+             { "os": "oraclelinux", "ver": "8", "arch": "amd64", "ep_dfile": "oracle" },
+             { "os": "oraclelinux", "ver": "8", "arch": "arm64", "ep_dfile": "oracle" },
+             { "os": "photon", "ver": "latest", "arch": "amd64", "ep_dfile": "photon" },
+             { "os": "photon", "ver": "latest", "arch": "arm64", "ep_dfile": "photon" } ]
     runs-on: ubuntu-latest
     name: 🐍 • ${{ matrix.i['os'] }} • ${{ matrix.i['ver'] }} • ${{ matrix.i['arch'] }}
     env:
@@ -52,7 +56,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: /tmp/.buildx-cache
-          key: ${{ env.KEY_HEAD }}-${{ hashFiles(format('{0}{1}.*', env.D_DIR, matrix.i['dfile'])) }}
+          key: ${{ env.KEY_HEAD }}-${{ hashFiles(format('{0}{1}.*', env.D_DIR, matrix.i['ep_dfile'])) }}
 
       - uses: docker/login-action@v1
         with:
@@ -64,14 +68,14 @@ jobs:
         with:
           context: .
           push: true
-          file: ${{ format('{0}{1}{2}', env.D_DIR,  matrix.i['dfile'], env.D_EXT) }}
+          file: ${{ format('{0}{1}{2}', env.D_DIR,  matrix.i['ep_dfile'], env.D_EXT) }}
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.D_TAG }}
           platforms: linux/${{ matrix.i['arch'] }}
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
           build-args: |
             BASE_IMAGE=${{ matrix.i['os'] }}:${{ matrix.i['ver'] }}
-            ENTRY_POINT=${{ env.D_DIR }}${{ matrix.i['ep'] }}
+            ENTRY_POINT=${{ env.D_DIR }}${{ matrix.i['ep_dfile'] }}.sh
 
 # https://github.com/docker/build-push-action/issues/252
 # https://github.com/moby/buildkit/issues/1896
