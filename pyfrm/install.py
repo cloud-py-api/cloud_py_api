@@ -155,9 +155,9 @@ def pip_call(parameters, userbase: str = "", python_path: str = "", user_cache: 
         _stderr = _result.stderr.decode("utf-8")
         _stdout = _result.stdout.decode("utf-8")
         if _stderr:
-            Log.debug(f"pip.stderr:\n{_stderr}")
+            Log.debug(f"pip.stderr:\n{_stderr}".rstrip("\n"))
         if _stdout:
-            Log.debug(f"pip.stdout:\n{_stdout}")
+            Log.debug(f"pip.stdout:\n{_stdout}".rstrip("\n"))
         reply = sub(r"^\s*WARNING:.*\n?", "", _stderr, flags=MULTILINE + IGNORECASE)
         if len(reply) == 0:
             return True, _stdout
