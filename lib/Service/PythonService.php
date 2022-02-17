@@ -136,7 +136,8 @@ class PythonService {
 	public function getPyFrmConfig($loglevel = null): array {
 		$dbdriveroptions = $this->config->getSystemValue('dbdriveroptions');
 		return [
-			'loglvl' => isset($loglevel) ? $loglevel : logLvl::name($this->config->getSystemValue('loglevel')),
+			// 'loglvl' => isset($loglevel) ? logLvl::name($loglevel) : logLvl::name($this->config->getSystemValue('loglevel')),
+			'loglvl' => 'DEBUG',
 			'frmAppData' => $this->appsService->getAppDataFolderAbsPath(Application::APP_ID),
 			'dbConfig' => [
 				'dbHost' => $this->config->getSystemValue('dbhost'),
