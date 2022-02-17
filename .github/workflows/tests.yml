@@ -164,14 +164,17 @@ jobs:
       - name: Enable cloud_py_api
         run: php -f nextcloud/occ app:enable cloud_py_api
 
-      - name: Check migrations
-        run: php -f nextcloud/occ migrations:status cloud_py_api
+      - name: Check occ commands
+        run: php -f nextcloud/occ
 
-      - name: Execute migration
-        run: php -f nextcloud/occ occ migrations:execute cloud_py_api 0001Date20211028154433
+      # - name: Check migrations
+      #   run: php -f nextcloud/occ migrations:status cloud_py_api
 
-      - name: Check migrations
-        run: php -f nextcloud/occ migrations:status cloud_py_api
+      # - name: Execute migration
+      #   run: php -f nextcloud/occ occ migrations:execute cloud_py_api 0001Date20211028154433
+
+      # - name: Check migrations
+      #   run: php -f nextcloud/occ migrations:status cloud_py_api
 
       - name: Configure Nextcloud for testing
         run: |
