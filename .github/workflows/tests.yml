@@ -180,6 +180,7 @@ jobs:
           XDEBUG_MODE: coverage
 
       - name: Print debug logs
+        if: always()
         run: cat nextcloud/data/nextcloud.log
 
       - name: Report coverage
