@@ -133,10 +133,10 @@ class PythonService {
 		}
 	}
 
-	public function getPyFrmConfig(): array {
+	public function getPyFrmConfig($loglevel = null): array {
 		$dbdriveroptions = $this->config->getSystemValue('dbdriveroptions');
 		return [
-			'loglvl' => logLvl::name($this->config->getSystemValue('loglevel')),
+			'loglvl' => isset($loglevel) ? $loglevel : logLvl::name($this->config->getSystemValue('loglevel')),
 			'frmAppData' => $this->appsService->getAppDataFolderAbsPath(Application::APP_ID),
 			'dbConfig' => [
 				'dbHost' => $this->config->getSystemValue('dbhost'),

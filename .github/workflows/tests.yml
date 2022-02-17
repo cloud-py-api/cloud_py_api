@@ -163,23 +163,24 @@ jobs:
       - name: Enable cloud_py_api
         run: php -f nextcloud/occ app:enable cloud_py_api
 
-      - name: Install pyfrm
-        run: php -f nextcloud/occ cloud_py_api:framework:install
-
       - name: Configure Nextcloud for testing
         run: |
           php -f nextcloud/occ config:system:set debug --type bool --value true
           php -f nextcloud/occ config:system:set app.mail.verify-tls-peer --type bool --value false
 
+      # - name: Install pyfrm
+      #   run: php -f nextcloud/occ cloud_py_api:framework:install
+
       - name: Run integration tests
         working-directory: nextcloud/apps/cloud_py_api
         run: |
           ss -tunlp
-          compose run test:integration
+          composer run test:integration
         env:
           XDEBUG_MODE: coverage
 
       - name: Print debug logs
+        if: always()
         run: cat nextcloud/data/nextcloud.log
 
       - name: Report coverage

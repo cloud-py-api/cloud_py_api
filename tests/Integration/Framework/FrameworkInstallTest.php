@@ -68,7 +68,7 @@ class FrameworkInstallTest extends TestCase {
 
 	public function testFrameworkInstall() {
 		$pythonOutput = $this->pythonService->run('/pyfrm/install.py', [
-			'--config' => rawurlencode(json_encode($this->pythonService->getPyFrmConfig())),
+			'--config' => rawurlencode(json_encode($this->pythonService->getPyFrmConfig("DEBUG"))),
 			'--install' => '',
 			'--target' => 'framework'
 		]);
