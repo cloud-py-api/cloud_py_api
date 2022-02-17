@@ -80,7 +80,7 @@ class FrameworkInstallTest extends TestCase {
 		}
 		echo PHP_EOL. 'LOG NOT FORMATTED: ' . PHP_EOL;
 		echo PHP_EOL. json_encode($pythonOutput) . PHP_EOL;
-		$this->assertTrue($pythonOutput['result_code'] === 0 && isset($pythonOutput['output'][0]) && json_decode($pythonOutput['output'][0], true)['Result'] === 'true');
+		$this->assertTrue($pythonOutput['result_code'] === 0 && isset($pythonOutput['output'][0]) && json_decode($pythonOutput['output'][0], true)['Result'] === true);
 	}
 
 }
