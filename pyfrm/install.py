@@ -456,9 +456,9 @@ if __name__ == "__main__":
         print("Logs:")
         for log_record in LogsContainer:
             print(str(log_record["log_lvl"]) + " : " + log_record["module"] + " : " + log_record["content"])
-        print(f"Result: {result}")
         print(f"Installed:\n{r_installed_list}")
         print(f"NotInstalled:\n{r_not_installed_list}")
+        print(f"Result: {result}")
     else:
         print(
             to_json(

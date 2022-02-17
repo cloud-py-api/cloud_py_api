@@ -27,9 +27,9 @@ requires = [
 #    "DeprecationWarning"
 #]
 
-[project]
-name = "cloud-py-frm"
-requires-python = ">=3.7.1"
+#[project]
+#name = "cloud-py-frm"
+#requires-python = ">=3.7.1"
 
 [tool.black]
 line-length = 120
