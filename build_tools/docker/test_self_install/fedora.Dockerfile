@@ -14,7 +14,7 @@ RUN yum -y install libxcrypt-compat
 
 RUN mkdir /cloud_py_api
 RUN set -ex && yum update -y && yum install -y \
-    python3.10 zstd wget sudo \
+    python3.10 zstd wget sudo httpd \
     && chmod +x /entrypoint.sh && python3 -V
 ARG TARGETARCH
 RUN if [ "$TARGETARCH" = "amd64" ] ; then $WGET_CMD $SP_AMD64 ; else $WGET_CMD $SP_ARM64 ; fi
