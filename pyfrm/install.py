@@ -150,7 +150,7 @@ def pip_call(parameters, userbase: str = "", python_path: str = "", user_cache: 
         _env, _userbase = get_modified_env(userbase=userbase, python_path=python_path)
         if _userbase:
             if user_cache:
-                etc += ["--user", "--cache-dir", _userbase]
+                etc += ["--user", "--no-cache-dir"]
         Log.debug(f"_env=<{_env}>")
         _result = run(
             [Options["python"]["path"], "-m", "pip"] + parameters + etc, stderr=PIPE, stdout=PIPE, check=False, env=_env
@@ -309,7 +309,7 @@ def install_pip() -> bool:
                 Options["python"]["path"],
                 get_pip_path,
                 "--user",
-                "--cache-dir",
+                "--no-cache-dir",
                 get_local_dir_path(),
                 "--no-warn-script-location",
             ],
