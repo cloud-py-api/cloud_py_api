@@ -157,7 +157,7 @@ jobs:
         run: composer install
 
       - name: Upgrade pip
-        run: python3 -m pip install -U pip
+        run: /usr/bin/python3 -m pip install -U pip
 
       - name: Install serverinfo
         uses: actions/checkout@master
