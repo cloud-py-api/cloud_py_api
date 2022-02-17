@@ -28,6 +28,8 @@ RequiredPackagesList = {
     "sqlalchemy": "SQLAlchemy",
     "requirements": "requirements-parser",
     "google.protobuf": "protobuf",
+}
+OptionalPackagesList = {
     "grpc": "grpcio",
 }
 LogsContainer = []
@@ -211,36 +213,51 @@ def import_package(name: str, dest_sym_table=None, package=None) -> bool:
     return False
 
 
-def frm_check() -> [dict, dict]:
+def frm_check_item(import_name: str, install_name: str) -> dict:
+    _modules = {}
+    _result = import_package(import_name, dest_sym_table=_modules)
+    if _result:
+        location = ""
+        if hasattr(_modules[import_name], "__version__"):
+            version = _modules[import_name].__version__
+        else:
+            version = get_package_info(install_name).get("version", "")
+        if hasattr(_modules[import_name], "__spec__"):
+            __spec = _modules[import_name].__spec__
+            if __spec is not None and hasattr(__spec, "has_location"):
+                if __spec.has_location:
+                    location = __spec.origin
+        if not location and hasattr(_modules[import_name], "__path__"):
+            location = _modules[import_name].__path__
+        if location and not path.isdir(location):
+            location = path.dirname(location)
+        return {"package": install_name, "location": location, "version": version}
+    return {"package": install_name, "location": "", "version": ""}
+
+
+def frm_check() -> [dict, dict, dict]:
     if not Options["pip"]["present"]:
         Log.error("Python pip not found or has too low version.")
         return {}, {"package": "pip3", "location": "", "version": ""}
     add_python_path(get_site_packages(), first=True)
-    modules = {}
     installed_list = {}
     not_installed_list = {}
+    not_installed_opt_list = {}
     for import_name, install_name in RequiredPackagesList.items():
-        _result = import_package(import_name, dest_sym_table=modules)
-        if _result:
-            location = ""
-            if hasattr(modules[import_name], "__version__"):
-                version = modules[import_name].__version__
-            else:
-                version = get_package_info(install_name).get("version", "")
-            if hasattr(modules[import_name], "__spec__"):
-                __spec = modules[import_name].__spec__
-                if __spec is not None and hasattr(__spec, "has_location"):
-                    if __spec.has_location:
-                        location = __spec.origin
-            if not location and hasattr(modules[import_name], "__path__"):
-                location = modules[import_name].__path__
-            if location and not path.isdir(location):
-                location = path.dirname(location)
-            installed_list[import_name] = {"package": install_name, "location": location, "version": version}
+        _result = frm_check_item(import_name, install_name)
+        if _result.get("location", ""):
+            installed_list[import_name] = _result
         else:
-            not_installed_list[import_name] = {"package": install_name, "location": "", "version": ""}
+            not_installed_list[import_name] = _result
             Log.error(f"Missing {import_name}:{install_name}")
-    return installed_list, not_installed_list
+    for import_name, install_name in OptionalPackagesList.items():
+        _result = frm_check_item(import_name, install_name)
+        if _result.get("location", ""):
+            installed_list[import_name] = _result
+        else:
+            not_installed_opt_list[import_name] = _result
+            Log.warning(f"Missing {import_name}:{install_name}")
+    return installed_list, not_installed_list, not_installed_opt_list
 
 
 def download_pip(url: str, out_path: str) -> bool:
@@ -326,13 +343,19 @@ def install() -> bool:
         if not Options["pip"]["present"]:
             Log.error("Cant run pip after local install.")
             return False
-    for import_name, install_name in RequiredPackagesList.items():
+    for install_name in RequiredPackagesList.values():
         _result, _message = pip_call(
             ["install", install_name, "--no-warn-script-location", "--prefer-binary"], user_cache=True
         )
         if not _result:
             Log.error(f"Cant install {install_name}. Pip output:\n{_message}")
             return False
+    for install_name in OptionalPackagesList.values():
+        _result, _message = pip_call(
+            ["install", install_name, "--no-warn-script-location", "--prefer-binary"], user_cache=True
+        )
+        if not _result:
+            Log.warning(f"Cant install {install_name}. Pip output:\n{_message}")
     return True
 
 
@@ -347,10 +370,10 @@ def update_pip() -> bool:
     return True
 
 
-def check_target(target: str) -> [dict, dict]:
+def check_target(target: str) -> [dict, dict, dict]:
     if target == "framework":
         return frm_check()
-    return {}, {}
+    return {}, {}, {}
 
 
 def frm_perform(action: str) -> bool:
@@ -422,6 +445,7 @@ if __name__ == "__main__":
     result = False
     r_installed_list = {}
     r_not_installed_list = {}
+    r_not_installed_opt_list = {}
     try:
         try:
             Log.debug(f"User name: {getuser()}")
@@ -437,18 +461,19 @@ if __name__ == "__main__":
         Log.info(f"Python info: {Options.get('python')}")
         Log.info(f"Pip info: {Options.get('pip')}")
         if args.target != "framework":
-            r_installed_list, r_not_installed_list = check_target("framework")
+            r_installed_list, r_not_installed_list, r_not_installed_opt_list = check_target("framework")
             if r_not_installed_list:
                 raise FrmProgrammingError("Install framework before targeting app.")
             r_installed_list.clear()
             r_not_installed_list.clear()
+            r_not_installed_opt_list.clear()
         if args.install:
             result = perform_action(args.target, "install")
         elif args.update:
             result = perform_action(args.target, "update")
         elif args.delete:
             result = perform_action(args.target, "delete")
-        r_installed_list, r_not_installed_list = check_target(args.target)
+        r_installed_list, r_not_installed_list, r_not_installed_opt_list = check_target(args.target)
         if args.check and not r_not_installed_list:
             result = True
         if not result:
@@ -466,6 +491,7 @@ if __name__ == "__main__":
             print(str(log_record["log_lvl"]) + " : " + log_record["module"] + " : " + log_record["content"])
         print(f"Installed:\n{r_installed_list}")
         print(f"NotInstalled:\n{r_not_installed_list}")
+        print(f"NotInstalledOpt:\n{r_not_installed_opt_list}")
         print(f"Result: {result}")
     else:
         print(
@@ -474,6 +500,7 @@ if __name__ == "__main__":
                     "Result": result,
                     "Installed": r_installed_list,
                     "NotInstalled": r_not_installed_list,
+                    "NotInstalledOpt": r_not_installed_opt_list,
                     "Logs": LogsContainer,
                 }
             )
