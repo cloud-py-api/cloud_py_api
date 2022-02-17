@@ -34,6 +34,7 @@ use Psr\Log\LoggerInterface;
 
 use OCA\Cloud_Py_API\AppInfo\Application;
 use OCA\Cloud_Py_API\Db\SettingMapper;
+use OCA\Cloud_Py_API\Proto\logLvl;
 
 
 class PythonService {
@@ -61,7 +62,7 @@ class PythonService {
 
 	public function __construct(SettingMapper $settingMapper, IConfig $config,
 								IAppData $appData, LoggerInterface $logger,
-								UtilsService $utils, AppsService $appsService) {
+								UtilsService $utils, AppsService $appsService, bool $test = false) {
 		$this->appData = $appData;
 		$this->config = $config;
 		$this->logger = $logger;
@@ -70,6 +71,9 @@ class PythonService {
 		$pythonCommand = $settingMapper->findByName('python_command');
 		$this->pythonCommand = $pythonCommand->getValue();
 		$this->utils = $utils;
+		if ($test) { // If it used in tests
+			chdir(dirname(dirname(getcwd()))); // If running on cloud_py_api dir - change to the NC root cwd
+		}
 		$this->cwd = $this->utils->getCustomAppsDirectory() . Application::APP_ID;
 	}
 
@@ -129,10 +133,35 @@ class PythonService {
 		}
 	}
 
+	public function getPyFrmConfig(): array {
+		$dbdriveroptions = $this->config->getSystemValue('dbdriveroptions');
+		return [
+			'loglvl' => logLvl::name($this->config->getSystemValue('loglevel')),
+			'frmAppData' => $this->appsService->getAppDataFolderAbsPath(Application::APP_ID),
+			'dbConfig' => [
+				'dbHost' => $this->config->getSystemValue('dbhost'),
+				'dbType' => $this->config->getSystemValue('dbtype'),
+				'dbName' => $this->config->getSystemValue('dbname'),
+				'dbUser' => $this->config->getSystemValue('dbuser'),
+				'dbPass' => $this->config->getSystemValue('dbpassword'),
+				'dbPrefix' => $this->config->getSystemValue('dbtableprefix'),
+				'iniDbSocket'=> ini_get('pdo_mysql.default_socket'),
+				'iniDbHost'=> ini_get('mysqli.default_host'),
+				'iniDbPort'=> ini_get('mysqli.default_port'),
+				'dbDriverSslKey' => isset($dbdriveroptions) && $dbdriveroptions !== '' ? $dbdriveroptions[\PDO::MYSQL_ATTR_SSL_KEY] : null,
+				'dbDriverSslCert' => isset($dbdriveroptions) && $dbdriveroptions !== '' ? $$dbdriveroptions[\PDO::MYSQL_ATTR_SSL_CERT] : null,
+				'dbDriverSslCa' => isset($dbdriveroptions) && $dbdriveroptions !== '' ? $dbdriveroptions[\PDO::MYSQL_ATTR_SSL_CA] : null,
+				'dbDriverSslVerifyCrt' => isset($dbdriveroptions) && $dbdriveroptions !== '' ? $dbdriveroptions[\PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT] : null,
+			],
+			'target' => 'framework',
+		];
+	}
+
 	public function pyFrmInstall(string $type) {
-		$pythonOutput = $this->run('/pyfrm/install.py', [
-			$this->appsService->getAppDataFolderAbsPath(Application::APP_ID) => '', 
-			$type === 'basic' ? '--install' : '--install-extra' => ''
+		$pythonOutput = $this->pythonService->run('/pyfrm/install.py', [
+			'--config' => rawurlencode(json_encode($this->getPyFrmConfig())),
+			'--install' => '',
+			'--target' => 'framework',
 		]);
 		return [
 			'success' => $pythonOutput['result_code'] === 0,
@@ -142,8 +171,9 @@ class PythonService {
 
 	public function checkPyFrmInit(): array {
 		$pythonOutput = $this->run('/pyfrm/install.py', [
-			$this->appsService->getAppDataFolderAbsPath(Application::APP_ID) => '', 
-			'--check' => ''
+			'--config' => rawurlencode(json_encode($this->getPyFrmConfig())), 
+			'--check' => '',
+			'--target' => 'framework'
 		]);
 		return [
 			'success' => $pythonOutput['result_code'] === 0,
