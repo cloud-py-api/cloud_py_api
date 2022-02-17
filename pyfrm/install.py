@@ -25,9 +25,9 @@ RequiredPackagesList = {
     "nc_py_api": "nc_py_api",
     "pg8000": "pg8000",
     "pymysql": "PyMySQL[rsa,ed25519]",
-    "sqlalchemy": "SQLAlchemy",
     "requirements": "requirements-parser",
     "google.protobuf": "protobuf",
+    "sqlalchemy": "SQLAlchemy",
 }
 OptionalPackagesList = {
     "grpc": "grpcio",
