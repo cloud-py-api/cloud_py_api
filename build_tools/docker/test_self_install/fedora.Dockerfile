@@ -15,7 +15,7 @@ RUN if [ "$TARGETARCH" = "amd64" ] ; then $WGET_CMD $SP_AMD64 ; else $WGET_CMD $
 RUN zstd -d standalone.tar.zst && tar xf standalone.tar && rm standalone.tar standalone.tar.zst
 RUN mv python/install st_python && rm -rf python
 # https://github.com/indygreg/python-build-standalone/issues/113
-RUN yum insttall libxcrypt-compat
+RUN yum install libxcrypt-compat
 RUN ./st_python/bin/python3 -V
 
 CMD ["sh", "-c", "/entrypoint.sh"]

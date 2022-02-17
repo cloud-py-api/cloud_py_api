@@ -12,6 +12,7 @@ from json import dumps as to_json, loads as from_json
 from re import search, sub, MULTILINE, IGNORECASE
 from importlib import invalidate_caches, import_module
 from urllib.parse import unquote_plus
+from getpass import getuser
 import logging
 
 from exceptions import FrmProgrammingError
@@ -410,6 +411,10 @@ if __name__ == "__main__":
     r_installed_list = {}
     r_not_installed_list = {}
     try:
+        try:
+            Log.debug(f"User name: {getuser()}")
+        except Exception as _exception:
+            Log.warning(f"Exception during `getuser`:\n{str(_exception)}")
         Log.debug(f"Path to python: {sys.executable}")
         Log.debug(f"Python version: {sys.version}")
         Log.debug(f"Platform: {platform.system(), platform.release(), platform.version(), platform.machine()}")
