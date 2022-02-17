@@ -89,6 +89,7 @@ jobs:
         nextcloud-version: ['master']
         python-version: ['3.7', '3.10', 'standalone']
         db: ['mysql', 'pgsql']
+      fail-fast: false
     name: php${{ matrix.php-version }}-${{ matrix.db }}-Python-${{ matrix.python-version }} integration tests
 
     services:
@@ -189,6 +190,7 @@ jobs:
           cat nextcloud/data/nextcloud.log
 
       - name: Report coverage
+        if: always()
         uses: codecov/codecov-action@v2.1.0
         with:
           file: ./nextcloud/apps/cloud_py_api/tests/clover.integration.xml

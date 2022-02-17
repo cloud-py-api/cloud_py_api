@@ -74,7 +74,10 @@ class FrameworkInstallTest extends TestCase {
 			'--target' => 'framework'
 		]);
 		echo PHP_EOL . rawurlencode(json_encode($this->pythonService->getPyFrmConfig(logLvl::DEBUG))) . PHP_EOL;
-		echo PHP_EOL. json_encode($pythonOutput) . PHP_EOL;
+		echo PHP_EOL. 'LOG: ' . PHP_EOL;
+		foreach (json_decode($pythonOutput['output'][0], true)['Logs'] as $logRow) {
+			echo PHP_EOL. '[' . logLvl::name($logRow['log_lvl']) . '] ('. $logRow['module'] .'): ' . $logRow['content'] . PHP_EOL;
+		}
 		$this->assertTrue($pythonOutput['result_code'] === 0 && isset($pythonOutput['output'][0]) && json_decode($pythonOutput['output'][0], true)['Result'] === 'true' && count($pythonOutput['errors']) === 0);
 	}
 
