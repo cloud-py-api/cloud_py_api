@@ -175,7 +175,7 @@ jobs:
         working-directory: nextcloud/apps/cloud_py_api
         run: |
           ss -tunlp
-          compose run test:integration
+          composer run test:integration
         env:
           XDEBUG_MODE: coverage
 
