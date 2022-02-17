@@ -16,7 +16,7 @@ RUN set -ex && apt update && apt install -y \
 ARG TARGETARCH
 RUN if [ "$TARGETARCH" = "amd64" ] ; then $WGET_CMD $SP_AMD64 ; else $WGET_CMD $SP_ARM64 ; fi
 RUN zstd -d standalone.tar.zst && tar xf standalone.tar && rm standalone.tar standalone.tar.zst
-RUN mv python/install /cloud_py_api/st_python && rm -rf python
+RUN mv python/install /cloud_py_api/st_python && rm -rf python && chown -R www-data:www-data /cloud_py_api
 RUN ./cloud_py_api/st_python/bin/python3 -V
 
 CMD ["sh", "-c", "/entrypoint.sh"]
