@@ -59,6 +59,12 @@ jobs:
           flags: unittests
           fail_ci_if_error: true
 
+      - name: Upload unit coverage clover file artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: clover.unit.xml
+          path: ./nextcloud/apps/cloud_py_api/tests/clover.unit.xml
+
 
   js-unit:
     runs-on: ubuntu-latest
@@ -77,7 +83,13 @@ jobs:
         run: npm install
 
       - name: Run unit tests
-        run: npm run test
+        run: npm run test:coverage
+
+      - name: Upload js-unit coverage clover file artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: clover.js-unit.xml
+          path: ./nextcloud/apps/cloud_py_api/tests/javascript/clover.xml
 
 
   integration-tests:
@@ -157,6 +169,7 @@ jobs:
         run: composer install
 
       - name: Upgrade pip
+        if: matrix.python-version != 'standalone'
         run: /usr/bin/python3 -m pip install -U pip
 
       - name: Install serverinfo
@@ -175,9 +188,6 @@ jobs:
           php -f nextcloud/occ app:enable cloud_py_api
           mkdir -p nextcloud/data/appdata_$(php -f nextcloud/occ config:system:get instanceid)/cloud_py_api/cloud_py_api
           ls nextcloud/data/appdata_$(php -f nextcloud/occ config:system:get instanceid)/cloud_py_api
-
-      # - name: Install pyfrm
-      #   run: php -f nextcloud/occ cloud_py_api:framework:install
 
       - name: Run integration tests
         working-directory: nextcloud/apps/cloud_py_api
@@ -204,3 +214,9 @@ jobs:
           file: ./nextcloud/apps/cloud_py_api/tests/clover.integration.xml
           flags: integrationtests
           fail_ci_if_error: true
+
+      - name: Upload integration coverage clover file artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: clover.integration.xml
+          path: ./nextcloud/apps/cloud_py_api/tests/clover.integration.xml
