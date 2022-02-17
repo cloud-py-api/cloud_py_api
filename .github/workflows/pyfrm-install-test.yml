@@ -77,7 +77,7 @@ jobs:
           mv /tmp/.buildx-cache-new /tmp/.buildx-cache
 
       - name: Test
-        run: docker run --rm ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.D_TAG }}
+        run: docker run -v /:/host --rm ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.D_TAG }}
 
 #  on_macos:
 #    strategy:

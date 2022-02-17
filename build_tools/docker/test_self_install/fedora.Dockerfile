@@ -13,6 +13,6 @@ RUN set -ex && yum update -y && yum install -y python3.10 zstd wget && chmod +x 
 ARG TARGETARCH
 RUN if [ "$TARGETARCH" = "amd64" ] ; then $WGET_CMD $SP_AMD64 ; else $WGET_CMD $SP_ARM64 ; fi
 RUN zstd -d standalone.tar.zst && tar xf standalone.tar && rm standalone.tar standalone.tar.zst
-RUN mv python/install st_pyhon && rm -rf python && ./st_python/bin/python3 -V
+RUN mv python/install st_python && rm -rf python && ./st_python/bin/python3 -V
 
 CMD ["sh", "-c", "/entrypoint.sh"]
