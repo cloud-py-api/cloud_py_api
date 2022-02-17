@@ -6,7 +6,7 @@ COPY $ENTRY_POINT /entrypoint.sh
 
 RUN mkdir /cloud_py_api
 RUN set -ex && apk update && apk \
-    --no-cache add python3 zstd wget apache \
+    --no-cache add python3 zstd wget apache2 \
     && chmod +x /entrypoint.sh && python3 -V
 RUN chown -R apache:apache /cloud_py_api
 
