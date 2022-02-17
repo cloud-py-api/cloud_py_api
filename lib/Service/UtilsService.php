@@ -60,9 +60,6 @@ class UtilsService {
 		$this->config = $config;
 		$this->settingMapper = $settingMapper;
 		$this->appManager = $appManager;
-		/** @var Setting */
-		$pythonCommandSetting = $this->settingMapper->findByName('python_command');
-		$this->pythonCommand = $pythonCommandSetting->getValue();
 		$this->databaseStatistics = $databaseStatistics;
 	}
 
@@ -146,6 +143,9 @@ class UtilsService {
 	}
 
 	public function getPythonVersion() {
+		/** @var Setting */
+		$pythonCommandSetting = $this->settingMapper->findByName('python_command');
+		$this->pythonCommand =  $pythonCommandSetting->getValue();
 		exec($this->pythonCommand . ' --version', $output, $result_code);
 		if ($result_code === 0 && isset($output[0]) && preg_match_all("/\d{1}\.\d{1,2}(\.\d{1,2}){0,1}/s", $output[0], $matches)) {
 			return isset($matches[0][0]) ? $matches[0][0] : null;
