@@ -82,9 +82,11 @@ jobs:
           node-version: 14.x
 
       - name: Install dependencies
+        working-directory: nextcloud/apps/cloud_py_api
         run: npm install
 
       - name: Run unit tests
+        working-directory: nextcloud/apps/cloud_py_api
         run: npm run test:coverage
 
       - name: Print debug info
