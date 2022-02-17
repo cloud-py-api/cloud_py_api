@@ -37,6 +37,7 @@ use Psr\Log\LoggerInterface;
 
 use OCA\Cloud_Py_API\AppInfo\Application;
 use OCA\Cloud_Py_API\Db\SettingMapper;
+use OCA\Cloud_Py_API\Proto\logLvl;
 use OCA\Cloud_Py_API\Service\AppsService;
 use OCA\Cloud_Py_API\Service\PythonService;
 use OCA\Cloud_Py_API\Service\UtilsService;
@@ -68,11 +69,11 @@ class FrameworkInstallTest extends TestCase {
 
 	public function testFrameworkInstall() {
 		$pythonOutput = $this->pythonService->run('/pyfrm/install.py', [
-			'--config' => rawurlencode(json_encode($this->pythonService->getPyFrmConfig("DEBUG"))),
+			'--config' => rawurlencode(json_encode($this->pythonService->getPyFrmConfig(logLvl::DEBUG))),
 			'--install' => '',
 			'--target' => 'framework'
 		]);
-		echo PHP_EOL . rawurlencode(json_encode($this->pythonService->getPyFrmConfig())) . PHP_EOL;
+		echo PHP_EOL . rawurlencode(json_encode($this->pythonService->getPyFrmConfig(logLvl::DEBUG))) . PHP_EOL;
 		echo PHP_EOL. json_encode($pythonOutput) . PHP_EOL;
 		$this->assertTrue($pythonOutput['result_code'] === 0 && isset($pythonOutput['output'][0]) && json_decode($pythonOutput['output'][0], true)['Result'] === 'true' && count($pythonOutput['errors']) === 0);
 	}
