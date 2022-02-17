@@ -156,6 +156,9 @@ jobs:
         working-directory: nextcloud/apps/cloud_py_api
         run: composer install
 
+      - name: Upgrade pip
+        run: pip install -U pip
+
       - name: Install serverinfo
         uses: actions/checkout@master
         with:
