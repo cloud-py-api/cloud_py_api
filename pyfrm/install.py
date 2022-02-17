@@ -238,7 +238,7 @@ def frm_check_item(import_name: str, install_name: str) -> dict:
 def frm_check() -> [dict, dict, dict]:
     if not Options["pip"]["present"]:
         Log.error("Python pip not found or has too low version.")
-        return {}, {"package": "pip3", "location": "", "version": ""}
+        return {}, {"package": "pip3", "location": "", "version": ""}, {}
     add_python_path(get_site_packages(), first=True)
     installed_list = {}
     not_installed_list = {}
