@@ -183,11 +183,10 @@ jobs:
         if: always()
         run: |
           ls -l
+          ls -l nextcloud/
           ls -l nextcloud/data
-          ls -l nextcloud/data/appdata_*
-          ls -l nextcloud/data/appdata_*/cloud_py_api
+          cat nextcloud/config/config.php
           cat nextcloud/data/nextcloud.log
-          cat nextcloud/data/appdata_*/cloud_py_api/pyfrm_log.log
 
       - name: Report coverage
         uses: codecov/codecov-action@v2.1.0
