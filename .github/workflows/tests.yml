@@ -73,6 +73,8 @@ jobs:
     steps:
       - name: Checkout Cloud_Py_API
         uses: actions/checkout@v2
+        with:
+          path: nextcloud/apps/cloud_py_api
 
       - name: Setup Node
         uses: actions/setup-node@v2
@@ -87,7 +89,8 @@ jobs:
 
       - name: Print debug info
         run: |
-          ls -l ./nextcloud/apps/cloud_py_api/tests/javascript
+          ls -l nextcloud/apps/cloud_py_api/tests
+          ls -l nextcloud/apps/cloud_py_api/tests/javascript
 
       - name: Upload js-unit coverage clover file artifact
         uses: actions/upload-artifact@v2
