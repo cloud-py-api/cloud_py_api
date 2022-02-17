@@ -157,10 +157,7 @@ jobs:
         run: composer install
 
       - name: Upgrade pip
-        uses: BSFishy/pip-action@v1
-        with:
-          packages: pip
-          upgrade: true
+        run: python3 -m pip install -U pip
 
       - name: Install serverinfo
         uses: actions/checkout@master
