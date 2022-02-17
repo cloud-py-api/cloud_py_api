@@ -11,8 +11,8 @@ ENV WGET_CMD_PY="wget -q --no-check-certificate -O standalone.tar.zst"
 
 RUN mkdir /cloud_py_api
 RUN set -ex && yum update -y && yum install -y \
-    python3 wget sudo \
-    && chmod +x /entrypoint.sh && python3 -V
+    wget \
+    && chmod +x /entrypoint.sh
 ARG TARGETARCH
 RUN if [ "$TARGETARCH" = "amd64" ] ; then $WGET_CMD_PY $SP_AMD64 ; else $WGET_CMD_PY $SP_ARM64 ; fi
 ENV ZST_URL_AMD="https://download-ib01.fedoraproject.org/pub/epel/7/x86_64/Packages/z/zstd-1.5.2-1.el7.x86_64.rpm"
