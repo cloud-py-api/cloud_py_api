@@ -85,6 +85,10 @@ jobs:
       - name: Run unit tests
         run: npm run test:coverage
 
+      - name: Print debug info
+        run: |
+          ls -l ./nextcloud/apps/cloud_py_api/tests/javascript
+
       - name: Upload js-unit coverage clover file artifact
         uses: actions/upload-artifact@v2
         with:
