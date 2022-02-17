@@ -142,6 +142,10 @@ jobs:
       - name: Install Nextcloud
         run: php -f nextcloud/occ maintenance:install --database-host 127.0.0.1 --database-name nextcloud --database-user nextcloud --database-pass nextcloud --admin-user admin --admin-pass admin --database ${{ matrix.db }}
 
+      - name: Configure Nextcloud for testing
+        run: |
+          php -f nextcloud/occ config:system:set debug --type bool --value true
+
       - name: Checkout Cloud_Py_API
         uses: actions/checkout@master
         with:
@@ -167,19 +171,14 @@ jobs:
       - name: Check occ commands
         run: php -f nextcloud/occ
 
-      # - name: Check migrations
-      #   run: php -f nextcloud/occ migrations:status cloud_py_api
+      - name: Check migrations
+        run: php -f nextcloud/occ migrations:status cloud_py_api
 
-      # - name: Execute migration
-      #   run: php -f nextcloud/occ occ migrations:execute cloud_py_api 0001Date20211028154433
+      - name: Execute migration
+        run: php -f nextcloud/occ occ migrations:execute cloud_py_api 0001Date20211028154433
 
-      # - name: Check migrations
-      #   run: php -f nextcloud/occ migrations:status cloud_py_api
-
-      - name: Configure Nextcloud for testing
-        run: |
-          php -f nextcloud/occ config:system:set debug --type bool --value true
-          php -f nextcloud/occ config:system:set app.mail.verify-tls-peer --type bool --value false
+      - name: Check migrations
+        run: php -f nextcloud/occ migrations:status cloud_py_api
 
       # - name: Install pyfrm
       #   run: php -f nextcloud/occ cloud_py_api:framework:install
