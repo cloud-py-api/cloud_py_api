@@ -151,6 +151,7 @@ def pip_call(parameters, userbase: str = "", python_path: str = "", user_cache: 
         if _userbase:
             if user_cache:
                 etc += ["--user", "--cache-dir", _userbase]
+        Log.debug(f"_env=<{_env}>")
         _result = run(
             [Options["python"]["path"], "-m", "pip"] + parameters + etc, stderr=PIPE, stdout=PIPE, check=False, env=_env
         )
