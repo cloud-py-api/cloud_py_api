@@ -59,7 +59,7 @@ RUN set -ex; \
     elif [ $DB_TYPE = "pgsql" ]; then \
         apt install -y php$PHP_VERSION-pgsql && apt install -y postgresql && \
         ls -l /etc/init.d && \
-        /etc/init.d/postgresql start \
+        /etc/init.d/postgresql start && \
         sudo -u postgres psql | \i /create_user.sql; \
     fi
 
