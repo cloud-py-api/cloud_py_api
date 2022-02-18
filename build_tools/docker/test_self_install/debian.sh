@@ -5,7 +5,8 @@ FRM_CONFIG="%7B%22loglvl%22%3A%22DEBUG%22%2C%22frmAppData%22%3A%22%2Fcloud_py_ap
 DUMP_FOLDERS="ls -la /cloud_py_api /cloud_py_api/.local /cloud_py_api/st_python /var/www"
 CLEAR_FOLDERS="rm -rf /cloud_py_api/.local"
 AS_USER="sudo -u www-data"
-G_PACKAGES_INSTALL="apt install python3-pip && pip3 install pipdeptree pg8000 PyMySQL protobuf SQLAlchemy"
+INSTALL_PIP="apt install python3-pip"
+INSTALL_PACKAGES="pip3 install pipdeptree pg8000 PyMySQL protobuf SQLAlchemy"
 
 cp -r host/home/runner/work/cloud_py_api/cloud_py_api/pyfrm /
 if [ -d "/cloud_py_api/st_python" ]; then
@@ -38,7 +39,7 @@ if python3 -V; then
   $DUMP_FOLDERS
   $CLEAR_FOLDERS
   $ECHO_LINE_BREAK && echo "Installing packages globally" && $ECHO_LINE_BREAK
-  $G_PACKAGES_INSTALL
+  $INSTALL_PIP && $INSTALL_PACKAGES
   $ECHO_LINE_BREAK && echo "Sys python w packages(user): checking." && $ECHO_LINE_BREAK
   if ! $AS_USER python3 /pyfrm/install.py --config "$FRM_CONFIG" --check --target framework --dev; then
     $DUMP_FOLDERS
