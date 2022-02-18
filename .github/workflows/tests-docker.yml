@@ -81,7 +81,7 @@ jobs:
             BASE_IMAGE=${{ matrix.i['os'] }}:${{ matrix.i['ver'] }}
             ENTRY_POINT=${{ env.D_DIR }}${{ matrix.i['os'] }}/${{ matrix.i['os'] }}.unit.sh
             NEXTCLOUD_VERSION=${{ matrix.nextcloud-version }}
-            NC_CREATE_USER_SQL=${{ env.D_DIR }}${{ matrix.db }})_create_user.sql
+            NC_CREATE_USER_SQL=${{ env.D_DIR }}${{ matrix.db }}_create_user.sql
             PHP_VERSION=${{ matrix.php-version }}
             DB_TYPE=${{ matrix.db }}
 
@@ -158,6 +158,6 @@ jobs:
             BASE_IMAGE=${{ matrix.i['os'] }}:${{ matrix.i['ver'] }}
             ENTRY_POINT=${{ env.D_DIR }}${{ matrix.i['os'] }}/${{ matrix.i['os'] }}.integration.sh
             NEXTCLOUD_VERSION=${{ matrix.nextcloud-version }}
-            NC_CREATE_USER_SQL=${{ env.D_DIR }}${{ matrix.db }})_create_user.sql
+            NC_CREATE_USER_SQL=${{ env.D_DIR }}${{ matrix.db }}_create_user.sql
             PHP_VERSION=${{ matrix.php-version }}
             DB_TYPE=${{ matrix.db }}
