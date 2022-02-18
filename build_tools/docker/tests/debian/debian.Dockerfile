@@ -67,16 +67,16 @@ RUN set -ex; \
         elif [ $DB_TYPE = "pgsql" ]; then \
             sudo service mysql start && \
             sudo -u postgres psql < /create_user.sql \
-        fi
-    elif [ $VER = "10.11" ]; then
+        fi \
+    elif [ $VER = "10.11" ]; then \
         if [ $DB_TYPE = "mysql" ]; then \
             sudo service mysql start && \
             sudo mysql -u root -p < /create_user.sql \
         elif [ $DB_TYPE = "pgsql" ]; then \
             sudo service mysql start && \
             sudo -u postgres psql < /create_user.sql \
-        fi
-    fi
+        fi \
+    fi \
 
 # INSTALL NEXTLOUD AND CONFIGURE FOR DEBUGGING
 RUN set -ex; \
