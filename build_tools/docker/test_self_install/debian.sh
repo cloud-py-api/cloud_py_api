@@ -5,7 +5,7 @@ FRM_CONFIG="%7B%22loglvl%22%3A%22DEBUG%22%2C%22frmAppData%22%3A%22%2Fcloud_py_ap
 DUMP_FOLDERS="ls -la /cloud_py_api /cloud_py_api/.local /cloud_py_api/st_python /var/www"
 CLEAR_FOLDERS="rm -rf /cloud_py_api/.local"
 AS_USER="sudo -u www-data"
-INSTALL_PIP="apt install python3-pip"
+INSTALL_PIP="apt install -y python3-pip"
 INSTALL_PACKAGES="pip3 install pipdeptree pg8000 PyMySQL protobuf SQLAlchemy"
 
 cp -r host/home/runner/work/cloud_py_api/cloud_py_api/pyfrm /
