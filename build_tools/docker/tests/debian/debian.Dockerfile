@@ -61,11 +61,21 @@ COPY $NC_CREATE_USER_SQL /create_user.sql
 ARG VER
 RUN set -ex; \
     if [ $VER = "11.2" ]; then \
-        sudo service mariadb start && \
-        sudo mysql -u root -p < /create_user.sql; \
+        if [ $DB_TYPE = "mysql" ]; then \
+            sudo service mariadb start && \
+            sudo mysql -u root -p < /create_user.sql; \
+        elif [ $DB_TYPE = "pgsql" ]; then \
+            sudo service mysql start && \
+            sudo -u postgres psql < /create_user.sql; \
+        fi;
     elif [ $VER = "10.11" ]; then
-        sudo service mysql start && \
-        sudo -u postgres psql < /create_user.sql; \
+        if [ $DB_TYPE = "mysql" ]; then \
+            sudo service mysql start && \
+            sudo mysql -u root -p < /create_user.sql; \
+        elif [ $DB_TYPE = "pgsql" ]; then \
+            sudo service mysql start && \
+            sudo -u postgres psql < /create_user.sql; \
+        fi;
     fi
 
 # INSTALL NEXTLOUD AND CONFIGURE FOR DEBUGGING
