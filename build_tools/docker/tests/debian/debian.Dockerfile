@@ -53,7 +53,7 @@ COPY $NC_CREATE_USER_SQL /create_user.sql
 RUN set -ex; \
     if [ $DB_TYPE = "mysql" ]; then \
         apt install -y php$PHP_VERSION-mysql && apt install -y mariadb-server && \
-        ls -l /etc/init.d && \
+        ls -l /etc/init.d && ls /lib/systemd/system/ | grep mysql && \
         service mysql start && \
         sudo mysql -u root -p < /create_user.sql; \
     elif [ $DB_TYPE = "pgsql" ]; then \
