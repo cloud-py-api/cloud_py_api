@@ -44,7 +44,7 @@ RUN apt install -y nodejs npm && \
     npm--version && \
     npm install -g npm@latest && \
     nodejs --version && \
-    npm--version
+    npm --version
 
 # INSTALL PDO_MYSQL or PDO_PGSQL AND CREATE NEXTCLOUD USER
 ARG NC_CREATE_USER_SQL
