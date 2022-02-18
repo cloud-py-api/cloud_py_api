@@ -33,9 +33,9 @@ jobs:
           # { "os": "oraclelinux", "ver": "8", "arch": "amd64" },
           # { "os": "oraclelinux", "ver": "8", "arch": "arm64" } 
         ]
-      nextcloud-version: ['v22.2.5', '23.0.2']
-      php-version: ['7.4', '8.0']
-      db: ['mysql', 'pgsql']
+        nextcloud-version: ['v22.2.5', 'v23.0.2']
+        php-version: ['7.4', '8.0']
+        db: ['mysql', 'pgsql']
 
     name: ☁️ • ${{ matrix.i['os'] }} • ${{ matrix.i['ver'] }} • ${{ matrix.i['arch'] }} unit tests
     env:
@@ -109,9 +109,9 @@ jobs:
           # { "os": "oraclelinux", "ver": "8", "arch": "amd64" },
           # { "os": "oraclelinux", "ver": "8", "arch": "arm64" } 
         ]
-      nextcloud-version: ['v22.2.5', '23.0.2']
-      php-version: ['7.4', '8.0']
-      db: ['mysql', 'pgsql']
+        nextcloud-version: ['v22.2.5', 'v23.0.2']
+        php-version: ['7.4', '8.0']
+        db: ['mysql', 'pgsql']
 
     name: ☁️ • ${{ matrix.i['os'] }} • ${{ matrix.i['ver'] }} • ${{ matrix.i['arch'] }} integration tests
     env:
