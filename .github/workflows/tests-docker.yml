@@ -79,8 +79,9 @@ jobs:
           cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
           build-args: |
             BASE_IMAGE=${{ matrix.i['os'] }}:${{ matrix.i['ver'] }}
-            ENTRY_POINT=${{ env.D_DIR }}${{ matrix.i['dir'] }}.unit.sh
+            ENTRY_POINT=${{ env.D_DIR }}${{ matrix.i['os'] }}/${{ matrix.i['os'] }}.unit.sh
             NEXTCLOUD_VERSION=${{ matrix.nextcloud-version }}
+            NC_CREATE_USER_SQL=${{ env.D_DIR }}${{ matrix.db }})_create_user.sql
             PHP_VERSION=${{ matrix.php-version }}
             DB_TYPE=${{ matrix.db }}
 
@@ -155,7 +156,8 @@ jobs:
           cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
           build-args: |
             BASE_IMAGE=${{ matrix.i['os'] }}:${{ matrix.i['ver'] }}
-            ENTRY_POINT=${{ env.D_DIR }}${{ matrix.i['dir'] }}.integration.sh
+            ENTRY_POINT=${{ env.D_DIR }}${{ matrix.i['os'] }}/${{ matrix.i['os'] }}.integration.sh
             NEXTCLOUD_VERSION=${{ matrix.nextcloud-version }}
+            NC_CREATE_USER_SQL=${{ env.D_DIR }}${{ matrix.db }})_create_user.sql
             PHP_VERSION=${{ matrix.php-version }}
             DB_TYPE=${{ matrix.db }}
