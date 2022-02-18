@@ -50,7 +50,7 @@ RUN set -ex; \
 # INSTALL PDO_MYSQL or PDO_PGSQL
 RUN set -ex; \
     if [ $DB_TYPE = "mysql" ]; then \
-        apt install -y php$PHP_VERSION-mysql && apt install -y mariadb-server
+        apt install -y php$PHP_VERSION-mysql && apt install -y mariadb-server;
     elif [ $DB_TYPE = "pgsql" ]; then \
         apt install -y php$PHP_VERSION-pgsql && apt install -y postgresql;
     fi
@@ -63,7 +63,7 @@ RUN set -ex; \
     if [ $VER = "11.2" ]; then \
         sudo service mariadb start
         sudo mysql -u root -p < /create_user.sql; \
-    elif [ $ver = "10.11" ]; then
+    elif [ $VER = "10.11" ]; then
         sudo service mysql start
         sudo -u postgres psql < /create_user.sql; \
     fi
