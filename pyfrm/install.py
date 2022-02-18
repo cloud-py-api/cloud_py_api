@@ -15,7 +15,7 @@ from urllib.parse import unquote_plus
 from getpass import getuser
 import logging
 
-from exceptions import FrmProgrammingError
+from exceptions import FrmException, FrmProgrammingError
 
 
 EXTRA_PIP_ARGS = []
@@ -80,46 +80,44 @@ def get_pip_info() -> dict:
 
 
 def get_local_dir_path() -> str:
-    """Returns abs path to local dir. Tt is: .../appdata_xxx/cloud_py_api/local"""
-    return path.join(Options["app_data"], "local")
+    """Returns abs path to local dir. It is: .../appdata_xxx/cloud_py_api/local"""
+    return path.join(Options["app_data"], ".local")
 
 
-def check_local_dir(create_if_absent: bool = False) -> bool:
-    """Returns True if local dir exists or was created(if create_if_absent=True), False otherwise."""
-    dir_exists = path.isdir(get_local_dir_path())
-    if not dir_exists and create_if_absent:
-        try:
-            mkdir(get_local_dir_path(), mode=0o774)
-        except OSError:
-            return False
-        return path.isdir(get_local_dir_path())
-    return dir_exists
+def init_local_dir() -> None:
+    local_dir_abs = get_local_dir_path()
+    if path.isdir(local_dir_abs):
+        return
+    Log.info(f"Creating local directory: {local_dir_abs}")
+    try:
+        mkdir(local_dir_abs, mode=0o774)
+        if not path.isdir(local_dir_abs):
+            raise FrmException("[REPORT]Local directory missing after create.")
+    except OSError as e:
+        Log.error("[REPORT]Can not create `local` directory.")
+        raise OSError from e
 
 
 def get_core_userbase() -> str:
     if Options["python"]["local"]:
         return path.dirname(path.dirname(Options["python"]["path"]))
-    if check_local_dir():
-        return get_local_dir_path()
-    return ""
+    return get_local_dir_path()
 
 
-def get_modified_env(userbase: str = "", python_path: str = ""):
+def get_modified_env(userbase: str = "", python_path: str = "") -> dict:
     modified_env = dict(environ)
     if userbase:
         modified_env["PYTHONUSERBASE"] = userbase
     else:
-        def_userbase = get_core_userbase()
-        if def_userbase:
-            modified_env["PYTHONUSERBASE"] = def_userbase
+        modified_env["PYTHONUSERBASE"] = get_core_userbase()
     if python_path:
         modified_env["PYTHONPATH"] = python_path
     modified_env["_PIP_LOCATIONS_NO_WARN_ON_MISMATCH"] = "1"
-    return modified_env, modified_env.get("PYTHONUSERBASE", "")
+    return modified_env
 
 
 def get_site_packages(userbase: str = "") -> str:
-    _env, _userbase = get_modified_env(userbase=userbase)
+    _env = get_modified_env(userbase=userbase)
     try:
         _result = run(
             [Options["python"]["path"], "-m", "site", "--user-site"], stderr=PIPE, stdout=PIPE, check=True, env=_env
@@ -146,19 +144,20 @@ def remove_pip_warnings(pip_output: str) -> str:
     return sub(r"^\s*WARNING:.*\n?", "", pip_output, flags=MULTILINE + IGNORECASE)
 
 
-def pip_call(
-    parameters, userbase: str = "", python_path: str = "", user: bool = False, cache: bool = False
-) -> [bool, str]:
+def pip_call(parameters, userbase: str = "", python_path: str = "", user: bool = False, cache=None) -> [bool, str]:
     Log.debug(f"(USERBASE<{userbase}> PATH<{python_path}>): {str(parameters)}")
     try:
         etc = ["--disable-pip-version-check"]
         etc += EXTRA_PIP_ARGS
-        _env, _userbase = get_modified_env(userbase=userbase, python_path=python_path)
-        if _userbase:
-            if user:
-                etc += ["--user"]
-            if cache:
-                etc += ["--cache-dir", _userbase]
+        _env = get_modified_env(userbase=userbase, python_path=python_path)
+        if user:
+            etc += ["--user"]
+        if cache is False:
+            etc += ["--no-cache-dir"]
+        elif cache is True:
+            etc += ["--cache-dir"]
+        elif isinstance(cache, str):
+            etc += ["--cache-dir", cache]
         Log.debug(f"_env=<{_env}>")
         pip_run_args = [Options["python"]["path"], "-m", "pip"] + parameters + etc
         Log.debug(f"_args=<{pip_run_args}>")
@@ -270,9 +269,6 @@ def frm_check() -> [dict, dict, dict]:
 
 def download_pip(url: str, out_path: str) -> bool:
     n_download_clients = 2
-    if not check_local_dir(create_if_absent=True):
-        Log.error("Cant create local dir.")
-        return False
     for _ in range(2):
         try:
             run(["curl", url, "-o", out_path], timeout=90, stderr=DEVNULL, stdout=DEVNULL, check=True)
@@ -310,7 +306,7 @@ def install_pip() -> bool:
         return False
     try:
         Log.info("Running get-pip.py...")
-        _env, _userbase = get_modified_env(get_local_dir_path())
+        _env = get_modified_env(get_local_dir_path())
         _result = run(
             [
                 Options["python"]["path"],
@@ -468,6 +464,7 @@ if __name__ == "__main__":
         Log.debug(f"Path to python: {sys.executable}")
         Log.debug(f"Python version: {sys.version}")
         Log.debug(f"Platform: {platform.system(), platform.release(), platform.version(), platform.machine()}")
+        init_local_dir()
         Options["python"] = get_python_info()
         Options["pip"] = get_pip_info()
         Log.info(f"Python info: {Options.get('python')}")
