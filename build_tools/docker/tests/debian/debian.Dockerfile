@@ -52,7 +52,7 @@ ARG NC_CREATE_USER_SQL
 COPY $NC_CREATE_USER_SQL /create_user.sql
 RUN set -ex; \
     if [ $DB_TYPE = "mysql" ]; then \
-        apt install -y php$PHP_VERSION-mysql && apt install -y mariadb-server && \
+        apt install -y php$PHP_VERSION-mysql && apt install -y mysql-server && \
         ls -l /etc/init.d && \
         /etc/init.d/mysql start && \
         sudo mysql -u root -p < /create_user.sql; \
