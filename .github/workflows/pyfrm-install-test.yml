@@ -19,9 +19,9 @@ jobs:
              { "os": "ubuntu", "ver": "21.10", "arch": "amd64", "ep_dfile": "debian" },
              { "os": "ubuntu", "ver": "21.10", "arch": "arm64", "ep_dfile": "debian" },
              { "os": "ubuntu", "ver": "22.04", "arch": "amd64", "ep_dfile": "debian" },
-             { "os": "ubuntu", "ver": "22.04", "arch": "arm64", "ep_dfile": "debian" } ]
-#             { "os": "centos", "ver": "7", "arch": "amd64", "ep_dfile": "centos" },
-#             { "os": "centos", "ver": "7", "arch": "arm64", "ep_dfile": "centos" },
+             { "os": "ubuntu", "ver": "22.04", "arch": "arm64", "ep_dfile": "debian" },
+             { "os": "centos", "ver": "7", "arch": "amd64", "ep_dfile": "centos" },
+             { "os": "centos", "ver": "7", "arch": "arm64", "ep_dfile": "centos" } ]
 #             { "os": "fedora", "ver": "35", "arch": "amd64", "ep_dfile": "fedora" },
 #             { "os": "fedora", "ver": "35", "arch": "arm64", "ep_dfile": "fedora" },
 #             { "os": "amazonlinux", "ver": "latest", "arch": "amd64", "ep_dfile": "amazon" },
