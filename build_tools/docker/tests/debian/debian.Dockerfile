@@ -6,7 +6,7 @@ COPY $ENTRY_POINT /entrypoint.sh
 
 RUN set -ex \
     && apt update \
-    && apt install -y lsb-release apt-transport-https ca-certificates wget curl
+    && apt install -y lsb-release apt-transport-https ca-certificates wget curl git
 
 # INSTALL PYTHON (WITH PIP)
 RUN set -ex && apt install -y \
