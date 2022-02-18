@@ -13,25 +13,28 @@ if [ -d "/cloud_py_api/st_python" ]; then
     $ECHO_LINE_BREAK && echo "Installing" && $ECHO_LINE_BREAK
     /cloud_py_api/st_python/bin/python3 /pyfrm/install.py --config "$FRM_CONFIG" --install --target framework --dev || exit 101
   fi
-  $DUMP_FOLDERS && $CLEAR_FOLDERS
+  $DUMP_FOLDERS
+  $CLEAR_FOLDERS
 elif ! python3 -V; then
   echo "System or Standalone python not found. Test failed." && exit 102
 fi
 if python3 -V; then
-  echo "Checking on system python as user."
+  $ECHO_LINE_BREAK && echo "Checking on system python as user." && $ECHO_LINE_BREAK
   if ! sudo -H -u www-data python3 /pyfrm/install.py --config "$FRM_CONFIG" --check --target framework --dev; then
     $DUMP_FOLDERS
     $ECHO_LINE_BREAK && echo "Installing" && $ECHO_LINE_BREAK
     sudo -H -u www-data python3 /pyfrm/install.py --config "$FRM_CONFIG" --install --target framework --dev || exit 101
   fi
-  $DUMP_FOLDERS && $CLEAR_FOLDERS
-  echo "Checking on system python as root."
+  $DUMP_FOLDERS
+  $CLEAR_FOLDERS
+  $ECHO_LINE_BREAK && echo "Checking on system python as root." && $ECHO_LINE_BREAK
   if ! python3 /pyfrm/install.py --config "$FRM_CONFIG" --check --target framework --dev; then
     $DUMP_FOLDERS
     $ECHO_LINE_BREAK && echo "Installing" && $ECHO_LINE_BREAK
     python3 /pyfrm/install.py --config "$FRM_CONFIG" --install --target framework --dev || exit 101
   fi
-  $DUMP_FOLDERS && $CLEAR_FOLDERS
+  $DUMP_FOLDERS
+  $CLEAR_FOLDERS
 fi
 echo "Test OK."
 exit 0

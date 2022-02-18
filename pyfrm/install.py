@@ -80,7 +80,7 @@ def get_pip_info() -> dict:
 
 
 def get_local_dir_path() -> str:
-    """Returns abs path to local dir. It is: .../appdata_xxx/cloud_py_api/local"""
+    """Returns abs path to local dir. It is: .../appdata_xxx/cloud_py_api/.local"""
     return path.join(Options["app_data"], ".local")
 
 
