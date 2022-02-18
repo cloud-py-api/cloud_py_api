@@ -65,10 +65,10 @@ RUN set -ex; \
 
 # INSTALL NEXTLOUD AND CONFIGURE FOR DEBUGGING
 RUN set -ex; \
-    git clone https://github.com/nextcloud/server.git --recursive --depth 1 -b "$NEXTCLOUD_VERSION" nextcloud \
+    git clone https://github.com/nextcloud/server.git --recursive --depth 1 -b $NEXTCLOUD_VERSION nextcloud \
     && php -f nextcloud/occ maintenance:install --database-host 127.0.0.1 \
     --database-name nextcloud --database-user nextcloud --database-pass nextcloud \
-    --admin-user admin --admin-pass admin --database "$DB_TYPE" \
+    --admin-user admin --admin-pass admin --database $DB_TYPE \
     && php -f nextcloud/occ config:system:set debug --type bool --value true
 
 # INSTALL SERVERINFO APP
