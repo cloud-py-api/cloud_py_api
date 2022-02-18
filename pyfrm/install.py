@@ -132,7 +132,7 @@ def get_site_packages(userbase: str = "") -> str:
 
 def check_pip() -> tuple:
     _ret = (0, 0, 0)
-    _call_result, _message = pip_call(["--version"], user_cache=False)
+    _call_result, _message = pip_call(["--version"])
     if _call_result:
         m_groups = search(r"pip\s*(\d+(\.\d+){0,2})", _message, flags=MULTILINE + IGNORECASE)
         if m_groups is None:
@@ -142,27 +142,34 @@ def check_pip() -> tuple:
     return _ret
 
 
-def pip_call(parameters, userbase: str = "", python_path: str = "", user_cache: bool = False) -> [bool, str]:
+def remove_pip_warnings(pip_output: str) -> str:
+    return sub(r"^\s*WARNING:.*\n?", "", pip_output, flags=MULTILINE + IGNORECASE)
+
+
+def pip_call(
+    parameters, userbase: str = "", python_path: str = "", user: bool = False, cache: bool = False
+) -> [bool, str]:
     Log.debug(f"(USERBASE<{userbase}> PATH<{python_path}>): {str(parameters)}")
     try:
         etc = ["--disable-pip-version-check"]
         etc += EXTRA_PIP_ARGS
         _env, _userbase = get_modified_env(userbase=userbase, python_path=python_path)
         if _userbase:
-            if user_cache:
-                etc += ["--user", "--no-cache-dir"]
+            if user:
+                etc += ["--user"]
+            if cache:
+                etc += ["--cache-dir", _userbase]
         Log.debug(f"_env=<{_env}>")
-        _result = run(
-            [Options["python"]["path"], "-m", "pip"] + parameters + etc, stderr=PIPE, stdout=PIPE, check=False, env=_env
-        )
+        pip_run_args = [Options["python"]["path"], "-m", "pip"] + parameters + etc
+        Log.debug(f"_args=<{pip_run_args}>")
+        _result = run(pip_run_args, stderr=PIPE, stdout=PIPE, check=False, env=_env)
         _stderr = _result.stderr.decode("utf-8")
         _stdout = _result.stdout.decode("utf-8")
         if _stderr:
             Log.debug(f"pip.stderr:\n{_stderr}".rstrip("\n"))
         if _stdout:
             Log.debug(f"pip.stdout:\n{_stdout}".rstrip("\n"))
-        reply = sub(r"^\s*WARNING:.*\n?", "", _stderr, flags=MULTILINE + IGNORECASE)
-        if len(reply) == 0:
+        if not remove_pip_warnings(_stderr):
             return True, _stdout
         return False, _stderr
     except (OSError, ValueError, TypeError, TimeoutExpired) as _exception_info:
@@ -186,7 +193,7 @@ def add_python_path(_path: str, first: bool = False):
 def get_package_info(name: str, userbase: str = "", python_path: str = "") -> dict:
     package_info = {}
     if name:
-        _call_result, _message = pip_call(["show", name], userbase=userbase, python_path=python_path, user_cache=False)
+        _call_result, _message = pip_call(["show", name], userbase=userbase, python_path=python_path, cache=True)
         if _call_result:
             _pip_show_map = {
                 "Name:": "name",
@@ -318,11 +325,11 @@ def install_pip() -> bool:
             check=False,
             env=_env,
         )
-        Log.debug(f"get-pip.stderr:\n{_result.stderr.decode('utf-8')}")
         Log.debug(f"get-pip.stdout:\n{_result.stdout.decode('utf-8')}")
         full_reply = _result.stderr.decode("utf-8")
-        reply = sub(r"^\s*WARNING:.*\n?", "", full_reply, flags=MULTILINE + IGNORECASE)
-        if len(reply) == 0:
+        if full_reply:
+            Log.debug(f"get-pip.stderr:\n{full_reply}")
+        if not remove_pip_warnings(full_reply):
             return True
         Log.error(f"get-pip returned:\n{full_reply}")
     except (OSError, ValueError, TypeError, TimeoutExpired) as _exception_info:
@@ -346,14 +353,14 @@ def install() -> bool:
             return False
     for install_name in RequiredPackagesList.values():
         _result, _message = pip_call(
-            ["install", install_name, "--no-warn-script-location", "--prefer-binary"], user_cache=True
+            ["install", install_name, "--no-warn-script-location", "--prefer-binary"], user=True, cache=True
         )
         if not _result:
             Log.error(f"Cant install {install_name}. Pip output:\n{_message}")
             return False
     for install_name in OptionalPackagesList.values():
         _result, _message = pip_call(
-            ["install", install_name, "--no-warn-script-location", "--prefer-binary"], user_cache=True
+            ["install", install_name, "--no-warn-script-location", "--prefer-binary"], user=True, cache=True
         )
         if not _result:
             Log.warning(f"Cant install {install_name}. Pip output:\n{_message}")
@@ -365,7 +372,9 @@ def update_pip() -> bool:
         Log.error("No local compatible pip found.")
         return False
     if Options["pip"]["local"]:
-        _call_result, _message = pip_call(["install", "--upgrade", "pip", "--no-warn-script-location"], user_cache=True)
+        _call_result, _message = pip_call(
+            ["install", "--upgrade", "pip", "--no-warn-script-location"], user=True, cache=True
+        )
         if not _call_result:
             return False
     return True
@@ -387,7 +396,9 @@ def frm_perform(action: str) -> bool:
             return False
         for import_name, install_name in RequiredPackagesList.items():
             _result, _message = pip_call(
-                ["install", "--upgrade", install_name, "--no-warn-script-location", "--prefer-binary"], user_cache=True
+                ["install", "--upgrade", install_name, "--no-warn-script-location", "--prefer-binary"],
+                user=True,
+                cache=True,
             )
             if not _result:
                 Log.error(f"Cant update {install_name}. Pip output:\n{_message}")
