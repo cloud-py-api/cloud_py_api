@@ -155,6 +155,8 @@ jobs:
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
           build-args: |
+            OS=${{ matrix.i['os'] }}
+            VER=${{ matrix.i['ver'] }}
             BASE_IMAGE=${{ matrix.i['os'] }}:${{ matrix.i['ver'] }}
             ENTRY_POINT=${{ env.D_DIR }}${{ matrix.i['os'] }}/${{ matrix.i['os'] }}.integration.sh
             NEXTCLOUD_VERSION=${{ matrix.nextcloud-version }}
