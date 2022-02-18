@@ -37,7 +37,7 @@ RUN set -ex && \
 
 # INSTALL COMPOSER
 RUN curl -sS https://getcomposer.org/installer -o composer-setup.php
-RUN sudo composer-setup.php --install-dir/usr/local/bin --filename=composer
+RUN sudo php composer-setup.php --install-dir/usr/local/bin --filename=composer
 
 # INSTALL NODEJS & NPM
 RUN apt install nodejs npm && \
