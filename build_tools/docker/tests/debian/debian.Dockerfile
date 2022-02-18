@@ -26,11 +26,14 @@ ARG DB_TYPE
 RUN wget -O /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg \
     && echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" \
     | tee /etc/apt/sources.list.d/php.list
-RUN set -ex \
-    && apt install php"$PHP_VERSION" -y \
-    && apt install php"$PHP_VERSION"-{ctype, curl, dom, filter, hash, json, \
-    libxml, mbstring, openssl, posix, session, SimpleXML, XMLReader, XMLWriter, zip, zlib, \
-    bz2, cli}
+RUN set -ex && \
+    apt install php$PHP_VERSION -y && \
+    apt install php$PHP_VERSION-ctype, php$PHP_VERSION-curl, php$PHP_VERSION-dom, \
+    php$PHP_VERSION-filter, php$PHP_VERSION-hash, php$PHP_VERSION-json, \
+    php$PHP_VERSION-libxml, php$PHP_VERSION-mbstring, php$PHP_VERSION-openssl, \
+    php$PHP_VERSION-posix, php$PHP_VERSION-session, php$PHP_VERSION-SimpleXML, \
+    php$PHP_VERSION-XMLReader, php$PHP_VERSION-XMLWriter, php$PHP_VERSION-zip, \
+    php$PHP_VERSION-zlib, php$PHP_VERSION-bz2, php$PHP_VERSION-cli
 
 # INSTALL COMPOSER
 RUN curl -sS https://getcomposer.org/installer -o composer-setup.php
@@ -48,11 +51,11 @@ ARG NC_CREATE_USER_SQL
 COPY $NC_CREATE_USER_SQL /create_user.sql
 RUN set -ex; \
     if [ $DB_TYPE = "mysql" ]; then \
-        apt install php"$PHP_VERSION"-pdo_mysql && apt install mariadb-server && \
+        apt install php$PHP_VERSION-pdo_mysql && apt install mariadb-server && \
         /etc/init.d/mysql start && \
         sudo mysql -u root -p < /create_user.sql \
     elif [ $DB_TYPE = "pgsql" ]; then \
-        apt install php"$PHP_VERSION"-pdo_pgsql && apt install postgresql && \
+        apt install php$PHP_VERSION-pdo_pgsql && apt install postgresql && \
         /etc/init.d/postgresql start \
         sudo -u postgres psql | \i /create_user.sql \
     fi
