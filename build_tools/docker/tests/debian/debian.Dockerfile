@@ -47,24 +47,24 @@ RUN set -ex; \
     node --version && \
     npm --version
 
-# INSTALL PDO_MYSQL or PDO_PGSQL AND CREATE NEXTCLOUD USER
+# INSTALL PDO_MYSQL or PDO_PGSQL
+RUN set -ex; \
+    if [ $DB_TYPE = "mysql" ]; then \
+        apt install -y php$PHP_VERSION-mysql && apt install -y mariadb-server
+    elif [ $DB_TYPE = "pgsql" ]; then \
+        apt install -y php$PHP_VERSION-pgsql && apt install -y postgresql;
+    fi
+
+# CREATE NEXTCLOUD USER
 ARG NC_CREATE_USER_SQL
 COPY $NC_CREATE_USER_SQL /create_user.sql
 ARG VER
 RUN set -ex; \
-    if [ $DB_TYPE = "mysql" ]; then \
-        apt install -y php$PHP_VERSION-mysql && apt install -y mariadb-server && \
-        ls -l /etc/init.d && ls /lib/systemd/system/ | grep mysql && \
-        if [ $VER = "11.2" ]; then \
-            sudo service mariadb start;
-        elif [ $ver = "10.11" ]; then
-            sudo service mysql start;
-        fi && \
+    if [ $VER = "11.2" ]; then \
+        sudo service mariadb start
         sudo mysql -u root -p < /create_user.sql; \
-    elif [ $DB_TYPE = "pgsql" ]; then \
-        apt install -y php$PHP_VERSION-pgsql && apt install -y postgresql && \
-        ls -l /etc/init.d && \
-        sudo service postgresql start && \
+    elif [ $ver = "10.11" ]; then
+        sudo service mysql start
         sudo -u postgres psql < /create_user.sql; \
     fi
 
