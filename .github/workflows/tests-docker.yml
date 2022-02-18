@@ -37,7 +37,7 @@ jobs:
         php-version: ['7.4', '8.0']
         db: ['mysql', 'pgsql']
 
-    name: ☁️ • ${{ matrix.i['os'] }} • ${{ matrix.i['ver'] }} • ${{ matrix.i['arch'] }} unit tests
+    name: ☁️ • ${{ matrix.nextcloud-version }} • php${{ matrix.php-version }} • ${{ matrix.db }} • ${{ matrix.i['os'] }} • ${{ matrix.i['ver'] }} • ${{ matrix.i['arch'] }} unit tests
     env:
       KEY_HEAD: ${{ matrix.i['os'] }}-${{ matrix.i['ver'] }}-${{ matrix.i['arch'] }}-cpa_unit_tests
       D_TAG: ${{ matrix.i['os'] }}-${{ matrix.i['ver'] }}-${{ matrix.i['arch'] }}:cpa_unit_tests
@@ -72,7 +72,7 @@ jobs:
         with:
           context: .
           push: true
-          file: ${{ format('{0}/{1}/{2}.{3}', env.D_DIR, matrix.i['os'], matrix.i['os'], env.D_EXT) }}
+          file: ${{ format('{0}/{1}/*.{2}', env.D_DIR, matrix.i['os'], env.D_EXT) }}
           tags: ${{ secrets.DOCKERHUB_USERNAME_A }}/${{ env.D_TAG }}
           platforms: linux/${{ matrix.i['arch'] }}
           cache-from: type=local,src=/tmp/.buildx-cache
@@ -113,10 +113,10 @@ jobs:
         php-version: ['7.4', '8.0']
         db: ['mysql', 'pgsql']
 
-    name: ☁️ • ${{ matrix.i['os'] }} • ${{ matrix.i['ver'] }} • ${{ matrix.i['arch'] }} integration tests
+    name: ☁️ • ${{ matrix.nextcloud-version }} • php${{ matrix.php-version }} • ${{ matrix.db }} • ${{ matrix.i['os'] }} • ${{ matrix.i['ver'] }} • ${{ matrix.i['arch'] }} integration tests
     env:
-      KEY_HEAD: ${{ matrix.i['os'] }}-${{ matrix.i['ver'] }}-${{ matrix.i['arch'] }}-cpa_unit_tests
-      D_TAG: ${{ matrix.i['os'] }}-${{ matrix.i['ver'] }}-${{ matrix.i['arch'] }}:cpa_unit_tests
+      KEY_HEAD: nc-${{ matrix.nextcloud-version }}-php${{ matrix.php-version }}-${{ matrix.db }}-${{ matrix.i['os'] }}-${{ matrix.i['ver'] }}-${{ matrix.i['arch'] }}-cpa_integration_tests
+      D_TAG: nc-${{ matrix.nextcloud-version }}-php${{ matrix.php-version }}-${{ matrix.db }}-${{ matrix.i['os'] }}-${{ matrix.i['ver'] }}-${{ matrix.i['arch'] }}:cpa_integration_tests
 
     steps:
       - uses: actions/checkout@v2
@@ -148,7 +148,7 @@ jobs:
         with:
           context: .
           push: true
-          file: ${{ format('{0}/{1}/{2}.{3}', env.D_DIR, matrix.i['os'], matrix.i['os'], env.D_EXT) }}
+          file: ${{ format('{0}/{1}/*.{2}', env.D_DIR, matrix.i['os'], env.D_EXT) }}
           tags: ${{ secrets.DOCKERHUB_USERNAME_A }}/${{ env.D_TAG }}
           platforms: linux/${{ matrix.i['arch'] }}
           cache-from: type=local,src=/tmp/.buildx-cache
