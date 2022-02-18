@@ -25,7 +25,7 @@ ARG DB_TYPE
 # INSTALL PHP AND NECESSARY PHP EXTENSIONS
 RUN wget -O /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg \
     && echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" \
-    | tee /etc/apt/sources.list.d/php.list
+    | tee /etc/apt/sources.list.d/php.list && apt update
 RUN set -ex && \
     apt install php$PHP_VERSION -y && \
     apt install php$PHP_VERSION-ctype, php$PHP_VERSION-curl, php$PHP_VERSION-dom, \
