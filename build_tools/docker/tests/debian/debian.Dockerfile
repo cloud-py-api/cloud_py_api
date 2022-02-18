@@ -60,7 +60,7 @@ RUN set -ex; \
         apt install -y php$PHP_VERSION-pgsql && apt install -y postgresql && \
         ls -l /etc/init.d && \
         /etc/init.d/postgresql start && \
-        sudo -u postgres psql | \i /create_user.sql; \
+        sudo -u postgres psql < /create_user.sql; \
     fi
 
 # INSTALL NEXTLOUD AND CONFIGURE FOR DEBUGGING
