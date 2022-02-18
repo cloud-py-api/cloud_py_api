@@ -72,7 +72,7 @@ jobs:
         with:
           context: .
           push: true
-          file: ${{ format('{0}{1}/*{2}', env.D_DIR, matrix.i['os'], env.D_EXT) }}
+          file: ${{ format('{0}{1}/{2}{3}', env.D_DIR, matrix.i['os'], matrix.i['os'], env.D_EXT) }}
           tags: ${{ secrets.DOCKERHUB_USERNAME_A }}/${{ env.D_TAG }}
           platforms: linux/${{ matrix.i['arch'] }}
           cache-from: type=local,src=/tmp/.buildx-cache
@@ -148,7 +148,7 @@ jobs:
         with:
           context: .
           push: true
-          file: ${{ format('{0}{1}/*{2}', env.D_DIR, matrix.i['os'], env.D_EXT) }}
+          file: ${{ format('{0}{1}/{2}{3}', env.D_DIR, matrix.i['os'], matrix.i['os'], env.D_EXT) }}
           tags: ${{ secrets.DOCKERHUB_USERNAME_A }}/${{ env.D_TAG }}
           platforms: linux/${{ matrix.i['arch'] }}
           cache-from: type=local,src=/tmp/.buildx-cache
