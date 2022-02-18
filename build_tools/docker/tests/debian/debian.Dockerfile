@@ -54,7 +54,7 @@ RUN set -ex; \
     if [ $DB_TYPE = "mysql" ]; then \
         apt install -y php$PHP_VERSION-mysql && apt install -y mariadb-server && \
         ls -l /etc/init.d && \
-        /etc/init.d/mariadb start && \
+        /etc/init.d/mysql start && \
         sudo mysql -u root -p < /create_user.sql; \
     elif [ $DB_TYPE = "pgsql" ]; then \
         apt install -y php$PHP_VERSION-pgsql && apt install -y postgresql && \
