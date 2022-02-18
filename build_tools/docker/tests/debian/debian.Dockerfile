@@ -10,11 +10,13 @@ RUN set -ex \
 
 # INSTALL PYTHON (WITH PIP)
 RUN set -ex && apt install -y \
-    python3 python3-distutils-extra zstd sudo \
+    python3 python3-pip python3-distutils zstd sudo \
     && chmod +x /entrypoint.sh && python3 -V
 
 # UPGRADE PIP & INSTALL PYTEST
-RUN python3 -m pip install -U pip && python3 -m pip install pytest
+RUN set -ex && \
+    python3 -m pip install -U pip && \
+    python3 -m pip install pytest
 
 ARG NEXTCLOUD_VERSION
 ARG PHP_VERSION
