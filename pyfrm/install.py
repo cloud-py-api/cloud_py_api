@@ -155,9 +155,7 @@ def pip_call(parameters, userbase: str = "", python_path: str = "", user: bool =
         if cache is False:
             etc += ["--no-cache-dir"]
         elif cache is True:
-            etc += ["--cache-dir"]
-        elif isinstance(cache, str):
-            etc += ["--cache-dir", cache]
+            etc += ["--cache-dir", _env["PYTHONUSERBASE"]]
         Log.debug(f"_env=<{_env}>")
         pip_run_args = [Options["python"]["path"], "-m", "pip"] + parameters + etc
         Log.debug(f"_args=<{pip_run_args}>")
