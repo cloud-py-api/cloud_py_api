@@ -27,7 +27,7 @@ jobs:
              { "os": "amazonlinux", "ver": "latest", "arch": "amd64", "ep_dfile": "amazon" },
              { "os": "amazonlinux", "ver": "latest", "arch": "arm64", "ep_dfile": "amazon" },
              { "os": "alpine", "ver": "3.15", "arch": "amd64", "ep_dfile": "alpine" },
-             { "os": "alpine", "ver": "3.14", "arch": "arm64", "ep_dfile": "alpine" },
+#             { "os": "alpine", "ver": "3.14", "arch": "arm64", "ep_dfile": "alpine" },
              { "os": "oraclelinux", "ver": "8", "arch": "amd64", "ep_dfile": "oracle" },
              { "os": "oraclelinux", "ver": "8", "arch": "arm64", "ep_dfile": "oracle" } ]
 #             { "os": "photon", "ver": "latest", "arch": "amd64", "ep_dfile": "photon" },
