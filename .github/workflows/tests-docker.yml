@@ -1,0 +1,161 @@
+name: Docker Unit&Integration Tests
+
+on:
+  workflow_dispatch:
+
+env:
+  D_DIR: "./build_tools/docker/tests/"
+  D_EXT: ".Dockerfile"
+
+jobs:
+  unit:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: true
+      matrix:
+        i: [
+          { "os": "debian", "ver": "10.11", "arch": "amd64" },
+          { "os": "debian", "ver": "10.11", "arch": "arm64" },
+          { "os": "debian", "ver": "11.2", "arch": "amd64" },
+          { "os": "debian", "ver": "11.2", "arch": "arm64" },
+          # { "os": "ubuntu", "ver": "21.10", "arch": "amd64" },
+          # { "os": "ubuntu", "ver": "21.10", "arch": "arm64" },
+          # { "os": "ubuntu", "ver": "22.04", "arch": "amd64" },
+          # { "os": "ubuntu", "ver": "22.04", "arch": "arm64" },
+          # { "os": "centos", "ver": "7", "arch": "amd64" },
+          # { "os": "centos", "ver": "7", "arch": "arm64" },
+          # { "os": "fedora", "ver": "35", "arch": "amd64" },
+          # { "os": "fedora", "ver": "35", "arch": "arm64" },
+          # { "os": "amazonlinux", "ver": "latest", "arch": "amd64" },
+          # { "os": "amazonlinux", "ver": "latest", "arch": "arm64" },
+          # { "os": "alpine", "ver": "3.15", "arch": "amd64" },
+          # { "os": "alpine", "ver": "3.14", "arch": "arm64" },
+          # { "os": "oraclelinux", "ver": "8", "arch": "amd64" },
+          # { "os": "oraclelinux", "ver": "8", "arch": "arm64" } 
+        ]
+      nextcloud-version: ['v22.2.5', '23.0.2']
+      php-version: ['7.4', '8.0']
+      db: ['mysql', 'pgsql']
+
+    name: ☁️ • ${{ matrix.i['os'] }} • ${{ matrix.i['ver'] }} • ${{ matrix.i['arch'] }} unit tests
+    env:
+      KEY_HEAD: ${{ matrix.i['os'] }}-${{ matrix.i['ver'] }}-${{ matrix.i['arch'] }}-cpa_unit_tests
+      D_TAG: ${{ matrix.i['os'] }}-${{ matrix.i['ver'] }}-${{ matrix.i['arch'] }}:cpa_unit_tests
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up QEMU
+        if: matrix.i['arch'] == 'arm64'
+        uses: docker/setup-qemu-action@v1
+        with:
+          platforms: arm64
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+        with:
+          buildkitd-flags: --debug
+          install: true
+
+      # - name: Cache Docker layers
+      #   uses: actions/cache@v2
+      #   with:
+      #     path: /tmp/.buildx-cache
+      #     key: ${{ env.KEY_HEAD }}-${{ hashFiles(format('{0}/{1}/*', env.D_DIR, matrix.i['os'])) }}
+
+      - uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME_A }}
+          password: ${{ secrets.DOCKERHUB_TOKEN_A }}
+
+      - name: Build image
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          push: true
+          file: ${{ format('{0}/{1}/{2}.{3}', env.D_DIR, matrix.i['os'], matrix.i['os'], env.D_EXT) }}
+          tags: ${{ secrets.DOCKERHUB_USERNAME_A }}/${{ env.D_TAG }}
+          platforms: linux/${{ matrix.i['arch'] }}
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
+          build-args: |
+            BASE_IMAGE=${{ matrix.i['os'] }}:${{ matrix.i['ver'] }}
+            ENTRY_POINT=${{ env.D_DIR }}${{ matrix.i['dir'] }}.unit.sh
+            NEXTCLOUD_VERSION=${{ matrix.nextcloud-version }}
+            PHP_VERSION=${{ matrix.php-version }}
+            DB_TYPE=${{ matrix.db }}
+
+  integration:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: true
+      matrix:
+        i: [
+          { "os": "debian", "ver": "10.11", "arch": "amd64" },
+          { "os": "debian", "ver": "10.11", "arch": "arm64" },
+          { "os": "debian", "ver": "11.2", "arch": "amd64" },
+          { "os": "debian", "ver": "11.2", "arch": "arm64" },
+          # { "os": "ubuntu", "ver": "21.10", "arch": "amd64" },
+          # { "os": "ubuntu", "ver": "21.10", "arch": "arm64" },
+          # { "os": "ubuntu", "ver": "22.04", "arch": "amd64" },
+          # { "os": "ubuntu", "ver": "22.04", "arch": "arm64" },
+          # { "os": "centos", "ver": "7", "arch": "amd64" },
+          # { "os": "centos", "ver": "7", "arch": "arm64" },
+          # { "os": "fedora", "ver": "35", "arch": "amd64" },
+          # { "os": "fedora", "ver": "35", "arch": "arm64" },
+          # { "os": "amazonlinux", "ver": "latest", "arch": "amd64" },
+          # { "os": "amazonlinux", "ver": "latest", "arch": "arm64" },
+          # { "os": "alpine", "ver": "3.15", "arch": "amd64" },
+          # { "os": "alpine", "ver": "3.14", "arch": "arm64" },
+          # { "os": "oraclelinux", "ver": "8", "arch": "amd64" },
+          # { "os": "oraclelinux", "ver": "8", "arch": "arm64" } 
+        ]
+      nextcloud-version: ['v22.2.5', '23.0.2']
+      php-version: ['7.4', '8.0']
+      db: ['mysql', 'pgsql']
+
+    name: ☁️ • ${{ matrix.i['os'] }} • ${{ matrix.i['ver'] }} • ${{ matrix.i['arch'] }} integration tests
+    env:
+      KEY_HEAD: ${{ matrix.i['os'] }}-${{ matrix.i['ver'] }}-${{ matrix.i['arch'] }}-cpa_unit_tests
+      D_TAG: ${{ matrix.i['os'] }}-${{ matrix.i['ver'] }}-${{ matrix.i['arch'] }}:cpa_unit_tests
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up QEMU
+        if: matrix.i['arch'] == 'arm64'
+        uses: docker/setup-qemu-action@v1
+        with:
+          platforms: arm64
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+        with:
+          buildkitd-flags: --debug
+          install: true
+
+      # - name: Cache Docker layers
+      #   uses: actions/cache@v2
+      #   with:
+      #     path: /tmp/.buildx-cache
+      #     key: ${{ env.KEY_HEAD }}-${{ hashFiles(format('{0}/{1}/*', env.D_DIR, matrix.i['os'])) }}
+
+      - uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME_A }}
+          password: ${{ secrets.DOCKERHUB_TOKEN_A }}
+
+      - name: Build image
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          push: true
+          file: ${{ format('{0}/{1}/{2}.{3}', env.D_DIR, matrix.i['os'], matrix.i['os'], env.D_EXT) }}
+          tags: ${{ secrets.DOCKERHUB_USERNAME_A }}/${{ env.D_TAG }}
+          platforms: linux/${{ matrix.i['arch'] }}
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
+          build-args: |
+            BASE_IMAGE=${{ matrix.i['os'] }}:${{ matrix.i['ver'] }}
+            ENTRY_POINT=${{ env.D_DIR }}${{ matrix.i['dir'] }}.integration.sh
+            NEXTCLOUD_VERSION=${{ matrix.nextcloud-version }}
+            PHP_VERSION=${{ matrix.php-version }}
+            DB_TYPE=${{ matrix.db }}

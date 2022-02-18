@@ -1,0 +1,73 @@
+ARG BASE_IMAGE
+FROM $BASE_IMAGE
+
+ARG ENTRY_POINT
+COPY $ENTRY_POINT /entrypoint.sh
+
+RUN set -ex \
+    && apt update \
+    && apt install -y lsb-release apt-transport-https ca-certificates wget curl
+
+# INSTALL PYTHON (WITH PIP)
+RUN set -ex && apt install -y \
+    python3 python3-distutils-extra zstd sudo \
+    && chmod +x /entrypoint.sh && python3 -V
+
+# UPGRADE PIP & INSTALL PYTEST
+RUN python3 -m pip install -U pip && python3 -m pip install pytest
+
+ARG NEXTCLOUD_VERSION
+ARG PHP_VERSION
+ARG DB_TYPE
+
+# INSTALL PHP AND NECESSARY PHP EXTENSIONS
+RUN wget -O /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg \
+    && echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" \
+    | tee /etc/apt/sources.list.d/php.list
+RUN set -ex \
+    && apt install php"$PHP_VERSION" -y \
+    && apt install php"$PHP_VERSION"-{ctype, curl, dom, filter, hash, json, \
+    libxml, mbstring, openssl, posix, session, SimpleXML, XMLReader, XMLWriter, zip, zlib, \
+    bz2, cli}
+
+# INSTALL COMPOSER
+RUN curl -sS https://getcomposer.org/installer -o composer-setup.php
+RUN sudo composer-setup.php --install-dir/usr/local/bin --filename=composer
+
+# INSTALL NODEJS & NPM
+RUN apt install nodejs npm && \
+    npm--version && \
+    npm install -g npm@latest && \
+    nodejs --version && \
+    npm--version
+
+# INSTALL PDO_MYSQL or PDO_PGSQL
+COPY ./db.sql /db.sql
+RUN set -ex; \
+    if [ $DB_TYPE = "mysql" ]; then \
+        apt install php"$PHP_VERSION"-pdo_mysql && apt install mariadb-server && \
+        /etc/init.d/mysql start && \
+        sudo mysql -u root -p < /db.sql
+    elif [ $DB_TYPE = "pgsql" ]; then \
+        apt install php"$PHP_VERSION"-pdo_pgsql && apt install postgresql && \
+        /etc/init.d/postgresql start
+        sudo -u postgres psql | \i /db.sql
+    fi
+
+# INSTALL NEXTLOUD AND CONFIGURE FOR DEBUGGING
+RUN set -ex; \
+    git clone https://github.com/nextcloud/server.git --recursive --depth 1 -b "$NEXTCLOUD_VERSION" nextcloud \
+    && php -f nextcloud/occ maintenance:install --database-host 127.0.0.1 \
+    --database-name nextcloud --database-user nextcloud --database-pass nextcloud \
+    --admin-user admin --admin-pass admin --database "$DB_TYPE" \
+    && php -f nextcloud/occ config:system:set debug --type bool --value true
+
+# INSTALL SERVERINFO APP
+RUN git clone https://github.com/nextcloud/serverinfo.git nextcloud/apps/serverinfo \
+    && php -f nextcloud/occ app:enable serverinfo
+
+# INSTALL CLOUD_PY_API APP
+RUN git clone https://github.com/bigcat88/cloud_py_api.git nextcloud/apps/cloud_py_api \
+    && php -f nextcloud/occ app:enable cloud_py_api
+
+CMD ["sh", "-c", "/entrypoint.sh"]
