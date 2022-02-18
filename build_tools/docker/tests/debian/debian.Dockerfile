@@ -40,7 +40,7 @@ RUN curl -sS https://getcomposer.org/installer -o composer-setup.php
 RUN sudo php composer-setup.php --install-dir/usr/local/bin --filename=composer
 
 # INSTALL NODEJS & NPM
-RUN apt install nodejs npm && \
+RUN apt install -y nodejs npm && \
     npm--version && \
     npm install -g npm@latest && \
     nodejs --version && \
