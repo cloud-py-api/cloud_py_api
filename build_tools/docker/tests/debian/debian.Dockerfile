@@ -52,11 +52,11 @@ ARG NC_CREATE_USER_SQL
 COPY $NC_CREATE_USER_SQL /create_user.sql
 RUN set -ex; \
     if [ $DB_TYPE = "mysql" ]; then \
-        apt install php$PHP_VERSION-pdo_mysql && apt install mariadb-server && \
+        apt install php$PHP_VERSION-mysql && apt install mariadb-server && \
         /etc/init.d/mysql start && \
         sudo mysql -u root -p < /create_user.sql; \
     elif [ $DB_TYPE = "pgsql" ]; then \
-        apt install php$PHP_VERSION-pdo_pgsql && apt install postgresql && \
+        apt install php$PHP_VERSION-pgsql && apt install postgresql && \
         /etc/init.d/postgresql start \
         sudo -u postgres psql | \i /create_user.sql; \
     fi
