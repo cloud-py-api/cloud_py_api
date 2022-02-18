@@ -52,7 +52,7 @@ RUN set -ex; \
     if [ $DB_TYPE = "mysql" ]; then \
         apt install -y php$PHP_VERSION-mysql && apt install -y mariadb-server
     elif [ $DB_TYPE = "pgsql" ]; then \
-        apt install -y php$PHP_VERSION-pgsql && apt install -y postgresql;
+        apt install -y php$PHP_VERSION-pgsql && apt install -y postgresql
     fi
 
 # CREATE NEXTCLOUD USER
@@ -66,7 +66,7 @@ RUN set -ex; \
             sudo mysql -u root -p < /create_user.sql \
         elif [ $DB_TYPE = "pgsql" ]; then \
             sudo service mysql start && \
-            sudo -u postgres psql < /create_user.sql; \
+            sudo -u postgres psql < /create_user.sql \
         fi
     elif [ $VER = "10.11" ]; then
         if [ $DB_TYPE = "mysql" ]; then \
@@ -74,7 +74,7 @@ RUN set -ex; \
             sudo mysql -u root -p < /create_user.sql \
         elif [ $DB_TYPE = "pgsql" ]; then \
             sudo service mysql start && \
-            sudo -u postgres psql < /create_user.sql; \
+            sudo -u postgres psql < /create_user.sql \
         fi
     fi
 
