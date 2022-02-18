@@ -21,7 +21,7 @@ ENV WGET_CMD_ZST="wget -q --no-check-certificate -O zstd.rpm"
 RUN if [ "$TARGETARCH" = "amd64" ] ; then $WGET_CMD_ZST $ZST_URL_AMD ; else $WGET_CMD_ZST $ZST_URL_ARM; fi
 RUN yum localinstall -y zstd.rpm && rm zstd.rpm
 RUN zstd -d standalone.tar.zst && tar xf standalone.tar && rm standalone.tar standalone.tar.zst
-RUN mv python/install /cloud_py_api/st_python && rm -rf python
+RUN mv python/install /cloud_py_api/st_python && rm -rf python && chown -R apache:apache /cloud_py_api
 RUN ./cloud_py_api/st_python/bin/python3 -V
 
 CMD ["sh", "-c", "/entrypoint.sh"]
