@@ -4,12 +4,14 @@ FROM $BASE_IMAGE
 ARG ENTRY_POINT
 COPY $ENTRY_POINT /entrypoint.sh
 
-RUN set -ex \
-    && apt update \
-    && apt install -y lsb-release apt-transport-https ca-certificates wget curl git
+RUN set -ex; \
+    apt update && \
+    apt install -y lsb-release apt-transport-https \
+    ca-certificates wget curl git systemd
 
 # INSTALL PYTHON (WITH PIP)
-RUN set -ex && apt install -y \
+RUN set -ex; \
+    apt install -y \
     python3 python3-pip python3-distutils zstd sudo \
     && chmod +x /entrypoint.sh && python3 -V
 
