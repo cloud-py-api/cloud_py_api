@@ -54,15 +54,19 @@ ARG VER
 ARG DB_TYPE
 ARG NC_CREATE_USER_SQL
 COPY $NC_CREATE_USER_SQL /create_user.sql
+
+RUN wget https://repo.mysql.com//mysql-apt-config_0.8.18-1_all.deb && \
+    apt install ./mysql-apt-config_0.8.18-1_all.deb -y && apt update
+
 RUN set -ex; \
-    DB_PKG=$(echo $DB_TYPE | sed 's/mysql/mariadb-server/') && \
+    DB_PKG=$(echo $DB_TYPE | sed 's/mysql/mysql-server/') && \
     DB_INIT=$(echo $DB_TYPE | sed 's/mysql/sudo mysql -u root -p/') && \
     DB_PKG=$(echo $DB_PKG | sed 's/pgsql/postgresql/') && \
     DB_INIT=$(echo $DB_INIT | sed 's/pgsql/sudo -u postgres psql/') && \
     apt install -y php$PHP_VERSION-$DB_TYPE $DB_PKG && \
     DB_SERVICE=$(echo $DB_TYPE | sed 's/mysql/mysql/') && \
     DB_SERVICE=$(echo $DB_TYPE | sed 's/pgsql/postgresql/') && \
-    systemctl enable $DB_SERVICE && service $DB_SERVICE start && \
+    systemctl enable $DB_SERVICE && sudo service $DB_SERVICE start && \
     $DB_INIT < /create_user.sql
 
 # INSTALL NEXTLOUD AND CONFIGURE FOR DEBUGGING
