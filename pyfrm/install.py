@@ -356,8 +356,8 @@ def install() -> bool:
 
 
 def update_pip() -> bool:
-    if Options["pip"]["present"]:
-        Log.error("No local compatible pip found.")
+    if not Options["pip"]["present"]:
+        Log.error("No compatible pip found.")
         return False
     if Options["pip"]["local"]:
         _call_result, _message = pip_call(
