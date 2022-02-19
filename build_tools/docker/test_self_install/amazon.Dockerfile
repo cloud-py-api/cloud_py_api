@@ -11,7 +11,7 @@ ENV WGET_CMD="wget -q --no-check-certificate -O standalone.tar.zst"
 
 RUN mkdir /cloud_py_api
 RUN set -ex && yum update -y && yum install -y \
-    tar python3 zstd wget sudo httpd \
+    tar python3 zstd curl sudo httpd \
     && chmod +x /entrypoint.sh && python3 -V
 ARG TARGETARCH
 RUN if [ "$TARGETARCH" = "amd64" ] ; then $WGET_CMD $SP_AMD64 ; else $WGET_CMD $SP_ARM64 ; fi

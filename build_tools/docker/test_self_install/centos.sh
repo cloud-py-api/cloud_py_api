@@ -17,7 +17,7 @@ if [ -d "/cloud_py_api/st_python" ]; then
   $DUMP_FOLDERS
   $CLEAR_FOLDERS
 else
-  echo "Standalone python not found. Test failed." && exit 102
+  echo "ERROR! System or Standalone python not found. Test failed." && exit 102
 fi
 echo "Test OK."
 exit 0
