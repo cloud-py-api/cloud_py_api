@@ -10,8 +10,6 @@ INSTALL_PACKAGES="pip3 install pipdeptree pg8000 PyMySQL protobuf SQLAlchemy"
 
 cp -r host/home/runner/work/cloud_py_api/cloud_py_api/pyfrm /
 if [ -d "/cloud_py_api/st_python" ]; then
-  # Temporary workaround for pip, till we dont get our Action for repack python with latest pip.
-  $AS_USER /cloud_py_api/st_python/bin/python3 /pyfrm/install.py --config "$FRM_CONFIG" --update --target framework --dev || exit 101
   $ECHO_LINE_BREAK && echo "Standalone python(user): checking." && $ECHO_LINE_BREAK
   if ! $AS_USER /cloud_py_api/st_python/bin/python3 /pyfrm/install.py --config "$FRM_CONFIG" --check --target framework --dev; then
     $DUMP_FOLDERS
