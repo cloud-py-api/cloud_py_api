@@ -62,7 +62,7 @@ RUN set -ex; \
     apt install -y php$PHP_VERSION-$DB_TYPE $DB_PKG && \
     DB_SERVICE=$(echo $DB_TYPE | sed 's/mysql/mysql/') && \
     DB_SERVICE=$(echo $DB_TYPE | sed 's/pgsql/postgresql/') && \
-    systemctl enable $DB_SERVICE && systemctl start $DB_SERVICE && \
+    systemctl enable $DB_SERVICE && service $DB_SERVICE start && \
     $DB_INIT < /create_user.sql
 
 # INSTALL NEXTLOUD AND CONFIGURE FOR DEBUGGING
