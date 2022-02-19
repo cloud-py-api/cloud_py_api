@@ -32,6 +32,7 @@ RequiredPackagesList = {
 OptionalPackagesList = {
     "grpc": "grpcio",
 }
+AllPackagesList = {**RequiredPackagesList, **OptionalPackagesList}
 LogsContainer = []
 Log = logging.getLogger("pyfrm.install")
 Log.propagate = False
@@ -248,20 +249,16 @@ def frm_check() -> [dict, dict, dict]:
     installed_list = {}
     not_installed_list = {}
     not_installed_opt_list = {}
-    for import_name, install_name in RequiredPackagesList.items():
+    for import_name, install_name in AllPackagesList.items():
         _result = frm_check_item(import_name, install_name)
         if _result.get("location", ""):
             installed_list[import_name] = _result
         else:
-            not_installed_list[import_name] = _result
+            if import_name in OptionalPackagesList.keys():
+                not_installed_opt_list[import_name] = _result
+            else:
+                not_installed_list[import_name] = _result
             Log.error(f"Missing {import_name}:{install_name}")
-    for import_name, install_name in OptionalPackagesList.items():
-        _result = frm_check_item(import_name, install_name)
-        if _result.get("location", ""):
-            installed_list[import_name] = _result
-        else:
-            not_installed_opt_list[import_name] = _result
-            Log.warning(f"Missing {import_name}:{install_name}")
     return installed_list, not_installed_list, not_installed_opt_list
 
 
@@ -345,19 +342,16 @@ def install() -> bool:
         if not Options["pip"]["present"]:
             Log.error("Cant run pip after local install.")
             return False
-    for install_name in RequiredPackagesList.values():
+    for install_name in AllPackagesList.values():
         _result, _message = pip_call(
             ["install", install_name, "--no-warn-script-location", "--prefer-binary"], user=True, cache=True
         )
         if not _result:
-            Log.error(f"Cant install {install_name}. Pip output:\n{_message}")
-            return False
-    for install_name in OptionalPackagesList.values():
-        _result, _message = pip_call(
-            ["install", install_name, "--no-warn-script-location", "--prefer-binary"], user=True, cache=True
-        )
-        if not _result:
-            Log.warning(f"Cant install {install_name}. Pip output:\n{_message}")
+            if install_name in OptionalPackagesList.values():
+                Log.warning(f"Cant install {install_name}. Pip output:\n{_message}")
+            else:
+                Log.error(f"Cant install {install_name}. Pip output:\n{_message}")
+                return False
     return True
 
 
@@ -388,15 +382,21 @@ def frm_perform(action: str) -> bool:
     if action == "update":
         if not update_pip():
             return False
-        for import_name, install_name in RequiredPackagesList.items():
+        _installed, _not, _not_opt = frm_check()
+        _local = {
+            import_name: pckg_info
+            for import_name, pckg_info in _installed.items()
+            if pckg_info["location"].startswith(Options["app_data"])
+        }
+        for import_name in _local.keys():
+            install_name = AllPackagesList[import_name]
             _result, _message = pip_call(
                 ["install", "--upgrade", install_name, "--no-warn-script-location", "--prefer-binary"],
                 user=True,
                 cache=True,
             )
             if not _result:
-                Log.error(f"Cant update {install_name}. Pip output:\n{_message}")
-                return False
+                Log.error(f"Cant warning {install_name}. Pip output:\n{_message}")
         return True
     raise FrmProgrammingError(f"Unknown action: {action}.")
 
