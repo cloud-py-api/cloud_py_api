@@ -26,7 +26,7 @@ RUN wget -O /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg
     && echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" \
     | tee /etc/apt/sources.list.d/php.list && apt update
 RUN set -ex && \
-    apt install php$PHP_VERSION -y
+    apt install -y php$PHP_VERSION php$PHP_VERSION-zip
     # apt install php$PHP_VERSION-ctype, php$PHP_VERSION-curl, php$PHP_VERSION-dom, \
     # php$PHP_VERSION-filter, php$PHP_VERSION-hash, php$PHP_VERSION-json, \
     # php$PHP_VERSION-libxml, php$PHP_VERSION-mbstring, php$PHP_VERSION-openssl, \
