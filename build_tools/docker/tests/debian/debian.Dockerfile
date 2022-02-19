@@ -48,7 +48,7 @@ RUN set -ex; \
 ARG VER
 ARG DB_TYPE
 ARG NC_CREATE_USER_SQL
-set -ex; \
+RUN set -ex; \
     DB_PKG=$(echo $DB_TYPE | sed 's/mysql/mariadb-server/') && \
     DB_INIT=$(echo $DB_TYPE | sed 's/mysql/sudo mysql -u root -p/') && \
     DB_PKG=$(echo $DB_PKG | sed 's/pgsql/postgresql/') && \
