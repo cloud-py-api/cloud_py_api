@@ -2,7 +2,7 @@
 
 ECHO_LINE_BREAK="echo -----------------------------------------------------"
 FRM_CONFIG="%7B%22loglvl%22%3A%22DEBUG%22%2C%22frmAppData%22%3A%22%2Fcloud_py_api%22%2C%22dbConfig%22%3A%7B%22dbType%22%3A%22pgsql%22%2C%22dbUser%22%3A%22%22%2C%22dbName%22%3A%22nextcloud%22%7D%7D"
-DUMP_FOLDERS="ls -la /cloud_py_api /cloud_py_api/.local /cloud_py_api/st_python /var/www"
+DUMP_FOLDERS="ls -la /cloud_py_api /cloud_py_api/.local /var/www"
 CLEAR_FOLDERS="rm -rf /cloud_py_api/.local"
 AS_USER="sudo -u apache"
 INSTALL_PIP="apk add --no-cache py3-pip"
