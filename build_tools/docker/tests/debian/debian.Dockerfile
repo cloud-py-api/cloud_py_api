@@ -18,11 +18,8 @@ RUN set -ex && \
     python3 -m pip install -U pip && \
     python3 -m pip install pytest
 
-ARG NEXTCLOUD_VERSION
-ARG PHP_VERSION
-ARG DB_TYPE
-
 # INSTALL PHP AND NECESSARY PHP EXTENSIONS
+ARG PHP_VERSION
 RUN wget -O /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg \
     && echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" \
     | tee /etc/apt/sources.list.d/php.list && apt update
@@ -47,34 +44,20 @@ RUN set -ex; \
     node --version && \
     npm --version
 
-# INSTALL PDO_MYSQL or PDO_PGSQL
-RUN set -ex; \
-    if [ $DB_TYPE = "mysql" ]; then \
-        apt install -y php$PHP_VERSION-mysql && apt install -y mariadb-server; \
-    elif [ $DB_TYPE = "pgsql" ]; then \
-        apt install -y php$PHP_VERSION-pgsql && apt install -y postgresql; \
-    fi
-
-# CREATE NEXTCLOUD USER
-ARG NC_CREATE_USER_SQL
-COPY $NC_CREATE_USER_SQL /create_user.sql
+# INSTALL PDO_MYSQL or PDO_PGSQL AND INIT NEXTCLOUD DB
 ARG VER
-RUN set -ex; \
-    if [ $VER = "11.2" ]; then \
-        if [ $DB_TYPE = "mysql" ]; then \
-            sudo service mariadb start && sudo mysql -u root -p < /create_user.sql; \
-        elif [ $DB_TYPE = "pgsql" ]; then \
-            sudo service mysql start && sudo -u postgres psql < /create_user.sql; \
-        fi \
-    elif [ $VER = "10.11" ]; then \
-        if [ $DB_TYPE = "mysql" ]; then \
-            sudo service mysql start && sudo mysql -u root -p < /create_user.sql; \
-        elif [ $DB_TYPE = "pgsql" ]; then \
-            sudo service mysql start && sudo -u postgres psql < /create_user.sql; \
-        fi \
-    fi
+ARG DB_TYPE
+ARG NC_CREATE_USER_SQL
+set -ex && \
+    DB_PKG=$(echo $DB_TYPE | sed 's/mysql/mariadb-server/') && \
+    DB_INIT=$(echo $DB_TYPE | sed 's/mysql/sudo mysql -u root -p/') && \
+    DB_PKG=$(echo $DB_PKG | sed 's/pgsql/postgresql/') && \
+    DB_INIT=$(echo $DB_INIT | sed 's/pgsql/sudo -u postgres psql/') && \
+    apt install php$PHP_VERSION-$DB_TYPE $DB_PKG && \
+    systemctl enable $DB_TYPE && $DB_INIT < $NC_CREATE_USER_SQL \
 
 # INSTALL NEXTLOUD AND CONFIGURE FOR DEBUGGING
+ARG NEXTCLOUD_VERSION
 RUN set -ex; \
     git clone https://github.com/nextcloud/server.git --recursive --depth 1 -b $NEXTCLOUD_VERSION nextcloud \
     && php -f nextcloud/occ maintenance:install --database-host 127.0.0.1 \
