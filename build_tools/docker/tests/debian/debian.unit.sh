@@ -2,7 +2,7 @@
 
 ECHO_LINE_BREAK="echo -----------------------------------------------------"
 
-cd nextcloud/apps/cloud_py_api
+cd nextcloud/apps/cloud_py_api || exit
 
 $ECHO_LINE_BREAK
 echo "PHP UNIT TESTS START"

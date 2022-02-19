@@ -14,8 +14,8 @@ jobs:
       fail-fast: true
       matrix:
         i: [
-          { "os": "debian", "ver": "10.11", "arch": "amd64" },
-          { "os": "debian", "ver": "10.11", "arch": "arm64" },
+          # { "os": "debian", "ver": "10.11", "arch": "amd64" },
+          # { "os": "debian", "ver": "10.11", "arch": "arm64" },
           { "os": "debian", "ver": "11.2", "arch": "amd64" },
           { "os": "debian", "ver": "11.2", "arch": "arm64" },
           # { "os": "ubuntu", "ver": "21.10", "arch": "amd64" },
@@ -91,8 +91,8 @@ jobs:
       fail-fast: true
       matrix:
         i: [
-          { "os": "debian", "ver": "10.11", "arch": "amd64" },
-          { "os": "debian", "ver": "10.11", "arch": "arm64" },
+          # { "os": "debian", "ver": "10.11", "arch": "amd64" },
+          # { "os": "debian", "ver": "10.11", "arch": "arm64" },
           { "os": "debian", "ver": "11.2", "arch": "amd64" },
           { "os": "debian", "ver": "11.2", "arch": "arm64" },
           # { "os": "ubuntu", "ver": "21.10", "arch": "amd64" },

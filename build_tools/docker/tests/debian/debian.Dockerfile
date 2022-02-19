@@ -4,12 +4,14 @@ FROM $BASE_IMAGE
 ARG ENTRY_POINT
 COPY $ENTRY_POINT /entrypoint.sh
 
-RUN set -ex \
-    && apt update \
-    && apt install -y lsb-release apt-transport-https ca-certificates wget curl git
+RUN set -ex; \
+    apt update && \
+    apt install -y lsb-release apt-transport-https \
+    ca-certificates wget curl git systemd
 
 # INSTALL PYTHON (WITH PIP)
-RUN set -ex && apt install -y \
+RUN set -ex; \
+    apt install -y \
     python3 python3-pip python3-distutils zstd sudo \
     && chmod +x /entrypoint.sh && python3 -V
 
@@ -24,7 +26,10 @@ RUN wget -O /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg
     && echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" \
     | tee /etc/apt/sources.list.d/php.list && apt update
 RUN set -ex && \
-    apt install php$PHP_VERSION -y
+    apt install -y php$PHP_VERSION php$PHP_VERSION-dom php$PHP_VERSION-zip \
+    php$PHP_VERSION-XMLWriter php$PHP_VERSION-XMLReader libxml2 \
+    php$PHP_VERSION-mbstring php$PHP_VERSION-GD php$PHP_VERSION-SimpleXML \
+    php$PHP_VERSION-curl
     # apt install php$PHP_VERSION-ctype, php$PHP_VERSION-curl, php$PHP_VERSION-dom, \
     # php$PHP_VERSION-filter, php$PHP_VERSION-hash, php$PHP_VERSION-json, \
     # php$PHP_VERSION-libxml, php$PHP_VERSION-mbstring, php$PHP_VERSION-openssl, \
@@ -48,13 +53,20 @@ RUN set -ex; \
 ARG VER
 ARG DB_TYPE
 ARG NC_CREATE_USER_SQL
+COPY $NC_CREATE_USER_SQL /create_user.sql
 RUN set -ex; \
     DB_PKG=$(echo $DB_TYPE | sed 's/mysql/mariadb-server/') && \
     DB_INIT=$(echo $DB_TYPE | sed 's/mysql/sudo mysql -u root -p/') && \
     DB_PKG=$(echo $DB_PKG | sed 's/pgsql/postgresql/') && \
     DB_INIT=$(echo $DB_INIT | sed 's/pgsql/sudo -u postgres psql/') && \
     apt install -y php$PHP_VERSION-$DB_TYPE $DB_PKG && \
-    systemctl enable $DB_TYPE && $DB_INIT < $NC_CREATE_USER_SQL
+    DB_LIB=$(echo $DB_TYPE | sed 's/mysql//var/lib/mysql') && \
+    DB_LIB=$(echo $DB_TYPE | sed 's/pgsql//var/run/postgresql') && \
+    sudo chmod -R 755 $DB_LIB && \
+    DB_SERVICE=$(echo $DB_TYPE | sed 's/mysql/mysql/') && \
+    DB_SERVICE=$(echo $DB_TYPE | sed 's/pgsql/postgresql/') && \
+    systemctl enable $DB_SERVICE && \
+    $DB_INIT < /create_user.sql
 
 # INSTALL NEXTLOUD AND CONFIGURE FOR DEBUGGING
 ARG NEXTCLOUD_VERSION
