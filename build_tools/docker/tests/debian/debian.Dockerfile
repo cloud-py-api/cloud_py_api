@@ -27,7 +27,7 @@ RUN wget -O /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg
     | tee /etc/apt/sources.list.d/php.list && apt update
 RUN set -ex && \
     apt install -y php$PHP_VERSION php$PHP_VERSION-dom php$PHP_VERSION-zip \
-    php$PHP_VERSION-XMLWriter php$PHP_VERSION-XMLReader php$PHP_VERSION-libxml2 \
+    php$PHP_VERSION-XMLWriter php$PHP_VERSION-XMLReader libxml2 \
     php$PHP_VERSION-mbstring php$PHP_VERSION-GD php$PHP_VERSION-SimpleXML \
     php$PHP_VERSION-curl
     # apt install php$PHP_VERSION-ctype, php$PHP_VERSION-curl, php$PHP_VERSION-dom, \
