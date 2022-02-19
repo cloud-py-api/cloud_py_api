@@ -53,7 +53,7 @@ RUN set -ex; \
     DB_INIT=$(echo $DB_TYPE | sed 's/mysql/sudo mysql -u root -p/') && \
     DB_PKG=$(echo $DB_PKG | sed 's/pgsql/postgresql/') && \
     DB_INIT=$(echo $DB_INIT | sed 's/pgsql/sudo -u postgres psql/') && \
-    apt install php$PHP_VERSION-$DB_TYPE $DB_PKG && \
+    apt install -y php$PHP_VERSION-$DB_TYPE $DB_PKG && \
     systemctl enable $DB_TYPE && $DB_INIT < $NC_CREATE_USER_SQL
 
 # INSTALL NEXTLOUD AND CONFIGURE FOR DEBUGGING
