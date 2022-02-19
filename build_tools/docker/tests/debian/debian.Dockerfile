@@ -60,8 +60,8 @@ RUN set -ex; \
     DB_PKG=$(echo $DB_PKG | sed 's/pgsql/postgresql/') && \
     DB_INIT=$(echo $DB_INIT | sed 's/pgsql/sudo -u postgres psql/') && \
     apt install -y php$PHP_VERSION-$DB_TYPE $DB_PKG && \
-    DB_LIB=$(echo $DB_TYPE | sed 's/mysql//var/lib/mysql/') && \
-    DB_LIB=$(echo $DB_TYPE | sed 's/pgsql//var/run/postgresql/') && \
+    DB_LIB=$(echo $DB_TYPE | sed 's/mysql/\/var\/lib\/mysql/') && \
+    DB_LIB=$(echo $DB_TYPE | sed 's/pgsql/\/var\/run\/postgresql/') && \
     sudo chmod -R 755 $DB_LIB && \
     DB_SERVICE=$(echo $DB_TYPE | sed 's/mysql/mysql/') && \
     DB_SERVICE=$(echo $DB_TYPE | sed 's/pgsql/postgresql/') && \
