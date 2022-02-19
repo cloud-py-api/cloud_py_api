@@ -38,16 +38,6 @@ if python3 -V; then
   fi
   $DUMP_FOLDERS
   $CLEAR_FOLDERS
-  $ECHO_LINE_BREAK && echo "Installing packages globally" && $ECHO_LINE_BREAK
-  $INSTALL_PIP && $INSTALL_PACKAGES
-  $ECHO_LINE_BREAK && echo "Sys python w packages(user): checking." && $ECHO_LINE_BREAK
-  if ! $AS_USER python3 /pyfrm/install.py --config "$FRM_CONFIG" --check --target framework --dev; then
-    $DUMP_FOLDERS
-    $ECHO_LINE_BREAK && echo "Sys python w packages(user): installing." && $ECHO_LINE_BREAK
-    $AS_USER python3 /pyfrm/install.py --config "$FRM_CONFIG" --install --target framework --dev || exit 101
-  fi
-  $DUMP_FOLDERS
-  $CLEAR_FOLDERS
 fi
 echo "Test OK."
 exit 0
