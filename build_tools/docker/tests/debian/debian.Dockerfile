@@ -62,7 +62,7 @@ RUN set -ex; \
     apt install -y php$PHP_VERSION-$DB_TYPE $DB_PKG && \
     DB_SERVICE=$(echo $DB_TYPE | sed 's/mysql/mysql/') && \
     DB_SERVICE=$(echo $DB_TYPE | sed 's/pgsql/postgresql/') && \
-    sudo chmod -R 755 /var/lib/$DB_SERVICE/
+    sudo chmod -R 755 /var/lib/$DB_SERVICE/ && \
     systemctl enable $DB_SERVICE && \
     $DB_INIT < /create_user.sql
 
