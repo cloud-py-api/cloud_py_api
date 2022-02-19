@@ -10,7 +10,6 @@ env:
   URL_MUSL_LINUX_x86_64: ""
   URL_MUSL_LINUX_aarch64: ""
   D_DIR: "./build_tools/docker/test_py_pyfrm_basic/"
-  D_EXT: ".Dockerfile"
 
 jobs:
   on_linux:
@@ -35,7 +34,7 @@ jobs:
 #             { "os": "alpine", "ver": "3.14", "arch": "arm64", "ep_dfile": "alpine" },
              { "os": "oraclelinux", "ver": "8", "arch": "amd64", "ep_dfile": "oracle" },
              { "os": "oraclelinux", "ver": "8", "arch": "arm64", "ep_dfile": "oracle" },
-             { "os": "photon", "ver": "latest", "arch": "amd64", "ep_dfile": "photon" } ]
+             { "os": "photon", "ver": "latest", "arch": "amd64", "ep_dfile": "photon" }, ]
 #             { "os": "photon", "ver": "latest", "arch": "arm64", "ep_dfile": "photon" } ]
     runs-on: ubuntu-latest
     name: 🐍 • ${{ matrix.i['os'] }} • ${{ matrix.i['ver'] }} • ${{ matrix.i['arch'] }}
@@ -89,7 +88,7 @@ jobs:
         with:
           context: .
           push: true
-          file: ${{ format('{0}{1}{2}', env.D_DIR,  matrix.i['ep_dfile'], env.D_EXT) }}
+          file: ${{ env.D_DIR }}${{ matrix.i['ep_dfile'] }}.Dockerfile
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.D_TAG }}
           platforms: linux/${{ matrix.i['arch'] }}
           cache-from: type=local,src=/tmp/.buildx-cache
