@@ -60,7 +60,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: /tmp/.buildx-cache
-          key: ${{ env.KEY_HEAD }}-${{ matrix.i['add_packages'] }}
+          key: ${{ env.KEY_HEAD }}--${{ matrix.i['add_packages'] }}
 
       - uses: docker/login-action@v1
         with:

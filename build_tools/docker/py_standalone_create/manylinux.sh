@@ -1,6 +1,6 @@
 #!/bin/sh
 
-/st_python/bin/python3 -m pip install pytest || exit 105
+/st_python/bin/python3 -m pip install pytest pytest-benchmark || exit 105
 
 git clone https://github.com/mrecachinas/hexhamming.git || exit 106
 /st_python/bin/python3 -m pytest hexhamming || exit 106
