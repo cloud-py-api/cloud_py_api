@@ -41,9 +41,9 @@ jobs:
       - uses: actions/checkout@v2
       - name: Initializing
         run: |
-          wget ${{ env.URL_BASE }}${{ matrix.i['link'] }} -O standalone.tar.zst
-          wget https://github.com/indygreg/python-build-standalone/blob/main/LICENSE -O LICENSE
-          sudo mkdir /pythons && chmod 0777
+          wget -q ${{ env.URL_BASE }}${{ matrix.i['link'] }} -O standalone.tar.zst
+          wget -q https://github.com/indygreg/python-build-standalone/blob/main/LICENSE -O LICENSE
+          sudo mkdir /pythons && chmod 0777 /pythons
       - name: Set up QEMU
         if: matrix.i['cpu'] == 'arm64'
         uses: docker/setup-qemu-action@v1
