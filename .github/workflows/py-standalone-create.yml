@@ -34,8 +34,9 @@ jobs:
     runs-on: ubuntu-latest
     name: 🐍 • ${{ matrix.i['cpu'] }} • ${{ matrix.i['os'] }}
     env:
-      KEY_HEAD: ${{ matrix.i['cpu'] }}-${{ matrix.i['os'] }}-${{ matrix.i['d_tag'] }}-${{ REL_TAG }}-py_std
-      D_TAG: ${{ matrix.i['cpu'] }}-${{ matrix.i['os'] }}-${{ matrix.i['d_tag'] }}-${{ REL_TAG }}:py_std
+      KEY_HEAD: ${{ format('{0}{1}{2}{3}-py_std', matrix.i['cpu'], matrix.i['os'], matrix.i['d_tag'], env.REL_TAG) }}
+#      ${{ matrix.i['cpu'] }}-${{ matrix.i['os'] }}-${{ matrix.i['d_tag'] }}-${{ env.REL_TAG }}-py_std
+      D_TAG: ${{ matrix.i['cpu'] }}-${{ matrix.i['os'] }}-${{ matrix.i['d_tag'] }}:py_std
 
     steps:
       - uses: actions/checkout@v2
