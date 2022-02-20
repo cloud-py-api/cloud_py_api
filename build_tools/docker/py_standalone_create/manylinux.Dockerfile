@@ -1,9 +1,6 @@
 ARG BASE_IMAGE
 FROM $BASE_IMAGE
 
-ARG ENTRY_POINT
-COPY $ENTRY_POINT /entrypoint.sh
-
 ENV ZST_URL_AMD="https://download-ib01.fedoraproject.org/pub/epel/7/x86_64/Packages/z/zstd-1.5.2-1.el7.x86_64.rpm"
 ENV ZST_URL_ARM="https://download-ib01.fedoraproject.org/pub/epel/7/aarch64/Packages/z/zstd-1.4.2-1.el7.aarch64.rpm"
 ARG TARGETARCH
@@ -25,6 +22,7 @@ RUN mv python/install /st_python && mv python/licenses /st_python/licenses && mv
     && rm -rf python
 RUN /st_python/bin/python3 -m pip install --cache-dir /tmp --upgrade pip
 RUN /st_python/bin/python3 -m pip install --cache-dir /tmp -r requirements.txt
-RUN tar -cvf st_python.tar /st_python && zstd -15 /st_python
+ARG OUTPUT_NAME
+RUN tar -cvf st_python.tar /st_python && zstd -15 /st_python -o $OUT_NAME
 
-CMD ["sh", "-c", "/entrypoint.sh"]
+CMD ["sh", "-c"]

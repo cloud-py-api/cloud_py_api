@@ -50,19 +50,19 @@ jobs:
         with:
           platforms: arm64
 
-      - name: Put standalone url(manylinux-x86_64)
+      - name: Standalone url(manylinux-x86_64)
         if: matrix.i['os'] != 'alpine' && matrix.i['arch'] == 'amd64'
         run: echo SP_URL="$URL_BASE$URL_MANY_LINUX_x86_64" >> $GITHUB_ENV
 
-      - name: Put standalone url(manylinux-aarch64)
+      - name: Standalone url(manylinux-aarch64)
         if: matrix.i['os'] != 'alpine' && matrix.i['arch'] == 'arm64'
         run: echo SP_URL="$URL_BASE$URL_MANY_LINUX_aarch64" >> $GITHUB_ENV
 
-      - name: Put standalone url(musllinux-x86_64)
+      - name: Standalone url(musllinux-x86_64)
         if: matrix.i['os'] == 'alpine' && matrix.i['arch'] == 'amd64'
         run: echo SP_URL="$URL_BASE$URL_MUSL_LINUX_x86_64" >> $GITHUB_ENV
 
-      - name: Put standalone url(musllinux-aarch64)
+      - name: Standalone url(musllinux-aarch64)
         if: matrix.i['os'] == 'alpine' && matrix.i['arch'] == 'arm64'
         run: echo SP_URL="$URL_BASE$URL_MUSL_LINUX_aarch64" >> $GITHUB_ENV
 
