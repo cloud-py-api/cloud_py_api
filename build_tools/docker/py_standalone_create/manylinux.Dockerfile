@@ -5,7 +5,7 @@ ARG ENTRY_POINT
 COPY $ENTRY_POINT /entrypoint.sh
 
 RUN yum update -y && yum install -y \
-    sudo wget \
+    sudo wget git \
     && chmod +x /entrypoint.sh
 
 ENV ZST_URL_AMD="https://download-ib01.fedoraproject.org/pub/epel/7/x86_64/Packages/z/zstd-1.5.2-1.el7.x86_64.rpm"

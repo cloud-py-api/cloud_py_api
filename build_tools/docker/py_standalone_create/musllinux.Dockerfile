@@ -5,7 +5,7 @@ ARG ENTRY_POINT
 COPY $ENTRY_POINT /entrypoint.sh
 
 RUN apk update && apk --no-cache add \
-    zstd sudo \
+    zstd sudo git \
     && chmod +x /entrypoint.sh
 
 COPY standalone.tar.zst /standalone.tar.zst
