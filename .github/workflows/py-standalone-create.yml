@@ -16,11 +16,11 @@ jobs:
         i: [
           { "cpu": "amd64", "os": "manylinux", "d_tag": "centos:7",
             "link": "20211017/cpython-3.10.0-x86_64-unknown-linux-gnu-lto-20211017T1616.tar.zst",
-            "add_packages": "pillow pillow_heif hexhamming"
+            "add_packages": "cffi pillow pillow_heif hexhamming"
           } ,
           { "cpu": "arm64", "os": "manylinux", "d_tag": "centos:7",
             "link": "20211017/cpython-3.10.0-aarch64-unknown-linux-gnu-lto-20211017T1616.tar.zst",
-            "add_packages": "pillow pillow_heif hexhamming"
+            "add_packages": "cffi pillow pillow_heif hexhamming"
           } ,
 #          { "cpu": "x86_64", "os": "musllinux", "d_tag": "alpine:3.12.9",
 #            "link": "",

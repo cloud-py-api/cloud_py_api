@@ -25,6 +25,6 @@ RUN /st_python/bin/python3 -m pip install --cache-dir /tmp --upgrade pip
 ARG ADD_PACKAGES
 RUN /st_python/bin/python3 -m pip install --cache-dir /tmp $ADD_PACKAGES
 ARG OUTPUT_NAME
-RUN tar -cf st_python.tar /st_python && zstd -15 /st_python -o $OUTPUT_NAME
+RUN tar -cf st_python.tar /st_python && zstd -15 st_python.tar -o $OUTPUT_NAME
 
 CMD ["sh", "-c", "/entrypoint.sh"]
