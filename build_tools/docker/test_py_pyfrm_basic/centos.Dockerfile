@@ -8,7 +8,7 @@ ENV ZST_URL_AMD="https://download-ib01.fedoraproject.org/pub/epel/7/x86_64/Packa
 ENV ZST_URL_ARM="https://download-ib01.fedoraproject.org/pub/epel/7/aarch64/Packages/z/zstd-1.4.2-1.el7.aarch64.rpm"
 ARG TARGETARCH
 RUN wget -q --no-check-certificate -O zstd.rpm \
-    echo $(echo $TARGETARCH | sed 's@amd64@'"$ZST_URL_AMD"'@' | sed 's@arm64@'"$ZST_URL_ARM"'@') && \
+    $(echo $(echo $TARGETARCH | sed 's@amd64@'"$ZST_URL_AMD"'@' | sed 's@arm64@'"$ZST_URL_ARM"'@')) && \
     yum localinstall -y zstd.rpm && rm zstd.rpm
 
 RUN mkdir /cloud_py_api
