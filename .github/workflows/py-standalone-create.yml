@@ -35,7 +35,7 @@ jobs:
     name: 🐍 • ${{ matrix.i['cpu'] }} • ${{ matrix.i['os'] }}
     env:
       KEY_HEAD: ${{ matrix.i['cpu'] }}-${{ matrix.i['os'] }}-${{ matrix.i['d_tag'] }}-20211017-py_std
-      D_TAG: ${{ matrix.i['cpu'] }}-${{ matrix.i['os'] }}-${{ matrix.i['d_tag'] }}:20211017-py_std
+      D_TAG: ${{ matrix.i['cpu'] }}-${{ matrix.i['os'] }}-${{ matrix.i['d_tag'] }}:20211017_py_std
 
     steps:
       - uses: actions/checkout@v2
