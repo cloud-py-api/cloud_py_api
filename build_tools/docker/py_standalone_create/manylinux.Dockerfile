@@ -4,16 +4,16 @@ FROM $BASE_IMAGE
 ARG ENTRY_POINT
 COPY $ENTRY_POINT /entrypoint.sh
 
+RUN yum update -y && yum install -y \
+    sudo wget \
+    && chmod +x /entrypoint.sh
+
 ENV ZST_URL_AMD="https://download-ib01.fedoraproject.org/pub/epel/7/x86_64/Packages/z/zstd-1.5.2-1.el7.x86_64.rpm"
 ENV ZST_URL_ARM="https://download-ib01.fedoraproject.org/pub/epel/7/aarch64/Packages/z/zstd-1.4.2-1.el7.aarch64.rpm"
 ARG TARGETARCH
 RUN wget -q --no-check-certificate -O zstd.rpm \
     echo $(echo $TARGETARCH | sed 's@amd64@'"$ZST_URL_AMD"'@' | sed 's@arm64@'"$ZST_URL_ARM"'@') && \
     yum localinstall -y zstd.rpm && rm zstd.rpm
-
-RUN yum update -y && yum install -y \
-    sudo \
-    && chmod +x /entrypoint.sh
 
 COPY standalone.tar.zst /standalone.tar.zst
 COPY LICENSE /LICENSE
