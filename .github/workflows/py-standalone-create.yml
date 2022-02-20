@@ -41,7 +41,7 @@ jobs:
       - uses: actions/checkout@v2
       - name: Initializing
         run: |
-          wget $URL_BASE${{ matrix.i['link'] }} -O standalone.tar.zst
+          wget ${{ env.URL_BASE }}${{ matrix.i['link'] }} -O standalone.tar.zst
           wget https://github.com/indygreg/python-build-standalone/blob/main/LICENSE -O LICENSE
           mkdir /pythons
       - name: Set up QEMU
