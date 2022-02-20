@@ -81,7 +81,7 @@ jobs:
             BASE_IMAGE=${{ matrix.i['d_tag'] }}
             ENTRY_POINT=${{ env.D_DIR }}${{ matrix.i['os'] }}.sh
             ADD_PACKAGES=${{ matrix.i['add_packages'] }}
-            OUT_NAME=st_python_${{ matrix.i['cpu'] }}_${{ matrix.i['os'] }}.tar.zst
+            OUTPUT_NAME=st_python_${{ matrix.i['cpu'] }}_${{ matrix.i['os'] }}.tar.zst
 
       - name: Temp fix - Move cache
         run: |
