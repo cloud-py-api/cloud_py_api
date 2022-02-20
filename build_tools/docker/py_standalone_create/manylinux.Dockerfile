@@ -11,14 +11,20 @@ RUN wget -q --no-check-certificate -O zstd.rpm \
     echo $(echo $TARGETARCH | sed 's@amd64@'"$ZST_URL_AMD"'@' | sed 's@arm64@'"$ZST_URL_ARM"'@') && \
     yum localinstall -y zstd.rpm && rm zstd.rpm
 
-RUN mkdir /cloud_py_api
-RUN set -ex && yum update -y && yum install -y \
-    wget sudo httpd \
+RUN yum update -y && yum install -y \
+    sudo \
     && chmod +x /entrypoint.sh
-ARG SP_URL
-RUN wget -q --no-check-certificate -O standalone.tar.zst $SP_URL
+
+COPY standalone.tar.zst /standalone.tar.zst
+COPY LICENSE /LICENSE
+ARG ADD_PACKAGES
+RUN echo $ADD_PACKAGES > requirements.txt
+
 RUN zstd -d standalone.tar.zst && tar xf standalone.tar && rm standalone.tar standalone.tar.zst
-RUN mv python/install /cloud_py_api/st_python && rm -rf python && chown -R apache:apache /cloud_py_api
-RUN ./cloud_py_api/st_python/bin/python3 -V
+RUN mv python/install /st_python && mv python/licenses /st_python/licenses && mv /LICENSE /st_python/licenses/ \
+    && rm -rf python
+RUN /st_python/bin/python3 -m pip install --cache-dir /tmp --upgrade pip
+RUN /st_python/bin/python3 -m pip install --cache-dir /tmp -r requirements.txt
+RUN tar -cvf st_python.tar /st_python && zstd -15 /st_python
 
 CMD ["sh", "-c", "/entrypoint.sh"]

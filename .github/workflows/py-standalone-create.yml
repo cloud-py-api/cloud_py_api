@@ -1,0 +1,88 @@
+name: Generate Python Standalone archives
+
+on:
+  workflow_dispatch:
+
+env:
+  URL_BASE: "https://github.com/indygreg/python-build-standalone/releases/download/"
+  D_DIR: "./build_tools/docker/py_standalone_create/"
+
+jobs:
+  on_linux:
+    strategy:
+      fail-fast: true
+      matrix:
+        i: [
+          { "cpu": "amd64", "os": "manylinux", "d_tag": "centos:7",
+            "link": "20211017/cpython-3.10.0-x86_64-unknown-linux-gnu-lto-20211017T1616.tar.zst",
+            "add_packages": "pillow pillow_heif hexhamming"
+          } ,
+          { "cpu": "arm64", "os": "manylinux", "d_tag": "centos:7",
+            "link": "20211017/cpython-3.10.0-aarch64-unknown-linux-gnu-lto-20211017T1616.tar.zst",
+            "add_packages": "pillow pillow_heif hexhamming"
+          } ,
+#          { "cpu": "x86_64", "os": "musllinux", "d_tag": "alpine:3.12.9",
+#            "link": "",
+#            "add_packages": ""
+#          } ,
+#          { "cpu": "arm64", "os": "musllinux", "d_tag": "alpine:3.12.9",
+#            "link": "" ,
+#            "add_packages": ""
+#          } ,
+        ]
+    runs-on: ubuntu-latest
+    name: 🐍 • ${{ matrix.i['cpu'] }} • ${{ matrix.i['os'] }}
+    env:
+      KEY_HEAD: ${{ matrix.i['cpu'] }}-${{ matrix.i['os'] }}-${{ matrix.i['d_tag'] }}-cpa_py_std_tepack
+      D_TAG: ${{ matrix.i['cpu'] }}-${{ matrix.i['os'] }}-${{ matrix.i['d_tag'] }}:cpa_py_std_tepack
+
+    steps:
+      - uses: actions/checkout@v2
+      - run: |
+          wget $URL_BASE${{ matrix.i['link'] }} -O standalone.tar.zst
+          wget https://github.com/indygreg/python-build-standalone/blob/main/LICENSE -O LICENSE
+      - name: Set up QEMU
+        if: matrix.i['cpu'] == 'arm64'
+        uses: docker/setup-qemu-action@v1
+        with:
+          platforms: arm64
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+        with:
+          buildkitd-flags: --debug
+          install: true
+
+      - name: Cache Docker layers
+        uses: actions/cache@v2
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ env.KEY_HEAD }}-${{ matrix.i['add_packages'] }}-${{ hashFiles("standalone.tar.zst") }}
+
+      - uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build image
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          push: true
+          file: ${{ env.D_DIR }}${{ matrix.i['os'] }}.Dockerfile
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.D_TAG }}
+          platforms: linux/${{ matrix.i['cpu'] }}
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
+          build-args: |
+            BASE_IMAGE=${{ matrix.i['d_tag'] }}
+            ENTRY_POINT=${{ env.D_DIR }}${{ matrix.i['os'] }}.sh
+            ADD_PACKAGES=${{ matrix.i['add_packages'] }}
+
+      - name: Temp fix - Move cache
+        run: |
+          rm -rf /tmp/.buildx-cache
+          mv /tmp/.buildx-cache-new /tmp/.buildx-cache
+
+#      - name: Test
+#        run: docker run -v /:/host --rm ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.D_TAG }}
