@@ -1,6 +1,9 @@
 ARG BASE_IMAGE
 FROM $BASE_IMAGE
 
+ARG ENTRY_POINT
+COPY $ENTRY_POINT /entrypoint.sh
+
 RUN apk update && apk --no-cache add \
     zstd sudo \
     && chmod +x /entrypoint.sh
@@ -18,4 +21,4 @@ RUN /st_python/bin/python3 -m pip install --cache-dir /tmp -r requirements.txt
 ARG OUTPUT_NAME
 RUN tar -cvf st_python.tar /st_python && zstd -15 /st_python -o $OUT_NAME
 
-CMD ["sh", "-c"]
+CMD ["sh", "-c", "/entrypoint.sh"]
