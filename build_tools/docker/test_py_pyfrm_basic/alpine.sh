@@ -17,6 +17,9 @@ if [ -d "/cloud_py_api/st_python" ]; then
     $AS_USER /cloud_py_api/st_python/bin/python3 /pyfrm/install.py --config "$FRM_CONFIG" --install --target framework --dev || exit 101
   fi
   $DUMP_FOLDERS
+  $ECHO_LINE_BREAK && echo "Standalone python(user): updating" && $ECHO_LINE_BREAK
+  $AS_USER /cloud_py_api/st_python/bin/python3 /pyfrm/install.py --config "$FRM_CONFIG" --update --target framework --dev || exit 101
+  $DUMP_FOLDERS
   $CLEAR_FOLDERS
 elif ! python3 -V; then
   echo "ERROR! System or Standalone python not found. Test failed." && exit 102
@@ -46,6 +49,9 @@ if python3 -V; then
     $ECHO_LINE_BREAK && echo "Sys python w packages(user): installing." && $ECHO_LINE_BREAK
     $AS_USER python3 /pyfrm/install.py --config "$FRM_CONFIG" --install --target framework --dev || exit 101
   fi
+  $DUMP_FOLDERS
+  $ECHO_LINE_BREAK && echo "Sys python w packages(user): updating." && $ECHO_LINE_BREAK
+  $AS_USER python3 /pyfrm/install.py --config "$FRM_CONFIG" --update --target framework --dev || exit 101
   $DUMP_FOLDERS
   $CLEAR_FOLDERS
 fi
