@@ -221,7 +221,7 @@ def import_package(name: str, dest_sym_table=None, package=None) -> bool:
 
 def frm_check_item(import_name: str, install_name: str, throw_pip: bool) -> dict:
     if throw_pip:
-        _r = get_package_info(install_name)
+        _r = get_package_info(sub(r"\[.*]", "", install_name, flags=IGNORECASE))
         return {"package": install_name, "location": _r.get("location", ""), "version": _r.get("version", "")}
     _modules = {}
     _result = import_package(import_name, dest_sym_table=_modules)
