@@ -43,7 +43,7 @@ jobs:
         run: |
           wget -q ${{ env.URL_BASE }}${{ matrix.i['link'] }} -O standalone.tar.zst
           wget -q https://github.com/indygreg/python-build-standalone/blob/main/LICENSE -O LICENSE
-          sudo mkdir /pythons && sudo chmod 0777 /pythons
+          mkdir st_pythons && chmod 0777 st_pythons
       - name: Set up QEMU
         if: matrix.i['cpu'] == 'arm64'
         uses: docker/setup-qemu-action@v1
@@ -94,7 +94,7 @@ jobs:
       - uses: actions/upload-artifact@v2
         with:
           name: tarball
-          path: pythons/*.tar.zst
+          path: st_pythons/*.tar.zst
           if-no-files-found: error
 
       - name: Create release draft
@@ -105,6 +105,6 @@ jobs:
           commit: ${{ github.ref }}
           draft: true
           body: "Generated based on https://github.com/indygreg/python-build-standalone/releases"
-          artifacts: pythons/*
+          artifacts: st_pythons/*
           token: ${{ secrets.GITHUB_TOKEN }}
           artifactErrorsFailBuild: true
