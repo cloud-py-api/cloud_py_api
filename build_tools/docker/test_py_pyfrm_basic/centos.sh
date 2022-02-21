@@ -24,7 +24,7 @@ if [ -d "/cloud_py_api/st_python" ]; then
   $AS_USER /cloud_py_api/st_python/bin/python3 /pyfrm/install.py --config "$FRM_CONFIG" --update --target framework --dev || exit 101
   $DUMP_FOLDERS
   $CLEAR_FOLDERS
-  $AS_USER $CLONED_PY_INTP -m pip install --no-cache-dir pg8000==1.23.0 PyMySQL==1.0.1 protobuf==3.19.1 || exit 101
+#  $AS_USER $CLONED_PY_INTP -m pip install --no-cache-dir pg8000==1.23.0 PyMySQL==1.0.1 protobuf==3.19.1 || exit 101
   $ECHO_LINE_BREAK && echo "Standalone(clone) python(user): checking." && $ECHO_LINE_BREAK
   if ! $AS_USER $CLONED_PY_INTP /pyfrm/install.py --config "$FRM_CONFIG" --check --target framework --dev; then
     $CLONE_DUMP_FOLDERS
