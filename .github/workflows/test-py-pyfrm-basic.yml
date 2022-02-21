@@ -4,9 +4,9 @@ on:
   workflow_dispatch:
 
 env:
-  URL_BASE: "https://github.com/indygreg/python-build-standalone/releases/download/20211017/cpython-3.10.0"
-  URL_MANY_LINUX_x86_64: "-x86_64-unknown-linux-gnu-lto-20211017T1616.tar.zst"
-  URL_MANY_LINUX_aarch64: "-aarch64-unknown-linux-gnu-lto-20211017T1616.tar.zst"
+  URL_BASE: "https://github.com/bigcat88/cloud_py_api/releases/download/20211017/"
+  URL_MANY_LINUX_x86_64: "st_python_amd64_manylinux.tar.zst"
+  URL_MANY_LINUX_aarch64: "st_python_arm64_manylinux.tar.zst"
   URL_MUSL_LINUX_x86_64: ""
   URL_MUSL_LINUX_aarch64: ""
   D_DIR: "./build_tools/docker/test_py_pyfrm_basic/"
@@ -34,8 +34,8 @@ jobs:
 #             { "os": "alpine", "ver": "3.14", "arch": "arm64", "ep_dfile": "alpine" },
              { "os": "oraclelinux", "ver": "8", "arch": "amd64", "ep_dfile": "oracle" },
              { "os": "oraclelinux", "ver": "8", "arch": "arm64", "ep_dfile": "oracle" },
-             { "os": "photon", "ver": "latest", "arch": "amd64", "ep_dfile": "photon" }, ]
-#             { "os": "photon", "ver": "latest", "arch": "arm64", "ep_dfile": "photon" } ]
+             { "os": "photon", "ver": "latest", "arch": "amd64", "ep_dfile": "photon" },
+             { "os": "photon", "ver": "latest", "arch": "arm64", "ep_dfile": "photon" } ]
     runs-on: ubuntu-latest
     name: 🐍 • ${{ matrix.i['os'] }} • ${{ matrix.i['ver'] }} • ${{ matrix.i['arch'] }}
     env:
