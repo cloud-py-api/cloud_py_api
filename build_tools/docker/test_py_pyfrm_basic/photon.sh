@@ -6,6 +6,7 @@ DUMP_FOLDERS="ls -la /cloud_py_api /cloud_py_api/.local /cloud_py_api/st_python 
 CLEAR_FOLDERS="rm -rf /cloud_py_api/.local"
 AS_USER="sudo -u apache"
 INSTALL_PIP="yum install -y python3-pip"
+UPDATE_PIP="python3 -m pip install --upgrade pip"
 INSTALL_PACKAGES="pip3 install pipdeptree pg8000 PyMySQL protobuf SQLAlchemy"
 
 cp -r host/home/runner/work/cloud_py_api/cloud_py_api/pyfrm /
@@ -22,6 +23,7 @@ elif ! python3 -V; then
   echo "ERROR! System or Standalone python not found. Test failed." && exit 102
 fi
 if python3 -V; then
+  $INSTALL_PIP && $UPDATE_PIP
   $ECHO_LINE_BREAK && echo "Sys python(user): checking." && $ECHO_LINE_BREAK
   if ! $AS_USER python3 /pyfrm/install.py --config "$FRM_CONFIG" --check --target framework --dev; then
     $DUMP_FOLDERS
@@ -39,7 +41,7 @@ if python3 -V; then
   $DUMP_FOLDERS
   $CLEAR_FOLDERS
   $ECHO_LINE_BREAK && echo "Installing packages globally" && $ECHO_LINE_BREAK
-  $INSTALL_PIP && $INSTALL_PACKAGES
+  $INSTALL_PACKAGES
   $ECHO_LINE_BREAK && echo "Sys python w packages(user): checking." && $ECHO_LINE_BREAK
   if ! $AS_USER python3 /pyfrm/install.py --config "$FRM_CONFIG" --check --target framework --dev; then
     $DUMP_FOLDERS
