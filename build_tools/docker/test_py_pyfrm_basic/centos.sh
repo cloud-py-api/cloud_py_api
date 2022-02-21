@@ -6,9 +6,9 @@ DUMP_FOLDERS="ls -la /cloud_py_api /cloud_py_api/.local /cloud_py_api/st_python 
 CLEAR_FOLDERS="rm -rf /cloud_py_api/.local"
 AS_USER="sudo -u apache"
 CLONED_PY_PATH="/cloud_py_api/st_python_upd_test"
-CLONED_PY_INTP="$CLONED_PY_PATH/bin/python3"
+CLONED_PY_INTP=$CLONED_PY_PATH/bin/python3
 CLONE_PY_ST="$AS_USER cp -r /cloud_py_api/st_python $CLONED_PY_PATH"
-INSTALL_OLD_PCKG="$CLONED_PY_INTP -m pip install pipdeptree==2.2.0 pg8000==1.23.0 PyMySQL==1.0.1 protobuf==3.19.1"
+OLD_PACKAGES="pipdeptree==2.2.0 pg8000==1.23.0 PyMySQL==1.0.1 protobuf==3.19.1"
 CLONE_DUMP_FOLDERS="ls -la /cloud_py_api /cloud_py_api/.local /cloud_py_api/st_python_upd_test /var/www"
 
 cp -r host/home/runner/work/cloud_py_api/cloud_py_api/pyfrm /
@@ -25,7 +25,7 @@ if [ -d "/cloud_py_api/st_python" ]; then
   $AS_USER /cloud_py_api/st_python/bin/python3 /pyfrm/install.py --config "$FRM_CONFIG" --update --target framework --dev || exit 101
   $DUMP_FOLDERS
   $CLEAR_FOLDERS
-  $AS_USER "$INSTALL_OLD_PCKG"
+  $AS_USER $CLONED_PY_INTP -m pip install "$OLD_PACKAGES" || exit 101
   $ECHO_LINE_BREAK && echo "Standalone(clone) python(user): checking." && $ECHO_LINE_BREAK
   if ! $AS_USER $CLONED_PY_INTP /pyfrm/install.py --config "$FRM_CONFIG" --check --target framework --dev; then
     $CLONE_DUMP_FOLDERS
