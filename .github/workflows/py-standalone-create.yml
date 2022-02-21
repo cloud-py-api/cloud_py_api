@@ -25,11 +25,11 @@ jobs:
           } ,
 #          { "cpu": "x86_64", "os": "musllinux", "d_tag": "alpine:3.12.9",
 #            "link": "",
-#            "add_packages": ""
+#            "add_packages": "cffi pillow pillow_heif hexhamming"
 #          } ,
 #          { "cpu": "arm64", "os": "musllinux", "d_tag": "alpine:3.12.9",
 #            "link": "" ,
-#            "add_packages": ""
+#            "add_packages": "cffi pillow pillow_heif hexhamming"
 #          } ,
         ]
     runs-on: ubuntu-latest
@@ -99,7 +99,7 @@ jobs:
       - name: Create release draft
         uses: ncipollo/release-action@v1.8.8
         with:
-          name: ${{ format('indygreg python-standalone {0}', env.REL_TAG) }}
+          name: ${{ format('indygreg python-standalone({0})', env.REL_TAG) }}
           tag: ${{ env.REL_TAG }}
           commit: ${{ github.ref }}
           draft: true
