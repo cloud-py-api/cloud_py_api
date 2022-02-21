@@ -7,6 +7,7 @@ env:
   URL_BASE: "https://github.com/indygreg/python-build-standalone/releases/download/"
   D_DIR: "./build_tools/docker/py_standalone_create/"
   REL_TAG: "20211017"
+  CPYTHON_VER: "cpython-3.10.0"
 
 jobs:
   on_linux:
@@ -15,11 +16,11 @@ jobs:
       matrix:
         i: [
           { "cpu": "amd64", "os": "manylinux", "d_tag": "centos:7",
-            "link": "20211017/cpython-3.10.0-x86_64-unknown-linux-gnu-lto-20211017T1616.tar.zst",
+            "link": "x86_64-unknown-linux-gnu-lto-20211017T1616.tar.zst",
             "add_packages": "cffi pillow pillow_heif hexhamming"
           } ,
           { "cpu": "arm64", "os": "manylinux", "d_tag": "centos:7",
-            "link": "20211017/cpython-3.10.0-aarch64-unknown-linux-gnu-lto-20211017T1616.tar.zst",
+            "link": "aarch64-unknown-linux-gnu-lto-20211017T1616.tar.zst",
             "add_packages": "cffi pillow pillow_heif hexhamming"
           } ,
 #          { "cpu": "x86_64", "os": "musllinux", "d_tag": "alpine:3.12.9",
@@ -33,17 +34,16 @@ jobs:
         ]
     runs-on: ubuntu-latest
     name: 🐍 • ${{ matrix.i['cpu'] }} • ${{ matrix.i['os'] }}
-    env:
-      KEY_HEAD: ${{ matrix.i['cpu'] }}-${{ matrix.i['os'] }}-${{ matrix.i['d_tag'] }}-20211017-py_std
-      D_TAG: ${{ matrix.i['cpu'] }}-${{ matrix.i['os'] }}:20211017-py_std
 
     steps:
       - uses: actions/checkout@v2
       - name: Initializing
         run: |
-          wget -q ${{ env.URL_BASE }}${{ matrix.i['link'] }} -O standalone.tar.zst
+          mkdir st_pythons
+          wget -q ${{ env.URL_BASE }}$REL_TAG/$CPYTHON_VER-${{ matrix.i['link'] }} -O standalone.tar.zst
           wget -q https://github.com/indygreg/python-build-standalone/blob/main/LICENSE -O LICENSE
-          mkdir st_pythons && chmod 0777 st_pythons
+          echo DOCK_TAG=${{ matrix.i['cpu'] }}-${{ matrix.i['os'] }}:$REL_TAG-py_std >> $GITHUB_ENV
+
       - name: Set up QEMU
         if: matrix.i['cpu'] == 'arm64'
         uses: docker/setup-qemu-action@v1
@@ -67,7 +67,7 @@ jobs:
           context: .
           push: true
           file: ${{ env.D_DIR }}${{ matrix.i['os'] }}.Dockerfile
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.D_TAG }}
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.DOCK_TAG }}
           platforms: linux/${{ matrix.i['cpu'] }}
           build-args: |
             BASE_IMAGE=${{ matrix.i['d_tag'] }}
@@ -76,7 +76,7 @@ jobs:
             OUTPUT_NAME=st_python_${{ matrix.i['cpu'] }}_${{ matrix.i['os'] }}.tar.zst
 
       - name: Test
-        run: docker run -v /:/host --rm ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.D_TAG }}
+        run: docker run -v /:/host --rm ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.DOCK_TAG }}
 
       - uses: actions/upload-artifact@v2
         with:
@@ -100,7 +100,7 @@ jobs:
         uses: ncipollo/release-action@v1.8.8
         with:
           name: ${{ format('indygreg python-standalone {0}', env.REL_TAG) }}
-          tag: v${{ env.REL_TAG }}
+          tag: ${{ env.REL_TAG }}
           commit: ${{ github.ref }}
           draft: true
           body: "Generated based on https://github.com/indygreg/python-build-standalone/releases"
