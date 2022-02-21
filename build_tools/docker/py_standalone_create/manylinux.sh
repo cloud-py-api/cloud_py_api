@@ -7,5 +7,4 @@ git clone https://github.com/mrecachinas/hexhamming.git || exit 106
 git clone https://github.com/bigcat88/pillow_heif.git || exit 106
 /st_python/bin/python3 -m pytest pillow_heif || exit 106
 
-ls -la /host/home/runner/work/cloud_py_api/cloud_py_api
 echo "TEST OK" && cp /*.tar.zst /host/home/runner/work/cloud_py_api/cloud_py_api/st_pythons/
