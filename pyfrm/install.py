@@ -219,7 +219,10 @@ def import_package(name: str, dest_sym_table=None, package=None) -> bool:
     return False
 
 
-def frm_check_item(import_name: str, install_name: str) -> dict:
+def frm_check_item(import_name: str, install_name: str, throw_pip: bool) -> dict:
+    if throw_pip:
+        _r = get_package_info(import_name)
+        return {"package": install_name, "location": _r.get("location", ""), "version": _r.get("version", "")}
     _modules = {}
     _result = import_package(import_name, dest_sym_table=_modules)
     if _result:
@@ -241,7 +244,7 @@ def frm_check_item(import_name: str, install_name: str) -> dict:
     return {"package": install_name, "location": "", "version": ""}
 
 
-def frm_check() -> [dict, dict, dict]:
+def frm_check(throw_pip: bool = False) -> [dict, dict, dict]:
     if not Options["pip"]["present"]:
         Log.error("Python pip not found or has too low version.")
         return {}, {"package": "pip3", "location": "", "version": ""}, {}
@@ -250,7 +253,7 @@ def frm_check() -> [dict, dict, dict]:
     not_installed_list = {}
     not_installed_opt_list = {}
     for import_name, install_name in AllPackagesList.items():
-        _result = frm_check_item(import_name, install_name)
+        _result = frm_check_item(import_name, install_name, throw_pip)
         if _result.get("location", ""):
             installed_list[import_name] = _result
         else:
@@ -368,9 +371,9 @@ def update_pip() -> bool:
     return True
 
 
-def check_target(target: str) -> [dict, dict, dict]:
+def check_target(target: str, throw_pip: bool = False) -> [dict, dict, dict]:
     if target == "framework":
-        return frm_check()
+        return frm_check(throw_pip)
     return {}, {}, {}
 
 
@@ -480,7 +483,9 @@ if __name__ == "__main__":
             result = perform_action(args.target, "update")
         elif args.delete:
             result = perform_action(args.target, "delete")
-        r_installed_list, r_not_installed_list, r_not_installed_opt_list = check_target(args.target)
+        r_installed_list, r_not_installed_list, r_not_installed_opt_list = check_target(
+            args.target, throw_pip=args.update
+        )
         if args.check and not r_not_installed_list:
             result = True
         if not result:
