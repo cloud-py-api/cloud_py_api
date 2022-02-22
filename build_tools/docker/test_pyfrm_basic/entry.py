@@ -15,7 +15,7 @@ ST_PYTHON = path.join(ST_PYTHON_DIR, "bin/python3")
 ST_PYTHON_CLONE_DIR = path.join(FRM_APP_DATA, "st_python_clone")
 ST_PYTHON_CLONE = path.join(ST_PYTHON_DIR, "bin/python3")
 AS_USER = ["sudo", "-u"]
-PRJ_PATH = environ.get("PRJ_PATH", "/host/home/runner/work/cloud_py_api/cloud_py_api")
+PRJ_PATH = environ.get("PRJ_PATH", "/host")
 PY_FRM_PATH = environ.get("PY_FRM_PATH", "/")
 
 
@@ -154,7 +154,3 @@ if __name__ == "__main__":
             )
             python_test(AS_USER if AS_USER else None)
     sys.exit(0)
-
-# python3 "/host/home/runner/work/cloud_py_api/cloud_py_api/$D_DIR/entrypoint.py" || exit 101
-# echo "Test OK."
-# exit 0

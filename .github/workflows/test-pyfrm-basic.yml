@@ -6,7 +6,7 @@ on:
 env:
 #  ST_PY_URL: "https://github.com/bigcat88/cloud_py_api/releases/download/20211017/st_python_amd64_manylinux.tar.zst"
   REL_TAG: "20211017"
-  D_DIR: "./build_tools/docker/test_pyfrm_basic"
+  D_DIR: "build_tools/docker/test_pyfrm_basic"
 
 jobs:
   on_linux:
@@ -47,7 +47,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Initializing
-        run: echo FULL_D_TAG=${{ secrets.DOCKERHUB_USERNAME }}/${{ env.D_TAG }} >> $GITHUB_ENV
+        run: |
+          echo FULL_D_TAG=${{ secrets.DOCKERHUB_USERNAME }}/${{ env.D_TAG }} >> $GITHUB_ENV
       - name: Set up QEMU
         if: matrix.i['arch'] == 'arm64'
         uses: docker/setup-qemu-action@v1
@@ -86,6 +87,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Build image
+        id: build
         uses: docker/build-push-action@v2
         with:
           context: .
@@ -106,4 +108,4 @@ jobs:
           mv /tmp/.buildx-cache-new /tmp/.buildx-cache
 
       - name: Test
-        run: docker run -v /:/host --entrypoint python3 ${{ env.D_DIR }}/entry.py --rm ${{ env.FULL_D_TAG }}
+        run: docker run -v ./:/host ${{ steps.build.outputs.digest }} --entrypoint python3 /host/${{ env.D_DIR }}/entry.py
