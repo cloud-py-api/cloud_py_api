@@ -108,4 +108,4 @@ jobs:
           mv /tmp/.buildx-cache-new /tmp/.buildx-cache
 
       - name: Test
-        run: docker run -v ./:/host ${{ steps.build.outputs.digest }} --entrypoint python3 /host/${{ env.D_DIR }}/entry.py
+        run: docker run -v ./:/host ${{ env.FULL_D_TAG }} --entrypoint python3 /host/${{ env.D_DIR }}/entry.py
