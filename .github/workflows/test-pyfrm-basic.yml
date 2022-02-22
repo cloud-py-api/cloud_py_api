@@ -62,7 +62,8 @@ jobs:
         if: matrix.i['os'] == 'alpine'
         run: |
           OS_PACKAGES="python3 zstd wget apache2 sudo py3-cffi"
-          echo INIT_CMD="apk update && apk add --no-cache $OS_PACKAGES" >> $GITHUB_ENV
+          echo UPDATE_CMD="apk update" >> $GITHUB_ENV
+          echo INSTALL_CMD="apk add --no-cache $OS_PACKAGES" >> $GITHUB_ENV
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
@@ -93,7 +94,8 @@ jobs:
           cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
           build-args: |
             BASE_IMAGE=${{ matrix.i['os'] }}:${{ matrix.i['ver'] }}
-            INIT_CMD=${{ env.INIT_CMD }}
+            UPDATE_CMD=${{ env.UPDATE_CMD }}
+            INSTALL_CMD=${{ env.INSTALL_CMD }}
 
       - name: Temp fix - Move cache
         run: |
