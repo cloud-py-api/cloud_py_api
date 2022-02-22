@@ -71,6 +71,13 @@ jobs:
           echo UPDATE_CMD="apk update" >> $GITHUB_ENV
           echo INSTALL_CMD="apk add --no-cache $OS_PACKAGES" >> $GITHUB_ENV
 
+      - name: Preparing centos
+        if: matrix.i['os'] != 'debian' && matrix.i['os'] != 'ubuntu' && matrix.i['os'] != 'alpine'
+        run: |
+          OS_PACKAGES="python3-minimal python3-distutils zstd wget sudo"
+          echo UPDATE_CMD="apt update" >> $GITHUB_ENV
+          echo INSTALL_CMD="apt install -y $OS_PACKAGES" >> $GITHUB_ENV
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
         with:
@@ -110,4 +117,4 @@ jobs:
           mv /tmp/.buildx-cache-new /tmp/.buildx-cache
 
       - name: Test
-        run: docker run -v ${{ env.MOUNT_PATH }}:/host ${{ env.FULL_D_TAG }} --entrypoint python3 /host/${{ env.D_DIR }}/entry.py
+        run: docker run --rm -v ${{ env.MOUNT_PATH }}:/host ${{ env.FULL_D_TAG }} python3 /host/${{ env.D_DIR }}/entry.py
