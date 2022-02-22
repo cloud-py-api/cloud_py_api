@@ -2,6 +2,6 @@ ARG BASE_IMAGE
 FROM $BASE_IMAGE
 
 ARG INIT_CMD
-RUN set -ex && $INIT_CMD
+RUN set -ex && $INIT_CMD && python3 -V
 
 CMD ["sh"]
