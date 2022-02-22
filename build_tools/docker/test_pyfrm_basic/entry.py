@@ -16,7 +16,7 @@ ST_PYTHON_CLONE_DIR = path.join(FRM_APP_DATA, "st_python_clone")
 ST_PYTHON_CLONE = path.join(ST_PYTHON_DIR, "bin/python3")
 AS_USER = ["sudo", "-u"]
 PRJ_PATH = environ.get("PRJ_PATH", "/host")
-PY_FRM_PATH = environ.get("PY_FRM_PATH", "/")
+PY_FRM_PATH = path.join(PRJ_PATH, "pyfrm")
 
 
 def my_print(data):
@@ -115,11 +115,10 @@ if __name__ == "__main__":
         raise Exception("Unsupported python version.")
     init_frm_cfg()
     init_web_username()
-    mkdir(FRM_APP_DATA)
+    if not path.isdir(FRM_APP_DATA):
+        mkdir(FRM_APP_DATA)
     if AS_USER:
         run(["chown", "-R", f"{AS_USER[2]}:{AS_USER[2]}", FRM_APP_DATA], check=True)
-    rmtree(PY_FRM_PATH, ignore_errors=True)
-    copytree(path.join(PRJ_PATH, "pyfrm"), PY_FRM_PATH)
     if (
         AS_USER
         and path.isdir(ST_PYTHON_DIR)
