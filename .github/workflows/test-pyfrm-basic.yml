@@ -116,7 +116,4 @@ jobs:
           mv /tmp/.buildx-cache-new /tmp/.buildx-cache
 
       - name: Test
-        run: docker run --rm -v $GITHUB_WORKSPACE:/host ${{ env.FULL_D_TAG }} ls -la /host /host/${{ env.D_DIR }}
-
-
-# python3 /host/${{ env.D_DIR }}/entry.py
+        run: docker run --rm -v $GITHUB_WORKSPACE:/host ${{ env.FULL_D_TAG }} python3 /host/${{ env.D_DIR }}/entry.py
