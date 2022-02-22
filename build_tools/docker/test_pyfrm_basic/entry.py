@@ -145,11 +145,16 @@ if __name__ == "__main__":
         if AS_USER:
             python_test(AS_USER)
         python_test()
-        _os_pckg_cmd = environ.get("OS_PCKG_INSTALL_CMD", "")
-        if _os_pckg_cmd:
-            run(_os_pckg_cmd.split(), check=True)
-            _os_pckg_py_install = environ.get("OS_PCKG_PY_INSTALL", "")
-            if _os_pckg_py_install:
-                run(_os_pckg_py_install.split(), check=True)
+        _pip_install_cmd = environ.get("PIP_INIT_CMD", "")
+        if _pip_install_cmd:
+            run(_pip_install_cmd.split(), check=True)
+            run(
+                "pip3 install pipdeptree pg8000 PyMySQL protobuf SQLAlchemy".split(),
+                check=True,
+            )
             python_test(AS_USER if AS_USER else None)
     sys.exit(0)
+
+# python3 "/host/home/runner/work/cloud_py_api/cloud_py_api/$D_DIR/entrypoint.py" || exit 101
+# echo "Test OK."
+# exit 0

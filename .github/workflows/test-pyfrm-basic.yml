@@ -4,15 +4,18 @@ on:
   workflow_dispatch:
 
 env:
-  ST_PY_URL: "https://github.com/bigcat88/cloud_py_api/releases/download/20211017/st_python_amd64_manylinux.tar.zst"
-  D_DIR: "./build_tools/docker/test_py_pyfrm_basic"
+#  ST_PY_URL: "https://github.com/bigcat88/cloud_py_api/releases/download/20211017/st_python_amd64_manylinux.tar.zst"
+  REL_TAG: "20211017"
+  D_DIR: "./build_tools/docker/test_pyfrm_basic"
 
 jobs:
   on_linux:
     strategy:
       fail-fast: true
       matrix:
-        i: [ { "os": "alpine", "ver": "3.15", "arch": "amd64" } ]
+        i: [
+          { "os": "alpine", "ver": "3.15", "arch": "amd64" }
+        ]
 #        i: [ { "os": "debian", "ver": "10.11", "arch": "amd64" },
 #             { "os": "debian", "ver": "10.11", "arch": "arm64" },
 #             { "os": "debian", "ver": "11.2", "arch": "amd64" },
@@ -38,24 +41,29 @@ jobs:
     runs-on: ubuntu-latest
     name: 🐍 • ${{ matrix.i['os'] }} • ${{ matrix.i['ver'] }} • ${{ matrix.i['arch'] }}
     env:
-      KEY_HEAD: ${{ matrix.i['ver'] }}-${{ matrix.i['arch'] }}-cpa_pyfrm_test_sfinst
-      D_TAG: ${{ matrix.i['os'] }}-${{ matrix.i['ver'] }}-${{ matrix.i['arch'] }}:cpa_pyfrm_test_sfinst
+      KEY_HEAD: ${{ matrix.i['os'] }}-${{ matrix.i['ver'] }}-${{ matrix.i['arch'] }}-test_pyfrm_basic
 
     steps:
       - uses: actions/checkout@v2
+      - name: Initializing
+        run: |
+          echo D_TAG=${{ matrix.i['os'] }}-${{ matrix.i['ver'] }}-${{ matrix.i['arch'] }}:test_pyfrm_basic >> $GITHUB_ENV
+          echo FULL_D_TAG=${{ secrets.DOCKERHUB_USERNAME }}/$D_TAG >> $GITHUB_ENV
       - name: Set up QEMU
         if: matrix.i['arch'] == 'arm64'
         uses: docker/setup-qemu-action@v1
         with:
           platforms: arm64
 
-      - name: Correct url for arm64
-        if: matrix.i['arch'] == 'arm64'
-        run: echo ST_PY_URL="$(echo $ST_PY_URL | sed s/amd64/arm64/)" >> $GITHUB_ENV
-
+#      - name: Correct url for arm64
+#        if: matrix.i['arch'] == 'arm64'
+#        run: echo ST_PY_URL="$(echo $ST_PY_URL | sed s/amd64/arm64/)" >> $GITHUB_ENV
+#
       - name: Correct url for musli
         if: matrix.i['os'] == 'alpine'
-        run: echo ST_PY_URL="$(echo $ST_PY_URL | sed s/manylinux/musllinux/)" >> $GITHUB_ENV
+        run: |
+          OS_PACKAGES="python3 zstd wget apache2 sudo py3-cffi"
+          echo INIT_CMD="apk update && apk --no-cache add $OS_PACKAGES" >> $GITHUB_ENV
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
@@ -67,7 +75,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: /tmp/.buildx-cache
-          key: ${{ env.KEY_HEAD }}-${{ hashFiles(format('{0}/{1}.*', env.D_DIR, matrix.i['os'])) }}
+          key: ${{ env.KEY_HEAD }}-${{ hashFiles(format('{0}/*.*', env.D_DIR)) }}
 
       - uses: docker/login-action@v1
         with:
@@ -79,15 +87,14 @@ jobs:
         with:
           context: .
           push: true
-          file: ${{ env.D_DIR }}/${{ matrix.i['os'] }}.Dockerfile
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.D_TAG }}
+          file: ${{ env.D_DIR }}/base.Dockerfile
+          tags: ${{ env.FULL_D_TAG }}
           platforms: linux/${{ matrix.i['arch'] }}
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
           build-args: |
             BASE_IMAGE=${{ matrix.i['os'] }}:${{ matrix.i['ver'] }}
-            ENTRY_POINT=${{ env.D_DIR }}/${{ matrix.i['os'] }}.sh
-            SP_URL=${{ env.ST_PY_URL }}
+            INIT_CMD=${{ env.INIT_CMD }}
 
       - name: Temp fix - Move cache
         run: |
@@ -95,4 +102,4 @@ jobs:
           mv /tmp/.buildx-cache-new /tmp/.buildx-cache
 
       - name: Test
-        run: docker run -e D_DIR -v /:/host --rm ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.D_TAG }}
+        run: docker run -v /:/host --rm ${{ env.FULL_D_TAG }} --entrypoint python3 ${{ env.D_DIR }}/entry.py

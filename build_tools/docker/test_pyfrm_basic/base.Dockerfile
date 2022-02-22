@@ -1,0 +1,7 @@
+ARG BASE_IMAGE
+FROM $BASE_IMAGE
+
+ARG INIT_CMD
+RUN set -ex && $INIT_CMD
+
+CMD ["sh"]
