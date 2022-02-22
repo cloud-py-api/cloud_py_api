@@ -56,17 +56,32 @@ def python_test(as_user=None, st_python=None):
     _whom = "USER" if as_user else "ROOT"
     _as = AS_USER if as_user else []
     my_print(f"{_py_intp} ({_whom}): CHECKING.")
-    _ = run(_as + [_py_intp] + get_cmd("check"), check=False)
+    _ = run(
+        _as + [_py_intp] + get_cmd("check"),
+        stdout=sys.stdout,
+        stderr=sys.stderr,
+        check=False,
+    )
     if _.returncode == 2:
         raise Exception(f"TEST FAILED. ({_py_intp}, CHECK, {_whom})")
     if _.returncode == 1:
         my_print(f"{_py_intp} ({_whom}): INSTALLING.")
-        _ = run(_as + [_py_intp] + get_cmd("install"), check=False)
+        _ = run(
+            _as + [_py_intp] + get_cmd("install"),
+            stdout=sys.stdout,
+            stderr=sys.stderr,
+            check=False,
+        )
         if _.returncode:
             raise Exception(f"TEST FAILED. ({_py_intp}, INSTALL, {_whom})")
     check_fs()
     my_print(f"{_py_intp} ({_whom}): UPDATING.")
-    _ = run(_as + [_py_intp] + get_cmd("update"), check=False)
+    _ = run(
+        _as + [_py_intp] + get_cmd("update"),
+        stdout=sys.stdout,
+        stderr=sys.stderr,
+        check=False,
+    )
     if _.returncode:
         raise Exception(f"TEST FAILED. ({_py_intp}, UPDATE, {_whom})")
     check_fs()
@@ -133,6 +148,8 @@ if __name__ == "__main__":
             + [ST_PYTHON_CLONE]
             + ["-m", "pip", "install", "--no-cache-dir"]
             + ["pg8000==1.23.0", "PyMySQL==1.0.1", "protobuf==3.19.1"],
+            stdout=sys.stdout,
+            stderr=sys.stderr,
             check=True,
         )
         python_test(AS_USER, ST_PYTHON_CLONE)
@@ -144,11 +161,13 @@ if __name__ == "__main__":
         if AS_USER:
             python_test(AS_USER)
         python_test()
-        _pip_install_cmd = environ.get("PIP_INIT_CMD", "")
-        if _pip_install_cmd:
-            run(_pip_install_cmd.split(), check=True)
+        _pip_init_cmd = environ.get("PIP_INIT_CMD", "")
+        if _pip_init_cmd:
+            run(_pip_init_cmd.split(), stdout=sys.stdout, stderr=sys.stderr, check=True)
             run(
                 "pip3 install pipdeptree pg8000 PyMySQL protobuf SQLAlchemy".split(),
+                stdout=sys.stdout,
+                stderr=sys.stderr,
                 check=True,
             )
             python_test(AS_USER if AS_USER else None)

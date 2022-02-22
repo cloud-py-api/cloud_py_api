@@ -69,6 +69,7 @@ jobs:
           OS_PACKAGES="python3 zstd wget apache2 sudo py3-cffi"
           echo UPDATE_CMD="apk update" >> $GITHUB_ENV
           echo INSTALL_CMD="apk add --no-cache $OS_PACKAGES" >> $GITHUB_ENV
+          echo PIP_INIT_CMD="apk add py3-pip" >> $GITHUB_ENV
 
       - name: Preparing centos
         if: matrix.i['os'] != 'debian' && matrix.i['os'] != 'ubuntu' && matrix.i['os'] != 'alpine'
@@ -116,4 +117,4 @@ jobs:
           mv /tmp/.buildx-cache-new /tmp/.buildx-cache
 
       - name: Test
-        run: docker run --rm -v $GITHUB_WORKSPACE:/host ${{ env.FULL_D_TAG }} python3 /host/${{ env.D_DIR }}/entry.py
+        run: docker run --rm -e PIP_INIT_CMD -v $GITHUB_WORKSPACE:/host ${{ env.FULL_D_TAG }} python3 /host/${{ env.D_DIR }}/entry.py
