@@ -117,7 +117,7 @@ if __name__ == "__main__":
     init_web_username()
     mkdir(FRM_APP_DATA)
     if AS_USER:
-        run(["chown", "-R", f"{AS_USER}:{AS_USER}", FRM_APP_DATA], check=True)
+        run(["chown", "-R", f"{AS_USER[2]}:{AS_USER[2]}", FRM_APP_DATA], check=True)
     rmtree(PY_FRM_PATH, ignore_errors=True)
     copytree(path.join(PRJ_PATH, "pyfrm"), PY_FRM_PATH)
     if (

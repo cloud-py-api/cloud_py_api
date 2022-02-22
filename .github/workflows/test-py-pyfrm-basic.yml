@@ -5,7 +5,7 @@ on:
 
 env:
   ST_PY_URL: "https://github.com/bigcat88/cloud_py_api/releases/download/20211017/st_python_amd64_manylinux.tar.zst"
-  D_DIR: "./build_tools/docker/test_py_pyfrm_basic/"
+  D_DIR: "./build_tools/docker/test_py_pyfrm_basic"
 
 jobs:
   on_linux:
@@ -67,7 +67,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: /tmp/.buildx-cache
-          key: ${{ env.KEY_HEAD }}-${{ hashFiles(format('{0}{1}.*', env.D_DIR, matrix.i['os'])) }}
+          key: ${{ env.KEY_HEAD }}-${{ hashFiles(format('{0}/{1}.*', env.D_DIR, matrix.i['os'])) }}
 
       - uses: docker/login-action@v1
         with:
@@ -79,14 +79,14 @@ jobs:
         with:
           context: .
           push: true
-          file: ${{ env.D_DIR }}${{ matrix.i['os'] }}.Dockerfile
+          file: ${{ env.D_DIR }}/${{ matrix.i['os'] }}.Dockerfile
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.D_TAG }}
           platforms: linux/${{ matrix.i['arch'] }}
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
           build-args: |
             BASE_IMAGE=${{ matrix.i['os'] }}:${{ matrix.i['ver'] }}
-            ENTRY_POINT=${{ env.D_DIR }}${{ matrix.i['os'] }}.sh
+            ENTRY_POINT=${{ env.D_DIR }}/${{ matrix.i['os'] }}.sh
             SP_URL=${{ env.ST_PY_URL }}
 
       - name: Temp fix - Move cache
