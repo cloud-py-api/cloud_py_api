@@ -14,16 +14,17 @@ jobs:
       fail-fast: true
       matrix:
         i: [
-          { "os": "alpine", "ver": "3.15", "arch": "amd64" }
+          { "os": "debian", "ver": "10.11", "arch": "amd64" },
+          { "os": "debian", "ver": "10.11", "arch": "arm64" },
+          { "os": "debian", "ver": "11.2", "arch": "amd64" },
+          { "os": "debian", "ver": "11.2", "arch": "arm64" },
+          { "os": "ubuntu", "ver": "21.10", "arch": "amd64" },
+          { "os": "ubuntu", "ver": "21.10", "arch": "arm64" },
+          { "os": "ubuntu", "ver": "22.04", "arch": "amd64" },
+          { "os": "ubuntu", "ver": "22.04", "arch": "arm64" },
+          { "os": "alpine", "ver": "3.15", "arch": "amd64" },
         ]
-#        i: [ { "os": "debian", "ver": "10.11", "arch": "amd64" },
-#             { "os": "debian", "ver": "10.11", "arch": "arm64" },
-#             { "os": "debian", "ver": "11.2", "arch": "amd64" },
-#             { "os": "debian", "ver": "11.2", "arch": "arm64" },
-#             { "os": "ubuntu", "ver": "21.10", "arch": "amd64" },
-#             { "os": "ubuntu", "ver": "21.10", "arch": "arm64" },
-#             { "os": "ubuntu", "ver": "22.04", "arch": "amd64" },
-#             { "os": "ubuntu", "ver": "22.04", "arch": "arm64" },
+#        i: [
 #             { "os": "centos", "ver": "7", "arch": "amd64" },
 #             { "os": "centos", "ver": "7", "arch": "arm64" },
 #             { "os": "fedora", "ver": "35", "arch": "amd64" },
@@ -62,6 +63,7 @@ jobs:
           OS_PACKAGES="python3-minimal python3-distutils zstd wget sudo"
           echo UPDATE_CMD="apt update" >> $GITHUB_ENV
           echo INSTALL_CMD="apt install -y $OS_PACKAGES" >> $GITHUB_ENV
+          echo PIP_INIT_CMD="apt install -y python3-pip" >> $GITHUB_ENV
 
       - name: Preparing musli
         if: matrix.i['os'] == 'alpine'
@@ -69,12 +71,12 @@ jobs:
           OS_PACKAGES="python3 zstd wget apache2 sudo py3-cffi"
           echo UPDATE_CMD="apk update" >> $GITHUB_ENV
           echo INSTALL_CMD="apk add --no-cache $OS_PACKAGES" >> $GITHUB_ENV
-          echo PIP_INIT_CMD="apk add py3-pip" >> $GITHUB_ENV
+#          echo PIP_INIT_CMD="apk add py3-pip" >> $GITHUB_ENV   # waiting for greenlet to have binary wheels.
 
       - name: Preparing centos
         if: matrix.i['os'] != 'debian' && matrix.i['os'] != 'ubuntu' && matrix.i['os'] != 'alpine'
         run: |
-          OS_PACKAGES="python3-minimal python3-distutils zstd wget sudo"
+          OS_PACKAGES="python3 zstd wget sudo"
           echo UPDATE_CMD="yum update -y" >> $GITHUB_ENV
           echo INSTALL_CMD="yum install -y $OS_PACKAGES" >> $GITHUB_ENV
 

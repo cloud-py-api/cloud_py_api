@@ -20,9 +20,9 @@ PY_FRM_PATH = path.join(PRJ_PATH, "pyfrm")
 
 
 def my_print(data):
-    print("<<<----------------------------------------------->>>")
-    print(data)
-    print("<<<----------------------------------------------->>>")
+    print("<<<----------------------------------------------->>>", flush=True)
+    print(data, flush=True)
+    print("<<<----------------------------------------------->>>", flush=True)
 
 
 def get_cmd(cmd):
