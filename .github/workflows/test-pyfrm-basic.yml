@@ -54,10 +54,13 @@ jobs:
         with:
           platforms: arm64
 
-#      - name: Correct url for arm64
-#        if: matrix.i['arch'] == 'arm64'
-#        run: echo ST_PY_URL="$(echo $ST_PY_URL | sed s/amd64/arm64/)" >> $GITHUB_ENV
-#
+      - name: Preparing debian
+        if: matrix.i['os'] == 'debian' || matrix.i['os'] == 'ubuntu'
+        run: |
+          OS_PACKAGES="python3-minimal python3-distutils zstd wget sudo"
+          echo UPDATE_CMD="apt update" >> $GITHUB_ENV
+          echo INSTALL_CMD="apt install -y $OS_PACKAGES" >> $GITHUB_ENV
+
       - name: Preparing musli
         if: matrix.i['os'] == 'alpine'
         run: |
@@ -103,4 +106,4 @@ jobs:
           mv /tmp/.buildx-cache-new /tmp/.buildx-cache
 
       - name: Test
-        run: docker run -v /:/host --rm ${{ env.FULL_D_TAG }} --entrypoint python3 ${{ env.D_DIR }}/entry.py
+        run: docker run -v /:/host --entrypoint python3 ${{ env.D_DIR }}/entry.py --rm ${{ env.FULL_D_TAG }}
