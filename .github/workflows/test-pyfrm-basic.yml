@@ -49,7 +49,6 @@ jobs:
       - name: Initializing
         run: |
           echo FULL_D_TAG=${{ secrets.DOCKERHUB_USERNAME }}/${{ env.D_TAG }} >> $GITHUB_ENV
-          echo MOUNT_PATH="/host/home/runner/work/cloud_py_api/cloud_py_api" >> $GITHUB_ENV
 
       - name: Set up QEMU
         if: matrix.i['arch'] == 'arm64'
@@ -117,7 +116,7 @@ jobs:
           mv /tmp/.buildx-cache-new /tmp/.buildx-cache
 
       - name: Test
-        run: docker run --rm -v ${{ env.MOUNT_PATH }}:/host ${{ env.FULL_D_TAG }} ls -la /host /host/${{ env.D_DIR }}
+        run: docker run --rm -v ${{ env.GITHUB_WORKSPACE }}:/host ${{ env.FULL_D_TAG }} ls -la /host /host/${{ env.D_DIR }}
 
 
 # python3 /host/${{ env.D_DIR }}/entry.py
