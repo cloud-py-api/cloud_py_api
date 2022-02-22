@@ -42,13 +42,13 @@ jobs:
     name: 🐍 • ${{ matrix.i['os'] }} • ${{ matrix.i['ver'] }} • ${{ matrix.i['arch'] }}
     env:
       KEY_HEAD: ${{ matrix.i['os'] }}-${{ matrix.i['ver'] }}-${{ matrix.i['arch'] }}-test_pyfrm_basic
+      D_TAG: ${{ matrix.i['os'] }}-${{ matrix.i['ver'] }}-${{ matrix.i['arch'] }}:test_pyfrm_basic
 
     steps:
       - uses: actions/checkout@v2
       - name: Initializing
         run: |
-          echo D_TAG=${{ matrix.i['os'] }}-${{ matrix.i['ver'] }}-${{ matrix.i['arch'] }}:test_pyfrm_basic >> $GITHUB_ENV
-          echo FULL_D_TAG=${{ secrets.DOCKERHUB_USERNAME }}/$D_TAG >> $GITHUB_ENV
+          echo FULL_D_TAG=${{ secrets.DOCKERHUB_USERNAME }}/${{ env.D_TAG }} >> $GITHUB_ENV
       - name: Set up QEMU
         if: matrix.i['arch'] == 'arm64'
         uses: docker/setup-qemu-action@v1
