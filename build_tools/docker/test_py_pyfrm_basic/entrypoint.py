@@ -2,7 +2,7 @@ import sys
 from subprocess import run
 from shutil import copytree, rmtree
 from pwd import getpwnam
-from os import chown, path, environ, stat
+from os import chown, path, environ, stat, mkdir
 from urllib import parse
 from json import dumps as to_json
 
@@ -115,6 +115,9 @@ if __name__ == "__main__":
         raise Exception("Unsupported python version.")
     init_frm_cfg()
     init_web_username()
+    mkdir(FRM_APP_DATA)
+    if AS_USER:
+        run(["chown", "-R", f"{AS_USER}:{AS_USER}", FRM_APP_DATA], check=True)
     rmtree(PY_FRM_PATH, ignore_errors=True)
     copytree(path.join(PRJ_PATH, "pyfrm"), PY_FRM_PATH)
     if (

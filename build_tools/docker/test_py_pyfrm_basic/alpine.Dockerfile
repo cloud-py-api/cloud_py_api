@@ -8,6 +8,5 @@ RUN set -ex && apk update && apk \
     --no-cache add python3 zstd wget apache2 sudo \
     py3-cffi  \
     && chmod +x /entrypoint.sh && python3 -V
-RUN mkdir /cloud_py_api && chown -R apache:apache /cloud_py_api
 
 CMD ["sh", "-c", "/entrypoint.sh"]
