@@ -193,10 +193,11 @@ def init():
     if machine().lower() == "arm64":
         _st_type = "arm64"
     _st_os = "manylinux"
-    _ = run("ldd --version".split(), stdout=PIPE, check=False)
-    if _.stdout:
-        if _.stdout.decode("utf-8").find("musl") != -1:
-            _st_os = "musllinux"
+    _ = run("ldd --version".split(), stdout=PIPE, stderr=PIPE, check=False)
+    if _.stdout and _.stdout.decode("utf-8").find("musl") != -1:
+        _st_os = "musllinux"
+    elif _.stderr and _.stderr.decode("utf-8").find("musl") != -1:
+        _st_os = "musllinux"
     _url = (
         "https://github.com/bigcat88/cloud_py_api/releases/download/"
         + f"{_st_py_tag}/st_python_{_st_type}_{_st_os}.tar.zst"
