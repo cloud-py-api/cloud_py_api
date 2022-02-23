@@ -47,16 +47,12 @@ def clean_fs():
 
 def check_fs():
     _dir_list = listdir(FRM_APP_DATA)
-    _dir_list = [
-        i
-        for i in _dir_list
-        if i
-        not in (
-            ".local",
-            path.basename(ST_PYTHON_DIR),
-            path.basename(ST_PYTHON_CLONE_DIR),
-        )
+    frm_allowed_names = [
+        ".local",
+        path.basename(ST_PYTHON_DIR),
+        path.basename(ST_PYTHON_CLONE_DIR),
     ]
+    _dir_list = [i for i in _dir_list if i not in frm_allowed_names]
     if _dir_list:
         my_print(f"Unexpected files in {FRM_APP_DATA} directory:\n{str(_dir_list)}")
         raise Exception("Test failed.")
@@ -239,23 +235,26 @@ if __name__ == "__main__":
     if path.isdir(ST_PYTHON_DIR):
         python_tests(ST_PYTHON)
     if sys.version_info[1] > 6 and environ.get("SKIP_SYS_PY_TESTS", "0") == "0":
-        # Temporary till proton will be updated to use newer pip without that bug with `xml`.
+        # Temporary till photon will be updated to use newer pip without that bug with `xml`.
         if environ.get("M_OS_NAME", "") == "photon":
             _install_cmd = environ.get("INSTALL_CMD")
             _pip_name = environ.get("PIP_NAME", "")
             if _pip_name:
                 run(_install_cmd.split() + [_pip_name], check=True)
                 run(
-                    [sys.executable] + "-m pip install --upgrade pip".split(),
+                    [sys.executable]
+                    + "-m pip install --no-cache-dir --upgrade pip".split(),
                     check=True,
                 )
+        # -----------------------------------------------------------------------------------
         python_tests()
         _install_cmd = environ.get("INSTALL_CMD")
         _pip_name = environ.get("PIP_NAME", "")
         if _pip_name:
             run(_install_cmd.split() + [_pip_name], check=True)
             run(
-                [sys.executable] + "-m pip install --upgrade pip".split(),
+                [sys.executable]
+                + "-m pip install --no-cache-dir --upgrade pip".split(),
                 check=True,
             )
             run(
