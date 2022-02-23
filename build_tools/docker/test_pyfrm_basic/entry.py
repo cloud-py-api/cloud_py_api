@@ -259,7 +259,7 @@ if __name__ == "__main__":
             )
             run(
                 [sys.executable]
-                + "-m pip install pipdeptree pg8000 PyMySQL protobuf SQLAlchemy".split(),
+                + "-m pip install --no-cache-dir pipdeptree pg8000 PyMySQL protobuf SQLAlchemy".split(),
                 check=True,
             )
             python_tests()
