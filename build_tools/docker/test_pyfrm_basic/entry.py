@@ -1,6 +1,6 @@
 import sys
 from platform import machine
-from subprocess import run, PIPE, DEVNULL
+from subprocess import run, PIPE, STDOUT, DEVNULL
 from shutil import copytree, rmtree
 from pwd import getpwnam
 from os import path, environ, listdir, mkdir, remove
@@ -16,17 +16,11 @@ SYS_PYTHON = "python3"
 ST_PYTHON_DIR = path.join(FRM_APP_DATA, "st_python")
 ST_PYTHON = path.join(ST_PYTHON_DIR, "bin/python3")
 ST_PYTHON_CLONE_DIR = path.join(FRM_APP_DATA, "st_python_clone")
-ST_PYTHON_CLONE = path.join(ST_PYTHON_DIR, "bin/python3")
+ST_PYTHON_CLONE = path.join(ST_PYTHON_CLONE_DIR, "bin/python3")
 AS_USER = ["sudo", "-u"]
 PRJ_PATH = environ.get("PRJ_PATH", "/host")
 PY_FRM_PATH = path.join(PRJ_PATH, "pyfrm")
 CURRENT_USER = getuser()
-
-
-def my_print(data):
-    print("<<<----------------------------------------------->>>", flush=True)
-    print(data, flush=True)
-    print("<<<----------------------------------------------->>>", flush=True)
 
 
 def get_cmd(cmd):
@@ -45,7 +39,7 @@ def clean_fs():
     rmtree(path.join(FRM_APP_DATA, ".local"), ignore_errors=True)
 
 
-def check_fs():
+def check_fs(log_head, process_result):
     _dir_list = listdir(FRM_APP_DATA)
     frm_allowed_names = [
         ".local",
@@ -54,23 +48,38 @@ def check_fs():
     ]
     _dir_list = [i for i in _dir_list if i not in frm_allowed_names]
     if _dir_list:
-        my_print(f"Unexpected files in {FRM_APP_DATA} directory:\n{str(_dir_list)}")
-        raise Exception("Test failed.")
+        print(f"{log_head} LOGS:", flush=True)
+        print(process_result.stdout.decode("utf-8"), flush=True)
+        print(
+            f"Unexpected files in {FRM_APP_DATA} directory:\n{str(_dir_list)}",
+            flush=True,
+        )
+        raise Exception("check_fs error.")
     try:
         _dir = path.expanduser(f"~")
         _dir_list = listdir(_dir)
         _must_not_be = [i for i in _dir_list if i in (".local", ".cache")]
         if _must_not_be:
-            my_print(f"Unexpected files in {_dir} directory:\n{str(_dir_list)}")
-            raise Exception("Test failed.")
+            print(f"{log_head} LOGS:", flush=True)
+            print(process_result.stdout.decode("utf-8"), flush=True)
+            print(
+                f"Unexpected files in {_dir} directory:\n{str(_must_not_be)}",
+                flush=True,
+            )
+            raise Exception("check_fs error.")
         if AS_USER:
             try:
                 _dir = path.expanduser(f"~{AS_USER[2]}")
                 _dir_list = listdir(_dir)
                 _must_not_be = [i for i in _dir_list if i in (".local", ".cache")]
                 if _must_not_be:
-                    my_print(f"Unexpected files in {_dir} directory:\n{str(_dir_list)}")
-                    raise Exception("Test failed.")
+                    print(f"{log_head} LOGS:", flush=True)
+                    print(process_result.stdout.decode("utf-8"), flush=True)
+                    print(
+                        f"Unexpected files in {_dir} directory:\n{str(_must_not_be)}",
+                        flush=True,
+                    )
+                    raise Exception("check_fs error.")
             except FileNotFoundError:
                 pass
     except (KeyError, RuntimeError):
@@ -79,34 +88,51 @@ def check_fs():
 
 def python_test(python_interpreter=None, as_user: bool = False):
     _py_intp = python_interpreter if python_interpreter else sys.executable
-    _whom = AS_USER[2] if as_user and AS_USER else "ROOT"
+    _whom = AS_USER[2] if as_user and AS_USER else CURRENT_USER
     _as = AS_USER if as_user and AS_USER else []
-    my_print(f"{_py_intp} ({_whom}): CHECKING.")
+    _log_head = f"{_py_intp} ({_whom}): "
+    print(_log_head + "CHECKING:..", end="", flush=True)
     _ = run(
         _as + [_py_intp] + get_cmd("check"),
+        stdout=PIPE,
+        stderr=STDOUT,
         check=False,
     )
     if _.returncode == 2:
-        raise Exception(f"TEST FAILED. ({_py_intp}, CHECK, {_whom})")
+        print(f". FAILED\n\n{_log_head} LOGS:", flush=True)
+        print(_.stdout.decode("utf-8"), flush=True)
+        raise Exception(f"TEST FAILED. {_log_head}: CHECK")
+    print(". OK", flush=True)
+    check_fs(_log_head, _)
     if _.returncode == 1:
-        my_print(f"{_py_intp} ({_whom}): INSTALLING.")
+        print(_log_head + "INSTALLING:..", end="", flush=True)
         _ = run(
             _as + [_py_intp] + get_cmd("install"),
+            stdout=PIPE,
+            stderr=STDOUT,
             check=False,
         )
         if _.returncode:
-            raise Exception(f"TEST FAILED. ({_py_intp}, INSTALL, {_whom})")
-    check_fs()
-    my_print(f"{_py_intp} ({_whom}): UPDATING.")
+            print(f". FAILED\n\n{_log_head} LOGS:", flush=True)
+            print(_.stdout.decode("utf-8"), flush=True)
+            raise Exception(f"TEST FAILED. {_log_head}: INSTALL")
+        print(". OK", flush=True)
+        check_fs(_log_head, _)
+    print(_log_head + "UPDATING:..", end="", flush=True)
     _ = run(
         _as + [_py_intp] + get_cmd("update"),
+        stdout=PIPE,
+        stderr=STDOUT,
         check=False,
     )
     if _.returncode:
-        raise Exception(f"TEST FAILED. ({_py_intp}, UPDATE, {_whom})")
-    check_fs()
+        print(f". FAILED\n\n{_log_head} LOGS:", flush=True)
+        print(_.stdout.decode("utf-8"), flush=True)
+        raise Exception(f"TEST FAILED. {_log_head}: UPDATE")
+    print(". OK", flush=True)
+    check_fs(_log_head, _)
     clean_fs()
-    my_print(f"{_py_intp} ({_whom}): PASSED.")
+    print(_log_head + "PASSED", flush=True)
 
 
 def python_tests(python_interpreter=None):
@@ -191,10 +217,8 @@ def init():
     if machine().lower() in ("arm64", "aarch64"):
         _st_type = "arm64"
     _st_os = "manylinux"
-    _ = run("ldd --version".split(), stdout=PIPE, stderr=PIPE, check=False)
+    _ = run("ldd --version".split(), stdout=PIPE, stderr=STDOUT, check=False)
     if _.stdout and _.stdout.decode("utf-8").find("musl") != -1:
-        _st_os = "musllinux"
-    elif _.stderr and _.stderr.decode("utf-8").find("musl") != -1:
         _st_os = "musllinux"
     _url = (
         "https://github.com/bigcat88/cloud_py_api/releases/download/"
@@ -203,7 +227,7 @@ def init():
     zst_path = path.join(FRM_APP_DATA, "standalone.tar.zst")
     _ = run(f"wget -q --no-check-certificate -O {zst_path} {_url}".split(), check=False)
     if _.returncode:
-        my_print("WARNING: Standalone Python not found.")
+        print("WARNING: Standalone Python not found.", flush=True)
         if path.isfile(zst_path):
             remove(zst_path)
         return
@@ -236,16 +260,16 @@ if __name__ == "__main__":
         python_tests(ST_PYTHON)
     if sys.version_info[1] > 6 and environ.get("SKIP_SYS_PY_TESTS", "0") == "0":
         # Temporary till photon will be updated to use newer pip without that bug with `xml`.
-        if environ.get("M_OS_NAME", "") == "photon":
-            _install_cmd = environ.get("INSTALL_CMD")
-            _pip_name = environ.get("PIP_NAME", "")
-            if _pip_name:
-                run(_install_cmd.split() + [_pip_name], check=True)
-                run(
-                    [sys.executable]
-                    + "-m pip install --no-cache-dir --upgrade pip".split(),
-                    check=True,
-                )
+        # if environ.get("M_OS_NAME", "") == "photon":
+        #     _install_cmd = environ.get("INSTALL_CMD")
+        #     _pip_name = environ.get("PIP_NAME", "")
+        #     if _pip_name:
+        #         run(_install_cmd.split() + [_pip_name], check=True)
+        #         run(
+        #             [sys.executable]
+        #             + "-m pip install --no-cache-dir --upgrade pip".split(),
+        #             check=True,
+        #         )
         # -----------------------------------------------------------------------------------
         python_tests()
         _install_cmd = environ.get("INSTALL_CMD")

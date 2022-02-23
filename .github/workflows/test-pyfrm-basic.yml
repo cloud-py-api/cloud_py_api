@@ -31,8 +31,8 @@ jobs:
 #          { "os": "alpine", "ver": "3.13", "arch": "arm64", "ex_pckgs": "" },
           { "os": "oraclelinux", "ver": "8", "arch": "amd64", "ex_pckgs": "" },
           { "os": "oraclelinux", "ver": "8", "arch": "arm64", "ex_pckgs": "" },
-          { "os": "photon", "ver": "latest", "arch": "amd64", "ex_pckgs": "" },
-          { "os": "photon", "ver": "latest", "arch": "arm64", "ex_pckgs": "" },
+          { "os": "photon", "ver": "latest", "arch": "amd64", "ex_pckgs": "python3-xml" },
+          { "os": "photon", "ver": "latest", "arch": "arm64", "ex_pckgs": "python3-xml" },
         ]
     runs-on: ubuntu-latest
     name: 🐍 • ${{ matrix.i['os'] }} • ${{ matrix.i['ver'] }} • ${{ matrix.i['arch'] }}
