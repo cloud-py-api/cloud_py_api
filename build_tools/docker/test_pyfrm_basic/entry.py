@@ -206,8 +206,9 @@ def init():
     _ = run(f"wget -q --no-check-certificate -O {zst_path} {_url}".split(), check=False)
     if _.returncode:
         my_print("WARNING: Standalone Python not found.")
+        if path.isfile(zst_path):
+            remove(zst_path)
         return
-    my_print(f"DEBUG: Standalone Python found({_url}).")
     run(f"zstd -d {zst_path}".split(), stderr=DEVNULL, stdout=DEVNULL, check=True)
     remove(zst_path)
     tar_path = path.join(FRM_APP_DATA, "standalone.tar")
