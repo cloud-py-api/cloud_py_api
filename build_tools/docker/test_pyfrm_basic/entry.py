@@ -1,10 +1,12 @@
 import sys
-from subprocess import run
+from platform import machine
+from subprocess import run, PIPE, DEVNULL
 from shutil import copytree, rmtree
 from pwd import getpwnam
-from os import chown, path, environ, stat, mkdir
+from os import path, environ, listdir, mkdir, remove
 from urllib import parse
 from json import dumps as to_json
+import tarfile
 
 
 FRM_APP_DATA = "/cloud_py_api"
@@ -42,24 +44,48 @@ def clean_fs():
 
 
 def check_fs():
+    _dir_list = listdir(FRM_APP_DATA)
     _dir_list = [
-        FRM_APP_DATA,
-        path.join(FRM_APP_DATA, ".local"),
-        ST_PYTHON_DIR,
-        "/var/www",
+        i
+        for i in _dir_list
+        if i
+        not in (
+            ".local",
+            path.basename(ST_PYTHON_DIR),
+            path.basename(ST_PYTHON_CLONE_DIR),
+        )
     ]
-    run(["ls", "-la"] + _dir_list, check=False)
+    if _dir_list:
+        my_print(f"Unexpected files in {FRM_APP_DATA} directory:\n{str(_dir_list)}")
+        raise Exception("Test failed.")
+    try:
+        _dir = path.expanduser(f"~")
+        _dir_list = listdir(_dir)
+        _must_not_be = [i for i in _dir_list if i in (".local", ".cache")]
+        if _must_not_be:
+            my_print(f"Unexpected files in {_dir} directory:\n{str(_dir_list)}")
+            raise Exception("Test failed.")
+        if AS_USER:
+            try:
+                _dir = path.expanduser(f"~{AS_USER[2]}")
+                _dir_list = listdir(_dir)
+                _must_not_be = [i for i in _dir_list if i in (".local", ".cache")]
+                if _must_not_be:
+                    my_print(f"Unexpected files in {_dir} directory:\n{str(_dir_list)}")
+                    raise Exception("Test failed.")
+            except FileNotFoundError:
+                pass
+    except (KeyError, RuntimeError):
+        pass
 
 
-def python_test(as_user=None, st_python=None):
-    _py_intp = st_python if st_python else sys.executable
-    _whom = "USER" if as_user else "ROOT"
-    _as = AS_USER if as_user else []
+def python_test(python_interpreter=None, as_user: bool = False):
+    _py_intp = python_interpreter if python_interpreter else sys.executable
+    _whom = AS_USER[2] if as_user and AS_USER else "ROOT"
+    _as = AS_USER if as_user and AS_USER else []
     my_print(f"{_py_intp} ({_whom}): CHECKING.")
     _ = run(
         _as + [_py_intp] + get_cmd("check"),
-        stdout=sys.stdout,
-        stderr=sys.stderr,
         check=False,
     )
     if _.returncode == 2:
@@ -68,8 +94,6 @@ def python_test(as_user=None, st_python=None):
         my_print(f"{_py_intp} ({_whom}): INSTALLING.")
         _ = run(
             _as + [_py_intp] + get_cmd("install"),
-            stdout=sys.stdout,
-            stderr=sys.stderr,
             check=False,
         )
         if _.returncode:
@@ -78,8 +102,6 @@ def python_test(as_user=None, st_python=None):
     my_print(f"{_py_intp} ({_whom}): UPDATING.")
     _ = run(
         _as + [_py_intp] + get_cmd("update"),
-        stdout=sys.stdout,
-        stderr=sys.stderr,
         check=False,
     )
     if _.returncode:
@@ -87,6 +109,12 @@ def python_test(as_user=None, st_python=None):
     check_fs()
     clean_fs()
     my_print(f"{_py_intp} ({_whom}): PASSED.")
+
+
+def python_tests(python_interpreter=None):
+    if AS_USER:
+        python_test(python_interpreter, as_user=True)
+    python_test(python_interpreter)
 
 
 def init_frm_cfg():
@@ -125,50 +153,100 @@ def init_web_username():
     AS_USER = []
 
 
-if __name__ == "__main__":
+def chown(target_dir: str) -> None:
+    if AS_USER:
+        run(["chown", "-R", f"{AS_USER[2]}:{AS_USER[2]}", target_dir], check=True)
+
+
+def init():
     if sys.version_info[0] != 3:
-        raise Exception("Unsupported python version.")
+        raise Exception(
+            f"Unsupported python version({sys.version_info[0]}.{sys.version_info[1]})."
+        )
     init_frm_cfg()
     init_web_username()
-    if not path.isdir(FRM_APP_DATA):
-        mkdir(FRM_APP_DATA)
-    if AS_USER:
-        run(["chown", "-R", f"{AS_USER[2]}:{AS_USER[2]}", FRM_APP_DATA], check=True)
-    if (
-        AS_USER
-        and path.isdir(ST_PYTHON_DIR)
-        and environ.get("SKIP_ST_PY_CLONED_TESTS", "0") == "0"
-    ):
+    # Delete .cache and .local folders if any in ~ and ~USER
+    try:
+        _dir = path.expanduser(f"~")
+        rmtree(path.join(_dir, ".cache"), ignore_errors=True)
+        rmtree(path.join(_dir, ".local"), ignore_errors=True)
+        if AS_USER:
+            try:
+                _dir = path.expanduser(f"~{AS_USER[2]}")
+                rmtree(path.join(_dir, ".cache"), ignore_errors=True)
+                rmtree(path.join(_dir, ".local"), ignore_errors=True)
+            except FileNotFoundError:
+                pass
+    except (KeyError, RuntimeError):
+        pass
+    # Create cloud_py_api folder.
+    rmtree(FRM_APP_DATA, ignore_errors=True)
+    mkdir(FRM_APP_DATA)
+    chown(FRM_APP_DATA)
+    # Download standalone python.
+    if environ.get("SKIP_ST_PY_TESTS", "0") != "0":
+        return
+    _st_py_tag = environ.get("REL_TAG")
+    if not _st_py_tag:
+        return
+    _st_type = "amd64"
+    if machine().lower() == "arm64":
+        _st_type = "arm64"
+    _st_os = "manylinux"
+    _ = run("ldd --version".split(), stdout=PIPE, check=False)
+    if _.stdout:
+        if _.stdout.decode("utf-8").find("musl") != -1:
+            _st_os = "musllinux"
+    _url = (
+        "https://github.com/bigcat88/cloud_py_api/releases/download/"
+        + f"{_st_py_tag}/st_python_{_st_type}_{_st_os}.tar.zst"
+    )
+    zst_path = path.join(FRM_APP_DATA, "standalone.tar.zst")
+    _ = run(f"wget -q --no-check-certificate -O {zst_path} {_url}".split(), check=False)
+    if _.returncode:
+        return
+    run(f"zstd -d {zst_path}".split(), stderr=DEVNULL, stdout=DEVNULL, check=True)
+    remove(zst_path)
+    tar_path = path.join(FRM_APP_DATA, "standalone.tar")
+    with tarfile.open(tar_path) as tar:
+        tar.extractall(FRM_APP_DATA)
+    remove(tar_path)
+    chown(ST_PYTHON_DIR)
+    if path.isdir(ST_PYTHON_DIR) and environ.get("SKIP_ST_PY_CLONED_TESTS", "0") == "0":
+        # Clone standalone python.
         rmtree(ST_PYTHON_CLONE_DIR, ignore_errors=True)
         copytree(ST_PYTHON_DIR, ST_PYTHON_CLONE_DIR)
-        _st = stat(ST_PYTHON_DIR)
-        chown(ST_PYTHON_CLONE_DIR, _st.st_uid, _st.st_gid)
+        chown(ST_PYTHON_CLONE_DIR)
+        # Install old packages for update test.
         run(
             AS_USER
             + [ST_PYTHON_CLONE]
             + ["-m", "pip", "install", "--no-cache-dir"]
             + ["pg8000==1.23.0", "PyMySQL==1.0.1", "protobuf==3.19.1"],
-            stdout=sys.stdout,
-            stderr=sys.stderr,
             check=True,
         )
-        python_test(AS_USER, ST_PYTHON_CLONE)
-    if path.isdir(ST_PYTHON_DIR) and environ.get("SKIP_ST_PY_TESTS", "0") == "0":
-        if AS_USER:
-            python_test(AS_USER, ST_PYTHON)
-        python_test(st_python=ST_PYTHON)
+
+
+if __name__ == "__main__":
+    init()
+    if path.isdir(ST_PYTHON_CLONE_DIR):
+        python_tests(ST_PYTHON_CLONE)
+    if path.isdir(ST_PYTHON_DIR):
+        python_tests(ST_PYTHON)
     if sys.version_info[1] > 6 and environ.get("SKIP_SYS_PY_TESTS", "0") == "0":
-        if AS_USER:
-            python_test(AS_USER)
-        python_test()
-        _pip_init_cmd = environ.get("PIP_INIT_CMD", "")
-        if _pip_init_cmd:
-            run(_pip_init_cmd.split(), stdout=sys.stdout, stderr=sys.stderr, check=True)
+        python_tests()
+        _install_cmd = environ.get("INSTALL_CMD")
+        _pip_name = environ.get("PIP_NAME", "")
+        if _pip_name:
+            run(_install_cmd.split() + [_pip_name], check=True)
             run(
-                "pip3 install pipdeptree pg8000 PyMySQL protobuf SQLAlchemy".split(),
-                stdout=sys.stdout,
-                stderr=sys.stderr,
+                [sys.executable] + "-m pip install --upgrade pip".split(),
                 check=True,
             )
-            python_test(AS_USER if AS_USER else None)
+            run(
+                [sys.executable]
+                + "-m pip install pipdeptree pg8000 PyMySQL protobuf SQLAlchemy".split(),
+                check=True,
+            )
+            python_tests()
     sys.exit(0)

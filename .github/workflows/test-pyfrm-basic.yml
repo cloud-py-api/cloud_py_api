@@ -4,7 +4,6 @@ on:
   workflow_dispatch:
 
 env:
-#  ST_PY_URL: "https://github.com/bigcat88/cloud_py_api/releases/download/20211017/st_python_amd64_manylinux.tar.zst"
   REL_TAG: "20211017"
   D_DIR: "build_tools/docker/test_pyfrm_basic"
 
@@ -14,31 +13,27 @@ jobs:
       fail-fast: true
       matrix:
         i: [
-          { "os": "debian", "ver": "10.11", "arch": "amd64" },
-          { "os": "debian", "ver": "10.11", "arch": "arm64" },
-          { "os": "debian", "ver": "11.2", "arch": "amd64" },
-          { "os": "debian", "ver": "11.2", "arch": "arm64" },
-          { "os": "ubuntu", "ver": "21.10", "arch": "amd64" },
-          { "os": "ubuntu", "ver": "21.10", "arch": "arm64" },
-          { "os": "ubuntu", "ver": "22.04", "arch": "amd64" },
-          { "os": "ubuntu", "ver": "22.04", "arch": "arm64" },
-          { "os": "alpine", "ver": "3.15", "arch": "amd64" },
+          { "os": "debian", "ver": "10.11", "arch": "amd64", "ex_pckgs": "" },
+          { "os": "debian", "ver": "10.11", "arch": "arm64", "ex_pckgs": "" },
+          { "os": "debian", "ver": "11.2", "arch": "amd64", "ex_pckgs": "" },
+          { "os": "debian", "ver": "11.2", "arch": "arm64", "ex_pckgs": "" },
+          { "os": "ubuntu", "ver": "21.10", "arch": "amd64", "ex_pckgs": "" },
+          { "os": "ubuntu", "ver": "21.10", "arch": "arm64", "ex_pckgs": "" },
+          { "os": "ubuntu", "ver": "22.04", "arch": "amd64", "ex_pckgs": "" },
+          { "os": "ubuntu", "ver": "22.04", "arch": "arm64", "ex_pckgs": "" },
+          { "os": "fedora", "ver": "35", "arch": "amd64", "ex_pckgs": "libxcrypt-compat" },
+          { "os": "fedora", "ver": "35", "arch": "arm64", "ex_pckgs": "libxcrypt-compat" },
+          { "os": "amazonlinux", "ver": "latest", "arch": "amd64", "ex_pckgs": "" },
+          { "os": "amazonlinux", "ver": "latest", "arch": "arm64", "ex_pckgs": "" },
+          { "os": "alpine", "ver": "3.15", "arch": "amd64", "ex_pckgs": "" },
+#          { "os": "alpine", "ver": "3.15", "arch": "arm64", "ex_pckgs": "" },
+          { "os": "alpine", "ver": "3.13", "arch": "amd64", "ex_pckgs": "" },
+#          { "os": "alpine", "ver": "3.13", "arch": "arm64", "ex_pckgs": "" },
+          { "os": "oraclelinux", "ver": "8", "arch": "amd64", "ex_pckgs": "" },
+          { "os": "oraclelinux", "ver": "8", "arch": "arm64", "ex_pckgs": "" },
+          { "os": "photon", "ver": "latest", "arch": "amd64", "ex_pckgs": "" },
+          { "os": "photon", "ver": "latest", "arch": "arm64", "ex_pckgs": "" },
         ]
-#        i: [
-#             { "os": "centos", "ver": "7", "arch": "amd64" },
-#             { "os": "centos", "ver": "7", "arch": "arm64" },
-#             { "os": "fedora", "ver": "35", "arch": "amd64" },
-#             { "os": "fedora", "ver": "35", "arch": "arm64" },
-#             { "os": "amazonlinux", "ver": "latest", "arch": "amd64" },
-#             { "os": "amazonlinux", "ver": "latest", "arch": "arm64" },
-#             { "os": "alpine", "ver": "3.15", "arch": "amd64" },
-##             { "os": "alpine", "ver": "3.15", "arch": "arm64" },
-#             { "os": "alpine", "ver": "3.13", "arch": "amd64" },
-##             { "os": "alpine", "ver": "3.13", "arch": "arm64" },
-#             { "os": "oraclelinux", "ver": "8", "arch": "amd64" },
-#             { "os": "oraclelinux", "ver": "8", "arch": "arm64" },
-#             { "os": "photon", "ver": "latest", "arch": "amd64" },
-#             { "os": "photon", "ver": "latest", "arch": "arm64" } ]
     runs-on: ubuntu-latest
     name: 🐍 • ${{ matrix.i['os'] }} • ${{ matrix.i['ver'] }} • ${{ matrix.i['arch'] }}
     env:
@@ -47,10 +42,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - name: Initializing
-        run: |
-          echo FULL_D_TAG=${{ secrets.DOCKERHUB_USERNAME }}/${{ env.D_TAG }} >> $GITHUB_ENV
-
       - name: Set up QEMU
         if: matrix.i['arch'] == 'arm64'
         uses: docker/setup-qemu-action@v1
@@ -60,25 +51,26 @@ jobs:
       - name: Preparing debian
         if: matrix.i['os'] == 'debian' || matrix.i['os'] == 'ubuntu'
         run: |
-          OS_PACKAGES="python3-minimal python3-distutils zstd wget sudo"
+          echo OS_PACKAGES="sudo wget zstd python3-minimal python3-distutils" >> $GITHUB_ENV
           echo UPDATE_CMD="apt update" >> $GITHUB_ENV
-          echo INSTALL_CMD="apt install -y $OS_PACKAGES" >> $GITHUB_ENV
-          echo PIP_INIT_CMD="apt install -y python3-pip" >> $GITHUB_ENV
+          echo INSTALL_CMD="apt install -y" >> $GITHUB_ENV
+          echo PIP_NAME="python3-pip" >> $GITHUB_ENV
 
       - name: Preparing musli
         if: matrix.i['os'] == 'alpine'
         run: |
-          OS_PACKAGES="python3 zstd wget apache2 sudo py3-cffi"
+          echo OS_PACKAGES="sudo wget zstd python3 apache2 py3-cffi" >> $GITHUB_ENV
           echo UPDATE_CMD="apk update" >> $GITHUB_ENV
-          echo INSTALL_CMD="apk add --no-cache $OS_PACKAGES" >> $GITHUB_ENV
-#          echo PIP_INIT_CMD="apk add py3-pip" >> $GITHUB_ENV   # waiting for greenlet to have binary wheels.
+          echo INSTALL_CMD="apk add --no-cache" >> $GITHUB_ENV
+#          echo PIP_NAME="py3-pip" >> $GITHUB_ENV   # waiting for greenlet to have binary wheels.
 
       - name: Preparing centos
         if: matrix.i['os'] != 'debian' && matrix.i['os'] != 'ubuntu' && matrix.i['os'] != 'alpine'
         run: |
-          OS_PACKAGES="python3 zstd wget sudo"
+          echo OS_PACKAGES="sudo wget zstd python3 httpd" >> $GITHUB_ENV
           echo UPDATE_CMD="yum update -y" >> $GITHUB_ENV
-          echo INSTALL_CMD="yum install -y $OS_PACKAGES" >> $GITHUB_ENV
+          echo INSTALL_CMD="yum install -y" >> $GITHUB_ENV
+          echo PIP_NAME="python3-pip" >> $GITHUB_ENV
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
@@ -90,7 +82,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: /tmp/.buildx-cache
-          key: ${{ env.KEY_HEAD }}-${{ hashFiles(format('{0}/*.*', env.D_DIR)) }}
+          key: ${{ env.KEY_HEAD }}-${{ hashFiles(format('{0}/*.Dockerfile', env.D_DIR)) }}
 
       - uses: docker/login-action@v1
         with:
@@ -104,7 +96,7 @@ jobs:
           context: .
           push: true
           file: ${{ env.D_DIR }}/base.Dockerfile
-          tags: ${{ env.FULL_D_TAG }}
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.D_TAG }}
           platforms: linux/${{ matrix.i['arch'] }}
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
@@ -112,6 +104,7 @@ jobs:
             BASE_IMAGE=${{ matrix.i['os'] }}:${{ matrix.i['ver'] }}
             UPDATE_CMD=${{ env.UPDATE_CMD }}
             INSTALL_CMD=${{ env.INSTALL_CMD }}
+            OS_PACKAGES=${{ env.OS_PACKAGES }} ${{ matrix.i['ex_pckgs'] }}
 
       - name: Temp fix - Move cache
         run: |
@@ -119,4 +112,9 @@ jobs:
           mv /tmp/.buildx-cache-new /tmp/.buildx-cache
 
       - name: Test
-        run: docker run --rm -e PIP_INIT_CMD -v $GITHUB_WORKSPACE:/host ${{ env.FULL_D_TAG }} python3 /host/${{ env.D_DIR }}/entry.py
+        run: |
+          docker run --rm \
+          -e REL_TAG -e INSTALL_CMD -e PIP_NAME \
+          -v $GITHUB_WORKSPACE:/host \
+          ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.D_TAG }} \
+          python3 /host/${{ env.D_DIR }}/entry.py
