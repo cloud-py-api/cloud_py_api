@@ -190,7 +190,7 @@ def init():
     if not _st_py_tag:
         return
     _st_type = "amd64"
-    if machine().lower() == "arm64":
+    if machine().lower() == "aarch64":
         _st_type = "arm64"
     _st_os = "manylinux"
     _ = run("ldd --version".split(), stdout=PIPE, stderr=PIPE, check=False)
