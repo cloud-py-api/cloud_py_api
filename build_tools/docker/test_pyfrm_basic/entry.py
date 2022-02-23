@@ -240,7 +240,7 @@ if __name__ == "__main__":
         python_tests(ST_PYTHON)
     if sys.version_info[1] > 6 and environ.get("SKIP_SYS_PY_TESTS", "0") == "0":
         # Temporary till proton will be updated to use newer pip without that bug with `xml`.
-        if environ.get("M_OS_NAME", "") == "proton":
+        if environ.get("M_OS_NAME", "") == "photon":
             _install_cmd = environ.get("INSTALL_CMD")
             _pip_name = environ.get("PIP_NAME", "")
             if _pip_name:
