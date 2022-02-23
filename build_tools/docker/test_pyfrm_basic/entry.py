@@ -6,6 +6,7 @@ from pwd import getpwnam
 from os import path, environ, listdir, mkdir, remove
 from urllib import parse
 from json import dumps as to_json
+from getpass import getuser
 import tarfile
 
 
@@ -19,6 +20,7 @@ ST_PYTHON_CLONE = path.join(ST_PYTHON_DIR, "bin/python3")
 AS_USER = ["sudo", "-u"]
 PRJ_PATH = environ.get("PRJ_PATH", "/host")
 PY_FRM_PATH = path.join(PRJ_PATH, "pyfrm")
+CURRENT_USER = getuser()
 
 
 def my_print(data):
@@ -113,7 +115,9 @@ def python_test(python_interpreter=None, as_user: bool = False):
 
 def python_tests(python_interpreter=None):
     if AS_USER:
+        chown(FRM_APP_DATA, AS_USER[2])
         python_test(python_interpreter, as_user=True)
+    chown(FRM_APP_DATA, CURRENT_USER)
     python_test(python_interpreter)
 
 
@@ -153,9 +157,8 @@ def init_web_username():
     AS_USER = []
 
 
-def chown(target_dir: str) -> None:
-    if AS_USER:
-        run(["chown", "-R", f"{AS_USER[2]}:{AS_USER[2]}", target_dir], check=True)
+def chown(target_dir: str, username: str) -> None:
+    run(["chown", "-R", f"{username}:{username}", target_dir], check=True)
 
 
 def init():
@@ -182,7 +185,6 @@ def init():
     # Create cloud_py_api folder.
     rmtree(FRM_APP_DATA, ignore_errors=True)
     mkdir(FRM_APP_DATA)
-    chown(FRM_APP_DATA)
     # Download standalone python.
     if environ.get("SKIP_ST_PY_TESTS", "0") != "0":
         return
@@ -190,7 +192,7 @@ def init():
     if not _st_py_tag:
         return
     _st_type = "amd64"
-    if machine().lower() == "aarch64":
+    if machine().lower() in ("arm64", "aarch64"):
         _st_type = "arm64"
     _st_os = "manylinux"
     _ = run("ldd --version".split(), stdout=PIPE, stderr=PIPE, check=False)
@@ -215,12 +217,11 @@ def init():
     with tarfile.open(tar_path) as tar:
         tar.extractall(FRM_APP_DATA)
     remove(tar_path)
-    chown(ST_PYTHON_DIR)
     if path.isdir(ST_PYTHON_DIR) and environ.get("SKIP_ST_PY_CLONED_TESTS", "0") == "0":
         # Clone standalone python.
         rmtree(ST_PYTHON_CLONE_DIR, ignore_errors=True)
         copytree(ST_PYTHON_DIR, ST_PYTHON_CLONE_DIR)
-        chown(ST_PYTHON_CLONE_DIR)
+        chown(FRM_APP_DATA, AS_USER[2] if AS_USER else CURRENT_USER)
         # Install old packages for update test.
         run(
             AS_USER
@@ -238,6 +239,16 @@ if __name__ == "__main__":
     if path.isdir(ST_PYTHON_DIR):
         python_tests(ST_PYTHON)
     if sys.version_info[1] > 6 and environ.get("SKIP_SYS_PY_TESTS", "0") == "0":
+        # Temporary till proton will be updated to use newer pip without that bug with `xml`.
+        if environ.get("M_OS_NAME", "") == "proton":
+            _install_cmd = environ.get("INSTALL_CMD")
+            _pip_name = environ.get("PIP_NAME", "")
+            if _pip_name:
+                run(_install_cmd.split() + [_pip_name], check=True)
+                run(
+                    [sys.executable] + "-m pip install --upgrade pip".split(),
+                    check=True,
+                )
         python_tests()
         _install_cmd = environ.get("INSTALL_CMD")
         _pip_name = environ.get("PIP_NAME", "")

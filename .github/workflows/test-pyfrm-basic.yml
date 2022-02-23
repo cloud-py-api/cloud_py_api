@@ -114,7 +114,7 @@ jobs:
       - name: Test
         run: |
           docker run --rm \
-          -e REL_TAG -e INSTALL_CMD -e PIP_NAME \
+          -e REL_TAG -e INSTALL_CMD -e PIP_NAME -e M_OS_NAME=${{ matrix.i['os'] }} \
           -v $GITHUB_WORKSPACE:/host \
           ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.D_TAG }} \
           python3 /host/${{ env.D_DIR }}/entry.py
