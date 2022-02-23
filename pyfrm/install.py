@@ -91,7 +91,7 @@ def init_local_dir() -> None:
         return
     Log.info(f"Creating local directory: {local_dir_abs}")
     try:
-        mkdir(local_dir_abs, mode=0o774)
+        mkdir(local_dir_abs, mode=0o764)
         if not path.isdir(local_dir_abs):
             raise FrmException("[REPORT]Local directory missing after create.")
     except OSError as e:
