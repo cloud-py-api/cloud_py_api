@@ -1,5 +1,7 @@
 # Nextcloud cloud_py_api (Framework)
 
+| We're not quite active for now (because of war in Ukraine)
+
 [![Documentation Status](https://readthedocs.org/projects/cloud-py-api/badge/?version=latest)](https://cloud-py-api.readthedocs.io/en/latest/?badge=latest)
 
 | **Currently in development**
