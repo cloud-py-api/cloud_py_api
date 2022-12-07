@@ -1,0 +1,69 @@
+name: Create Release
+
+on:
+  workflow_dispatch:
+
+env:
+  APP_NAME: cloud_py_api
+
+jobs:
+  build_app:
+    runs-on: ubuntu-latest
+    name: Build and create release
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Get release info
+        id: get_release_info
+        run: |
+          APP_VERSION=$(sed -n "s/<version>\(.*\)<\/version>/\\1/p" ./appinfo/info.xml | tr -d '\t')
+          IS_NIGHTLY=$(if [[ $APP_VERSION == *"beta"* ]]; then echo "true"; else echo "false"; fi)
+          echo "::set-output name=version::v${APP_VERSION}"
+          echo "::set-output name=tag::v${APP_VERSION}"
+          CHANGELOG=$(grep -oPz "(?s)##\s\[$APP_VERSION.+?(?=##\s\[|$)" ./CHANGELOG.md | tr -d '\0' | sed /^$/d | sed '1d')
+          CHANGELOG=$(echo "$CHANGELOG" | sed '$!N;s/^###.*\n#/#/;P;D' | sed '$!N;s/^###.*\n#/#/;P;D' | sed '${/^###/d;}')
+          if [ "$CHANGELOG" == "" ]; then
+            echo "changelog is empty!"
+            exit 1
+          fi
+          echo "CHANGELOG<<EOF" >> $GITHUB_ENV
+          echo "$CHANGELOG" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+          echo "IS_NIGHTLY=$IS_NIGHTLY" >> $GITHUB_ENV
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.x
+
+      - name: Build
+        run: make
+
+      - name: Install Krankerl
+        run: |
+          wget https://github.com/ChristophWurst/krankerl/releases/download/v0.13.0/krankerl_0.13.0_amd64.deb
+          sudo dpkg -i krankerl_0.13.0_amd64.deb
+
+      - name: Package app
+        run: krankerl package
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: tarball
+          path: build/artifacts/${{ env.APP_NAME }}.tar.gz
+          if-no-files-found: error
+
+      - name: Create release draft
+        uses: ncipollo/release-action@v1.10.0
+        with:
+          name: ${{ steps.get_release_info.outputs.version }}
+          tag: ${{ steps.get_release_info.outputs.tag }}
+          prerelease: ${{ env.IS_NIGHTLY }}
+          commit: ${{ github.ref }}
+          draft: true
+          body: ${{ env.CHANGELOG }}
+          artifacts: "build/artifacts/${{ env.APP_NAME }}.tar.gz"
+          token: ${{ secrets.GITHUB_TOKEN }}
+          artifactErrorsFailBuild: true
