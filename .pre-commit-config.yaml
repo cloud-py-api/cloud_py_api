@@ -4,12 +4,12 @@ repos:
     hooks:
     -   id: check-yaml
         exclude: (^3rdparty)
+    -   id: check-toml
+        exclude: (^3rdparty)
     -   id: end-of-file-fixer
         exclude: (^3rdparty|^js|^proto)
     -   id: trailing-whitespace
         exclude: (^3rdparty|^js|^proto)
-    -   id: check-toml
-        exclude: (^3rdparty)
     -   id: mixed-line-ending
         exclude: (^3rdparty|^js|^proto)
 

@@ -3,8 +3,21 @@ include README.md
 include CHANGELOG.md
 include pyproject.toml
 
-exclude *.yml
+exclude .eslintrc.js .l10nignore .nextcloudignore Makefile
+exclude *.yaml *.yml *.php *.xml *.js *.json *.lock
 exclude CODE_OF_CONDUCT.md
 exclude SECURITY.md
 
+recursive-exclude * *.yaml *.yml *.php *.xml *.js *.json *.lock
+
+prune .tx
+prune 3rdparty
+prune appinfo
 prune docker
+prune img
+prune js
+prune l10n
+prune lib
+prune proto
+prune src
+prune templates
