@@ -43,7 +43,7 @@ struct FsGetInfoRequest {
 }
 
 struct FsNodeInfo {
-    1: fsId fileId,
+    1: i64 fileId,
     2: bool is_dir,
     3: bool is_local,
     4: string mimetype,
@@ -57,7 +57,7 @@ struct FsNodeInfo {
     12: bool encrypted,
     13: string etag,
     14: string ownerName,
-    15: string storageId,
+    15: i64 storageId,
     16: i64 mountId
 }
 
