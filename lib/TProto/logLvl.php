@@ -36,4 +36,3 @@ final class logLvl
         4 => 'FATAL',
     );
 }
-

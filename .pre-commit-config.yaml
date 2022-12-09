@@ -1,25 +1,54 @@
 repos:
 -   repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.1.0
+    rev: v4.3.0
     hooks:
     -   id: check-yaml
-    -   id: end-of-file-fixer
-    -   id: trailing-whitespace
+        exclude: (^3rdparty)
     -   id: check-toml
-    -   id: name-tests-test
+        exclude: (^3rdparty)
+    -   id: end-of-file-fixer
+        exclude: (^3rdparty|^js|^proto)
+    -   id: trailing-whitespace
+        exclude: (^3rdparty|^js|^proto)
     -   id: mixed-line-ending
+        exclude: (^3rdparty|^js|^proto)
 
-# PHP
-
-# Python
 -   repo: https://github.com/PyCQA/isort
     rev: 5.10.1
     hooks:
     -   id: isort
-        exclude: db/
+        exclude: (^3rdparty)
 
 -   repo: https://github.com/psf/black
-    rev: 22.3.0
+    rev: 22.10.0
     hooks:
     -   id: black
-        exclude: db/
+        exclude: (^3rdparty)
+
+-   repo: https://github.com/PyCQA/flake8
+    rev: 6.0.0
+    hooks:
+    -   id: flake8
+        types: [file, python]
+        exclude: (^3rdparty)
+
+-   repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v0.991
+    hooks:
+     -  id: mypy
+        files: nc_py_api/
+        additional_dependencies: [types-pymysql, pg8000, pytest]
+
+-   repo: local
+    hooks:
+    -   id: pylint
+        name: pylint
+        entry: pylint "setup.py" "nc_py_api/"
+        language: system
+        types: [ python ]
+        pass_filenames: false
+        args:
+            [
+                "-rn", # Only display messages
+                "-sn", # Don't display the score
+            ]
