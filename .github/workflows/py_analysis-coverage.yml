@@ -1,0 +1,48 @@
+name: (Py)Analysis & Coverage
+
+on:
+  pull_request:
+    branches: [master]
+    types: [opened, edited, reopened, synchronize]
+    paths:
+      - 'nc_py_api/*.*'
+      - 'tests/nc_py_api/**'
+      - 'setup.*'
+      - 'pyproject.toml'
+  push:
+    branches: [master]
+    paths:
+      - 'nc_py_api/*.*'
+      - 'tests/nc_py_api/**'
+      - 'setup.*'
+      - 'pyproject.toml'
+  workflow_dispatch:
+
+jobs:
+  analysis:
+    runs-on: macos-12
+    name: Analysis
+    if: "!contains(github.event.head_commit.message, '[docs]')"
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: pre-commit cache
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/pre-commit
+          key: lint-pre-commit-${{ hashFiles('.pre-commit-config.yaml') }}
+          restore-keys: |
+            lint-pre-commit-
+
+      - name: Making preparations
+        run: |
+          python3 -m pip install .
+          python3 -m pip install pre-commit pylint
+          pre-commit install
+
+      - name: Run Analysis
+        run: pre-commit run --all-files --verbose --show-diff-on-failure

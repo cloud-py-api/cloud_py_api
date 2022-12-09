@@ -1,0 +1,99 @@
+name: (Py)Build and Publish to PyPi
+
+on:
+  workflow_dispatch:
+
+env:
+  TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
+  TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
+  TWINE_PYPI_ARGS: ""
+
+jobs:
+
+  wheels:
+    name: Build sdist and wheel
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: '3.9'
+
+      - name: Preparations
+        run: python3 -m pip install check-manifest twine build wheel
+
+      - name: Build
+        run: |
+          python3 -m check_manifest
+          python3 -m pip build
+
+      - name: Check
+        run: twine check dist/*
+
+      - name: Upload
+        uses: actions/upload-artifact@v3
+        with:
+          name: wheels
+          path: dist/*.*
+          if-no-files-found: error
+
+  create_release:
+    needs: [wheels]
+    runs-on: ubuntu-20.04
+    name: Create GitHub release
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Get release info
+        id: get_release_info
+        run: |
+          RELEASE_VERSION=$(sed -n "s/^__version__.*\"\(.*\)\"$/\\1/p" ./nc_py_api/_version.py)
+          echo "::set-output name=version::v${RELEASE_VERSION}"
+          echo "::set-output name=tag::v${RELEASE_VERSION}"
+          CHANGELOG=$(grep -oPz "(?s)##\s\[$RELEASE_VERSION.+?(?=##\s\[|$)" ./CHANGELOG.md | tr -d '\0' | sed /^$/d | sed '1d')
+          CHANGELOG=$(echo "$CHANGELOG" | sed '$!N;s/^###.*\n#/#/;P;D' | sed '$!N;s/^###.*\n#/#/;P;D' | sed '${/^###/d;}')
+          if [ "$CHANGELOG" == "" ]; then
+            echo "changelog is empty!"
+            exit 1
+          fi
+          echo "CHANGELOG<<EOF" >> $GITHUB_ENV
+          echo "$CHANGELOG" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+
+      - name: Collect sdist and wheels
+        uses: actions/download-artifact@v3
+        with:
+          name: wheels
+          path: dist
+
+      - name: Create release draft
+        uses: ncipollo/release-action@v1.11.2
+        with:
+          name: ${{ steps.get_release_info.outputs.version }}
+          tag: ${{ steps.get_release_info.outputs.tag }}
+          commit: ${{ github.ref }}
+          draft: false
+          body: ${{ env.CHANGELOG }}
+          artifacts: dist/*
+          artifactErrorsFailBuild: true
+
+#  publish:
+#    name: Publish to Pypi
+#    needs: [create_release]
+#    runs-on: ubuntu-latest
+#
+#    steps:
+#    - name: Collect sdist and wheels
+#      uses: actions/download-artifact@v3
+#      with:
+#        name: wheels
+#        path: dist
+#
+#    - name: Publish wheels to PyPI
+#      run: |
+#          python3 -m pip install twine
+#          ls -la dist/
+#          twine upload ${{ env.TWINE_PYPI_ARGS }} --skip-existing dist/*.whl
+#          twine upload ${{ env.TWINE_PYPI_ARGS }} dist/*tar.gz
