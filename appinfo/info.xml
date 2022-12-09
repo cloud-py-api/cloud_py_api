@@ -17,6 +17,7 @@ Nextcloud Python API Framework
 	<documentation>
 		<admin>https://github.com/cloud_py_api/cloud_py_api/wiki</admin>
 	</documentation>
+	<category>integration</category>
 	<category>tools</category>
 	<website>https://github.com/cloud_py_api/cloud_py_api</website>
 	<bugs>https://github.com/cloud_py_api/cloud_py_api/issues</bugs>
@@ -29,9 +30,6 @@ Nextcloud Python API Framework
 		<install>
 			<step>OCA\Cloud_Py_API\Migration\AppDataInitializationStep</step>
 		</install>
-		<pre-migration>
-			<step>OCA\Cloud_Py_API\Migration\AppUpdateStep</step>
-		</pre-migration>
 	</repair-steps>
 	<commands>
 		<command>OCA\Cloud_Py_API\Command\GetFileContentsCommand</command>

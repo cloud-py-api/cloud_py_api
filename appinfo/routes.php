@@ -30,6 +30,10 @@ return [
 	'routes' => [
 		// SETTINGS API
 		['name' => 'settings#index', 'url' => '/api/v1/settings', 'verb' => 'GET'],
-		['name' => 'settings#systemInfo', 'url' => '/api/v1/system-info', 'verb' => 'GET'],
+		['name' => 'settings#update', 'url' => '/api/v1/settings', 'verb' => 'PUT'],
+		['name' => 'settings#getSettingById', 'url' => '/api/v1/settings/{id}', 'verb' => 'GET'],
+		['name' => 'settings#getSettingByName', 'url' => '/api/v1/settings/name/{name}', 'verb' => 'GET'],
+		['name' => 'settings#updateSetting', 'url' => '/api/v1/settings/name/{name}', 'verb' => 'PUT'],
+		['name' => 'settings#systemInfo', 'url' => '/api/v1/system-info', 'verb' => 'GET']
 	]
 ];

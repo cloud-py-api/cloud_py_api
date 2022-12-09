@@ -268,7 +268,8 @@ class UtilsService {
 						json_encode($setting['value'])
 						: str_replace('\\', '', json_encode($setting['value'])),
 					'displayName' => $setting['displayName'],
-					'description' => $setting['description']
+					'description' => $setting['description'],
+					'helpUrl' => $setting['helpUrl']
 				]));
 			}
 		}

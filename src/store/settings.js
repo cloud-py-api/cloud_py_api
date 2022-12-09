@@ -100,9 +100,25 @@ const actions = {
 	async getSettings({ commit }) {
 		return axios.get(generateUrl('/apps/cloud_py_api/api/v1/settings')).then(res => {
 			commit('setSettings', res.data)
-			return res.data
+			return res
 		}).catch(err => {
 			console.debug(err)
+		})
+	},
+
+	/**
+	 * Update and commit list of settings
+	 *
+	 * @param {object} context the store object
+	 * @param {Array} settings list of settings
+	 * @return {Promise<object>}
+	 */
+	async updateSettings(context, settings) {
+		return axios.put(generateUrl('/apps/cloud_py_api/api/v1/settings'), { settings }).then(res => {
+			if (res.data.success) {
+				context.commit('setSettings', res.data.updated_settings)
+			}
+			return res
 		})
 	},
 }
