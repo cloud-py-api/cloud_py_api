@@ -1,14 +1,17 @@
 """
 Helper functions related to get files content or storages info.
 """
+from fnmatch import fnmatch
 from os import environ, path
 from pathlib import Path
-from typing import TypedDict
+from typing import Literal, Optional, TypedDict
 
+from . import mimetype
 from .config import CONFIG
 from .db_requests import (
     get_directory_list,
-    get_mimetype_id,
+    get_fileid_info,
+    get_fileids_info,
     get_non_direct_access_filesize_limit,
     get_paths_by_ids,
     get_storages_info,
@@ -21,7 +24,8 @@ class FsNodeInfo(TypedDict):
     id: int
     is_dir: bool
     is_local: bool
-    mimetype: str
+    mimetype: int
+    mimepart: int
     name: str
     internal_path: str
     abs_path: str
@@ -37,52 +41,92 @@ class FsNodeInfo(TypedDict):
     direct_access: bool
 
 
+FsNodeInfoField = Literal["is_dir", "is_local", "mimetype", "mimepart", "name", "direct_access"]
+
+
 USER_ID = environ.get("USER_ID", "")
-DIR_MIMETYPE = get_mimetype_id("'httpd/unix-directory'")
 STORAGES_INFO = get_storages_info()
 ND_ACCESS_LIMIT = get_non_direct_access_filesize_limit()
 """A value from the config that defines the maximum file size allowed to be requested from php."""
 
 
-def list_directory(file_id: int, user_id=USER_ID) -> list[FsNodeInfo]:
+def fs_get_obj_info(file_id: int) -> Optional[FsNodeInfo]:
+    raw_result = get_fileid_info(file_id)
+    if raw_result:
+        return db_record_to_fs_node(raw_result)
+    return None
+
+
+def fs_get_objs_info(file_ids: list[int]) -> list[FsNodeInfo]:
+    raw_result = get_fileids_info(file_ids)
+    return [db_record_to_fs_node(i) for i in raw_result]
+
+
+def fs_list_directory(file_id: int, user_id=USER_ID) -> list[FsNodeInfo]:
     _ = user_id  # noqa # will be used in 0.4.0 version
     dir_info = get_paths_by_ids([file_id])
     file_mounts = []
     if dir_info:
         file_mounts = get_mounts_to(dir_info[0]["storage"], dir_info[0]["path"])
     raw_result = get_directory_list(file_id, file_mounts)
-    result: list[FsNodeInfo] = []
-    for i in raw_result:
-        result.append(
-            {
-                "id": i["fileid"],
-                "is_dir": i["mimetype"] == DIR_MIMETYPE,
-                "is_local": is_local_storage(i["storage"]),
-                "mimetype": i["mimetype"],
-                "name": i["name"],
-                "internal_path": i["path"],
-                "abs_path": get_file_full_path(i["storage"], i["path"]),
-                "size": i["size"],
-                "permissions": i["permissions"],
-                "mtime": i["mtime"],
-                "checksum": i["checksum"],
-                "encrypted": i["encrypted"],
-                "etag": i["etag"],
-                "ownerName": get_storage_user_id(i["storage"]),
-                "storageId": i["storage"],
-                "mountId": get_storage_root_id(i["storage"]),
-                "direct_access": can_directly_access_file(i),
-            }
-        )
-    return result
+    return [db_record_to_fs_node(i) for i in raw_result]
 
 
-def get_file_data(file_info: FsNodeInfo) -> bytes:
+def fs_apply_exclude_lists(fs_objs: list[FsNodeInfo], excl_file_ids: list[int], excl_mask: list[str]) -> None:
+    """Purge all records according to exclude_(mask/fileid) from `where_to_purge`(or from fs_records)."""
+
+    indexes_to_purge = []
+    for index, fs_obj in enumerate(fs_objs):
+        if fs_obj["id"] in excl_file_ids:
+            indexes_to_purge.append(index)
+        elif is_path_in_exclude(fs_obj["internal_path"], excl_mask):
+            indexes_to_purge.append(index)
+    for index in reversed(indexes_to_purge):
+        del fs_objs[index]
+
+
+def fs_extract_sub_dirs(fs_objs: list[FsNodeInfo]) -> list[FsNodeInfo]:
+    sub_dirs = []
+    indexes_to_purge = []
+    for index, fs_obj in enumerate(fs_objs):
+        if fs_obj["mimetype"] == mimetype.DIR:
+            sub_dirs.append(fs_obj)
+            indexes_to_purge.append(index)
+    for index in reversed(indexes_to_purge):
+        del fs_objs[index]
+    return sub_dirs
+
+
+def fs_apply_ignore_flags(fs_objs: list[FsNodeInfo]) -> None:
+    ignore_flag = any(fs_obj["name"] in (".noimage", ".nomedia") for fs_obj in fs_objs)
+    if ignore_flag:
+        fs_filter_by(fs_objs, "mimepart", [mimetype.IMAGE, mimetype.VIDEO], reverse_filter=True)
+        fs_apply_exclude_lists(fs_objs, [], [".noimage", ".nomedia"])
+
+
+def fs_filter_by(fs_objs: list[FsNodeInfo], field: FsNodeInfoField, values: list, reverse_filter=False) -> None:
+    indexes_to_purge = []
+    if reverse_filter:
+        for index, fs_obj in enumerate(fs_objs):
+            if fs_obj[field] in values:
+                indexes_to_purge.append(index)
+    else:
+        for index, fs_obj in enumerate(fs_objs):
+            if fs_obj[field] not in values:
+                indexes_to_purge.append(index)
+    for index in reversed(indexes_to_purge):
+        del fs_objs[index]
+
+
+def fs_sort_by_id(fs_objs: list[FsNodeInfo]) -> list[FsNodeInfo]:
+    return sorted(fs_objs, key=lambda i: i["id"])
+
+
+def fs_get_file_data(file_info: FsNodeInfo) -> bytes:
     if file_info["direct_access"]:
         try:
             with open(file_info["abs_path"], "rb") as h_file:
-                data = h_file.read()
-                return data
+                return h_file.read()
         except Exception:  # noqa # pylint: disable=broad-except
             log.exception("Exception during reading %s", file_info["abs_path"])
     return request_file_from_php(file_info)
@@ -172,3 +216,36 @@ def get_mounts_to(storage_id: int, dir_path: str) -> list[int]:
             if mount_point_with_dir_path == str(Path(storage_info["mount_point"]).parent):
                 return_list.append(storage_info["root_id"])
     return return_list
+
+
+def db_record_to_fs_node(fs_record: dict) -> FsNodeInfo:
+    return {
+        "id": fs_record["fileid"],
+        "is_dir": fs_record["mimetype"] == mimetype.DIR,
+        "is_local": is_local_storage(fs_record["storage"]),
+        "mimetype": fs_record["mimetype"],
+        "mimepart": fs_record["mimepart"],
+        "name": fs_record["name"],
+        "internal_path": fs_record["path"],
+        "abs_path": get_file_full_path(fs_record["storage"], fs_record["path"]),
+        "size": fs_record["size"],
+        "permissions": fs_record["permissions"],
+        "mtime": fs_record["mtime"],
+        "checksum": fs_record["checksum"],
+        "encrypted": fs_record["encrypted"],
+        "etag": fs_record["etag"],
+        "ownerName": get_storage_user_id(fs_record["storage"]),
+        "storageId": fs_record["storage"],
+        "mountId": get_storage_root_id(fs_record["storage"]),
+        "direct_access": can_directly_access_file(fs_record),
+    }
+
+
+def is_path_in_exclude(fs_path: str, exclude_patterns: list[str]) -> bool:
+    """Checks with fnmatch if `path` is in `exclude_patterns`. Returns ``True`` if yes."""
+
+    name = path.basename(fs_path)
+    for pattern in exclude_patterns:
+        if fnmatch(name, pattern):
+            return True
+    return False
