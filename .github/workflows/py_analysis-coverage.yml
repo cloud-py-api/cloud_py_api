@@ -18,6 +18,9 @@ on:
       - 'pyproject.toml'
   workflow_dispatch:
 
+env:
+  APP_NAME: cloud_py_api
+
 jobs:
   analysis:
     runs-on: macos-12
@@ -46,3 +49,271 @@ jobs:
 
       - name: Run Analysis
         run: pre-commit run --all-files --verbose --show-diff-on-failure
+
+  tests-pgsql:
+    needs: [analysis]
+    runs-on: ubuntu-22.04
+    name: ${{ matrix.nextcloud }} • PHP ${{ matrix.php-version }} • PgSQL ${{ matrix.pgsql-version }}
+    if: "!contains(github.event.head_commit.message, '[docs]')"
+    strategy:
+      fail-fast: false
+      matrix:
+        nextcloud: [ "25.0.2" ]
+        php-version: [ "7.4", "8.0" ]
+        pgsql-version: [ "13", "14", "15" ]
+
+    services:
+      postgres:
+        image: postgres:${{ matrix.pgsql-version }}
+        env:
+          POSTGRES_USER: root
+          POSTGRES_PASSWORD: rootpassword
+          POSTGRES_DB: nextcloud
+          options: >-
+            --health-cmd pg_isready
+            --health-interval 10s
+            --health-timeout 5s
+            --health-retries 5
+        ports:
+          - 5432:5432
+
+    steps:
+      - name: Set up php ${{ matrix.php-version }}
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+          extensions: mbstring, fileinfo, intl, pdo_pgsql, zip, gd
+
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: cache-nextcloud
+        id: nextcloud_setup
+        uses: actions/cache@v3
+        with:
+          path: nextcloud-${{ matrix.nextcloud }}.tar.bz2
+          key: ${{ matrix.nextcloud }}
+
+      - name: Download Nextcloud
+        if: steps.nextcloud_setup.outputs.cache-hit != 'true'
+        run: wget -q https://download.nextcloud.com/server/releases/nextcloud-${{ matrix.nextcloud }}.tar.bz2
+
+      - name: Set up Nextcloud
+        run: |
+          tar -xjf nextcloud-${{ matrix.nextcloud }}.tar.bz2 --strip-components 1
+          mkdir data
+          php occ maintenance:install --verbose --database=pgsql --database-name=nextcloud \
+          --database-host=127.0.0.1 --database-user=root --database-pass=rootpassword \
+          --admin-user admin --admin-pass adminpassword
+          php occ config:system:set debug --value=true --type=boolean
+          php -S localhost:8080 &
+
+      - uses: actions/checkout@v3
+        with:
+          path: apps/${{ env.APP_NAME }}
+
+      - name: Enable App
+        run: php occ app:enable ${{ env.APP_NAME }}
+
+      - name: Generate coverage report
+        working-directory: apps/${{ env.APP_NAME }}
+        run: |
+          python3 -m pip -v install ".[dev]"
+          coverage run -m pytest -s && coverage xml && coverage html
+        env:
+          SERVER_ROOT: "../.."
+          CPA_LOGLEVEL: debug
+
+      - name: HTML coverage to artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage_${{ matrix.nextcloud }}_${{ matrix.php-version }}_${{ matrix.pgsql-version }}
+          path: apps/${{ env.APP_NAME }}/htmlcov
+          if-no-files-found: error
+
+      - name: Upload report to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: apps/${{ env.APP_NAME }}/coverage.xml
+          fail_ci_if_error: true
+          verbose: true
+
+  tests-mysql:
+    needs: [analysis]
+    runs-on: ubuntu-22.04
+    name: ${{ matrix.nextcloud }} • PHP ${{ matrix.php-version }} • MySQL ${{ matrix.mysql-version }}
+    if: "!contains(github.event.head_commit.message, '[docs]')"
+    strategy:
+      fail-fast: false
+      matrix:
+        nextcloud: [ "25.0.2" ]
+        php-version: [ "7.4", "8.0" ]
+        mysql-version: [ "8" ]
+
+    services:
+      mysql:
+        image: mysql:${{ matrix.mysql-version }}
+        env:
+          MYSQL_ROOT_PASSWORD: rootpassword
+          MYSQL_DATABASE: nextcloud
+          options: >-
+            --health-cmd mysqladmin ping
+            --health-interval 10s
+            --health-timeout 5s
+            --health-retries 5
+        ports:
+          - 3306:3306
+
+    steps:
+      - name: Set up php ${{ matrix.php-version }}
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+          extensions: mbstring, fileinfo, intl, pdo_mysql, zip, gd
+
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: cache-nextcloud
+        id: nextcloud_setup
+        uses: actions/cache@v3
+        with:
+          path: nextcloud-${{ matrix.nextcloud }}.tar.bz2
+          key: ${{ matrix.nextcloud }}
+
+      - name: Download Nextcloud
+        if: steps.nextcloud_setup.outputs.cache-hit != 'true'
+        run: wget -q https://download.nextcloud.com/server/releases/nextcloud-${{ matrix.nextcloud }}.tar.bz2
+
+      - name: Set up Nextcloud
+        run: |
+          tar -xjf nextcloud-${{ matrix.nextcloud }}.tar.bz2 --strip-components 1
+          mkdir data
+          php occ maintenance:install --verbose --database=mysql --database-name=nextcloud \
+          --database-host=127.0.0.1 --database-user=root --database-pass=rootpassword \
+          --admin-user admin --admin-pass adminpassword
+          php occ config:system:set debug --value=true --type=boolean
+          php -S localhost:8080 &
+
+      - uses: actions/checkout@v3
+        with:
+          path: apps/${{ env.APP_NAME }}
+
+      - name: Enable App
+        run: php occ app:enable ${{ env.APP_NAME }}
+
+      - name: Generate coverage report
+        working-directory: apps/${{ env.APP_NAME }}
+        run: |
+          python3 -m pip -v install ".[dev]"
+          coverage run -m pytest -s && coverage xml && coverage html
+        env:
+          SERVER_ROOT: "../.."
+          CPA_LOGLEVEL: debug
+
+      - name: HTML coverage to artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage_${{ matrix.nextcloud }}_${{ matrix.php-version }}_${{ matrix.mysql-version }}
+          path: apps/${{ env.APP_NAME }}/htmlcov
+          if-no-files-found: error
+
+      - name: Upload report to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: apps/${{ env.APP_NAME }}/coverage.xml
+          fail_ci_if_error: true
+          verbose: true
+
+  tests-mariadb:
+    needs: [analysis]
+    runs-on: ubuntu-22.04
+    name: ${{ matrix.nextcloud }} • PHP ${{ matrix.php-version }} • Maria ${{ matrix.mariadb-version }}
+    if: "!contains(github.event.head_commit.message, '[docs]')"
+    strategy:
+      fail-fast: false
+      matrix:
+        nextcloud: [ "25.0.2" ]
+        php-version: [ "7.4", "8.0" ]
+        mariadb-version: [ "10.3", "10.6", "10.10" ]
+
+    services:
+      mariadb:
+        image: mariadb:${{ matrix.mariadb-version }}
+        env:
+          MARIADB_ROOT_PASSWORD: rootpassword
+          MYSQL_DATABASE: nextcloud
+          options: >-
+            --health-cmd mysqladmin ping
+            --health-interval 10s
+            --health-timeout 5s
+            --health-retries 5
+        ports:
+          - 3306:3306
+
+    steps:
+      - name: Set up php ${{ matrix.php-version }}
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+          extensions: mbstring, fileinfo, intl, pdo_mysql, zip, gd
+
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: cache-nextcloud
+        id: nextcloud_setup
+        uses: actions/cache@v3
+        with:
+          path: nextcloud-${{ matrix.nextcloud }}.tar.bz2
+          key: ${{ matrix.nextcloud }}
+
+      - name: Download Nextcloud
+        if: steps.nextcloud_setup.outputs.cache-hit != 'true'
+        run: wget -q https://download.nextcloud.com/server/releases/nextcloud-${{ matrix.nextcloud }}.tar.bz2
+
+      - name: Set up Nextcloud
+        run: |
+          tar -xjf nextcloud-${{ matrix.nextcloud }}.tar.bz2 --strip-components 1
+          mkdir data
+          php occ maintenance:install --verbose --database=mysql --database-name=nextcloud \
+          --database-host=127.0.0.1 --database-user=root --database-pass=rootpassword \
+          --admin-user admin --admin-pass adminpassword
+          php occ config:system:set debug --value=true --type=boolean
+          php -S localhost:8080 &
+
+      - uses: actions/checkout@v3
+        with:
+          path: apps/${{ env.APP_NAME }}
+
+      - name: Enable App
+        run: php occ app:enable ${{ env.APP_NAME }}
+
+      - name: Generate coverage report
+        working-directory: apps/${{ env.APP_NAME }}
+        run: |
+          python3 -m pip -v install ".[dev]"
+          coverage run -m pytest -s && coverage xml && coverage html
+        env:
+          SERVER_ROOT: "../.."
+          CPA_LOGLEVEL: debug
+
+      - name: HTML coverage to artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage_${{ matrix.nextcloud }}_${{ matrix.php-version }}_${{ matrix.mariadb-version }}
+          path: apps/${{ env.APP_NAME }}/htmlcov
+          if-no-files-found: error
+
+      - name: Upload report to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: apps/${{ env.APP_NAME }}/coverage.xml
+          fail_ci_if_error: true
+          verbose: true

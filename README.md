@@ -1,5 +1,10 @@
 # Nextcloud Python Framework
 
+[![(Py)Analysis & Coverage](https://github.com/cloud-py-api/cloud_py_api/actions/workflows/py_analysis-coverage.yml/badge.svg)](https://github.com/cloud-py-api/cloud_py_api/actions/workflows/py_analysis-coverage.yml)
+![PythonVersion](https://img.shields.io/badge/python-3.9%20%7C%203.10%20%7C%203.11-blue)
+![impl](https://img.shields.io/pypi/implementation/nc_py_api)
+![pypi](https://img.shields.io/pypi/v/nc_py_api.svg)
+
 Framework(App) for Nextcloud to develop apps, that using Python.
 
 Consists of PHP part(**cloud_py_api app**) and a Python module(**nc-py-api**).
@@ -19,7 +24,7 @@ In your Nextcloud, simply enable the `cloud_py_api` app through the Apps managem
 
 The Nextcloud `cloud_py_api` app supports Nextcloud version 25 and higher.
 
-#### More information can be found on [Wiki page](https://github.com/cloud_py_api/cloud_py_api/wiki)
+#### More information can be found on [Wiki page](https://github.com/cloud-py-api/cloud_py_api/wiki)
 
 ## Maintainers
 

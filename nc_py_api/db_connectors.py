@@ -58,7 +58,7 @@ def create_connection(config: dict, log_errors=True):
 
 
 def connection_test(config: dict, log_errors=False) -> bool:
-    if environ.get("LOGLEVEL", "").upper() == "DEBUG":
+    if environ.get("CPA_LOGLEVEL", "").upper() == "DEBUG":
         log_errors = True
     connection = create_connection(config, log_errors=log_errors)
     if connection is not None:
