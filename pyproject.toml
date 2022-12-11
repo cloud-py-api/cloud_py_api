@@ -50,8 +50,9 @@ strict_optional = true
 [tool.pytest.ini_options]
 minversion = "6.0"
 testpaths = [
-    "tests",
+    "tests/nc_py_api",
 ]
 filterwarnings = [
     "ignore::DeprecationWarning",
 ]
+log_cli = true

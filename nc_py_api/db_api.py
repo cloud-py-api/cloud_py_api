@@ -54,6 +54,7 @@ def execute_fetchall(query: str, args=None, connection_id: int = 0) -> list:
             break
         except Exception:  # noqa # pylint: disable=broad-except
             log.exception("DB: Exception during executing fetchall.")
+            log.debug(query)
         close_connection(connection_id)
     return result
 
@@ -87,5 +88,6 @@ def execute_commit(query: str, args=None, connection_id: int = 0) -> int:
             break
         except Exception:  # noqa # pylint: disable=broad-except
             log.exception("DB: Exception during executing commit.")
+            log.debug(query)
         close_connection(connection_id)
     return result

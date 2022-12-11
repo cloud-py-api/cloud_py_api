@@ -60,7 +60,7 @@ def get_storages_info(num_id: Optional[int] = None) -> list:
 def get_mimetype_id(mimetype: str) -> int:
     """For string mimetype returns it number representation."""
 
-    query = f"SELECT id FROM {TABLES.mimetypes} WHERE mimetype = {mimetype};"
+    query = f"SELECT id FROM {TABLES.mimetypes} WHERE mimetype = '{mimetype}';"
     result = execute_fetchall(query)
     if not result:
         return 0
