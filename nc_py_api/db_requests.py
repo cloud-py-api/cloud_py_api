@@ -4,15 +4,21 @@ from .config import CONFIG
 from .db_api import execute_fetchall
 from .db_misc import TABLES
 
+FIELD_NAME_LIST = (
+    "fcache.fileid, fcache.storage, fcache.path, fcache.storage, fcache.name, "
+    "fcache.mimetype, fcache.mimepart, "
+    "fcache.size, fcache.mtime, fcache.encrypted, fcache.etag, fcache.permissions, fcache.checksum"
+)
+
 
 def get_paths_by_ids(file_ids: list) -> list:
     """For each element of list in file_ids return [path, fileid, storage]. Order of file_ids is not preserved."""
 
     query = (
-        "SELECT path, fileid, storage "
-        f"FROM {TABLES.file_cache} "
+        "SELECT fcache.path, fcache.fileid, fcache.storage "
+        f"FROM {TABLES.file_cache} AS fcache  "
         f"WHERE fileid IN ({','.join(str(x) for x in file_ids)}) "
-        "ORDER BY fileid ASC;"
+        "ORDER BY fcache.fileid ASC;"
     )
     return execute_fetchall(query)
 
@@ -61,6 +67,26 @@ def get_mimetype_id(mimetype: str) -> int:
     return result[0]["id"]
 
 
+def get_fileid_info(file_id: int) -> dict:
+    """Returns dictionary with information for given file id."""
+
+    query = f"SELECT {FIELD_NAME_LIST} FROM {TABLES.file_cache} AS fcache WHERE fcache.fileid = {file_id};"
+    result = execute_fetchall(query)
+    if result:
+        return result[0]
+    return {}
+
+
+def get_fileids_info(file_ids: list[int]) -> list[dict]:
+    """Returns dictionaries with information for given file ids."""
+
+    query = (
+        f"SELECT {FIELD_NAME_LIST} FROM {TABLES.file_cache} AS fcache "
+        f"WHERE fcache.fileid IN ({','.join(str(x) for x in file_ids)});"
+    )
+    return execute_fetchall(query)
+
+
 def get_directory_list(dir_id: int, mount_points_ids: list[int]) -> list[dict]:
     """Lists the provided directory
 
@@ -72,12 +98,7 @@ def get_directory_list(dir_id: int, mount_points_ids: list[int]) -> list[dict]:
     mp_query = ""
     if mount_points_ids:
         mp_query = f" OR fcache.fileid IN ({','.join(str(x) for x in mount_points_ids)})"
-    query = (
-        "SELECT fcache.fileid, fcache.storage, fcache.path, fcache.storage, fcache.name, fcache.mimetype, fcache.size, "
-        "fcache.mtime, fcache.encrypted, fcache.etag, fcache.permissions, fcache.checksum "
-        f"FROM {TABLES.file_cache} AS fcache "
-        f"WHERE (fcache.parent = {dir_id}{mp_query});"
-    )
+    query = f"SELECT {FIELD_NAME_LIST} FROM {TABLES.file_cache} AS fcache WHERE (fcache.parent = {dir_id}{mp_query});"
     return execute_fetchall(query)
 
 
