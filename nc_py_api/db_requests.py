@@ -11,7 +11,7 @@ FIELD_NAME_LIST = (
 )
 
 
-def get_paths_by_ids(file_ids: list) -> list:
+def get_paths_by_ids(file_ids: list[int]) -> list:
     """For each element of list in file_ids return [path, fileid, storage]. Order of file_ids is not preserved."""
 
     query = (

@@ -1,3 +1,4 @@
+import logging
 from unittest import mock
 
 import nc_py_api
@@ -8,7 +9,9 @@ def test_occ_call():
 
 
 def test_occ_call_invalid_command():
+    logging.disable(logging.CRITICAL)
     assert nc_py_api.occ_call("invalid command") is None
+    logging.disable(logging.NOTSET)
 
 
 def test_occ_call_with_param():
@@ -20,7 +23,9 @@ def test_occ_call_decode():
 
 
 def test_occ_call_decode_invalid_command():
+    logging.disable(logging.CRITICAL)
     assert nc_py_api.occ_call_decode("invalid command") is None
+    logging.disable(logging.NOTSET)
 
 
 def test_occ_call_decode_with_param():
@@ -32,7 +37,9 @@ def test_get_cloud_app_config_value():
 
 
 def test_get_cloud_app_config_invalid_name():
+    logging.disable(logging.CRITICAL)
     assert nc_py_api.get_cloud_app_config_value("core", "invalid_name") is None
+    logging.disable(logging.NOTSET)
 
 
 def test_get_cloud_app_config_default_value():
