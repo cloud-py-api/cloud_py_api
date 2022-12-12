@@ -4,7 +4,7 @@ Helper functions related to get files content or storages info.
 from fnmatch import fnmatch
 from os import environ, path
 from pathlib import Path
-from typing import Literal, Optional, TypedDict
+from typing import Literal, Optional, TypedDict, Union
 
 from . import mimetype
 from .config import CONFIG
@@ -62,12 +62,31 @@ def fs_get_objs_info(file_ids: list[int]) -> list[FsNodeInfo]:
     return [db_record_to_fs_node(i) for i in raw_result]
 
 
-def fs_list_directory(file_id: int, user_id=USER_ID) -> list[FsNodeInfo]:
-    _ = user_id  # noqa # will be used in 0.4.0 version
-    dir_info = get_paths_by_ids([file_id])
+def fs_list_directory(file_id: Optional[Union[int, FsNodeInfo]] = None, user_id=USER_ID) -> list[FsNodeInfo]:
+    """Get listing of the directory.
+
+    :param file_id: `fileid` or :py:data:`FsNodeInfo` of the directory. Can be `None` to list `root` directory.
+    :param user_id: `uid` of user. Optional, in most cases you should not specify it.
+
+    :returns: list of :py:data:`FsNodeInfo` dictionaries."""
+
+    storage_id = internal_path = None
+    if file_id is None:  # get user root `files` folder
+        file_id = get_files_root_node(user_id)
+        if file_id is None:
+            return []
+    if not isinstance(file_id, int):  # FsNodeInfo
+        storage_id = file_id["storageId"]
+        internal_path = file_id["internal_path"]
+        file_id = file_id["id"]
+    else:
+        dir_info = get_paths_by_ids([file_id])
+        if dir_info:
+            storage_id = dir_info[0]["storage"]
+            internal_path = dir_info[0]["path"]
     file_mounts = []
-    if dir_info:
-        file_mounts = get_mounts_to(dir_info[0]["storage"], dir_info[0]["path"])
+    if storage_id and internal_path:
+        file_mounts = get_mounts_to(storage_id, internal_path)
     raw_result = get_directory_list(file_id, file_mounts)
     return [db_record_to_fs_node(i) for i in raw_result]
 
@@ -132,29 +151,36 @@ def fs_get_file_data(file_info: FsNodeInfo) -> bytes:
     return request_file_from_php(file_info)
 
 
-def get_storage_info(storage_id: int) -> dict:
+def get_storage_by_id(storage_id: int) -> dict:
     for storage_info in STORAGES_INFO:
         if storage_info["numeric_id"] == storage_id:
             return storage_info
     return {}
 
 
+def get_storage_by_user_id(user_id: str) -> dict:
+    for storage_info in STORAGES_INFO:
+        if storage_info["user_id"] == user_id:
+            return storage_info
+    return {}
+
+
 def get_storage_mount_point(storage_id: int) -> str:
-    storage_info = get_storage_info(storage_id)
+    storage_info = get_storage_by_id(storage_id)
     if storage_info:
         return storage_info["mount_point"]
     return ""
 
 
 def get_storage_user_id(storage_id: int) -> str:
-    storage_info = get_storage_info(storage_id)
+    storage_info = get_storage_by_id(storage_id)
     if storage_info:
         return storage_info["user_id"]
     return ""
 
 
 def get_storage_root_id(storage_id: int) -> int:
-    storage_info = get_storage_info(storage_id)
+    storage_info = get_storage_by_id(storage_id)
     if storage_info:
         return storage_info["root_id"]
     return 0
@@ -171,7 +197,7 @@ def request_file_from_php(file_info: FsNodeInfo) -> bytes:
 
 
 def get_file_full_path(storage_id: int, relative_path: str) -> str:
-    storage_info = get_storage_info(storage_id)
+    storage_info = get_storage_by_id(storage_id)
     if not storage_info:
         return ""
     path_data = storage_info["id"].split(sep="::", maxsplit=1)
@@ -186,7 +212,7 @@ def get_file_full_path(storage_id: int, relative_path: str) -> str:
 
 
 def is_local_storage(storage_id: int) -> bool:
-    storage_info = get_storage_info(storage_id)
+    storage_info = get_storage_by_id(storage_id)
     if not storage_info:
         return False
     if storage_info["available"] == 0:
@@ -249,3 +275,15 @@ def is_path_in_exclude(fs_path: str, exclude_patterns: list[str]) -> bool:
         if fnmatch(name, pattern):
             return True
     return False
+
+
+def get_files_root_node(user_id: str) -> Union[FsNodeInfo, None]:
+    root_id = get_storage_by_user_id(user_id).get("root_id", 0)
+    if not root_id:
+        log.debug("can not find storage for specified user: %s", user_id)
+        return None
+    for i in get_directory_list(root_id, []):
+        if i["name"] == "files" and i["mimetype"] == mimetype.DIR:
+            return db_record_to_fs_node(i)
+    log.debug("can not find `files` directory inside root_id dir")
+    return None

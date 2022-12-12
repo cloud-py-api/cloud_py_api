@@ -113,8 +113,11 @@ jobs:
         with:
           path: apps/${{ env.APP_NAME }}
 
-      - name: Enable App
-        run: php occ app:enable ${{ env.APP_NAME }}
+      - name: Enable App & Test Data
+        run: |
+          php occ app:enable ${{ env.APP_NAME }}
+          cp -R apps/${{ env.APP_NAME }}/tests/nc_py_api/test_dir ./data/admin/files/
+          php occ files:scan admin
 
       - name: Generate coverage report
         working-directory: apps/${{ env.APP_NAME }}
@@ -202,8 +205,11 @@ jobs:
         with:
           path: apps/${{ env.APP_NAME }}
 
-      - name: Enable App
-        run: php occ app:enable ${{ env.APP_NAME }}
+      - name: Enable App & Test Data
+        run: |
+          php occ app:enable ${{ env.APP_NAME }}
+          cp -R apps/${{ env.APP_NAME }}/tests/nc_py_api/test_dir ./data/admin/files/
+          php occ files:scan admin
 
       - name: Generate coverage report
         working-directory: apps/${{ env.APP_NAME }}
@@ -291,8 +297,11 @@ jobs:
         with:
           path: apps/${{ env.APP_NAME }}
 
-      - name: Enable App
-        run: php occ app:enable ${{ env.APP_NAME }}
+      - name: Enable App & Test Data
+        run: |
+          php occ app:enable ${{ env.APP_NAME }}
+          cp -R apps/${{ env.APP_NAME }}/tests/nc_py_api/test_dir ./data/admin/files/
+          php occ files:scan admin
 
       - name: Generate coverage report
         working-directory: apps/${{ env.APP_NAME }}

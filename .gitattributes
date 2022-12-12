@@ -5,7 +5,18 @@
 js/* binary
 screenshots/* binary
 lib/TProto/* binary
-img/* binary
+*.bin binary
+*.heif binary
+*.heic binary
+*.hif binary
+*.avif binary
+*.png binary
+*.gif binary
+*.webp binary
+*.tiff binary
+*.jpeg binary
+*.jpg binary
+*.svg binary
 
 # Files to exclude from GitHub Languages statistics
 *.Dockerfile linguist-vendored=true

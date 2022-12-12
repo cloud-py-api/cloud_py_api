@@ -17,20 +17,20 @@ repos:
     rev: 5.10.1
     hooks:
     -   id: isort
-        exclude: (^3rdparty)
+        files: nc_py_api/
 
 -   repo: https://github.com/psf/black
     rev: 22.10.0
     hooks:
     -   id: black
-        exclude: (^3rdparty)
+        files: nc_py_api/
 
 -   repo: https://github.com/PyCQA/flake8
     rev: 6.0.0
     hooks:
     -   id: flake8
         types: [file, python]
-        exclude: (^3rdparty)
+        files: nc_py_api/
 
 -   repo: https://github.com/pre-commit/mirrors-mypy
     rev: v0.991
