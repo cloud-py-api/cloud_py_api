@@ -12,3 +12,6 @@ coverage:
       default:
         target: auto
         threshold: 2%
+
+fixes:
+  - "apps/cloud_py_api/::"
