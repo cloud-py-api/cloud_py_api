@@ -12,6 +12,7 @@ from .db_requests import (
     get_directory_list,
     get_fileid_info,
     get_fileids_info,
+    get_fs_obj_info_by_path,
     get_non_direct_access_filesize_limit,
     get_paths_by_ids,
     get_storages_info,
@@ -30,6 +31,7 @@ class FsNodeInfo(TypedDict):
     internal_path: str
     abs_path: str
     size: int
+    parent_id: int
     permissions: int
     mtime: int
     checksum: str
@@ -50,20 +52,33 @@ ND_ACCESS_LIMIT = get_non_direct_access_filesize_limit()
 """A value from the config that defines the maximum file size allowed to be requested from php."""
 
 
-def fs_get_obj_info(file_id: int) -> Optional[FsNodeInfo]:
-    raw_result = get_fileid_info(file_id)
+def fs_node_info(obj: Union[list[int], int, str], user_id=USER_ID) -> Union[list[FsNodeInfo], Optional[FsNodeInfo]]:
+    """Gets `FsNodeInfo` by list of ids, id or path.
+
+    :param obj: for the list of ints or one int it is a `fileid` value. For ``str`` type it is the
+    relative path to file/directory. `path` field from NC DB, without `files/` prefix.
+    :param user_id: `uid` of user. Optional, in most cases you should not specify it.
+
+    :returns: list of :py:data:`FsNodeInfo`, :py:data:`FsNodeInfo` or None in case of error.
+     Depends on the type of `obj` parameter."""
+
+    if isinstance(obj, list):
+        return [db_record_to_fs_node(i) for i in get_fileids_info(obj)]
+    if isinstance(obj, int):
+        raw_result = get_fileid_info(obj)
+    else:
+        numeric_id = get_storage_by_user_id(user_id).get("numeric_id", 0)
+        if not numeric_id:
+            log.debug("can not find storage for specified user: %s", user_id)
+            return None
+        raw_result = get_fs_obj_info_by_path(path.join("files", obj.lstrip("/")).rstrip("/"), numeric_id)
     if raw_result:
         return db_record_to_fs_node(raw_result)
     return None
 
 
-def fs_get_objs_info(file_ids: list[int]) -> list[FsNodeInfo]:
-    raw_result = get_fileids_info(file_ids)
-    return [db_record_to_fs_node(i) for i in raw_result]
-
-
 def fs_list_directory(file_id: Optional[Union[int, FsNodeInfo]] = None, user_id=USER_ID) -> list[FsNodeInfo]:
-    """Get listing of the directory.
+    """Gets listing of the directory.
 
     :param file_id: `fileid` or :py:data:`FsNodeInfo` of the directory. Can be `None` to list `root` directory.
     :param user_id: `uid` of user. Optional, in most cases you should not specify it.
@@ -141,7 +156,7 @@ def fs_sort_by_id(fs_objs: list[FsNodeInfo]) -> list[FsNodeInfo]:
     return sorted(fs_objs, key=lambda i: i["id"])
 
 
-def fs_get_file_data(file_info: FsNodeInfo) -> bytes:
+def fs_file_data(file_info: FsNodeInfo) -> bytes:
     if file_info["direct_access"]:
         try:
             with open(file_info["abs_path"], "rb") as h_file:
@@ -255,6 +270,7 @@ def db_record_to_fs_node(fs_record: dict) -> FsNodeInfo:
         "internal_path": fs_record["path"],
         "abs_path": get_file_full_path(fs_record["storage"], fs_record["path"]),
         "size": fs_record["size"],
+        "parent_id": fs_record["parent"],
         "permissions": fs_record["permissions"],
         "mtime": fs_record["mtime"],
         "checksum": fs_record["checksum"],
