@@ -28,6 +28,7 @@ declare(strict_types=1);
 
 namespace OCA\Cloud_Py_API\Service;
 
+use bantu\IniGetWrapper\IniGetWrapper;
 use OCP\IConfig;
 use OCP\App\IAppManager;
 
@@ -63,6 +64,23 @@ class UtilsService {
 		$this->settingMapper = $settingMapper;
 		$this->appManager = $appManager;
 		$this->databaseStatistics = $databaseStatistics;
+	}
+
+	public function getNCLogLevel(): string {
+		$loglevel = $this->config->getSystemValue('loglevel', 2);
+		$loglevels = [
+			0 => 'DEBUG',
+			1 => 'INFO',
+			2 => 'WARNING',
+			3 => 'ERROR',
+			4 => 'FATAL',
+		];
+		return $loglevels[$loglevel];
+	}
+
+	public function getCpaLogLevel(): string {
+		$cpaLobLevelSetting = $this->settingMapper->findByName('cpa_loglevel');
+		return json_decode($cpaLobLevelSetting->getValue());
 	}
 
 	/**
@@ -156,17 +174,6 @@ class UtilsService {
 		return true;
 	}
 
-	public function getPythonVersion() {
-		/** @var Setting */
-		$pythonCommandSetting = $this->settingMapper->findByName('python_command');
-		$this->pythonCommand = $pythonCommandSetting->getValue();
-		exec($this->pythonCommand . ' --version', $output, $result_code);
-		if ($result_code === 0 && isset($output[0]) && preg_match_all("/\d{1}\.\d{1,2}(\.\d{1,2}){0,1}/s", $output[0], $matches)) {
-			return isset($matches[0][0]) ? $matches[0][0] : null;
-		}
-		return null;
-	}
-
 	public function isSnapEnv(): bool {
 		return getenv('SNAP') !== false;
 	}
@@ -204,22 +211,7 @@ class UtilsService {
 		return $machineType;
 	}
 
-	public function getCustomAppsDirectory() {
-		$apps_directory = $this->config->getSystemValue('apps_paths');
-		if ($apps_directory !== "" && is_array($apps_directory) && count($apps_directory) > 0) {
-			foreach ($apps_directory as $custom_apps_dir) {
-				$appDir = $custom_apps_dir['path'] . '/' . Application::APP_ID;
-				if (file_exists($custom_apps_dir['path']) && is_dir($custom_apps_dir['path']) && $custom_apps_dir['writable']
-					&& file_exists($appDir) && is_dir($appDir)) {
-					return $custom_apps_dir['path'] . '/';
-				}
-			}
-		}
-		return getcwd() . '/apps/';
-	}
-
 	public function getSystemInfo(): array {
-		$pythonVersion = $this->getPythonVersion();
 		$result = [
 			'nextcloud-version' => $this->config->getSystemValue('version'),
 			Application::APP_ID . '-version' => $this->appManager->getAppVersion(Application::APP_ID),
@@ -230,13 +222,123 @@ class UtilsService {
 			'database' => $this->databaseStatistics !== null ? $this->databaseStatistics->getDatabaseStatistics() : null,
 			'php-version' => phpversion(),
 			'php-interpreter' => $this->getPhpInterpreter(),
-			'python-version' => $pythonVersion['success'] ? $pythonVersion['matches'] : 'Error: result_code=' . $pythonVersion['result_code'],
 			'python-interpretter-setting' => json_decode($this->pythonCommand),
 			'os' => php_uname('s'),
 			'os-release' => php_uname('r'),
 			'machine-type' => php_uname('m'),
 		];
 		return $result;
+	}
+
+	/**
+	 * Perform cURL download binary file request
+	 *
+	 * @param string $appId target Application::APP_ID
+	 * @param string $url download url
+	 * @param string $filename result binary name
+	 * @param bool $update flag to determine whether to update already downloaded binary or not
+	 * 
+	 * @return array
+	 */
+	public function downloadPythonBinary(
+		string $url,
+		array $binariesFolder,
+		string $filename = 'main',
+		bool $update = false
+	): array {
+		if (isset($binariesFolder['success']) && $binariesFolder['success']) {
+			$dir = $binariesFolder['path'] . '/';
+		} else {
+			return $binariesFolder; // Return getAppDataFolder result
+		}
+		$file_name = $filename . '.gz';
+		$save_file_loc = $dir . $file_name;
+		if (!file_exists($dir . $filename) || $update) {
+			$cURL = curl_init($url);
+			$fp = fopen($save_file_loc, 'wb');
+			if ($fp) {
+				curl_setopt_array($cURL, [
+					CURLOPT_RETURNTRANSFER => true,
+					CURLOPT_FILE => $fp,
+					CURLOPT_FOLLOWLOCATION => true,
+				]);
+				curl_exec($cURL);
+				curl_close($cURL);
+				fclose($fp);
+				$ungzipped = $this->unGz($binariesFolder, $file_name);
+				$chmodx = $this->addChmodX($binariesFolder, $file_name);
+				unlink($save_file_loc);
+				return [
+					'downloaded' => file_exists($save_file_loc),
+					'ungzipped' => $ungzipped,
+					'chmodx' => $chmodx
+				];
+			}
+		}
+		if (!file_exists($dir . $filename)) {
+			return ['success' => false, 'file' => $save_file_loc];
+		} else {
+			return [
+				'success' => true,
+				'downloaded' => true,
+				'ungzipped' => true,
+				'chmodx' => true,
+			];
+		}
+	}
+
+	/**
+	 * Ungzip target file
+	 *
+	 * @param array $binariesFolder binaries folder
+	 * @param string $file_name target `.gz` file
+	 * 
+	 * @return bool
+	 */
+	public function unGz(array $binariesFolder, string $file_name): bool {
+		$out_file_name = $binariesFolder['path'] . '/main';
+		$buffer_size = 4096;
+		$file_name = $binariesFolder['path'] . '/' . $file_name;
+		$gz_file = gzopen($file_name, 'rb');
+		$out_file = fopen($out_file_name, 'wb');
+		while (!gzeof($gz_file)) {
+			fwrite($out_file, gzread($gz_file, $buffer_size));
+		}
+		fclose($out_file);
+		gzclose($gz_file);
+		return file_exists($out_file_name);
+	}
+
+	/**
+	 * Add executable flag to the binary
+	 *
+	 * @param array $binariesFolder binaries folder
+	 * @param string $file_name target binary filename
+	 * 
+	 * @return bool
+	 */
+	public function addChmodX(array $binariesFolder, string $file_name): bool {
+		$file_name = $binariesFolder['path'] . '/' .
+			str_replace('.gz', '', $file_name);
+		if (file_exists($file_name)) {
+			exec('chmod +x ' . $file_name, $output, $result_code);
+			return $result_code === 0;
+		}
+		return false;
+	}
+
+	/**
+	 * Get correct binary name part
+	 *
+	 * @return string part of binary name
+	 */
+	public function getBinaryName(): string {
+		if (!$this->isMusliLinux()) {
+			$binaryName = 'manylinux_' . $this->getOsArch();
+		} else {
+			$binaryName = 'musllinux_' . $this->getOsArch();
+		}
+		return $binaryName;
 	}
 
 	public function checkForSettingsUpdates($app_data) {

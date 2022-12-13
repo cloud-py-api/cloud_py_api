@@ -29,37 +29,21 @@ declare(strict_types=1);
 namespace OCA\Cloud_Py_API\Service;
 
 use OCP\IConfig;
-use OCP\Files\IAppData;
 
-use OCA\Cloud_Py_API\AppInfo\Application;
 use OCA\Cloud_Py_API\Db\SettingMapper;
 use OCP\AppFramework\Db\DoesNotExistException;
 
 class PythonService {
-	/** @var IAppData */
-	private $appData;
-
-	/** @var string */
-	private $cwd;
-
 	/** @var string */
 	private $pythonCommand;
 
-	/** @var IConfig */
-	private $config;
+	/** @var string */
+	private $ncInstanceId;
 
-	/** @var UtilsService */
-	private $utils;
+	/** @var string */
+	private $ncDataFolder;
 
-	public function __construct(
-		SettingMapper $settingMapper,
-		IConfig $config,
-		IAppData $appData,
-		UtilsService $utils,
-		bool $test = false
-	) {
-		$this->appData = $appData;
-		$this->config = $config;
+	public function __construct(SettingMapper $settingMapper, IConfig $config) {
 		try {
 			/** @var Setting $pythonCommand */
 			$pythonCommand = $settingMapper->findByName('python_command');
@@ -67,18 +51,14 @@ class PythonService {
 		} catch (DoesNotExistException $e) {
 			$this->pythonCommand = '/usr/bin/python3';
 		}
-		$this->utils = $utils;
-		if ($test) { // If it used in tests
-			chdir(dirname(dirname(getcwd()))); // If running on cloud_py_api dir - change to the NC root cwd
-		}
-		$ncInstanceId = $config->getSystemValue('instanceid');
-		$ncDataFolder = $config->getSystemValue('datadirectory');
-		$this->cwd = $ncDataFolder . '/appdata_' . $ncInstanceId . '/' . Application::APP_ID . '/';
+		$this->ncInstanceId = $config->getSystemValue('instanceid');
+		$this->ncDataFolder = $config->getSystemValue('datadirectory');
 	}
 
 	/**
 	 * Runs Python script with given script relative path, script params and env variables
 	 *
+	 * @param string $appId target Application::APP_ID
 	 * @param string $scriptName relative to cwd path to the Python script or binary
 	 * @param array $scriptParams params to script in array (`['-param1' => value1, '--param2' => value2]`)
 	 * @param boolean $nonBlocking flag that determines how to run Python script
@@ -92,19 +72,21 @@ class PythonService {
 	 * `output` and `errors` of the script after Python finish executing.
 	 */
 	public function run(
+			$appId,
 			$scriptName,
 			$scriptParams = [],
 			$nonBlocking = false,
 			$env = [],
 			$binary = false
 		) {
+		$cwd = $this->ncDataFolder . '/appdata_' . $this->ncInstanceId . '/' . $appId . '/';
 		if (count($scriptParams) > 0) {
 			$params = array_map(function ($key, $value) {
 				return $value !== '' ? "$key $value " : "$key";
 			}, array_keys($scriptParams), array_values($scriptParams));
-			$cmd = $this->cwd . $scriptName . ' ' . join(' ', $params);
+			$cmd = $cwd . $scriptName . ' ' . join(' ', $params);
 		} else {
-			$cmd = $this->cwd . $scriptName;
+			$cmd = $cwd . $scriptName;
 		}
 		if (count($env) > 0) {
 			$envVariables = join(' ', array_map(function ($key, $value) {
@@ -117,7 +99,7 @@ class PythonService {
 			$cmd = $this->pythonCommand . ' ' . $cmd;
 		}
 		if ($nonBlocking) {
-			$logFile = $this->cwd . 'logs/' . date('d-m-Y_H:i:s', time()) . '.log';
+			$logFile = $cwd . 'logs/' . date('d-m-Y_H:i:s', time()) . '.log';
 			exec($envVariables . 'nohup ' . $cmd . ' > ' . $logFile . ' 2>' . $logFile . ' &');
 		} else {
 			$errors = [];

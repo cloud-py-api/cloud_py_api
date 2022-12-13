@@ -69,6 +69,13 @@ class AppInitialData {
 				"description" => "Use Python part in binary format (located in the appdata folder)",
 				"helpUrl" => "https://cloud-py-api.readthedocs.io/{todo-url:/settings/setting_name}"
 			],
+			[
+				"name" => "cpa_loglevel",
+				"value" => "WARNING",
+				"displayName" => "Framework loglevel",
+				"description" => "Used by apps, that using this Framework",
+				"helpUrl" => "https://cloud-py-api.readthedocs.io/{todo-url:/settings/setting_name}"
+			],
 		]
 	];
 
@@ -88,5 +95,7 @@ class AppInitialData {
 		$this->l10n->t("Absolute path to the PHP executable (e.g. \"/usr/bin/php7.4\"). Can be obtained by `which php` or `which php7.4` command");
 		$this->l10n->t("Use pre-compiled Python binaries");
 		$this->l10n->t("Use Python part in binary format (located in the appdata folder)");
+		$this->l10n->t("Framework loglevel");
+		$this->l10n->t("Used by apps, that using this Framework");
 	}
 }

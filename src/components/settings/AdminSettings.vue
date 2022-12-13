@@ -74,6 +74,18 @@
 					{{ t('cloud_py_api', 'Use pre-compiled Python binaries') }}
 				</NcCheckboxRadioSwitch>
 			</NcSettingsSection>
+			<NcSettingsSection :title="t('cloud_py_api', mappedSettings.cpa_loglevel.display_name)"
+				:description="t('cloud_py_api', mappedSettings.cpa_loglevel.description)"
+				:doc-url="mappedSettings.cpa_loglevel.help_url">
+				<select id="cpa_loglevel"
+					v-model="cpaLoglevel"
+					name="cpa_loglevel"
+					@change="updateCpaLoglevel">
+					<option v-for="loglevel in cpaLoglevels" :key="loglevel" :value="loglevel">
+						{{ loglevel }}
+					</option>
+				</select>
+			</NcSettingsSection>
 		</div>
 		<NcSettingsSection :title="t('cloud_py_api', 'Bug report')">
 			<BugReport />
@@ -103,6 +115,8 @@ export default {
 			remote_filesize_limit: null,
 			usePhpPathFromSettings: false,
 			python_binary: true,
+			cpaLoglevel: 'INFO',
+			cpaLoglevels: ['DEBUG', 'INFO', 'WARNING', 'ERROR'],
 		}
 	},
 	beforeMount() {
@@ -114,6 +128,7 @@ export default {
 			this.remote_filesize_limit = this.fromBytesToGBytes(Number(this.mappedSettings.remote_filesize_limit.value))
 			this.usePhpPathFromSettings = JSON.parse(this.mappedSettings.use_php_path_from_settings.value)
 			this.python_binary = JSON.parse(this.mappedSettings.python_binary.value)
+			this.cpaLoglevel = JSON.parse(this.mappedSettings.cpa_loglevel.value)
 		})
 	},
 	methods: {
@@ -139,6 +154,10 @@ export default {
 		},
 		updatePythonBinary() {
 			this.mappedSettings.python_binary.value = JSON.stringify(this.python_binary)
+			this.saveChanges()
+		},
+		updateCpaLoglevel() {
+			this.mappedSettings.cpa_loglevel.value = JSON.stringify(this.cpaLoglevel)
 			this.saveChanges()
 		},
 	},
