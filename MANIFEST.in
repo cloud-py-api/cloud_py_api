@@ -21,3 +21,4 @@ prune lib
 prune proto
 prune src
 prune templates
+prune tests
