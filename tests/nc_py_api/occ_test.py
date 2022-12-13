@@ -43,7 +43,9 @@ def test_get_cloud_app_config_invalid_name():
 
 
 def test_get_cloud_app_config_default_value():
+    logging.disable(logging.CRITICAL)
     assert nc_py_api.get_cloud_app_config_value("core", "invalid_name", default=3) == 3
+    logging.disable(logging.NOTSET)
 
 
 @mock.patch("nc_py_api.occ._PHP_PATH", "no_php")

@@ -4,6 +4,7 @@
 ![PythonVersion](https://img.shields.io/badge/python-3.9%20%7C%203.10%20%7C%203.11-blue)
 ![impl](https://img.shields.io/pypi/implementation/nc_py_api)
 ![pypi](https://img.shields.io/pypi/v/nc_py_api.svg)
+[![codecov](https://codecov.io/gh/cloud-py-api/cloud_py_api/branch/main/graph/badge.svg?token=6IHPKUYUU9)](https://codecov.io/gh/cloud-py-api/cloud_py_api)
 
 Framework(App) for Nextcloud to develop apps, that using Python.
 

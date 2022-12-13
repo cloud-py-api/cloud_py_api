@@ -6,7 +6,7 @@ from .db_misc import TABLES
 
 FIELD_NAME_LIST = (
     "fcache.fileid, fcache.storage, fcache.path, fcache.storage, fcache.name, "
-    "fcache.mimetype, fcache.mimepart, "
+    "fcache.mimetype, fcache.mimepart, fcache.parent, "
     "fcache.size, fcache.mtime, fcache.encrypted, fcache.etag, fcache.permissions, fcache.checksum"
 )
 
@@ -71,6 +71,19 @@ def get_fileid_info(file_id: int) -> dict:
     """Returns dictionary with information for given file id."""
 
     query = f"SELECT {FIELD_NAME_LIST} FROM {TABLES.file_cache} AS fcache WHERE fcache.fileid = {file_id};"
+    result = execute_fetchall(query)
+    if result:
+        return result[0]
+    return {}
+
+
+def get_fs_obj_info_by_path(obj_path: str, storage_numeric_id: int) -> dict:
+    """Returns dictionary with information for given userid:path."""
+
+    query = (
+        f"SELECT {FIELD_NAME_LIST} FROM {TABLES.file_cache} AS fcache "
+        f"WHERE fcache.path = '{obj_path}' AND fcache.storage = {storage_numeric_id};"
+    )
     result = execute_fetchall(query)
     if result:
         return result[0]
