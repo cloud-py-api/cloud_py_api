@@ -2,7 +2,6 @@ name: (Py)Analysis & Coverage
 
 on:
   pull_request:
-    branches: [main]
     types: [opened, edited, reopened, synchronize]
     paths:
       - 'nc_py_api/*.*'
@@ -10,7 +9,6 @@ on:
       - 'setup.*'
       - 'pyproject.toml'
   push:
-    branches: [main]
     paths:
       - 'nc_py_api/*.*'
       - 'tests/nc_py_api/**'
