@@ -310,7 +310,9 @@ jobs:
           node-version: 16.x
 
       - name: Install dependencies
+        working-directory: apps/${{ env.APP_NAME }}
         run: npm ci
 
       - name: Run unit tests
+        working-directory: apps/${{ env.APP_NAME }}
         run: npm run test
