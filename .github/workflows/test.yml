@@ -26,7 +26,7 @@ env:
   # Location of the phpunit.xml and phpunit.integration.xml files
   PHPUNIT_CONFIG: ./tests/phpunit.xml
   PHPUNIT_INTEGRATION_CONFIG: ./tests/phpunit.integration.xml
-  APP_NAME: mediadc
+  APP_NAME: cloud_py_api
 
 jobs:
   phpunit-mysql:
