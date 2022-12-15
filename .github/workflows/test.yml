@@ -1,11 +1,25 @@
 name: Test
 
 on:
-  # pull_request:
-  #   branches: [main, dev]
-  #   types: [opened, reopened, edited, synchronize]
-  # push:
-  #   branches: [dev, main]
+  pull_request:
+    branches: [main]
+    types: [opened, reopened, edited, synchronize]
+    paths:
+      - 'lib/*.*'
+      - 'src/*.*'
+      - 'templates/*.*'
+      - 'tests/Unit/**'
+      - 'tests/Integration/**'
+      - 'tests/javascript/**'
+  push:
+    branches: [main]
+    paths:
+      - 'lib/*.*'
+      - 'src/*.*'
+      - 'templates/*.*'
+      - 'tests/Unit/**'
+      - 'tests/Integration/**'
+      - 'tests/javascript/**'
   workflow_dispatch:
 
 env:

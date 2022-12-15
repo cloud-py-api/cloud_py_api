@@ -45,9 +45,6 @@ class UtilsService {
 	/** @var SettingMapper */
 	private $settingMapper;
 
-	/** @var string */
-	private $pythonCommand;
-
 	/** @var IAppManager */
 	private $appManager;
 
@@ -212,6 +209,7 @@ class UtilsService {
 	}
 
 	public function getSystemInfo(): array {
+		$pythonCommand = $this->settingMapper->findByName('python_command')->getValue();
 		$result = [
 			'nextcloud-version' => $this->config->getSystemValue('version'),
 			Application::APP_ID . '-version' => $this->appManager->getAppVersion(Application::APP_ID),
@@ -222,7 +220,7 @@ class UtilsService {
 			'database' => $this->databaseStatistics !== null ? $this->databaseStatistics->getDatabaseStatistics() : null,
 			'php-version' => phpversion(),
 			'php-interpreter' => $this->getPhpInterpreter(),
-			'python-interpretter-setting' => json_decode($this->pythonCommand),
+			'python-interpretter-setting' => json_decode($pythonCommand),
 			'os' => php_uname('s'),
 			'os-release' => php_uname('r'),
 			'machine-type' => php_uname('m'),
@@ -233,11 +231,11 @@ class UtilsService {
 	/**
 	 * Perform cURL download binary file request
 	 *
-	 * @param string $appId target Application::APP_ID
 	 * @param string $url download url
+	 * @param array $binariesFolder appdata binaries folder
 	 * @param string $filename result binary name
 	 * @param bool $update flag to determine whether to update already downloaded binary or not
-	 * 
+	 *
 	 * @return array
 	 */
 	public function downloadPythonBinary(
@@ -292,7 +290,7 @@ class UtilsService {
 	 *
 	 * @param array $binariesFolder binaries folder
 	 * @param string $file_name target `.gz` file
-	 * 
+	 *
 	 * @return bool
 	 */
 	public function unGz(array $binariesFolder, string $file_name): bool {
@@ -314,7 +312,7 @@ class UtilsService {
 	 *
 	 * @param array $binariesFolder binaries folder
 	 * @param string $file_name target binary filename
-	 * 
+	 *
 	 * @return bool
 	 */
 	public function addChmodX(array $binariesFolder, string $file_name): bool {
