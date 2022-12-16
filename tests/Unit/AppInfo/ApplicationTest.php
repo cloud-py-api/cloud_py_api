@@ -29,7 +29,7 @@ declare(strict_types=1);
 namespace OCA\Cloud_Py_API\Tests\Unit\AppInfo;
 
 use PHPUnit\Framework\TestCase;
-use OCA\Mediadc\AppInfo\Application;
+use OCA\Cloud_Py_API\AppInfo\Application;
 
 class ApplicationTest extends TestCase {
 	public function testConstructor() {

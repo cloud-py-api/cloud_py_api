@@ -19,7 +19,7 @@ Help us to maximize the effort we can spend fixing issues and adding new feature
 
 ## Contributing to Source Code
 
-Thanks for wanting to contribute source code to the Cloud_Py_API app. That's great!
+Thanks for wanting to contribute source code to the `cloud_py_api` app. That's great!
 
 ## Translations
 
