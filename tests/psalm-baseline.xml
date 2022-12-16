@@ -29,10 +29,9 @@
     </UndefinedDocblockClass>
   </file>
   <file src="lib/Service/PythonService.php">
-    <UndefinedDocblockClass occurrences="2">
-      <code>$pythonCommand</code>
-      <code>$pythonCommand</code>
-    </UndefinedDocblockClass>
+    <UndefinedMagicMethod occurrences="1">
+      <code>getValue</code>
+    </UndefinedMagicMethod>
   </file>
   <file src="lib/Service/ThriftService.php">
     <InvalidReturnType occurrences="1">
