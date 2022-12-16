@@ -43,14 +43,21 @@ class PythonService {
 	/** @var string */
 	private $ncDataFolder;
 
-	public function __construct(SettingMapper $settingMapper, IConfig $config) {
+	/** @var UtilsService */
+	private $utils;
+
+	public function __construct(
+		IConfig $config,
+		SettingMapper $settingMapper,
+		UtilsService $utils
+	) {
 		try {
-			/** @var Setting $pythonCommand */
 			$pythonCommand = $settingMapper->findByName('python_command');
 			$this->pythonCommand = $pythonCommand->getValue();
 		} catch (DoesNotExistException $e) {
 			$this->pythonCommand = '/usr/bin/python3';
 		}
+		$this->utils = $utils;
 		$this->ncInstanceId = $config->getSystemValue('instanceid');
 		$this->ncDataFolder = $config->getSystemValue('datadirectory');
 	}
@@ -79,7 +86,11 @@ class PythonService {
 			$env = [],
 			$binary = false
 		) {
-		$cwd = $this->ncDataFolder . '/appdata_' . $this->ncInstanceId . '/' . $appId . '/';
+		if ($binary) {
+			$cwd = $this->ncDataFolder . '/appdata_' . $this->ncInstanceId . '/' . $appId . '/';
+		} else {
+			$cwd = $this->utils->getCustomAppsDirectory() . $appId . '/';
+		}
 		if (count($scriptParams) > 0) {
 			$params = array_map(function ($key, $value) {
 				return $value !== '' ? "$key $value " : "$key";
@@ -99,8 +110,16 @@ class PythonService {
 			$cmd = $this->pythonCommand . ' ' . $cmd;
 		}
 		if ($nonBlocking) {
-			$logFile = $cwd . 'logs/' . date('d-m-Y_H:i:s', time()) . '.log';
-			exec($envVariables . 'nohup ' . $cmd . ' > ' . $logFile . ' 2>' . $logFile . ' &');
+			if ($binary) {
+				$logFile = $cwd . 'logs/' . date('d-m-Y_H:i:s', time()) . '.log';
+			} else {
+				$appDataDir = $this->ncDataFolder . '/appdata_' . $this->ncInstanceId . '/' . $appId . '/';
+				$pyBitecodeEnvVar = 'PYTHONBYTECODEBASE="' . $appDataDir . '" ';
+				$envVariables = $pyBitecodeEnvVar . $envVariables;
+				$logFile = $appDataDir . 'logs/' . date('d-m-Y_H:i:s', time()) . '.log';
+			}
+			$cmd = $envVariables . 'nohup ' . $cmd . ' > ' . $logFile . ' 2>' . $logFile . ' &';
+			exec($cmd);
 		} else {
 			$errors = [];
 			exec($envVariables . $cmd, $output, $result_code);

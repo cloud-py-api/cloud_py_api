@@ -208,11 +208,34 @@ class UtilsService {
 		return $machineType;
 	}
 
-	public function getSystemInfo(): array {
+	public function getCustomAppsDirectory()
+	{
+		$apps_directory = $this->config->getSystemValue('apps_paths');
+		if ($apps_directory !== "" && is_array($apps_directory) && count($apps_directory) > 0) {
+			foreach ($apps_directory as $custom_apps_dir) {
+				$appDir = $custom_apps_dir['path'] . '/' . Application::APP_ID;
+				if (
+					file_exists($custom_apps_dir['path']) && is_dir($custom_apps_dir['path']) 
+					&& $custom_apps_dir['writable'] && file_exists($appDir) && is_dir($appDir)
+				) {
+					return $custom_apps_dir['path'] . '/';
+				}
+			}
+		}
+		return getcwd() . '/apps/';
+	}
+
+	public function getSystemInfo($appId = null): array {
 		$pythonCommand = $this->settingMapper->findByName('python_command')->getValue();
+		$appVersions = [
+			Application::APP_ID . '-version' => $this->appManager->getAppVersion(Application::APP_ID),
+		];
+		if (isset($appId)) {
+			$appVersions[$appId . '-version'] = $this->appManager->getAppVersion($appId);
+		}
 		$result = [
 			'nextcloud-version' => $this->config->getSystemValue('version'),
-			Application::APP_ID . '-version' => $this->appManager->getAppVersion(Application::APP_ID),
+			'app-versions' => $appVersions,
 			'is-videos-supported' => $this->isVideosSupported(),
 			'is-snap' => $this->isSnapEnv(),
 			'arch' => $this->getOsArch(),
