@@ -49,7 +49,7 @@ You can support us in several ways:
 	<repository type="git">https://github.com/cloud_py_api/cloud_py_api</repository>
 	<dependencies>
 		<php min-version="7.4" min-int-size="64" />
-		<nextcloud min-version="24" max-version="26" />
+		<nextcloud min-version="25" max-version="26" />
 	</dependencies>
 	<repair-steps>
 		<install>
