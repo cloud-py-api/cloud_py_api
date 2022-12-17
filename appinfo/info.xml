@@ -8,6 +8,8 @@
 	<![CDATA[
 Nextcloud Python API Framework
 
+| **Currently in development, all is in a design state**
+
 ### Provides Convenient Functions for Python
 
 - Read & Write File System objects
