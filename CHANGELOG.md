@@ -2,11 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
-## [0.0.7 - 2022-12-14]
+## [0.1.0 - 2022-12-xx]
+
+This is the first `cloud_py_api` release
 
 ### Added
 
-- FS functions:
+- Added MediaDC get file contents command
+- Added Utils service for general actions
+- Added Python service for running python scripts or binaries
+- Added Python FS functions:
   * `fs_node_info`
   * `fs_list_directory`
   * `fs_file_data`
@@ -15,19 +20,3 @@ All notable changes to this project will be documented in this file.
   * `fs_extract_sub_dirs`
   * `fs_filter_by`
   * `fs_sort_by_id`
-
-### Changed
-
-### Fixed
-
-- Description, CI & CD stuff...
-
-## [0.0.6 - 2022-11-26]
-
-### Added
-
-- Deep, deep pre-Alpha. Just POC, that it works.
-
-### Changed
-
-### Fixed
