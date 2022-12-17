@@ -40,13 +40,13 @@ You can support us in several ways:
 	<author mail="bigcat88@icloud.com" homepage="https://github.com/bigcat88">Alexander Piskun</author>
 	<namespace>Cloud_Py_API</namespace>
 	<documentation>
-		<admin>https://github.com/cloud_py_api/cloud_py_api/wiki</admin>
+		<admin>https://github.com/cloud-py-api/cloud_py_api/wiki</admin>
 	</documentation>
 	<category>integration</category>
 	<category>tools</category>
-	<website>https://github.com/cloud_py_api/cloud_py_api</website>
-	<bugs>https://github.com/cloud_py_api/cloud_py_api/issues</bugs>
-	<repository type="git">https://github.com/cloud_py_api/cloud_py_api</repository>
+	<website>https://github.com/cloud-py-api/cloud_py_api</website>
+	<bugs>https://github.com/cloud-py-api/cloud_py_api/issues</bugs>
+	<repository type="git">https://github.com/cloud-py-api/cloud_py_api</repository>
 	<dependencies>
 		<php min-version="7.4" min-int-size="64" />
 		<nextcloud min-version="25" max-version="26" />
