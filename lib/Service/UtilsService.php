@@ -202,8 +202,6 @@ class UtilsService {
 			return 'amd64';
 		} elseif (str_contains($machineType, 'arm64')) {
 			return 'arm64';
-		} else {
-			return 'armv7';
 		}
 		return $machineType;
 	}
