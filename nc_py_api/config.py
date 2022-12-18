@@ -62,16 +62,18 @@ def finish_db_configuration() -> bool:
     if CONFIG["dbtype"] == "mysql":
         # when no `dbport` or `usock` found in NC config, trying php socket configuration.
         php_info = php_call("-r", "phpinfo();")
-        if isinstance(php_info, str):
+        if php_info:
             m_groups = re.search(
-                r"pdo_mysql\.default_socket\s*=>\s*(.*)\s*=>\s*(.*)", php_info, flags=re.MULTILINE + re.IGNORECASE
+                r"pdo_mysql\.default_socket\s*=>\s*(.*)\s*=>\s*(.*)",
+                php_info.decode("utf-8").rstrip("\n"),
+                flags=re.MULTILINE + re.IGNORECASE,
             )
             if m_groups is None:
                 log.warning("Cant parse php info.")
             else:
                 socket_path = m_groups.groups()[-1].strip()
                 if os.path.exists(socket_path):
-                    usock = CONFIG["usock"]
+                    usock = CONFIG.get("usock", None)
                     CONFIG["usock"] = socket_path
                     if connection_test(CONFIG):
                         return True
