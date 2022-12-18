@@ -2,7 +2,6 @@ name: (Py)Analysis & Coverage
 
 on:
   pull_request:
-    types: [opened, edited, reopened, synchronize]
     paths:
       - 'nc_py_api/*.*'
       - 'tests/nc_py_api/**'
@@ -314,6 +313,87 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: coverage_${{ matrix.nextcloud }}_${{ matrix.php-version }}_${{ matrix.mariadb-version }}
+          path: apps/${{ env.APP_NAME }}/htmlcov
+          if-no-files-found: error
+
+      - name: Upload report to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: apps/${{ env.APP_NAME }}/coverage.xml
+          fail_ci_if_error: true
+          verbose: true
+
+  tests-mysql-socket:
+    needs: [analysis]
+    runs-on: ubuntu-22.04
+    name: ${{ matrix.nextcloud }} • PHP ${{ matrix.php-version }} • MySQL • SOCK
+    if: "!contains(github.event.head_commit.message, '[docs]')"
+    strategy:
+      fail-fast: false
+      matrix:
+        php-version: [ "7.4", "8.0" ]
+        nextcloud: [ "25.0.2" ]
+
+    steps:
+      - name: Set up php ${{ matrix.php-version }}
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+          extensions: mbstring, fileinfo, intl, pdo_mysql, zip, gd
+
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: cache-nextcloud
+        id: nextcloud_setup
+        uses: actions/cache@v3
+        with:
+          path: nextcloud-${{ matrix.nextcloud }}.tar.bz2
+          key: ${{ matrix.nextcloud }}
+
+      - name: Download Nextcloud
+        if: steps.nextcloud_setup.outputs.cache-hit != 'true'
+        run: wget -q https://download.nextcloud.com/server/releases/nextcloud-${{ matrix.nextcloud }}.tar.bz2
+
+      - name: Set up Nextcloud
+        run: |
+          sudo sed -i "s/.*port.*3306.*/port = 3307/" /etc/mysql/mysql.conf.d/mysqld.cnf
+          sudo systemctl restart mysql.service
+          mysql -uroot -proot -e "CREATE DATABASE nextcloud CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;"
+          mysql -uroot -proot -e "show databases;"
+          tar -xjf nextcloud-${{ matrix.nextcloud }}.tar.bz2 --strip-components 1
+          mkdir data
+          php occ maintenance:install --verbose --database=mysql --database-name=nextcloud \
+          --database-user=root --database-pass=root \
+          --admin-user admin --admin-pass adminpassword
+          php occ config:system:set debug --value=true --type=boolean
+          php -S localhost:8080 &
+
+      - uses: actions/checkout@v3
+        with:
+          path: apps/${{ env.APP_NAME }}
+
+      - name: Enable App & Test Data
+        run: |
+          php occ app:enable ${{ env.APP_NAME }}
+          cp -R apps/${{ env.APP_NAME }}/tests/nc_py_api/test_dir ./data/admin/files/
+          php occ files:scan admin
+
+      - name: Generate coverage report
+        working-directory: apps/${{ env.APP_NAME }}
+        run: |
+          python3 -m pip -v install ".[dev]"
+          coverage run -m pytest -s && coverage xml && coverage html
+        env:
+          SERVER_ROOT: "../.."
+          CPA_LOGLEVEL: debug
+
+      - name: HTML coverage to artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage_${{ matrix.nextcloud }}_${{ matrix.php-version }}_mysql_socket
           path: apps/${{ env.APP_NAME }}/htmlcov
           if-no-files-found: error
 
