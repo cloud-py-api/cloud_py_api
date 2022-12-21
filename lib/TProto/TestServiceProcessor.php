@@ -93,23 +93,7 @@ class TestServiceProcessor
             $args->read($input);
         }
         $input->readMessageEnd();
-        $result = new \OCA\Cloud_Py_API\TProto\TestService_exit_result();
         $this->handler_->exit($args->resultCode);
-        $bin_accel = ($output instanceof TBinaryProtocolAccelerated) && function_exists('thrift_protocol_write_binary');
-        if ($bin_accel) {
-            thrift_protocol_write_binary(
-                $output,
-                'exit',
-                TMessageType::REPLY,
-                $result,
-                $seqid,
-                $output->isStrictWrite()
-            );
-        } else {
-            $output->writeMessageBegin('exit', TMessageType::REPLY, $seqid);
-            $result->write($output);
-            $output->writeMessageEnd();
-            $output->getTransport()->flush();
-        }
+        return;
     }
 }

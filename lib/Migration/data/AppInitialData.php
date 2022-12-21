@@ -63,13 +63,6 @@ class AppInitialData {
 				"helpUrl" => "https://cloud-py-api.readthedocs.io/{todo-url:/settings/setting_name}"
 			],
 			[
-				"name" => "python_binary",
-				"value" => true,
-				"displayName" => "Use pre-compiled Python binaries",
-				"description" => "Use Python part in binary format (located in the appdata folder)",
-				"helpUrl" => "https://cloud-py-api.readthedocs.io/{todo-url:/settings/setting_name}"
-			],
-			[
 				"name" => "cpa_loglevel",
 				"value" => "WARNING",
 				"displayName" => "Framework loglevel",

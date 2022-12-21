@@ -36,7 +36,7 @@ class TestServiceHandler implements TestServiceIf {
 	 * @return int
 	 */
 	public function ping($logLvl): int {
-		print('Recieved ping: ' . $logLvl);
+		print('Recieved ping: ' . $logLvl . PHP_EOL);
 		return $logLvl;
 	}
 
@@ -45,7 +45,7 @@ class TestServiceHandler implements TestServiceIf {
 	 * @return void
 	 */
 	public function exit($resultCode): void {
-		print('Closing with ' . $resultCode . ' result code.');
+		print('Closing with ' . $resultCode . ' result code.' . PHP_EOL);
 		exit($resultCode);
 	}
 }
