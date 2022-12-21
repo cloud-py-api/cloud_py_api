@@ -134,7 +134,7 @@ export default {
 		this._getSettings()
 	},
 	methods: {
-		_updateSettings() {
+		_updateSettings(settings) {
 			return axios.put(generateUrl('/apps/cloud_py_api/api/v1/settings'), { settings }).then(res => {
 				if (res.data.success) {
 					this.settings = res.data.updated_settings
@@ -159,10 +159,10 @@ export default {
 					showSuccess(this.t('cloud_py_api', 'Settings successfully updated'))
 				}
 			})
-			.catch(err => {
-				console.debug(err)
-				showError(this.t('cloud_py_api', 'Some error occurred while updating settings'))
-			})
+				.catch(err => {
+					console.debug(err)
+					showError(this.t('cloud_py_api', 'Some error occurred while updating settings'))
+				})
 		},
 		fromBytesToGBytes(bytes) {
 			return bytes / Math.pow(1024, 3)
