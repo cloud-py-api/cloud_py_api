@@ -38,7 +38,6 @@ use Thrift\Protocol\TBinaryProtocol;
 use Thrift\Server\TServerSocket;
 use Thrift\Server\TSimpleServer;
 use Thrift\Transport\TBufferedTransport;
-use Thrift\Transport\THttpClient;
 use Thrift\Transport\TSocket;
 
 class ThriftService {
@@ -56,7 +55,7 @@ class ThriftService {
 			$tfactory = new TTransportFactory($transport);
 			$pfactory = new TBinaryProtocolFactory(true, true);
 			$server = new TSimpleServer($processor, $transport, $tfactory, $tfactory, $pfactory, $pfactory);
-			print('Running Thrift server...');
+			print('Running Thrift server...' . PHP_EOL);
 			$server->serve();
 		} catch (TException $e) {
 			return [
@@ -68,20 +67,20 @@ class ThriftService {
 
 	public function runThriftClient(array $params = []): array {
 		try {
-			if (isset($params['http'])) {
-				$socket = new THttpClient('0.0.0.0', 6080, '');
-			} else {
-				$socket = new TSocket('0.0.0.0', 7080);
-			}
+			$socket = new TSocket('0.0.0.0', 7080);
 			$transport = new TBufferedTransport($socket, 1024, 1024);
 			$protocol = new TBinaryProtocol($transport);
 			$client = new \OCA\Cloud_Py_API\TProto\TestServiceClient($protocol);
 
 			$transport->open();
 			$result = $client->ping(\OCA\Cloud_Py_API\TProto\logLvl::DEBUG);
-			$client->exit(1);
+			$client->exit(0);
 			$transport->close();
-			return ['success' => $result === 0, 'recieved_ping_response' => $result];
+
+			return [
+				'success' => $result === 0,
+				'recieved_ping_response' => $result
+			];
 		} catch (TException $e) {
 			return [
 				'success' => false,

@@ -10,6 +10,6 @@ enum logLvl {
 }
 
 service TestService {
-    i32 ping(1: logLvl logLvl);
-    void exit(1: i32 resultCode);
+    i32 ping(1: logLvl logLvl),
+    oneway void exit(1: i32 resultCode)
 }

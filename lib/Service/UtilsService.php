@@ -202,8 +202,6 @@ class UtilsService {
 			return 'amd64';
 		} elseif (str_contains($machineType, 'arm64')) {
 			return 'arm64';
-		} else {
-			return 'armv7';
 		}
 		return $machineType;
 	}
@@ -364,6 +362,7 @@ class UtilsService {
 	public function checkForSettingsUpdates($app_data) {
 		$settings = $this->settingMapper->findAll();
 		if (count($settings) > 0) {
+			$this->updateSettingsTexts($app_data, $settings);
 			$this->checkForNewSettings($app_data, $settings);
 			$this->checkForDeletedSettings($app_data, $settings);
 		}
@@ -414,6 +413,34 @@ class UtilsService {
 			$setting = $this->settingMapper->findByName($settingName);
 			if (isset($setting)) {
 				$this->settingMapper->delete($setting);
+			}
+		}
+	}
+
+	private function updateSettingsTexts(array $app_data, array $settings) {
+		$newSettingsKeys = array_map(function ($setting) {
+			return $setting['name'];
+		}, $app_data['settings']);
+		foreach ($settings as $setting) {
+			if (in_array($setting->getName(), $newSettingsKeys)) {
+				$newSetting = null;
+				foreach ($app_data['settings'] as $s) {
+					if ($s['name'] == $setting->getName()) {
+						$newSetting = $s;
+					}
+				}
+				if (isset($newSetting)) {
+					if ($setting->getDescription() !== $newSetting['description']) {
+						$setting->setDescription($newSetting['description']);
+					}
+					if ($setting->getDisplayName() !== $newSetting['displayName']) {
+						$setting->setDisplayName($newSetting['displayName']);
+					}
+					if ($setting->getHelpUrl() !== $newSetting['helpUrl']) {
+						$setting->setHelpUrl($newSetting['helpUrl']);
+					}
+					$this->settingMapper->update($setting);
+				}
 			}
 		}
 	}

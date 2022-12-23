@@ -38,7 +38,7 @@ class AppInitialData {
 				"name" => "python_command",
 				"value" => "/usr/bin/python3",
 				"displayName" => "Full path to python interpreter",
-				"description" => "Absolute path to the python runnable (e.g. \"/usr/bin/python3\"). Can be obtained by `which python3` command.",
+				"description" => "Absolute path to the python runnable (e.g. \"/usr/bin/python3\"). Can be obtained by `which python3` command. Used when pre-compiled binaries option is not selected.",
 				"helpUrl" => "https://cloud-py-api.readthedocs.io/{todo-url:/settings/setting_name}"
 			],
 			[
@@ -63,13 +63,6 @@ class AppInitialData {
 				"helpUrl" => "https://cloud-py-api.readthedocs.io/{todo-url:/settings/setting_name}"
 			],
 			[
-				"name" => "python_binary",
-				"value" => true,
-				"displayName" => "Use pre-compiled Python binaries",
-				"description" => "Use Python part in binary format (located in the appdata folder)",
-				"helpUrl" => "https://cloud-py-api.readthedocs.io/{todo-url:/settings/setting_name}"
-			],
-			[
 				"name" => "cpa_loglevel",
 				"value" => "WARNING",
 				"displayName" => "Framework loglevel",
@@ -86,7 +79,7 @@ class AppInitialData {
 	private function _stringsForL10N(): void {
 		// TRANSLATORS Admin settings strings for localization (Eng versions stored in the database and translated on front-end)
 		$this->l10n->t("Full path to python interpreter");
-		$this->l10n->t("Absolute path to the python runnable (e.g. \"/usr/bin/python3\"). Can be obtained by `which python3` command.");
+		$this->l10n->t("Absolute path to the python runnable (e.g. \"/usr/bin/python3\"). Can be obtained by `which python3` command. Used when pre-compiled binaries option is not selected.");
 		$this->l10n->t("Remote/Encrypted file size limit to process");
 		$this->l10n->t("Maximum file size for requesting from php core. Used when file hosts on remote NC instance or have encrypted flag. Must be less then total available RAM size.");
 		$this->l10n->t("Use path to PHP interpreter for Python from settings");

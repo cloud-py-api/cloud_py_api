@@ -28,7 +28,6 @@ import Nextcloudl10n from './mixins/Nextcludl10n.js'
 
 import Vue from 'vue'
 import AdminSettings from './components/settings/AdminSettings.vue'
-import store from './store/index.js'
 
 // eslint-disable-next-line
 __webpack_nonce__ = btoa(getRequestToken())
@@ -38,4 +37,4 @@ __webpack_public_path__ = generateFilePath('cloud_py_api', '', 'js/')
 Vue.mixin(Nextcloudl10n)
 
 const View = Vue.extend(AdminSettings)
-new View({ store }).$mount('#cloud_py_api-admin-settings')
+new View().$mount('#cloud_py_api-admin-settings')

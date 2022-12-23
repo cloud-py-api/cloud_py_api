@@ -28,6 +28,7 @@ tmp
 .phpdoc
 clover.unit.xml
 clover.integration.xml
+proto/thrift/gen-*
 
 # Python Part
 

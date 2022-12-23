@@ -37,6 +37,7 @@
 					v-model="mappedSettings.python_command.value"
 					type="text"
 					name="python_command"
+					style="width: fit-content;"
 					@change="saveChanges">
 			</NcSettingsSection>
 			<NcSettingsSection :title="t('cloud_py_api', mappedSettings.remote_filesize_limit.display_name)"
@@ -65,14 +66,9 @@
 					v-model="mappedSettings.php_path.value"
 					type="text"
 					name="php_path"
+					:disabled="!usePhpPathFromSettings"
+					style="width: fit-content;"
 					@change="saveChanges">
-			</NcSettingsSection>
-			<NcSettingsSection :title="t('cloud_py_api', mappedSettings.python_binary.display_name)"
-				:description="t('cloud_py_api', mappedSettings.python_binary.description)"
-				:doc-url="mappedSettings.python_binary.help_url">
-				<NcCheckboxRadioSwitch :checked.sync="python_binary" @update:checked="updatePythonBinary">
-					{{ t('cloud_py_api', 'Use pre-compiled Python binaries') }}
-				</NcCheckboxRadioSwitch>
 			</NcSettingsSection>
 			<NcSettingsSection :title="t('cloud_py_api', mappedSettings.cpa_loglevel.display_name)"
 				:description="t('cloud_py_api', mappedSettings.cpa_loglevel.description)"
@@ -87,6 +83,17 @@
 				</select>
 			</NcSettingsSection>
 		</div>
+		<div v-else>
+			<NcSettingsSection :title="t('cloud_py_api', 'Error')">
+				<NcEmptyContent style="margin-top: 0;"
+					:title="t('cloud_py_api', 'Settings list is empty')"
+					:description="t('cloud_py_api', 'Seems like database not initialized properly. Try to re-enable the app')">
+					<template #icon>
+						<AlertCircleOutline />
+					</template>
+				</NcEmptyContent>
+			</NcSettingsSection>
+		</div>
 		<NcSettingsSection :title="t('cloud_py_api', 'Bug report')">
 			<BugReport />
 		</NcSettingsSection>
@@ -94,10 +101,13 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
-import { showError } from '@nextcloud/dialogs'
+import axios from '@nextcloud/axios'
+import { generateUrl } from '@nextcloud/router'
+import { showError, showSuccess } from '@nextcloud/dialogs'
 import NcSettingsSection from '@nextcloud/vue/dist/Components/NcSettingsSection.js'
 import NcCheckboxRadioSwitch from '@nextcloud/vue/dist/Components/NcCheckboxRadioSwitch.js'
+import NcEmptyContent from '@nextcloud/vue/dist/Components/NcEmptyContent.js'
+import AlertCircleOutline from 'vue-material-design-icons/AlertCircleOutline.vue'
 
 import BugReport from './BugReport.vue'
 
@@ -106,7 +116,9 @@ export default {
 	components: {
 		NcSettingsSection,
 		NcCheckboxRadioSwitch,
+		NcEmptyContent,
 		BugReport,
+		AlertCircleOutline,
 	},
 	data() {
 		return {
@@ -114,30 +126,43 @@ export default {
 			mappedSettings: {},
 			remote_filesize_limit: null,
 			usePhpPathFromSettings: false,
-			python_binary: true,
 			cpaLoglevel: 'INFO',
 			cpaLoglevels: ['DEBUG', 'INFO', 'WARNING', 'ERROR'],
 		}
 	},
 	beforeMount() {
-		this.getSettings().then((res) => {
-			this.settings = res.data
-			this.settings.forEach(setting => {
-				this.mappedSettings[setting.name] = setting
-			})
-			this.remote_filesize_limit = this.fromBytesToGBytes(Number(this.mappedSettings.remote_filesize_limit.value))
-			this.usePhpPathFromSettings = JSON.parse(this.mappedSettings.use_php_path_from_settings.value)
-			this.python_binary = JSON.parse(this.mappedSettings.python_binary.value)
-			this.cpaLoglevel = JSON.parse(this.mappedSettings.cpa_loglevel.value)
-		})
+		this._getSettings()
 	},
 	methods: {
-		...mapActions(['getSettings', 'updateSettings']),
-		saveChanges() {
-			this.updateSettings(this.settings).catch(err => {
-				console.debug(err)
-				showError(this.t('cloud_py_api', 'Some error occurred while updating settings'))
+		_updateSettings(settings) {
+			return axios.put(generateUrl('/apps/cloud_py_api/api/v1/settings'), { settings }).then(res => {
+				if (res.data.success) {
+					this.settings = res.data.updated_settings
+				}
+				return res
 			})
+		},
+		_getSettings() {
+			axios.get(generateUrl('/apps/cloud_py_api/api/v1/settings')).then(res => {
+				this.settings = res.data
+				this.settings.forEach(setting => {
+					this.mappedSettings[setting.name] = setting
+				})
+				this.remote_filesize_limit = this.fromBytesToGBytes(Number(this.mappedSettings.remote_filesize_limit.value))
+				this.usePhpPathFromSettings = JSON.parse(this.mappedSettings.use_php_path_from_settings.value)
+				this.cpaLoglevel = JSON.parse(this.mappedSettings.cpa_loglevel.value)
+			})
+		},
+		saveChanges() {
+			this._updateSettings(this.settings).then(res => {
+				if (res.data.success) {
+					showSuccess(this.t('cloud_py_api', 'Settings successfully updated'))
+				}
+			})
+				.catch(err => {
+					console.debug(err)
+					showError(this.t('cloud_py_api', 'Some error occurred while updating settings'))
+				})
 		},
 		fromBytesToGBytes(bytes) {
 			return bytes / Math.pow(1024, 3)
@@ -150,10 +175,6 @@ export default {
 		},
 		updateUsePhpPathFromSettings() {
 			this.mappedSettings.use_php_path_from_settings.value = JSON.stringify(this.usePhpPathFromSettings)
-			this.saveChanges()
-		},
-		updatePythonBinary() {
-			this.mappedSettings.python_binary.value = JSON.stringify(this.python_binary)
 			this.saveChanges()
 		},
 		updateCpaLoglevel() {

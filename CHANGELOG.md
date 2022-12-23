@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.1 - 2022-12-23]
+
+### Changed
+
+- Changed Admin settings list
+
 ## [0.1.0 - 2022-12-18]
 
 This is the first `cloud_py_api` release
