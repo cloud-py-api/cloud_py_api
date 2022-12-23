@@ -52,6 +52,9 @@ You can support us in several ways:
 		<nextcloud min-version="25" max-version="26" />
 	</dependencies>
 	<repair-steps>
+		<post-migration>
+			<step>OCA\Cloud_Py_API\Migration\AppUpdateStep</step>
+		</post-migration>
 		<install>
 			<step>OCA\Cloud_Py_API\Migration\AppDataInitializationStep</step>
 		</install>
