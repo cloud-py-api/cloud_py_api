@@ -38,8 +38,6 @@ use OCA\Cloud_Py_API\AppInfo\Application;
 use OCA\Cloud_Py_API\Db\Setting;
 use OCA\Cloud_Py_API\Db\SettingMapper;
 
-use function Safe\fread;
-
 class UtilsService {
 	/** @var IConfig */
 	private $config;
