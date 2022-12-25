@@ -271,7 +271,10 @@ class UtilsService {
 		}
 		$file_name = $filename . '.gz';
 		$save_file_loc = $dir . $file_name;
-		if (!file_exists($dir . $filename) || $update) {
+		$shouldDownloadBinary = $this->compareBinaryHash(
+			$url, $dir . $filename, $binariesFolder, $filename
+		);
+		if (!file_exists($dir . $filename) || ($update && $shouldDownloadBinary)) {
 			$cURL = curl_init($url);
 			$fp = fopen($save_file_loc, 'wb');
 			if ($fp) {
@@ -303,6 +306,88 @@ class UtilsService {
 				'chmodx' => true,
 			];
 		}
+	}
+
+	/**
+	 * @param string $binaryPath
+	 * @param array $binariesFolder,
+	 * @param string $filanem
+	 *
+	 * @return bool
+	 */
+	public function compareBinaryHash(
+		string $url,
+		string $binaryPath,
+		array $binariesFolder,
+		string $filename
+	) {
+		if (file_exists($binaryPath)) {
+			// get current binary hash (from .sha256 file or directly from existing binary)
+			if (file_exists($binaryPath . '.sha256')) {
+				$currentBinaryHash = file_get_contents(
+					$binaryPath . '.sha256', false, null, 0, 64
+				);
+			} else {
+				$binaryData = file_get_contents($binaryPath);
+				$currentBinaryHash = hash('sha256', $binaryData);
+			}
+			// download new binary sha256 hash from attached file to release
+			copy($binaryPath . '.sha256', $binaryPath . '.sha256.old');
+			$newBinaryHash = $this->downloadBinaryHash(
+				str_replace('.gz', '.sha256', $url), $binariesFolder, $filename
+			);
+			// should update binary if hashes not equial
+			if ($newBinaryHash['success']) {
+				return $currentBinaryHash != $newBinaryHash['binaryHash'];
+			} else {
+				// revert back old hash file
+				copy($binaryPath . '.sha256.old', $binaryPath . '.sha256');
+				unlink($binaryPath . '.sha256.old');
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Perform cURL download binary's sha256 sum file
+	 *
+	 * @param string $url url to the binary hashsum file
+	 * @param array $binariesFolder appdata binaries folder
+	 * @param string $filename downloaded checksum filename
+	 *
+	 * @return array
+	 */
+	public function downloadBinaryHash(
+		string $url,
+		array $binariesFolder,
+		string $filename
+	): array {
+		if (isset($binariesFolder['success']) && $binariesFolder['success']) {
+			$dir = $binariesFolder['path'] . '/';
+		} else {
+			return $binariesFolder; // Return getAppDataFolder result
+		}
+		$file_name = $filename . '.sha256';
+		$save_file_loc = $dir . $file_name;
+		$cURL = curl_init($url);
+		$fp = fopen($save_file_loc, 'w');
+		if ($fp) {
+			curl_setopt_array($cURL, [
+				CURLOPT_RETURNTRANSFER => true,
+				CURLOPT_FILE => $fp,
+				CURLOPT_FOLLOWLOCATION => true,
+				CURLOPT_RANGE => 64,
+			]);
+			$binaryHash = curl_exec($cURL);
+			curl_close($cURL);
+			fclose($fp);
+			return [
+				'success' => true,
+				'binaryHash' => $binaryHash,
+				'binaryHashFilePath' => $save_file_loc,
+			];
+		}
+		return ['success' => false];
 	}
 
 	/**
