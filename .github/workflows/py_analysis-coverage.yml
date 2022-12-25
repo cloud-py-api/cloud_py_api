@@ -404,3 +404,88 @@ jobs:
           file: apps/${{ env.APP_NAME }}/coverage.xml
           fail_ci_if_error: true
           verbose: true
+
+  tests-pgsql-socket:
+    needs: [analysis]
+    runs-on: ubuntu-22.04
+    name: ${{ matrix.nextcloud }} • PHP ${{ matrix.php-version }} • PgSQL • SOCK
+    if: "!contains(github.event.head_commit.message, '[docs]')"
+    strategy:
+      fail-fast: false
+      matrix:
+        php-version: [ "8.0" ]
+        nextcloud: [ "25.0.2" ]
+
+    steps:
+      - name: Set up php ${{ matrix.php-version }}
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+          extensions: mbstring, fileinfo, intl, pdo_mysql, zip, gd
+
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: cache-nextcloud
+        id: nextcloud_setup
+        uses: actions/cache@v3
+        with:
+          path: nextcloud-${{ matrix.nextcloud }}.tar.bz2
+          key: ${{ matrix.nextcloud }}
+
+      - name: Download Nextcloud
+        if: steps.nextcloud_setup.outputs.cache-hit != 'true'
+        run: wget -q https://download.nextcloud.com/server/releases/nextcloud-${{ matrix.nextcloud }}.tar.bz2
+
+      - name: Set up Nextcloud
+        run: |
+          sudo sed -i "s/.*local.*all.*all.*peer.*/local  all  all    md5/" /etc/postgresql/14/main/pg_hba.conf
+          sudo sed -i "s/.*listen_addresses.*localhost.*/listen_addresses = ''/" /etc/postgresql/14/main/postgresql.conf
+          sudo systemctl restart postgresql.service
+          sudo -u postgres psql -c "CREATE USER username WITH PASSWORD 'userpass';"
+          sudo -u postgres psql -c "CREATE DATABASE nextcloud TEMPLATE template0 ENCODING 'UNICODE';"
+          sudo -u postgres psql -c "ALTER DATABASE nextcloud OWNER TO username;"
+          sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE nextcloud TO username;"
+          sudo -u postgres psql -c "\l+"
+          tar -xjf nextcloud-${{ matrix.nextcloud }}.tar.bz2 --strip-components 1
+          mkdir data
+          php occ maintenance:install --verbose --database=pgsql --database-name=nextcloud \
+          --database-user=username --database-pass=userpass \
+          --admin-user admin --admin-pass adminpassword --database-host="/var/run/postgresql"
+          php occ config:system:set debug --value=true --type=boolean
+          php -S localhost:8080 &
+
+      - uses: actions/checkout@v3
+        with:
+          path: apps/${{ env.APP_NAME }}
+
+      - name: Enable App & Test Data
+        run: |
+          php occ app:enable ${{ env.APP_NAME }}
+          cp -R apps/${{ env.APP_NAME }}/tests/nc_py_api/test_dir ./data/admin/files/
+          php occ files:scan admin
+
+      - name: Generate coverage report
+        working-directory: apps/${{ env.APP_NAME }}
+        run: |
+          python3 -m pip -v install ".[dev]"
+          coverage run -m pytest -s && coverage xml && coverage html
+        env:
+          SERVER_ROOT: "../.."
+          CPA_LOGLEVEL: debug
+
+      - name: HTML coverage to artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage_${{ matrix.nextcloud }}_${{ matrix.php-version }}_pgsql_socket
+          path: apps/${{ env.APP_NAME }}/htmlcov
+          if-no-files-found: error
+
+      - name: Upload report to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: apps/${{ env.APP_NAME }}/coverage.xml
+          fail_ci_if_error: true
+          verbose: true
