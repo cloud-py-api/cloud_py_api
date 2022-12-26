@@ -1,5 +1,10 @@
 from datetime import datetime
 
+try:
+    from nacl import bindings  # pylint: disable=unused-import
+except ImportError:
+    bindings = None
+
 from .config import CONFIG
 
 
