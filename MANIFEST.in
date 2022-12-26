@@ -8,7 +8,7 @@ exclude *.yaml *.yml *.php *.xml *.js *.json *.lock
 exclude CODE_OF_CONDUCT.md
 exclude SECURITY.md
 
-recursive-exclude * *.yaml *.yml *.php *.xml *.js *.json *.lock
+recursive-exclude * *.yaml *.yml *.php *.xml *.js *.json *.lock *.png
 
 prune .tx
 prune 3rdparty
