@@ -13,5 +13,8 @@
     "**/src/**",
     "**/templates/**",
     "**/tests/**"
-  ]
+  ],
+  "pre-commit": {
+    "enabled": true
+  }
 }
