@@ -3,7 +3,7 @@ ci:
 
 repos:
 -   repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.3.0
+    rev: v4.4.0
     hooks:
     -   id: check-yaml
         exclude: (^3rdparty)
@@ -17,13 +17,13 @@ repos:
         exclude: (^3rdparty|^js|^proto)
 
 -   repo: https://github.com/PyCQA/isort
-    rev: 5.10.1
+    rev: 5.11.4
     hooks:
     -   id: isort
         files: nc_py_api/
 
 -   repo: https://github.com/psf/black
-    rev: 22.10.0
+    rev: 22.12.0
     hooks:
     -   id: black
         files: nc_py_api/
