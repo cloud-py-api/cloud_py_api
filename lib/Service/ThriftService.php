@@ -40,6 +40,9 @@ use Thrift\Server\TSimpleServer;
 use Thrift\Transport\TBufferedTransport;
 use Thrift\Transport\TSocket;
 
+/**
+ * @codeCoverageIgnore
+ */
 class ThriftService {
 	public function __construct() {
 		$loader = new ThriftClassLoader();

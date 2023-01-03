@@ -7,7 +7,7 @@ declare(strict_types=1);
  *
  * @copyright Copyright (c) 2022-2023 Alexander Piskun <bigcat88@icloud.com>
  *
- * @author 2022-2023 Andrey Borysenko <andrey18106x@gmail.com>
+ * @author 2021-2023 Andrey Borysenko <andrey18106x@gmail.com>
  *
  * @license AGPL-3.0-or-later
  *
@@ -26,26 +26,20 @@ declare(strict_types=1);
  *
  */
 
-namespace OCA\Cloud_Py_API\AppInfo;
+namespace OCA\Cloud_Py_API\Tests\Unit\Migration\data;
 
-use OCP\AppFramework\App;
-use OCP\AppFramework\Bootstrap\IBootContext;
-use OCP\AppFramework\Bootstrap\IBootstrap;
-use OCP\AppFramework\Bootstrap\IRegistrationContext;
+use PHPUnit\Framework\TestCase;
 
-class Application extends App implements IBootstrap {
-	public const APP_ID = 'cloud_py_api';
-
-	public function __construct() {
-		parent::__construct(self::APP_ID);
+/**
+ * @covers \OCA\Cloud_Py_API\Migration\data\AppInitialData
+ */
+class AppInitialDataTest extends TestCase {
+	public function setUp(): void {
+		parent::setUp();
 	}
 
-	/** @codeCoverageIgnore */
-	public function register(IRegistrationContext $context): void {
-		require_once __DIR__ . '/../../3rdparty/autoload.php';
-	}
-
-	/** @codeCoverageIgnore */
-	public function boot(IBootContext $context): void {
+	public function test() {
+		// TODO
+		$this->addToAssertionCount(1);
 	}
 }

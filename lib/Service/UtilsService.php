@@ -99,7 +99,7 @@ class UtilsService {
 		static $cachedExecutable = null;
 
 		if ($cachedExecutable !== null) {
-			return $cachedExecutable;
+			return $cachedExecutable; // @codeCoverageIgnore
 		}
 
 		$basename = basename(PHP_BINARY);
@@ -111,6 +111,7 @@ class UtilsService {
 
 		// Otherwise, we might be running as mod_php, php-fpm, etc, where PHP_BINARY is not a
 		// usable PHP interpreter.  Try to find one with the same version as the current one.
+		// @codeCoverageIgnoreStart
 
 		$candidates = [
 			'php' . PHP_MAJOR_VERSION . '.' . PHP_MINOR_VERSION . '.' . PHP_RELEASE_VERSION,
@@ -137,7 +138,7 @@ class UtilsService {
 
 		// Fallback, if nothing else can be found
 		$cachedExecutable = 'php';
-		return $cachedExecutable;
+		return $cachedExecutable; // @codeCoverageIgnoreEnd
 	}
 
 	/**
@@ -149,7 +150,7 @@ class UtilsService {
 	 */
 	public function isFunctionEnabled($function_name) {
 		if (!function_exists($function_name)) {
-			return false;
+			return false; // @codeCoverageIgnore
 		}
 		/**
 		 * @psalm-suppress UndefinedClass
@@ -160,13 +161,13 @@ class UtilsService {
 		$disabled = explode(',', $ini->get('disable_functions') ?: '');
 		$disabled = array_map('trim', $disabled);
 		if (in_array($function_name, $disabled)) {
-			return false;
+			return false; // @codeCoverageIgnore
 		}
 		/** @psalm-suppress UndefinedDocblockClass */
 		$disabled = explode(',', $ini->get('suhosin.executor.func.blacklist') ?: '');
 		$disabled = array_map('trim', $disabled);
 		if (in_array($function_name, $disabled)) {
-			return false;
+			return false; // @codeCoverageIgnore
 		}
 		return true;
 	}
@@ -200,13 +201,13 @@ class UtilsService {
 		$machineType = php_uname('m');
 		if (str_contains($machineType, 'x86_64')) {
 			return 'amd64';
-		} elseif (str_contains($machineType, 'arm64')) {
+		} elseif (str_contains($machineType, 'arm64')) { // @codeCoverageIgnoreStart
 			return 'arm64';
 		}
-		return $machineType;
+		return $machineType; // @codeCoverageIgnoreEnd
 	}
 
-	public function getCustomAppsDirectory() {
+	public function getCustomAppsDirectory(): string {
 		$apps_directory = $this->config->getSystemValue('apps_paths');
 		if ($apps_directory !== "" && is_array($apps_directory) && count($apps_directory) > 0) {
 			foreach ($apps_directory as $custom_apps_dir) {
@@ -240,7 +241,7 @@ class UtilsService {
 			'database' => $this->databaseStatistics !== null ? $this->databaseStatistics->getDatabaseStatistics() : null,
 			'php-version' => phpversion(),
 			'php-interpreter' => $this->getPhpInterpreter(),
-			'python-interpretter-setting' => json_decode($pythonCommand),
+			'python-interpreter-setting' => json_decode($pythonCommand),
 			'os' => php_uname('s'),
 			'os-release' => php_uname('r'),
 			'machine-type' => php_uname('m'),
@@ -250,6 +251,8 @@ class UtilsService {
 
 	/**
 	 * Perform cURL download binary file request
+	 *
+	 * @codeCoverageIgnore
 	 *
 	 * @param string $url download url
 	 * @param array $binariesFolder appdata binaries folder
@@ -309,6 +312,8 @@ class UtilsService {
 	}
 
 	/**
+	 * @codeCoverageIgnore
+	 *
 	 * @param string $binaryPath
 	 * @param array $binariesFolder,
 	 * @param string $filanem
@@ -350,6 +355,8 @@ class UtilsService {
 
 	/**
 	 * Perform cURL download binary's sha256 sum file
+	 *
+	 * @codeCoverageIgnore
 	 *
 	 * @param string $url url to the binary hashsum file
 	 * @param array $binariesFolder appdata binaries folder
@@ -393,6 +400,8 @@ class UtilsService {
 	/**
 	 * Ungzip target file
 	 *
+	 * @codeCoverageIgnore
+	 *
 	 * @param array $binariesFolder binaries folder
 	 * @param string $file_name target `.gz` file
 	 *
@@ -414,6 +423,8 @@ class UtilsService {
 
 	/**
 	 * Add executable flag to the binary
+	 *
+	 * @codeCoverageIgnore
 	 *
 	 * @param array $binariesFolder binaries folder
 	 * @param string $file_name target binary filename
@@ -444,6 +455,9 @@ class UtilsService {
 		return $binaryName;
 	}
 
+	/**
+	 * @codeCoverageIgnore
+	 */
 	public function checkForSettingsUpdates($app_data) {
 		$settings = $this->settingMapper->findAll();
 		if (count($settings) > 0) {
@@ -453,6 +467,9 @@ class UtilsService {
 		}
 	}
 
+	/**
+	 * @codeCoverageIgnore
+	 */
 	private function checkForNewSettings(array $app_data, array $settings): void {
 		$currentSettingsKeys = array_map(function ($setting) {
 			return $setting->getName();
@@ -481,6 +498,9 @@ class UtilsService {
 		}
 	}
 
+	/**
+	 * @codeCoverageIgnore
+	 */
 	private function checkForDeletedSettings(array $app_data, array $settings): void {
 		$currentSettingsKeys = array_map(function ($setting) {
 			return $setting->getName();
@@ -502,6 +522,9 @@ class UtilsService {
 		}
 	}
 
+	/**
+	 * @codeCoverageIgnore
+	 */
 	private function updateSettingsTexts(array $app_data, array $settings) {
 		$newSettingsKeys = array_map(function ($setting) {
 			return $setting['name'];

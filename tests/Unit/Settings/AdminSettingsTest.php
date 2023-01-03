@@ -7,7 +7,7 @@ declare(strict_types=1);
  *
  * @copyright Copyright (c) 2022-2023 Alexander Piskun <bigcat88@icloud.com>
  *
- * @author 2022-2023 Andrey Borysenko <andrey18106x@gmail.com>
+ * @author 2021-2023 Andrey Borysenko <andrey18106x@gmail.com>
  *
  * @license AGPL-3.0-or-later
  *
@@ -26,26 +26,39 @@ declare(strict_types=1);
  *
  */
 
-namespace OCA\Cloud_Py_API\AppInfo;
+namespace OCA\Cloud_Py_API\Tests\Unit\Settings;
 
-use OCP\AppFramework\App;
-use OCP\AppFramework\Bootstrap\IBootContext;
-use OCP\AppFramework\Bootstrap\IBootstrap;
-use OCP\AppFramework\Bootstrap\IRegistrationContext;
+use PHPUnit\Framework\TestCase;
 
-class Application extends App implements IBootstrap {
-	public const APP_ID = 'cloud_py_api';
+use OCA\Cloud_Py_API\Settings\AdminSettings;
+use OCP\AppFramework\Http\TemplateResponse;
 
-	public function __construct() {
-		parent::__construct(self::APP_ID);
+/**
+ * @covers \OCA\Cloud_Py_API\Settings\AdminSettings
+ */
+class AdminSettingsTest extends TestCase {
+	/** @var AdminSettings */
+	private $settings;
+
+	public function setUp(): void {
+		parent::setUp();
+
+		$this->settings = new AdminSettings();
 	}
 
-	/** @codeCoverageIgnore */
-	public function register(IRegistrationContext $context): void {
-		require_once __DIR__ . '/../../3rdparty/autoload.php';
+	public function testGetForm() {
+		$expected = new TemplateResponse('cloud_py_api', 'admin');
+		$result = $this->settings->getForm();
+		$this->assertEquals($expected, $result);
 	}
 
-	/** @codeCoverageIgnore */
-	public function boot(IBootContext $context): void {
+	public function testGetSection() {
+		$result = $this->settings->getSection();
+		$this->assertEquals('cloud_py_api', $result);
+	}
+
+	public function testGetPriority() {
+		$result = $this->settings->getPriority();
+		$this->assertIsInt($result);
 	}
 }
