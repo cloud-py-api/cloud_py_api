@@ -70,9 +70,9 @@ jobs:
           extensions: mbstring, iconv, fileinfo, intl, mysql, pdo_mysql
           coverage: none
 
-      - name: Set up PHPUnit
+      - name: Setup composer and dependencies
+        uses: php-actions/composer@v6
         working-directory: apps/${{ env.APP_NAME }}
-        run: composer i
 
       - name: Set up Nextcloud
         env:
@@ -95,9 +95,14 @@ jobs:
         # Only run if phpunit config file exists
         if: steps.check_phpunit.outputs.files_exists == 'true'
         working-directory: apps/${{ env.APP_NAME }}
+        uses: php-actions/phpunit@v3
         env:
           XDEBUG_MODE: coverage
-        run: composer test:unit:coverage
+        with:
+          bootstrap: vendor/autoload.php
+          configuration: ${{ env.PHPUNIT_CONFIG }}
+          php_extensions: xdebug
+          args: tests --coverage-html=./tests/coverage/php/unit --coverage-clover=./tests/clover.unit.xml
 
       - name: HTML coverage to artifacts
         if: steps.check_phpunit.outputs.files_exists == 'true'
@@ -173,9 +178,9 @@ jobs:
           extensions: mbstring, iconv, fileinfo, intl, pgsql, pdo_pgsql
           coverage: none
 
-      - name: Set up PHPUnit
+      - name: Setup composer and dependencies
+        uses: php-actions/composer@v6
         working-directory: apps/${{ env.APP_NAME }}
-        run: composer i
 
       - name: Set up Nextcloud
         env:
@@ -195,9 +200,14 @@ jobs:
         # Only run if phpunit config file exists
         if: steps.check_phpunit.outputs.files_exists == 'true'
         working-directory: apps/${{ env.APP_NAME }}
+        uses: php-actions/phpunit@v3
         env:
           XDEBUG_MODE: coverage
-        run: composer test:unit:coverage
+        with:
+          bootstrap: vendor/autoload.php
+          configuration: ${{ env.PHPUNIT_CONFIG }}
+          php_extensions: xdebug
+          args: tests --coverage-html=./tests/coverage/php/unit --coverage-clover=./tests/clover.unit.xml
 
       - name: HTML coverage to artifacts
         if: steps.check_phpunit.outputs.files_exists == 'true'
