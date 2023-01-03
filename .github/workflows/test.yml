@@ -99,9 +99,9 @@ jobs:
           XDEBUG_MODE: coverage
         with:
           bootstrap: apps/${{ env.APP_NAME }}/vendor/autoload.php
-          configuration: ${{ env.PHPUNIT_CONFIG }}
+          configuration: apps/${{ env.APP_NAME }}/${{ env.PHPUNIT_CONFIG }}
           php_extensions: xdebug
-          args: apps/${{ env.APP_NAME }}/tests --coverage-html=./tests/coverage/php/unit --coverage-clover=./tests/clover.unit.xml
+          args: apps/${{ env.APP_NAME }}/tests --coverage-html=apps/${{ env.APP_NAME }}/tests/coverage/php/unit --coverage-clover=apps/${{ env.APP_NAME }}/tests/clover.unit.xml
 
       - name: HTML coverage to artifacts
         if: steps.check_phpunit.outputs.files_exists == 'true'
@@ -203,9 +203,9 @@ jobs:
           XDEBUG_MODE: coverage
         with:
           bootstrap: apps/${{ env.APP_NAME }}/vendor/autoload.php
-          configuration: ${{ env.PHPUNIT_CONFIG }}
+          configuration: apps/${{ env.APP_NAME }}/${{ env.PHPUNIT_CONFIG }}
           php_extensions: xdebug
-          args: apps/${{ env.APP_NAME }}/tests --coverage-html=./tests/coverage/php/unit --coverage-clover=./tests/clover.unit.xml
+          args: apps/${{ env.APP_NAME }}/tests --coverage-html=apps/${{ env.APP_NAME }}/tests/coverage/php/unit --coverage-clover=apps/${{ env.APP_NAME }}/tests/clover.unit.xml
 
       - name: HTML coverage to artifacts
         if: steps.check_phpunit.outputs.files_exists == 'true'
