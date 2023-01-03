@@ -67,8 +67,8 @@ jobs:
         with:
           php-version: ${{ matrix.php-versions }}
           tools: phpunit
-          extensions: mbstring, iconv, fileinfo, intl, mysql, pdo_mysql, xdebug
-          coverage: none
+          extensions: mbstring, iconv, fileinfo, intl, mysql, pdo_mysql
+          coverage: xdebug
 
       - name: Setup composer dependencies
         working-directory: apps/${{ env.APP_NAME }}
@@ -168,8 +168,8 @@ jobs:
         with:
           php-version: ${{ matrix.php-versions }}
           tools: phpunit
-          extensions: mbstring, iconv, fileinfo, intl, pgsql, pdo_pgsql, xdebug
-          coverage: none
+          extensions: mbstring, iconv, fileinfo, intl, pgsql, pdo_pgsql
+          coverage: xdebug
 
       - name: Setup composer dependencies
         working-directory: apps/${{ env.APP_NAME }}
