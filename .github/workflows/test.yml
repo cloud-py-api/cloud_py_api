@@ -105,6 +105,14 @@ jobs:
           path: apps/${{ env.APP_NAME }}/tests/coverage/php/unit
           if-no-files-found: error
 
+      - name: Clover coverage to artifacts
+        if: steps.check_phpunit.outputs.files_exists == 'true'
+        uses: actions/upload-artifact@v3
+        with:
+          name: clover_coverage_unit_${{ matrix.server-versions }}_${{ matrix.php-versions }}_mysql.xml
+          path: apps/${{ env.APP_NAME }}/tests/clover.unit.xml
+          if-no-files-found: error
+
       - name: Upload to Codecov
         if: steps.check_phpunit.outputs.files_exists == 'true'
         uses: codecov/codecov-action@v3
