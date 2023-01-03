@@ -109,11 +109,10 @@ jobs:
 
       - name: Upload to Codecov
         if: steps.check_phpunit.outputs.files_exists == 'true'
-        working-directory: apps/${{ env.APP_NAME }}
         uses: codecov/codecov-action@v2
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          files: ./tests/clover.unit.xml
+          files: apps/${{ env.APP_NAME }}/tests/clover.unit.xml
           verbose: true
 
       - name: Check PHPUnit integration config file existence
@@ -210,11 +209,10 @@ jobs:
 
       - name: Upload to Codecov
         if: steps.check_phpunit.outputs.files_exists == 'true'
-        working-directory: apps/${{ env.APP_NAME }}
         uses: codecov/codecov-action@v2
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          files: ./tests/clover.unit.xml
+          files: apps/${{ env.APP_NAME }}/tests/clover.unit.xml
           verbose: true
 
       - name: Check PHPUnit integration config file existence
