@@ -95,7 +95,7 @@ jobs:
         # Only run if phpunit config file exists
         if: steps.check_phpunit.outputs.files_exists == 'true'
         working-directory: apps/${{ env.APP_NAME }}
-        run: ./vendor/phpunit/phpunit/phpunit -c ${{ env.PHPUNIT_CONFIG }} --fail-on-warning --coverage-html=tests/coverage/php/unit --coverage-clover=tests/clover.unit.xml
+        run: composer test:unit:coverage
 
       - name: HTML coverage to artifacts
         if: steps.check_phpunit.outputs.files_exists == 'true'
@@ -107,7 +107,7 @@ jobs:
 
       - name: Upload to Codecov
         if: steps.check_phpunit.outputs.files_exists == 'true'
-        uses: codecov/codecov-action@v2
+        uses: codecov/codecov-action@v3
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: apps/${{ env.APP_NAME }}/tests/clover.unit.xml
@@ -193,7 +193,7 @@ jobs:
         # Only run if phpunit config file exists
         if: steps.check_phpunit.outputs.files_exists == 'true'
         working-directory: apps/${{ env.APP_NAME }}
-        run: ./vendor/phpunit/phpunit/phpunit -c ${{ env.PHPUNIT_CONFIG }} --fail-on-warning --coverage-html=tests/coverage/php/unit --coverage-clover=tests/clover.unit.xml
+        run: composer test:unit:coverage
 
       - name: HTML coverage to artifacts
         if: steps.check_phpunit.outputs.files_exists == 'true'
@@ -205,7 +205,7 @@ jobs:
 
       - name: Upload to Codecov
         if: steps.check_phpunit.outputs.files_exists == 'true'
-        uses: codecov/codecov-action@v2
+        uses: codecov/codecov-action@v3
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: apps/${{ env.APP_NAME }}/tests/clover.unit.xml
