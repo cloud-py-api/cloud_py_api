@@ -4,152 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ebc7fb53a604b951169cce07679004c1",
-    "packages": [
-        {
-            "name": "apache/thrift",
-            "version": "v0.17.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/apache/thrift.git",
-                "reference": "4d493e867b349f3475203ef9848353b315203c51"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/apache/thrift/zipball/4d493e867b349f3475203ef9848353b315203c51",
-                "reference": "4d493e867b349f3475203ef9848353b315203c51",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^5.5 || ^7.0 || ^8.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "~4.8.36",
-                "squizlabs/php_codesniffer": "3.*"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.0.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Thrift\\": "lib/php/lib/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "Apache-2.0"
-            ],
-            "authors": [
-                {
-                    "name": "Apache Thrift Developers",
-                    "email": "dev@thrift.apache.org",
-                    "homepage": "http://thrift.apache.org"
-                }
-            ],
-            "description": "Apache Thrift RPC system",
-            "homepage": "http://thrift.apache.org",
-            "keywords": [
-                "rpc"
-            ],
-            "support": {
-                "email": "dev@thrift.apache.org",
-                "issues": "https://issues.apache.org/jira/browse/THRIFT",
-                "source": "https://github.com/apache/thrift/tree/v0.17.0"
-            },
-            "time": "2022-08-31T20:29:16+00:00"
-        },
-        {
-            "name": "google/protobuf",
-            "version": "v3.21.10",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/protocolbuffers/protobuf-php.git",
-                "reference": "118cb171ecd7dcac38055a954717a3b5ed4a4e5a"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/protocolbuffers/protobuf-php/zipball/118cb171ecd7dcac38055a954717a3b5ed4a4e5a",
-                "reference": "118cb171ecd7dcac38055a954717a3b5ed4a4e5a",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=7.0.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": ">=5.0.0"
-            },
-            "suggest": {
-                "ext-bcmath": "Need to support JSON deserialization"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Google\\Protobuf\\": "src/Google/Protobuf",
-                    "GPBMetadata\\Google\\Protobuf\\": "src/GPBMetadata/Google/Protobuf"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "description": "proto library for PHP",
-            "homepage": "https://developers.google.com/protocol-buffers/",
-            "keywords": [
-                "proto"
-            ],
-            "support": {
-                "source": "https://github.com/protocolbuffers/protobuf-php/tree/v3.21.10"
-            },
-            "time": "2022-11-30T19:56:32+00:00"
-        },
-        {
-            "name": "grpc/grpc",
-            "version": "1.42.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/grpc/grpc-php.git",
-                "reference": "9fa44f104cb92e924d4da547323a97f3d8aca6d4"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/grpc/grpc-php/zipball/9fa44f104cb92e924d4da547323a97f3d8aca6d4",
-                "reference": "9fa44f104cb92e924d4da547323a97f3d8aca6d4",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=7.0.0"
-            },
-            "require-dev": {
-                "google/auth": "^v1.3.0"
-            },
-            "suggest": {
-                "ext-protobuf": "For better performance, install the protobuf C extension.",
-                "google/protobuf": "To get started using grpc quickly, install the native protobuf library."
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Grpc\\": "src/lib/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "Apache-2.0"
-            ],
-            "description": "gRPC library for PHP",
-            "homepage": "https://grpc.io",
-            "keywords": [
-                "rpc"
-            ],
-            "support": {
-                "source": "https://github.com/grpc/grpc-php/tree/v1.42.0"
-            },
-            "time": "2021-11-19T08:13:51+00:00"
-        }
-    ],
+    "content-hash": "9503eb1863e3585605b28b561890042a",
+    "packages": [],
     "packages-dev": [
         {
             "name": "composer/pcre",
@@ -1408,16 +1264,16 @@
         },
         {
             "name": "psalm/phar",
-            "version": "4.29.0",
+            "version": "4.30.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/psalm/phar.git",
-                "reference": "367e803642395ef89d1edf8d472db28383bc0181"
+                "reference": "33723713902e1345904a5c9064ef7848bee0d490"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/psalm/phar/zipball/367e803642395ef89d1edf8d472db28383bc0181",
-                "reference": "367e803642395ef89d1edf8d472db28383bc0181",
+                "url": "https://api.github.com/repos/psalm/phar/zipball/33723713902e1345904a5c9064ef7848bee0d490",
+                "reference": "33723713902e1345904a5c9064ef7848bee0d490",
                 "shasum": ""
             },
             "require": {
@@ -1437,9 +1293,9 @@
             "description": "Composer-based Psalm Phar",
             "support": {
                 "issues": "https://github.com/psalm/phar/issues",
-                "source": "https://github.com/psalm/phar/tree/4.29.0"
+                "source": "https://github.com/psalm/phar/tree/4.30.0"
             },
-            "time": "2022-10-11T17:14:24+00:00"
+            "time": "2022-11-06T20:41:58+00:00"
         },
         {
             "name": "psr/cache",
@@ -4598,5 +4454,5 @@
     "platform-overrides": {
         "php": "7.4"
     },
-    "plugin-api-version": "2.2.0"
+    "plugin-api-version": "2.3.0"
 }
