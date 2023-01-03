@@ -67,7 +67,7 @@ jobs:
         with:
           php-version: ${{ matrix.php-versions }}
           tools: phpunit
-          extensions: mbstring, iconv, fileinfo, intl, mysql, pdo_mysql
+          extensions: mbstring, iconv, fileinfo, intl, mysql, pdo_mysql, xdebug
           coverage: none
 
       - name: Setup composer dependencies
@@ -94,13 +94,8 @@ jobs:
       - name: PHPUnit
         # Only run if phpunit config file exists
         if: steps.check_phpunit.outputs.files_exists == 'true'
-        uses: php-actions/phpunit@v3
-        env:
-          XDEBUG_MODE: coverage
-        with:
-          configuration: apps/${{ env.APP_NAME }}/${{ env.PHPUNIT_CONFIG }}
-          php_extensions: xdebug
-          args: apps/${{ env.APP_NAME }}/tests --coverage-html=apps/${{ env.APP_NAME }}/tests/coverage/php/unit --coverage-clover=apps/${{ env.APP_NAME }}/tests/clover.unit.xml
+        working-directory: apps/${{ env.APP_NAME }}
+        run: composer test:unit:coverage
 
       - name: HTML coverage to artifacts
         if: steps.check_phpunit.outputs.files_exists == 'true'
@@ -173,7 +168,7 @@ jobs:
         with:
           php-version: ${{ matrix.php-versions }}
           tools: phpunit
-          extensions: mbstring, iconv, fileinfo, intl, pgsql, pdo_pgsql
+          extensions: mbstring, iconv, fileinfo, intl, pgsql, pdo_pgsql, xdebug
           coverage: none
 
       - name: Setup composer dependencies
@@ -197,13 +192,8 @@ jobs:
       - name: PHPUnit
         # Only run if phpunit config file exists
         if: steps.check_phpunit.outputs.files_exists == 'true'
-        uses: php-actions/phpunit@v3
-        env:
-          XDEBUG_MODE: coverage
-        with:
-          configuration: apps/${{ env.APP_NAME }}/${{ env.PHPUNIT_CONFIG }}
-          php_extensions: xdebug
-          args: apps/${{ env.APP_NAME }}/tests --coverage-html=apps/${{ env.APP_NAME }}/tests/coverage/php/unit --coverage-clover=apps/${{ env.APP_NAME }}/tests/clover.unit.xml
+        working-directory: apps/${{ env.APP_NAME }}
+        run: composer test:unit:coverage
 
       - name: HTML coverage to artifacts
         if: steps.check_phpunit.outputs.files_exists == 'true'
