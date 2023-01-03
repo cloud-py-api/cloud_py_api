@@ -95,7 +95,7 @@ jobs:
         # Only run if phpunit config file exists
         if: steps.check_phpunit.outputs.files_exists == 'true'
         working-directory: apps/${{ env.APP_NAME }}
-        run: composer test:unit:coverage
+        run: ./vendor/phpunit/phpunit/phpunit -c ${{ env.PHPUNIT_CONFIG }} --fail-on-warning --coverage-html=tests/coverage/php/unit --coverage-clover=tests/clover.unit.xml
 
       - name: HTML coverage to artifacts
         if: steps.check_phpunit.outputs.files_exists == 'true'
@@ -193,7 +193,7 @@ jobs:
         # Only run if phpunit config file exists
         if: steps.check_phpunit.outputs.files_exists == 'true'
         working-directory: apps/${{ env.APP_NAME }}
-        run: composer test:unit:coverage
+        run: ./vendor/phpunit/phpunit/phpunit -c ${{ env.PHPUNIT_CONFIG }} --fail-on-warning --coverage-html=tests/coverage/php/unit --coverage-clover=tests/clover.unit.xml
 
       - name: HTML coverage to artifacts
         if: steps.check_phpunit.outputs.files_exists == 'true'
