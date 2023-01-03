@@ -98,7 +98,6 @@ jobs:
         env:
           XDEBUG_MODE: coverage
         with:
-          bootstrap: apps/${{ env.APP_NAME }}/vendor/autoload.php
           configuration: apps/${{ env.APP_NAME }}/${{ env.PHPUNIT_CONFIG }}
           php_extensions: xdebug
           args: apps/${{ env.APP_NAME }}/tests --coverage-html=apps/${{ env.APP_NAME }}/tests/coverage/php/unit --coverage-clover=apps/${{ env.APP_NAME }}/tests/clover.unit.xml
@@ -202,7 +201,6 @@ jobs:
         env:
           XDEBUG_MODE: coverage
         with:
-          bootstrap: apps/${{ env.APP_NAME }}/vendor/autoload.php
           configuration: apps/${{ env.APP_NAME }}/${{ env.PHPUNIT_CONFIG }}
           php_extensions: xdebug
           args: apps/${{ env.APP_NAME }}/tests --coverage-html=apps/${{ env.APP_NAME }}/tests/coverage/php/unit --coverage-clover=apps/${{ env.APP_NAME }}/tests/clover.unit.xml
