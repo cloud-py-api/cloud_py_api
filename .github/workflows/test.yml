@@ -110,7 +110,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: clover_coverage_unit_${{ matrix.server-versions }}_${{ matrix.php-versions }}_mysql.xml
-          path: apps/${{ env.APP_NAME }}/tests/clover.unit.xml
+          path: apps/${{ env.APP_NAME }}/tests/coverage/php/unit/clover.xml
           if-no-files-found: error
 
       - name: Upload to Codecov
@@ -118,7 +118,7 @@ jobs:
         uses: codecov/codecov-action@v3
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          file: apps/${{ env.APP_NAME }}/tests/clover.unit.xml
+          file: apps/${{ env.APP_NAME }}/tests/coverage/php/unit/clover.xml
           flags: php_backend
           verbose: true
 
@@ -217,7 +217,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: clover_coverage_unit_${{ matrix.server-versions }}_${{ matrix.php-versions }}_pgsql.xml
-          path: apps/${{ env.APP_NAME }}/tests/clover.unit.xml
+          path: apps/${{ env.APP_NAME }}/tests/coverage/php/unit/clover.xml
           if-no-files-found: error
 
       - name: Upload to Codecov
@@ -225,7 +225,7 @@ jobs:
         uses: codecov/codecov-action@v3
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          file: apps/${{ env.APP_NAME }}/tests/clover.unit.xml
+          file: apps/${{ env.APP_NAME }}/tests/coverage/php/unit/clover.xml
           flags: php_backend
           verbose: true
 
