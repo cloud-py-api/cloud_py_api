@@ -7,6 +7,9 @@ module.exports = {
 	coverageProvider: 'v8',
 	coverageReporters: ['json','text','lcov','clover','html'],
 	collectCoverageFrom: ['./src/**'],
+	coveragePathIgnorePatterns: [
+		'<rootDir>/src/main.js'
+	],
 	transformIgnorePatterns: [
 		// '<rootDir>/node_modules/',
 	],

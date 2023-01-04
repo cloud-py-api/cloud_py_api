@@ -2,16 +2,40 @@ comment:
   require_changes: true
   layout: "diff, files"
 
-coverage:
-  status:
-    project:
-      default:
-        target: auto
-        threshold: 2%
-    patch:
-      default:
-        target: auto
-        threshold: 2%
+# coverage:
+#   status:
+#     project:
+#       default:
+#         target: auto
+#         threshold: 2%
+#     patch:
+#       default:
+#         target: auto
+#         threshold: 2%
+
+flag_management:
+  individual_flags:
+    - name: python_backend
+      paths:
+        - nc_py_api/
+      statuses:
+        - type: project
+          target: auto
+          threshold: 2%
+    - name: php_backend
+      paths:
+        - lib/
+      statuses:
+        - type: project
+          target: auto
+          threshold: 2%
+    - name: frontend
+      paths:
+        - src/
+      statuses:
+        - type: project
+          target: auto
+          threshold: 2%
 
 fixes:
   - "apps/cloud_py_api/::"
