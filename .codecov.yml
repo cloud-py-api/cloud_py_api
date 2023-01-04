@@ -2,16 +2,16 @@ comment:
   require_changes: true
   layout: "diff, files"
 
-# coverage:
-#   status:
-#     project:
-#       default:
-#         target: auto
-#         threshold: 2%
-#     patch:
-#       default:
-#         target: auto
-#         threshold: 2%
+coverage:
+  status:
+    project:
+      default:
+        target: auto
+        threshold: 2%
+    patch:
+      default:
+        target: auto
+        threshold: 2%
 
 flag_management:
   individual_flags:
@@ -38,7 +38,7 @@ flag_management:
           threshold: 2%
 
 fixes:
-  - "^apps/cloud_py_api/::"
-  - "^apps/cloud_py_api/lib::"
-  - "^apps/cloud_py_api/src::"
-  - "^apps/cloud_py_api/nc_py_api::"
+  - "apps/cloud_py_api/::"
+  - "apps/cloud_py_api/nc_py_api::cloud_py_api/nc_py_api"
+  - "apps/cloud_py_api/lib::cloud_py_api/lib"
+  - "apps/cloud_py_api/src::cloud_py_api/src"
