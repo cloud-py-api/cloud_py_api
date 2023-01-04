@@ -120,7 +120,6 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
           file: apps/${{ env.APP_NAME }}/tests/coverage/php/unit/clover.xml
           flags: php_backend
-          root_dir: ./apps/${{ env.APP_NAME }}
           verbose: true
 
       - name: Check PHPUnit integration config file existence
@@ -228,7 +227,6 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
           file: apps/${{ env.APP_NAME }}/tests/coverage/php/unit/clover.xml
           flags: php_backend
-          root_dir: ./apps/${{ env.APP_NAME }}
           verbose: true
 
       - name: Check PHPUnit integration config file existence
