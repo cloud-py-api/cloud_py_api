@@ -33,6 +33,7 @@ use OCP\AppFramework\Bootstrap\IBootContext;
 use OCP\AppFramework\Bootstrap\IBootstrap;
 use OCP\AppFramework\Bootstrap\IRegistrationContext;
 
+// Temp ci trigger
 class Application extends App implements IBootstrap {
 	public const APP_ID = 'cloud_py_api';
 
