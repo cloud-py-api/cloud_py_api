@@ -28,7 +28,7 @@ import Nextcloudl10n from './mixins/Nextcludl10n.js'
 
 import Vue from 'vue'
 import AdminSettings from './components/settings/AdminSettings.vue'
-// temp ci trigger
+
 // eslint-disable-next-line
 __webpack_nonce__ = btoa(getRequestToken())
 // eslint-disable-next-line
