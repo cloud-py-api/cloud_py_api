@@ -32,7 +32,7 @@ jobs:
     strategy:
       matrix:
         php-versions: ["7.4", "8.0"]
-        server-versions: ['master']
+        nextcloud: ["25.0.2"]
 
     services:
       mysql:
@@ -44,14 +44,29 @@ jobs:
         options: --health-cmd="mysqladmin ping" --health-interval 5s --health-timeout 2s --health-retries 5
 
     steps:
-      - name: Checkout server
-        uses: actions/checkout@v3
+      - name: Set up php ${{ matrix.php-versions }}
+        uses: shivammathur/setup-php@v2
         with:
-          submodules: true
-          repository: nextcloud/server
-          ref: ${{ matrix.server-versions }}
+          php-version: ${{ matrix.php-versions }}
+          tools: phpunit
+          extensions: mbstring, iconv, fileinfo, intl, mysql, pdo_mysql
+          coverage: xdebug
 
-      - name: Checkout app
+      - name: cache-nextcloud
+        id: nextcloud_setup
+        uses: actions/cache@v3
+        with:
+          path: nextcloud-${{ matrix.nextcloud }}.tar.bz2
+          key: ${{ matrix.nextcloud }}
+
+      - name: Download Nextcloud
+        if: steps.nextcloud_setup.outputs.cache-hit != 'true'
+        run: wget -q https://download.nextcloud.com/server/releases/nextcloud-${{ matrix.nextcloud }}.tar.bz2
+
+      - name: Unpack nextcloud
+        run: tar -xjf nextcloud-${{ matrix.nextcloud }}.tar.bz2 --strip-components 1
+
+      - name: Checkout ${{ env.APP_NAME }} app
         uses: actions/checkout@v3
         with:
           path: apps/${{ env.APP_NAME }}
@@ -61,14 +76,6 @@ jobs:
         with:
           repository: nextcloud/serverinfo
           path: apps/serverinfo
-
-      - name: Set up php ${{ matrix.php-versions }}
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: ${{ matrix.php-versions }}
-          tools: phpunit
-          extensions: mbstring, iconv, fileinfo, intl, mysql, pdo_mysql
-          coverage: xdebug
 
       - name: Setup composer dependencies
         working-directory: apps/${{ env.APP_NAME }}
@@ -101,7 +108,7 @@ jobs:
         if: steps.check_phpunit.outputs.files_exists == 'true'
         uses: actions/upload-artifact@v3
         with:
-          name: coverage_unit_${{ matrix.server-versions }}_${{ matrix.php-versions }}_mysql
+          name: coverage_unit_${{ matrix.nextcloud }}_${{ matrix.php-versions }}_mysql
           path: apps/${{ env.APP_NAME }}/tests/coverage/php/unit
           if-no-files-found: error
 
@@ -109,7 +116,7 @@ jobs:
         if: steps.check_phpunit.outputs.files_exists == 'true'
         uses: actions/upload-artifact@v3
         with:
-          name: clover_coverage_unit_${{ matrix.server-versions }}_${{ matrix.php-versions }}_mysql.xml
+          name: clover_coverage_unit_${{ matrix.nextcloud }}_${{ matrix.php-versions }}_mysql.xml
           path: apps/${{ env.APP_NAME }}/tests/coverage/php/unit/clover.xml
           if-no-files-found: error
 
@@ -143,7 +150,7 @@ jobs:
     strategy:
       matrix:
         php-versions: ["8.0"]
-        server-versions: ["master"]
+        nextcloud: ["25.0.2"]
 
     services:
       postgres:
@@ -157,14 +164,29 @@ jobs:
         options: --health-cmd pg_isready --health-interval 5s --health-timeout 2s --health-retries 5
 
     steps:
-      - name: Checkout server
-        uses: actions/checkout@v3
+      - name: Set up php ${{ matrix.php-versions }}
+        uses: shivammathur/setup-php@v2
         with:
-          submodules: true
-          repository: nextcloud/server
-          ref: ${{ matrix.server-versions }}
+          php-version: ${{ matrix.php-versions }}
+          tools: phpunit
+          extensions: mbstring, iconv, fileinfo, intl, mysql, pdo_mysql
+          coverage: xdebug
 
-      - name: Checkout app
+      - name: cache-nextcloud
+        id: nextcloud_setup
+        uses: actions/cache@v3
+        with:
+          path: nextcloud-${{ matrix.nextcloud }}.tar.bz2
+          key: ${{ matrix.nextcloud }}
+
+      - name: Download Nextcloud
+        if: steps.nextcloud_setup.outputs.cache-hit != 'true'
+        run: wget -q https://download.nextcloud.com/server/releases/nextcloud-${{ matrix.nextcloud }}.tar.bz2
+
+      - name: Unpack nextcloud
+        run: tar -xjf nextcloud-${{ matrix.nextcloud }}.tar.bz2 --strip-components 1
+
+      - name: Checkout ${{ env.APP_NAME }} app
         uses: actions/checkout@v3
         with:
           path: apps/${{ env.APP_NAME }}
@@ -174,14 +196,6 @@ jobs:
         with:
           repository: nextcloud/serverinfo
           path: apps/serverinfo
-
-      - name: Set up php ${{ matrix.php-versions }}
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: ${{ matrix.php-versions }}
-          tools: phpunit
-          extensions: mbstring, iconv, fileinfo, intl, pgsql, pdo_pgsql
-          coverage: xdebug
 
       - name: Setup composer dependencies
         working-directory: apps/${{ env.APP_NAME }}
@@ -211,7 +225,7 @@ jobs:
         if: steps.check_phpunit.outputs.files_exists == 'true'
         uses: actions/upload-artifact@v3
         with:
-          name: coverage_unit_${{ matrix.server-versions }}_${{ matrix.php-versions }}_pgsql
+          name: coverage_unit_${{ matrix.nextcloud }}_${{ matrix.php-versions }}_pgsql
           path: apps/${{ env.APP_NAME }}/tests/coverage/php/unit
           if-no-files-found: error
 
@@ -219,7 +233,7 @@ jobs:
         if: steps.check_phpunit.outputs.files_exists == 'true'
         uses: actions/upload-artifact@v3
         with:
-          name: clover_coverage_unit_${{ matrix.server-versions }}_${{ matrix.php-versions }}_pgsql.xml
+          name: clover_coverage_unit_${{ matrix.nextcloud }}_${{ matrix.php-versions }}_pgsql.xml
           path: apps/${{ env.APP_NAME }}/tests/coverage/php/unit/clover.xml
           if-no-files-found: error
 

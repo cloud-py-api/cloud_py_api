@@ -42,6 +42,3 @@ flag_management:
 
 fixes:
   - "apps/cloud_py_api/::"
-  - "apps/cloud_py_api/nc_py_api::cloud_py_api/nc_py_api"
-  - "apps/cloud_py_api/lib::cloud_py_api/lib"
-  - "apps/cloud_py_api/src::cloud_py_api/src"
