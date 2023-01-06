@@ -26,20 +26,43 @@ declare(strict_types=1);
  *
  */
 
-namespace OCA\Cloud_Py_API\Tests\Unit\Migration\data;
+namespace OCA\Cloud_Py_API\Tests\Unit\Service;
 
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\MockObject\MockObject;
+
+use OCA\Cloud_Py_API\Service\ThriftService;
 
 /**
- * @covers \OCA\Cloud_Py_API\Migration\data\AppInitialData
+ * @covers \OCA\Cloud_Py_API\Service\ThriftService
  */
-class AppInitialDataTest extends TestCase {
+class ThriftServiceTest extends TestCase {
+	use \phpmock\phpunit\PHPMock;
+
+	/** @var ThriftService */
+	private $tService;
+
 	public function setUp(): void {
 		parent::setUp();
+
+		$this->tService = new ThriftService();
 	}
 
-	public function test() {
-		// TODO
-		$this->addToAssertionCount(1);
+	/**
+	 * @covers \OCA\Cloud_Py_API\Service\ThriftService::runThriftServer
+	 */
+	public function testRunThriftClient() {
+		$this->tService->runThriftBgServer();
+		sleep(1); // wait for server to start
+		$expectedResult = ['success' => true, 'recieved_ping_response' => 0];
+		$result = $this->tService->runThriftClient();
+		$this->assertEquals($expectedResult, $result);
 	}
+
+	public function testRunThriftClientError() {
+		$expectedResult = ['success' => false, 'error_message' => 'TSocket: Could not connect to 0.0.0.0:7080 (Connection refused [111])'];
+		$result = $this->tService->runThriftClient();
+		$this->assertEquals($expectedResult, $result);
+	}
+
 }

@@ -2,21 +2,13 @@ name: Test
 
 on:
   pull_request:
-    paths:
-      - 'lib/*.*'
-      - 'src/*.*'
-      - 'templates/*.*'
-      - 'tests/Unit/**'
-      - 'tests/Integration/**'
-      - 'tests/javascript/**'
+    branches:
+      - main
+      - dev
   push:
-    paths:
-      - 'lib/*.*'
-      - 'src/*.*'
-      - 'templates/*.*'
-      - 'tests/Unit/**'
-      - 'tests/Integration/**'
-      - 'tests/javascript/**'
+    branches:
+      - main
+      - dev
   workflow_dispatch:
 
 env:
@@ -137,6 +129,31 @@ jobs:
         working-directory: apps/${{ env.APP_NAME }}
         run: ./vendor/phpunit/phpunit/phpunit -c ${{ env.PHPUNIT_INTEGRATION_CONFIG }}
 
+      - name: HTML coverage to artifacts
+        if: steps.check_phpunit.outputs.files_exists == 'true'
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage_integration_${{ matrix.nextcloud }}_${{ matrix.php-versions }}_mysql
+          path: apps/${{ env.APP_NAME }}/tests/coverage/php/integration
+          if-no-files-found: error
+
+      - name: Clover coverage to artifacts
+        if: steps.check_phpunit.outputs.files_exists == 'true'
+        uses: actions/upload-artifact@v3
+        with:
+          name: clover_coverage_integration_${{ matrix.nextcloud }}_${{ matrix.php-versions }}_mysql.xml
+          path: apps/${{ env.APP_NAME }}/tests/coverage/php/integration/clover.xml
+          if-no-files-found: error
+
+      - name: Upload to Codecov
+        if: steps.check_phpunit.outputs.files_exists == 'true'
+        uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: apps/${{ env.APP_NAME }}/tests/coverage/php/integration/clover.xml
+          flags: php_backend
+          verbose: true
+
   phpunit-pgsql:
     runs-on: ubuntu-latest
 
@@ -251,6 +268,31 @@ jobs:
         if: steps.check_integration.outputs.files_exists == 'true'
         working-directory: apps/${{ env.APP_NAME }}
         run: ./vendor/phpunit/phpunit/phpunit -c ${{ env.PHPUNIT_INTEGRATION_CONFIG }}
+
+      - name: HTML coverage to artifacts
+        if: steps.check_phpunit.outputs.files_exists == 'true'
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage_integration_${{ matrix.nextcloud }}_${{ matrix.php-versions }}_pgsql
+          path: apps/${{ env.APP_NAME }}/tests/coverage/php/integration
+          if-no-files-found: error
+
+      - name: Clover coverage to artifacts
+        if: steps.check_phpunit.outputs.files_exists == 'true'
+        uses: actions/upload-artifact@v3
+        with:
+          name: clover_coverage_integration_${{ matrix.nextcloud }}_${{ matrix.php-versions }}_pgsql.xml
+          path: apps/${{ env.APP_NAME }}/tests/coverage/php/integration/clover.xml
+          if-no-files-found: error
+
+      - name: Upload to Codecov
+        if: steps.check_phpunit.outputs.files_exists == 'true'
+        uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: apps/${{ env.APP_NAME }}/tests/coverage/php/integration/clover.xml
+          flags: php_backend
+          verbose: true
 
   phpunit-summary:
     runs-on: ubuntu-latest

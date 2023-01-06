@@ -29,17 +29,50 @@ declare(strict_types=1);
 namespace OCA\Cloud_Py_API\Tests\Unit\Migration;
 
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\MockObject\MockObject;
+
+use OCA\Cloud_Py_API\Migration\AppDataInitializationStep;
+use OCA\Cloud_Py_API\Migration\data\AppInitialData;
 
 /**
  * @covers \OCA\Cloud_Py_API\Migration\AppDataInitializationStep
  */
 class AppDataInitializationStepTest extends TestCase {
+	/** @var \OCA\Cloud_Py_API\Db\SettingMapper|MockObject */
+	private $settingMapper;
+
+	/** @var \OCA\Cloud_Py_API\Service\UtilsService|MockObject */
+	private $utils;
+
+	/** @var AppDataInitializationStep */
+	private $repairStep;
+
 	public function setUp(): void {
 		parent::setUp();
+
+		$this->settingMapper = $this->createMock(\OCA\Cloud_Py_API\Db\SettingMapper::class);
+		$this->utils = $this->createMock(\OCA\Cloud_Py_API\Service\UtilsService::class);
+
+		$this->repairStep = new AppDataInitializationStep($this->settingMapper, $this->utils);
 	}
 
-	public function test() {
-		// TODO
-		$this->addToAssertionCount(1);
+	public function testName() {
+		$this->assertEquals('Initializing Cloud_Py_API data', $this->repairStep->getName());
+	}
+
+	public function testRun() {
+		/** @var \OCP\Migration\IOutput|MockObject */
+		$output = $this->createMock(\OCP\Migration\IOutput::class);
+
+		$this->settingMapper
+			->expects($this->exactly(count(AppInitialData::$INITIAL_DATA['settings'])))
+			->method('insert')
+			->with($this->isInstanceOf(\OCA\Cloud_Py_API\Db\Setting::class));
+
+		$this->utils->expects($this->once())
+			->method('checkForSettingsUpdates')
+			->with(AppInitialData::$INITIAL_DATA);
+
+		$this->repairStep->run($output);
 	}
 }

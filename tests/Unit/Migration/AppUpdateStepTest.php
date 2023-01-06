@@ -29,17 +29,40 @@ declare(strict_types=1);
 namespace OCA\Cloud_Py_API\Tests\Unit\Migration;
 
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\MockObject\MockObject;
+
+use OCA\Cloud_Py_API\Migration\AppUpdateStep;
+use OCA\Cloud_Py_API\Migration\data\AppInitialData;
 
 /**
  * @covers \OCA\Cloud_Py_API\Migration\AppUpdateStep
  */
 class AppUpdateStepTest extends TestCase {
+	/** @var \OCA\Cloud_Py_API\Service\UtilsService|MockObject */
+	private $utils;
+
+	/** @var AppUpdateStep */
+	private $repairStep;
+
 	public function setUp(): void {
 		parent::setUp();
+
+		$this->utils = $this->createMock(\OCA\Cloud_Py_API\Service\UtilsService::class);
+
+		$this->repairStep = new AppUpdateStep($this->utils);
 	}
 
-	public function test() {
-		// TODO
-		$this->addToAssertionCount(1);
+	public function testName() {
+		$this->assertEquals('Updating Cloud_Py_API data', $this->repairStep->getName());
+	}
+
+	public function testRun() {
+		/** @var \OCP\Migration\IOutput|MockObject */
+		$output = $this->createMock(\OCP\Migration\IOutput::class);
+		$this->utils->expects($this->once())
+			->method('checkForSettingsUpdates')
+			->with(AppInitialData::$INITIAL_DATA);
+
+		$this->repairStep->run($output);
 	}
 }

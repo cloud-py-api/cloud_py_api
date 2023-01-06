@@ -28,18 +28,49 @@ declare(strict_types=1);
 
 namespace OCA\Cloud_Py_API\Tests\Unit\Db;
 
+use OCA\Cloud_Py_API\Db\Setting;
 use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \OCA\Cloud_Py_API\Db\Setting
  */
 class SettingTest extends TestCase {
+	/** @var Setting */
+	private $setting;
+
 	public function setUp(): void {
 		parent::setUp();
+
+		$this->setting = new Setting([
+			'id' => 0,
+			'name' => 'test_setting_name',
+			'value' => 'test_setting_value',
+			'displayName' => 'test_setting_display_name',
+			'title' => 'test_setting_title',
+			'description' => 'test_setting_description',
+			'helpUrl' => 'test_setting_help_url',
+		]);
 	}
 
-	public function test() {
-		// TODO
-		$this->addToAssertionCount(1);
+	public function testSettingKeys() {
+		$this->assertEquals(0, $this->setting->getId());
+		$this->assertEquals('test_setting_name', $this->setting->getName());
+		$this->assertEquals('test_setting_value', $this->setting->getValue());
+		$this->assertEquals('test_setting_display_name', $this->setting->getDisplayName());
+		$this->assertEquals('test_setting_title', $this->setting->getTitle());
+		$this->assertEquals('test_setting_description', $this->setting->getDescription());
+		$this->assertEquals('test_setting_help_url', $this->setting->getHelpUrl());
+	}
+
+	public function testJsonSerialize() {
+		$this->assertEquals([
+			'id' => 0,
+			'name' => 'test_setting_name',
+			'value' => 'test_setting_value',
+			'display_name' => 'test_setting_display_name',
+			'title' => 'test_setting_title',
+			'description' => 'test_setting_description',
+			'help_url' => 'test_setting_help_url',
+		], $this->setting->jsonSerialize());
 	}
 }

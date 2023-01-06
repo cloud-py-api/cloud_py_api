@@ -30,7 +30,6 @@ namespace OCA\Cloud_Py_API\Service;
 
 use OCA\Cloud_Py_API\THandler\TestServiceHandler;
 use OCA\Cloud_Py_API\TProto\TestServiceProcessor;
-use Thrift\ClassLoader\ThriftClassLoader;
 use Thrift\Exception\TException;
 use Thrift\Factory\TBinaryProtocolFactory;
 use Thrift\Factory\TTransportFactory;
@@ -40,16 +39,9 @@ use Thrift\Server\TSimpleServer;
 use Thrift\Transport\TBufferedTransport;
 use Thrift\Transport\TSocket;
 
-/**
- * @codeCoverageIgnore
- */
 class ThriftService {
-	public function __construct() {
-		$loader = new ThriftClassLoader();
-		$loader->registerNamespace('test', '../TProto');
-		$loader->register();
-	}
 
+	/** @codeCoverageIgnore */
 	public function runThriftServer(array $params = []): array {
 		try {
 			$handler = new TestServiceHandler();
@@ -66,6 +58,12 @@ class ThriftService {
 				'error_message' => $e->getMessage(),
 			];
 		}
+	}
+
+	public function runThriftBgServer(array $params = []): void {
+		$pathToOcc = \OC::$SERVERROOT . '/occ';
+		$cmd = "php $pathToOcc cloud_py_api:thrift:server > /dev/null 2>&1 &";
+		exec($cmd);
 	}
 
 	public function runThriftClient(array $params = []): array {

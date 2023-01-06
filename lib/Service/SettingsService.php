@@ -34,9 +34,6 @@ use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 use OCA\Cloud_Py_API\Db\Setting;
 use OCA\Cloud_Py_API\Db\SettingMapper;
 
-/**
- * @codeCoverageIgnore
- */
 class SettingsService {
 	/** @var SettingMapper */
 	private $mapper;

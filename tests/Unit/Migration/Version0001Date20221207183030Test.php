@@ -29,17 +29,80 @@ declare(strict_types=1);
 namespace OCA\Cloud_Py_API\Tests\Unit\Migration;
 
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\MockObject\MockObject;
+
+use \OCA\Cloud_Py_API\Migration\Version0001Date20221207183030;
 
 /**
  * @covers \OCA\Cloud_Py_API\Migration\Version0001Date20221207183030
  */
 class Version0001Date20221207183030Test extends TestCase {
+	/** @var Version0001Date20221207183030 */
+	private $migration;
+
 	public function setUp(): void {
 		parent::setUp();
+
+		$this->migration = new Version0001Date20221207183030();
 	}
 
-	public function test() {
-		// TODO
-		$this->addToAssertionCount(1);
+	public function testChangeSchema() {
+		/** @var \OCP\Migration\IOutput|MockObject */
+		$output = $this->createMock(\OCP\Migration\IOutput::class);
+		/** @var \OCP\DB\ISchemaWrapper|MockObject */
+		$schema = $this->createMock(\OCP\DB\ISchemaWrapper::class);
+		$schema->expects($this->once())
+			->method('hasTable')
+			->with('cloud_py_api_settings')
+			->willReturn(false);
+
+		/** @var \Doctrine\DBAL\Schema\Table|MockObject */
+		$table = $this->createMock(\Doctrine\DBAL\Schema\Table::class);
+		$table->expects($this->any())
+			->method('addColumn')
+			->withConsecutive(
+				['id', 'integer', [
+					'autoincrement' => true,
+					'notnull' => true
+				]],
+				['name', 'string', [
+					'notnull' => true,
+					'default' => ""
+				]],
+				['value', 'json', [
+					'notnull' => true
+				]],
+				['display_name', 'string', [
+					'notnull' => true,
+					'default' => ""
+				]],
+				['title', 'string', [
+					'notnull' => true,
+					'default' => ""
+				]],
+				['description', 'string', [
+					'notnull' => true,
+					'default' => ""
+				]],
+				['help_url', 'string', [
+					'notnull' => true,
+					'default' => ""
+				]]
+			);
+		$table->expects($this->once())
+			->method('setPrimaryKey')
+			->with(['id']);
+		$table->expects($this->once())
+			->method('addIndex')
+			->with(['name'], 'cpa_setting__index');
+
+		$schema->expects($this->once())
+			->method('createTable')
+			->with('cloud_py_api_settings')
+			->willReturn($table);
+
+		$this->migration->changeSchema($output, function () use ($schema) {
+			return $schema;
+		}, []);
 	}
 }

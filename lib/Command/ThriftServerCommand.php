@@ -34,9 +34,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 use OCA\Cloud_Py_API\Service\ThriftService;
 
-/**
- * @codeCoverageIgnore
- */
 class ThriftServerCommand extends Command {
 	/** @var ThriftService */
 	private $tService;
