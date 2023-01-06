@@ -1,19 +1,14 @@
 name: (Py)Analysis & Coverage
 
 on:
-  pull_request:
-    paths:
-      - 'nc_py_api/*.*'
-      - 'tests/nc_py_api/**'
-      - 'setup.*'
-      - 'pyproject.toml'
   push:
-    paths:
-      - 'nc_py_api/*.*'
-      - 'tests/nc_py_api/**'
-      - 'setup.*'
-      - 'pyproject.toml'
-  workflow_dispatch:
+    branches:
+      - main
+      - dev
+  pull_request:
+    branches:
+      - main
+      - dev
 
 env:
   APP_NAME: cloud_py_api
@@ -22,7 +17,6 @@ jobs:
   analysis:
     runs-on: macos-12
     name: Analysis
-    if: "!contains(github.event.head_commit.message, '[docs]')"
 
     steps:
       - uses: actions/checkout@v3
@@ -30,28 +24,18 @@ jobs:
         with:
           python-version: '3.9'
 
-      - name: pre-commit cache
-        uses: actions/cache@v3
-        with:
-          path: ~/.cache/pre-commit
-          key: lint-pre-commit-${{ hashFiles('.pre-commit-config.yaml') }}
-          restore-keys: |
-            lint-pre-commit-
-
-      - name: Making preparations
-        run: |
-          python3 -m pip install .
-          python3 -m pip install pre-commit pylint
-          pre-commit install
+      - name: Install from source
+        run: python3 -m pip install .
 
       - name: Run Analysis
-        run: pre-commit run --all-files --verbose --show-diff-on-failure
+        run: |
+          python3 -m pip install pylint
+          python3 -m pylint setup.py "nc_py_api/" -sn
 
   tests-pgsql:
     needs: [analysis]
     runs-on: ubuntu-22.04
     name: ${{ matrix.nextcloud }} • PHP ${{ matrix.php-version }} • PgSQL ${{ matrix.pgsql-version }}
-    if: "!contains(github.event.head_commit.message, '[docs]')"
     strategy:
       fail-fast: false
       matrix:
@@ -144,7 +128,6 @@ jobs:
     needs: [analysis]
     runs-on: ubuntu-22.04
     name: ${{ matrix.nextcloud }} • PHP ${{ matrix.php-version }} • MySQL ${{ matrix.mysql-version }}
-    if: "!contains(github.event.head_commit.message, '[docs]')"
     strategy:
       fail-fast: false
       matrix:
@@ -236,7 +219,6 @@ jobs:
     needs: [analysis]
     runs-on: ubuntu-22.04
     name: ${{ matrix.nextcloud }} • PHP ${{ matrix.php-version }} • Maria ${{ matrix.mariadb-version }}
-    if: "!contains(github.event.head_commit.message, '[docs]')"
     strategy:
       fail-fast: false
       matrix:
@@ -328,7 +310,6 @@ jobs:
     needs: [analysis]
     runs-on: ubuntu-22.04
     name: ${{ matrix.nextcloud }} • PHP ${{ matrix.php-version }} • MySQL • SOCK
-    if: "!contains(github.event.head_commit.message, '[docs]')"
     strategy:
       fail-fast: false
       matrix:
@@ -409,7 +390,6 @@ jobs:
     needs: [analysis]
     runs-on: ubuntu-22.04
     name: ${{ matrix.nextcloud }} • PHP ${{ matrix.php-version }} • PgSQL • SOCK
-    if: "!contains(github.event.head_commit.message, '[docs]')"
     strategy:
       fail-fast: false
       matrix:
