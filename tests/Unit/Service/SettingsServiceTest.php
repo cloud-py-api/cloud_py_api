@@ -232,5 +232,4 @@ class SettingsServiceTest extends TestCase {
 		$result = $this->settingsService->updateSettings([$testSettingJson]);
 		$this->assertEquals($expectedResult, $result);
 	}
-
 }

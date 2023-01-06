@@ -40,7 +40,6 @@ use Thrift\Transport\TBufferedTransport;
 use Thrift\Transport\TSocket;
 
 class ThriftService {
-
 	/** @codeCoverageIgnore */
 	public function runThriftServer(array $params = []): array {
 		try {

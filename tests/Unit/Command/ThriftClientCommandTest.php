@@ -41,7 +41,6 @@ use OCA\Cloud_Py_API\Command\ThriftClientCommand;
  * @covers \OCA\Cloud_Py_API\Command\ThriftClientCommand
  */
 class ThriftClientCommandTest extends TestCase {
-
 	/** @var ThriftService|MockObject */
 	private $tService;
 

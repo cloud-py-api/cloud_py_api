@@ -29,7 +29,6 @@ declare(strict_types=1);
 namespace OCA\Cloud_Py_API\Tests\Unit\Service;
 
 use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\MockObject\MockObject;
 
 use OCA\Cloud_Py_API\Service\ThriftService;
 
@@ -64,5 +63,4 @@ class ThriftServiceTest extends TestCase {
 		$result = $this->tService->runThriftClient();
 		$this->assertEquals($expectedResult, $result);
 	}
-
 }
