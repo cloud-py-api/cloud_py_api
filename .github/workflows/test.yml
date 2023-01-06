@@ -127,7 +127,7 @@ jobs:
         # Only run if phpunit integration config file exists
         if: steps.check_integration.outputs.files_exists == 'true'
         working-directory: apps/${{ env.APP_NAME }}
-        run: ./vendor/phpunit/phpunit/phpunit -c ${{ env.PHPUNIT_INTEGRATION_CONFIG }}
+        run: composer test:integration:coverage
 
       - name: HTML coverage to artifacts
         if: steps.check_phpunit.outputs.files_exists == 'true'
@@ -267,7 +267,7 @@ jobs:
         # Only run if phpunit integration config file exists
         if: steps.check_integration.outputs.files_exists == 'true'
         working-directory: apps/${{ env.APP_NAME }}
-        run: ./vendor/phpunit/phpunit/phpunit -c ${{ env.PHPUNIT_INTEGRATION_CONFIG }}
+        run: composer test:integration:coverage
 
       - name: HTML coverage to artifacts
         if: steps.check_phpunit.outputs.files_exists == 'true'
