@@ -21,7 +21,8 @@
 		"psalm/phar": "4.30.0",
 		"phpunit/phpunit": "^9.5",
 		"nextcloud/coding-standard": "^1.0",
-		"friendsofphp/php-cs-fixer": "^3.13"
+		"friendsofphp/php-cs-fixer": "^3.13",
+		"php-mock/php-mock-phpunit": "^2.6"
 	},
 	"scripts": {
 		"lint": "find . -name \\*.php -not -path './vendor/*' -not -path './3rdparty/*'  -print0 | xargs -0 -n1 php -l",
@@ -33,7 +34,9 @@
 		"psalm:clear": "psalm.phar --clear-cache && psalm.phar --clear-global-cache",
 		"psalm:fix": "psalm.phar --alter --issues=InvalidReturnType,InvalidNullableReturnType,MissingParamType,InvalidFalsableReturnType",
 		"test:unit": "phpunit -c tests/phpunit.unit.xml --fail-on-warning",
-		"test:integration": "phpunit -c tests/phpunit.integration.xml --fail-on-warning"
+		"test:unit:coverage": "XDEBUG_MODE=coverage phpunit -c tests/phpunit.unit.xml --fail-on-warning --coverage-html=tests/coverage/php/unit --coverage-clover=tests/coverage/php/unit/clover.xml",
+		"test:integration": "phpunit -c tests/phpunit.integration.xml --fail-on-warning",
+		"test:integration:coverage": "XDEBUG_MODE=coverage phpunit -c tests/phpunit.integration.xml --fail-on-warning --coverage-html=tests/coverage/php/integration --coverage-clover=tests/coverage/php/integration/clover.xml"
 	},
 	"config": {
 		"optimize-autoloader": true,

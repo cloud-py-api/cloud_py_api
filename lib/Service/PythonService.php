@@ -54,9 +54,9 @@ class PythonService {
 		try {
 			$pythonCommand = $settingMapper->findByName('python_command');
 			$this->pythonCommand = $pythonCommand->getValue();
-		} catch (DoesNotExistException $e) {
+		} catch (DoesNotExistException $e) { // @codeCoverageIgnoreStart
 			$this->pythonCommand = '/usr/bin/python3';
-		}
+		} // @codeCoverageIgnoreEnd
 		$this->utils = $utils;
 		$this->ncInstanceId = $config->getSystemValue('instanceid');
 		$this->ncDataFolder = $config->getSystemValue('datadirectory');
@@ -64,6 +64,8 @@ class PythonService {
 
 	/**
 	 * Runs Python script with given script relative path, script params and env variables
+	 *
+	 * @codeCoverageIgnore
 	 *
 	 * @param string $appId target Application::APP_ID
 	 * @param string $scriptName relative to cwd path to the Python script or binary

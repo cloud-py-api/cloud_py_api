@@ -2,26 +2,18 @@ name: Test
 
 on:
   pull_request:
-    paths:
-      - 'lib/*.*'
-      - 'src/*.*'
-      - 'templates/*.*'
-      - 'tests/Unit/**'
-      - 'tests/Integration/**'
-      - 'tests/javascript/**'
+    branches:
+      - main
+      - dev
   push:
-    paths:
-      - 'lib/*.*'
-      - 'src/*.*'
-      - 'templates/*.*'
-      - 'tests/Unit/**'
-      - 'tests/Integration/**'
-      - 'tests/javascript/**'
+    branches:
+      - main
+      - dev
   workflow_dispatch:
 
 env:
-  # Location of the phpunit.xml and phpunit.integration.xml files
-  PHPUNIT_CONFIG: ./tests/phpunit.xml
+  # Location of the phpunit.unit.xml and phpunit.integration.xml files
+  PHPUNIT_CONFIG: ./tests/phpunit.unit.xml
   PHPUNIT_INTEGRATION_CONFIG: ./tests/phpunit.integration.xml
   APP_NAME: cloud_py_api
 
@@ -32,7 +24,7 @@ jobs:
     strategy:
       matrix:
         php-versions: ["7.4", "8.0"]
-        server-versions: ['master']
+        nextcloud: ["25.0.2"]
 
     services:
       mysql:
@@ -44,27 +36,34 @@ jobs:
         options: --health-cmd="mysqladmin ping" --health-interval 5s --health-timeout 2s --health-retries 5
 
     steps:
-      - name: Checkout server
-        uses: actions/checkout@v3
-        with:
-          submodules: true
-          repository: nextcloud/server
-          ref: ${{ matrix.server-versions }}
-
-      - name: Checkout app
-        uses: actions/checkout@v3
-        with:
-          path: apps/${{ env.APP_NAME }}
-
       - name: Set up php ${{ matrix.php-versions }}
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php-versions }}
           tools: phpunit
           extensions: mbstring, iconv, fileinfo, intl, mysql, pdo_mysql
-          coverage: none
+          coverage: xdebug
 
-      - name: Set up PHPUnit
+      - name: cache-nextcloud
+        id: nextcloud_setup
+        uses: actions/cache@v3
+        with:
+          path: nextcloud-${{ matrix.nextcloud }}.tar.bz2
+          key: ${{ matrix.nextcloud }}
+
+      - name: Download Nextcloud
+        if: steps.nextcloud_setup.outputs.cache-hit != 'true'
+        run: wget -q https://download.nextcloud.com/server/releases/nextcloud-${{ matrix.nextcloud }}.tar.bz2
+
+      - name: Unpack nextcloud
+        run: tar -xjf nextcloud-${{ matrix.nextcloud }}.tar.bz2 --strip-components 1
+
+      - name: Checkout app
+        uses: actions/checkout@v3
+        with:
+          path: apps/${{ env.APP_NAME }}
+
+      - name: Setup composer dependencies
         working-directory: apps/${{ env.APP_NAME }}
         run: composer i
 
@@ -73,8 +72,10 @@ jobs:
           DB_PORT: 4444
         run: |
           mkdir data
-          ./occ maintenance:install --verbose --database=mysql --database-name=nextcloud --database-host=127.0.0.1 --database-port=$DB_PORT --database-user=root --database-pass=rootpassword --admin-user admin --admin-pass password
-          ./occ app:enable ${{ env.APP_NAME }}
+          php occ maintenance:install --verbose --database=mysql --database-name=nextcloud \
+          --database-host=127.0.0.1 --database-port=$DB_PORT --database-user=root \
+          --database-pass=rootpassword --admin-user admin --admin-pass password
+          php occ app:enable ${{ env.APP_NAME }}
 
       - name: Check PHPUnit config file existence
         id: check_phpunit
@@ -89,7 +90,32 @@ jobs:
         # Only run if phpunit config file exists
         if: steps.check_phpunit.outputs.files_exists == 'true'
         working-directory: apps/${{ env.APP_NAME }}
-        run: ./vendor/phpunit/phpunit/phpunit -c ${{ env.PHPUNIT_CONFIG }}
+        run: composer test:unit:coverage
+
+      - name: HTML coverage to artifacts
+        if: steps.check_phpunit.outputs.files_exists == 'true'
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage_unit_${{ matrix.nextcloud }}_${{ matrix.php-versions }}_mysql
+          path: apps/${{ env.APP_NAME }}/tests/coverage/php/unit
+          if-no-files-found: error
+
+      - name: Clover coverage to artifacts
+        if: steps.check_phpunit.outputs.files_exists == 'true'
+        uses: actions/upload-artifact@v3
+        with:
+          name: clover_coverage_unit_${{ matrix.nextcloud }}_${{ matrix.php-versions }}_mysql.xml
+          path: apps/${{ env.APP_NAME }}/tests/coverage/php/unit/clover.xml
+          if-no-files-found: error
+
+      - name: Upload to Codecov
+        if: steps.check_phpunit.outputs.files_exists == 'true'
+        uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: apps/${{ env.APP_NAME }}/tests/coverage/php/unit/clover.xml
+          flags: php_backend
+          verbose: true
 
       - name: Check PHPUnit integration config file existence
         id: check_integration
@@ -101,7 +127,32 @@ jobs:
         # Only run if phpunit integration config file exists
         if: steps.check_integration.outputs.files_exists == 'true'
         working-directory: apps/${{ env.APP_NAME }}
-        run: ./vendor/phpunit/phpunit/phpunit -c ${{ env.PHPUNIT_INTEGRATION_CONFIG }}
+        run: composer test:integration:coverage
+
+      - name: HTML coverage to artifacts
+        if: steps.check_phpunit.outputs.files_exists == 'true'
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage_integration_${{ matrix.nextcloud }}_${{ matrix.php-versions }}_mysql
+          path: apps/${{ env.APP_NAME }}/tests/coverage/php/integration
+          if-no-files-found: error
+
+      - name: Clover coverage to artifacts
+        if: steps.check_phpunit.outputs.files_exists == 'true'
+        uses: actions/upload-artifact@v3
+        with:
+          name: clover_coverage_integration_${{ matrix.nextcloud }}_${{ matrix.php-versions }}_mysql.xml
+          path: apps/${{ env.APP_NAME }}/tests/coverage/php/integration/clover.xml
+          if-no-files-found: error
+
+      - name: Upload to Codecov
+        if: steps.check_phpunit.outputs.files_exists == 'true'
+        uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: apps/${{ env.APP_NAME }}/tests/coverage/php/integration/clover.xml
+          flags: php_backend
+          verbose: true
 
   phpunit-pgsql:
     runs-on: ubuntu-latest
@@ -109,7 +160,7 @@ jobs:
     strategy:
       matrix:
         php-versions: ["8.0"]
-        server-versions: ["master"]
+        nextcloud: ["25.0.2"]
 
     services:
       postgres:
@@ -123,27 +174,34 @@ jobs:
         options: --health-cmd pg_isready --health-interval 5s --health-timeout 2s --health-retries 5
 
     steps:
-      - name: Checkout server
-        uses: actions/checkout@v3
+      - name: Set up php ${{ matrix.php-versions }}
+        uses: shivammathur/setup-php@v2
         with:
-          submodules: true
-          repository: nextcloud/server
-          ref: ${{ matrix.server-versions }}
+          php-version: ${{ matrix.php-versions }}
+          tools: phpunit
+          extensions: mbstring, iconv, fileinfo, intl, mysql, pdo_mysql
+          coverage: xdebug
+
+      - name: cache-nextcloud
+        id: nextcloud_setup
+        uses: actions/cache@v3
+        with:
+          path: nextcloud-${{ matrix.nextcloud }}.tar.bz2
+          key: ${{ matrix.nextcloud }}
+
+      - name: Download Nextcloud
+        if: steps.nextcloud_setup.outputs.cache-hit != 'true'
+        run: wget -q https://download.nextcloud.com/server/releases/nextcloud-${{ matrix.nextcloud }}.tar.bz2
+
+      - name: Unpack nextcloud
+        run: tar -xjf nextcloud-${{ matrix.nextcloud }}.tar.bz2 --strip-components 1
 
       - name: Checkout app
         uses: actions/checkout@v3
         with:
           path: apps/${{ env.APP_NAME }}
 
-      - name: Set up php ${{ matrix.php-versions }}
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: ${{ matrix.php-versions }}
-          tools: phpunit
-          extensions: mbstring, iconv, fileinfo, intl, pgsql, pdo_pgsql
-          coverage: none
-
-      - name: Set up PHPUnit
+      - name: Setup composer dependencies
         working-directory: apps/${{ env.APP_NAME }}
         run: composer i
 
@@ -152,8 +210,10 @@ jobs:
           DB_PORT: 4444
         run: |
           mkdir data
-          ./occ maintenance:install --verbose --database=pgsql --database-name=nextcloud --database-host=127.0.0.1 --database-port=$DB_PORT --database-user=root --database-pass=rootpassword --admin-user admin --admin-pass password
-          ./occ app:enable ${{ env.APP_NAME }}
+          php occ maintenance:install --verbose --database=pgsql --database-name=nextcloud \
+          --database-host=127.0.0.1 --database-port=$DB_PORT --database-user=root \
+          --database-pass=rootpassword --admin-user admin --admin-pass password
+          php occ app:enable ${{ env.APP_NAME }}
 
       - name: Check PHPUnit config file existence
         id: check_phpunit
@@ -165,7 +225,32 @@ jobs:
         # Only run if phpunit config file exists
         if: steps.check_phpunit.outputs.files_exists == 'true'
         working-directory: apps/${{ env.APP_NAME }}
-        run: ./vendor/phpunit/phpunit/phpunit -c ${{ env.PHPUNIT_CONFIG }}
+        run: composer test:unit:coverage
+
+      - name: HTML coverage to artifacts
+        if: steps.check_phpunit.outputs.files_exists == 'true'
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage_unit_${{ matrix.nextcloud }}_${{ matrix.php-versions }}_pgsql
+          path: apps/${{ env.APP_NAME }}/tests/coverage/php/unit
+          if-no-files-found: error
+
+      - name: Clover coverage to artifacts
+        if: steps.check_phpunit.outputs.files_exists == 'true'
+        uses: actions/upload-artifact@v3
+        with:
+          name: clover_coverage_unit_${{ matrix.nextcloud }}_${{ matrix.php-versions }}_pgsql.xml
+          path: apps/${{ env.APP_NAME }}/tests/coverage/php/unit/clover.xml
+          if-no-files-found: error
+
+      - name: Upload to Codecov
+        if: steps.check_phpunit.outputs.files_exists == 'true'
+        uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: apps/${{ env.APP_NAME }}/tests/coverage/php/unit/clover.xml
+          flags: php_backend
+          verbose: true
 
       - name: Check PHPUnit integration config file existence
         id: check_integration
@@ -182,7 +267,32 @@ jobs:
         # Only run if phpunit integration config file exists
         if: steps.check_integration.outputs.files_exists == 'true'
         working-directory: apps/${{ env.APP_NAME }}
-        run: ./vendor/phpunit/phpunit/phpunit -c ${{ env.PHPUNIT_INTEGRATION_CONFIG }}
+        run: composer test:integration:coverage
+
+      - name: HTML coverage to artifacts
+        if: steps.check_phpunit.outputs.files_exists == 'true'
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage_integration_${{ matrix.nextcloud }}_${{ matrix.php-versions }}_pgsql
+          path: apps/${{ env.APP_NAME }}/tests/coverage/php/integration
+          if-no-files-found: error
+
+      - name: Clover coverage to artifacts
+        if: steps.check_phpunit.outputs.files_exists == 'true'
+        uses: actions/upload-artifact@v3
+        with:
+          name: clover_coverage_integration_${{ matrix.nextcloud }}_${{ matrix.php-versions }}_pgsql.xml
+          path: apps/${{ env.APP_NAME }}/tests/coverage/php/integration/clover.xml
+          if-no-files-found: error
+
+      - name: Upload to Codecov
+        if: steps.check_phpunit.outputs.files_exists == 'true'
+        uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: apps/${{ env.APP_NAME }}/tests/coverage/php/integration/clover.xml
+          flags: php_backend
+          verbose: true
 
   phpunit-summary:
     runs-on: ubuntu-latest
@@ -216,4 +326,19 @@ jobs:
 
       - name: Run unit tests
         working-directory: apps/${{ env.APP_NAME }}
-        run: npm run test
+        run: npm run test:coverage
+
+      - name: JavaScript coverage to artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage_js_unit
+          path: apps/${{ env.APP_NAME }}/tests/coverage/javascript
+          if-no-files-found: error
+
+      - name: Upload to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: apps/${{ env.APP_NAME }}/tests/coverage/javascript/clover.xml
+          flags: frontend
+          verbose: true

@@ -121,6 +121,7 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           file: apps/${{ env.APP_NAME }}/coverage.xml
+          flags: python_backend
           fail_ci_if_error: true
           verbose: true
 
@@ -212,6 +213,7 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           file: apps/${{ env.APP_NAME }}/coverage.xml
+          flags: python_backend
           fail_ci_if_error: true
           verbose: true
 
@@ -303,6 +305,7 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           file: apps/${{ env.APP_NAME }}/coverage.xml
+          flags: python_backend
           fail_ci_if_error: true
           verbose: true
 
@@ -383,6 +386,7 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           file: apps/${{ env.APP_NAME }}/coverage.xml
+          flags: python_backend
           fail_ci_if_error: true
           verbose: true
 
@@ -467,5 +471,6 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           file: apps/${{ env.APP_NAME }}/coverage.xml
+          flags: python_backend
           fail_ci_if_error: true
           verbose: true

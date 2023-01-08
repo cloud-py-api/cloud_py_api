@@ -28,6 +28,9 @@ declare(strict_types=1);
 
 namespace OCA\Cloud_Py_API\Migration\data;
 
+/**
+ * @codeCoverageIgnore
+ */
 class AppInitialData {
 	/** @var \OCP\IL10N */
 	private $l10n;
@@ -38,6 +41,7 @@ class AppInitialData {
 				"name" => "python_command",
 				"value" => "/usr/bin/python3",
 				"displayName" => "Full path to python interpreter",
+				"title" => "",
 				"description" => "Absolute path to the python runnable (e.g. \"/usr/bin/python3\"). Can be obtained by `which python3` command. Used when pre-compiled binaries option is not selected.",
 				"helpUrl" => "https://cloud-py-api.readthedocs.io/{todo-url:/settings/setting_name}"
 			],
@@ -45,6 +49,7 @@ class AppInitialData {
 				"name" => "remote_filesize_limit",
 				"value" => 536870912,
 				"displayName" => "Remote/Encrypted file size limit to process",
+				"title" => "",
 				"description" => "Maximum file size for requesting from php core. Used when file hosts on remote NC instance or have encrypted flag. Must be less then total available RAM size.",
 				"helpUrl" => "https://cloud-py-api.readthedocs.io/{todo-url:/settings/setting_name}"
 			],
@@ -52,6 +57,7 @@ class AppInitialData {
 				"name" => "use_php_path_from_settings",
 				"value" => false,
 				"displayName" => "Use path to PHP interpreter for Python from settings",
+				"title" => "",
 				"description" => "Determine whether to use path from settings or detect it automatically (may not work with some unusual PHP install locations). Used in Python part.",
 				"helpUrl" => "https://cloud-py-api.readthedocs.io/{todo-url:/settings/setting_name}"
 			],
@@ -59,6 +65,7 @@ class AppInitialData {
 				"name" => "php_path",
 				"value" => "/usr/bin/php",
 				"displayName" => "Full path to PHP interpreter for Python",
+				"title" => "",
 				"description" => "Absolute path to the PHP executable (e.g. \"/usr/bin/php7.4\"). Can be obtained by `which php` or `which php7.4` command",
 				"helpUrl" => "https://cloud-py-api.readthedocs.io/{todo-url:/settings/setting_name}"
 			],
@@ -67,6 +74,7 @@ class AppInitialData {
 				"value" => "WARNING",
 				"displayName" => "Framework loglevel",
 				"description" => "Used by apps, that using this Framework",
+				"title" => "",
 				"helpUrl" => "https://cloud-py-api.readthedocs.io/{todo-url:/settings/setting_name}"
 			],
 		]
