@@ -274,9 +274,7 @@ class UtilsService {
 		}
 		$file_name = $filename . '.gz';
 		$save_file_loc = $dir . $file_name;
-		$shouldDownloadBinary = $this->compareBinaryHash(
-			$url, $dir . $filename, $binariesFolder, $filename
-		);
+		$shouldDownloadBinary = $this->compareBinaryHash($url, $dir . $filename);
 		if (!file_exists($dir . $filename) || ($update && $shouldDownloadBinary)) {
 			$cURL = curl_init($url);
 			$fp = fopen($save_file_loc, 'wb');
