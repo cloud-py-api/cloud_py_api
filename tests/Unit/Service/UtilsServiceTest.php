@@ -192,9 +192,9 @@ class UtilsServiceTest extends TestCase {
 		$exec->expects($this->any())
 			->willReturnCallback(
 				function ($command, &$output, &$result_code) {
-					$this->assertEquals('ldd --version', $command);
+					$this->assertEquals('ldd --version 2>&1', $command);
 					$output = ['manylinux'];
-					$result_code = 0;
+					$result_code = 1;
 				}
 			);
 		$result = $this->utils->isMusliLinux();
@@ -207,9 +207,9 @@ class UtilsServiceTest extends TestCase {
 		$exec->expects($this->any())
 			->willReturnCallback(
 				function ($command, &$output, &$result_code) {
-					$this->assertEquals('ldd --version', $command);
+					$this->assertEquals('ldd --version 2>&1', $command);
 					$output = ['musl linux'];
-					$result_code = 0;
+					$result_code = 1;
 				}
 			);
 		$result = $this->utils->isMusliLinux();
@@ -356,7 +356,7 @@ class UtilsServiceTest extends TestCase {
 		$exec->expects($this->any())
 			->willReturnCallback(
 				function ($command, &$output, &$result_code) {
-					$this->assertEquals('ldd --version', $command);
+					$this->assertEquals('ldd --version 2>&1', $command);
 					$output = ['musl linux'];
 					$result_code = 0;
 				}
