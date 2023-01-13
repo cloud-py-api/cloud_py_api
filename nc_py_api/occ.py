@@ -11,6 +11,9 @@ from .log import cpa_logger as log
 def get_cloud_config_value(value_name: str, default=None) -> Union[str, None]:
     """Returns decoded utf8 output of `occ config:system:get {value}` command."""
 
+    env_value = os.environ.get("NC_" + value_name, None)
+    if env_value:
+        return env_value
     _ = occ_call_decode("config:system:get", value_name, log_error=default is None)
     return _ if _ is not None else default
 

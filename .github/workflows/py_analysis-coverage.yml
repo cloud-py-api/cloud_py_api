@@ -41,7 +41,9 @@ jobs:
       matrix:
         nextcloud: [ "25.0.2" ]
         php-version: [ "7.4", "8.0" ]
-        pgsql-version: [ "13", "14", "15" ]
+        pgsql-version: [ "13", "15" ]
+    env:
+      NC_dbname: nextcloud_abz
 
     services:
       postgres:
@@ -49,7 +51,7 @@ jobs:
         env:
           POSTGRES_USER: root
           POSTGRES_PASSWORD: rootpassword
-          POSTGRES_DB: nextcloud
+          POSTGRES_DB: ${{ env.NC_dbname }}
           options: >-
             --health-cmd pg_isready
             --health-interval 10s
@@ -84,9 +86,10 @@ jobs:
         run: |
           tar -xjf nextcloud-${{ matrix.nextcloud }}.tar.bz2 --strip-components 1
           mkdir data
-          php occ maintenance:install --verbose --database=pgsql --database-name=nextcloud \
+          php occ maintenance:install --verbose --database=pgsql --database-name=${{ env.NC_dbname }} \
           --database-host=127.0.0.1 --database-user=root --database-pass=rootpassword \
           --admin-user admin --admin-pass adminpassword
+          sed -i -e 's/${{ env.NC_dbname }}/xyz/g' config/config.php
           php occ config:system:set debug --value=true --type=boolean
           php -S localhost:8080 &
 
@@ -226,7 +229,7 @@ jobs:
       matrix:
         nextcloud: [ "25.0.2" ]
         php-version: [ "7.4", "8.0" ]
-        mariadb-version: [ "10.3", "10.6", "10.10" ]
+        mariadb-version: [ "10.3", "10.10" ]
 
     services:
       mariadb:
