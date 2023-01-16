@@ -138,6 +138,9 @@ export default {
 			return axios.put(generateUrl('/apps/cloud_py_api/api/v1/settings'), { settings }).then(res => {
 				if (res.data.success) {
 					this.settings = res.data.updated_settings
+					this.settings.forEach(setting => {
+						this.mappedSettings[setting.name] = setting
+					})
 				}
 				return res
 			})
@@ -165,10 +168,10 @@ export default {
 				})
 		},
 		fromBytesToGBytes(bytes) {
-			return bytes / Math.pow(1024, 3)
+			return (bytes / Math.pow(1024, 3)).toFixed(1)
 		},
 		fromGBytesToBytes(GBytes) {
-			return GBytes * Math.pow(1024, 3)
+			return (GBytes * Math.pow(1024, 3)).toFixed(0)
 		},
 		updateRemoteFilesizeLimit() {
 			this.mappedSettings.remote_filesize_limit.value = this.fromGBytesToBytes(Number(this.remote_filesize_limit))

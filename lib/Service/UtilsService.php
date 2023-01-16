@@ -189,7 +189,7 @@ class UtilsService {
 		return $result;
 	}
 
-	public function isMusliLinux(): bool {
+	public function isMuslLinux(): bool {
 		exec('ldd --version 2>&1', $output, $result_code);
 		if (count($output) > 0 && str_contains($output[0], 'musl')) {
 			return true;
@@ -404,7 +404,7 @@ class UtilsService {
 	 * @return string part of binary name
 	 */
 	public function getBinaryName(): string {
-		if (!$this->isMusliLinux()) {
+		if (!$this->isMuslLinux()) {
 			$binaryName = 'manylinux_' . $this->getOsArch();
 		} else {
 			$binaryName = 'musllinux_' . $this->getOsArch();
