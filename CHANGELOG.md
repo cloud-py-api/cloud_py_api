@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.2 - 2023-01-17]
+
+### Added
+
+- Added check of sha256 pre-compiled binary checksum
+
+### Fixed
+
+- Fixed incorrect pre-compiled binary download (for Alpine-based systems)
+- Fixed escape colon symbol in logs file names
+
 ## [0.1.1 - 2022-12-23]
 
 ### Changed
