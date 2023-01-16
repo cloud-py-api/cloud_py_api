@@ -113,12 +113,12 @@ class PythonService {
 		}
 		if ($nonBlocking) {
 			if ($binary) {
-				$logFile = $cwd . 'logs/' . date('d-m-Y_H:i:s', time()) . '.log';
+				$logFile = $cwd . 'logs/' . date('d-m-Y_H-i-s', time()) . '.log';
 			} else {
 				$appDataDir = $this->ncDataFolder . '/appdata_' . $this->ncInstanceId . '/' . $appId . '/';
 				$pyBitecodeEnvVar = 'PYTHONBYTECODEBASE="' . $appDataDir . '" ';
 				$envVariables = $pyBitecodeEnvVar . $envVariables;
-				$logFile = $appDataDir . 'logs/' . date('d-m-Y_H:i:s', time()) . '.log';
+				$logFile = $appDataDir . 'logs/' . date('d-m-Y_H-i-s', time()) . '.log';
 			}
 			$cmd = $envVariables . 'nohup ' . $cmd . ' > ' . $logFile . ' 2>' . $logFile . ' &';
 			exec($cmd);
