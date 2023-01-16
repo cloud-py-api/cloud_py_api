@@ -186,7 +186,7 @@ class UtilsServiceTest extends TestCase {
 		$this->assertEquals($expected, $result, 'Should return videos processing availability');
 	}
 
-	public function testIsMusliLinux() {
+	public function testIsMuslLinux() {
 		$expected = false;
 		$exec = $this->getFunctionMock('\OCA\Cloud_Py_API\Service', 'exec');
 		$exec->expects($this->any())
@@ -197,11 +197,11 @@ class UtilsServiceTest extends TestCase {
 					$result_code = 1;
 				}
 			);
-		$result = $this->utils->isMusliLinux();
+		$result = $this->utils->isMuslLinux();
 		$this->assertEquals($expected, $result, 'Should return bool is musllinux');
 	}
 
-	public function testIsMusliLinuxWithOverride() {
+	public function testIsMuslLinuxWithOverride() {
 		$expected = true;
 		$exec = $this->getFunctionMock('\OCA\Cloud_Py_API\Service', 'exec');
 		$exec->expects($this->any())
@@ -212,7 +212,7 @@ class UtilsServiceTest extends TestCase {
 					$result_code = 1;
 				}
 			);
-		$result = $this->utils->isMusliLinux();
+		$result = $this->utils->isMuslLinux();
 		$this->assertEquals($expected, $result, 'Should return true bool is musllinux');
 	}
 
