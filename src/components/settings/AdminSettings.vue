@@ -171,7 +171,7 @@ export default {
 			return (bytes / Math.pow(1024, 3)).toFixed(1)
 		},
 		fromGBytesToBytes(GBytes) {
-			return Math.round(GBytes * Math.pow(1024, 3))
+			return (GBytes * Math.pow(1024, 3)).toFixed(0)
 		},
 		updateRemoteFilesizeLimit() {
 			this.mappedSettings.remote_filesize_limit.value = this.fromGBytesToBytes(Number(this.remote_filesize_limit))
