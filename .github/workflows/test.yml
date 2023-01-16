@@ -116,6 +116,7 @@ jobs:
           file: apps/${{ env.APP_NAME }}/tests/coverage/php/unit/clover.xml
           flags: php_backend
           verbose: true
+          fail_ci_if_error: true
 
       - name: Check PHPUnit integration config file existence
         id: check_integration
@@ -153,6 +154,7 @@ jobs:
           file: apps/${{ env.APP_NAME }}/tests/coverage/php/integration/clover.xml
           flags: php_backend
           verbose: true
+          fail_ci_if_error: true
 
   phpunit-pgsql:
     runs-on: ubuntu-latest
@@ -251,6 +253,7 @@ jobs:
           file: apps/${{ env.APP_NAME }}/tests/coverage/php/unit/clover.xml
           flags: php_backend
           verbose: true
+          fail_ci_if_error: true
 
       - name: Check PHPUnit integration config file existence
         id: check_integration
@@ -293,6 +296,7 @@ jobs:
           file: apps/${{ env.APP_NAME }}/tests/coverage/php/integration/clover.xml
           flags: php_backend
           verbose: true
+          fail_ci_if_error: true
 
   phpunit-summary:
     runs-on: ubuntu-latest
@@ -342,3 +346,4 @@ jobs:
           file: apps/${{ env.APP_NAME }}/tests/coverage/javascript/clover.xml
           flags: frontend
           verbose: true
+          fail_ci_if_error: true
