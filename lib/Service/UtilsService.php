@@ -199,7 +199,7 @@ class UtilsService {
 
 	public function getOsArch(): string {
 		$arm64_names = array("aarch64", "armv8", "arm64");
-		$machineType = php_uname('m');		
+		$machineType = php_uname('m');
 		if (str_contains($machineType, 'x86_64')) {
 			return 'amd64';
 		}
