@@ -198,13 +198,17 @@ class UtilsService {
 	}
 
 	public function getOsArch(): string {
-		$machineType = php_uname('m');
+		$arm64_names = array("aarch64", "armv8", "arm64");
+		$machineType = php_uname('m');		
 		if (str_contains($machineType, 'x86_64')) {
 			return 'amd64';
-		} elseif (str_contains($machineType, 'arm64')) { // @codeCoverageIgnoreStart
-			return 'arm64';
 		}
-		return $machineType; // @codeCoverageIgnoreEnd
+		foreach ($arm64_names as $arm64_name) {
+			if (str_contains($machineType, $arm64_name)) {
+				return 'arm64';
+			}
+		}
+		return $machineType; // probably we should log here value or raise an exception
 	}
 
 	public function getCustomAppsDirectory(): string {
