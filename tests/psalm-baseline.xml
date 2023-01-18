@@ -53,7 +53,7 @@
       <code>DatabaseStatistics</code>
     </UndefinedDocblockClass>
     <UndefinedFunction occurrences="3">
-      <code>str_contains($machineType, 'arm64')</code>
+      <code>str_contains($machineType, $arm64_name)</code>
       <code>str_contains($machineType, 'x86_64')</code>
       <code>str_contains($output[0], 'musl')</code>
     </UndefinedFunction>
