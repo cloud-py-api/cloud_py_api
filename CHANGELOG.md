@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.4 - 2023-01-23]
+
+### Removed
+
+- Removed Thrift as not used and being replaced
+
 ## [0.1.3 - 2023-01-18]
 
 ### Fixed
