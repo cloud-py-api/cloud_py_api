@@ -61,8 +61,6 @@ You can support us in several ways:
 	</repair-steps>
 	<commands>
 		<command>OCA\Cloud_Py_API\Command\GetFileContentsCommand</command>
-		<command>OCA\Cloud_Py_API\Command\ThriftClientCommand</command>
-		<command>OCA\Cloud_Py_API\Command\ThriftServerCommand</command>
 	</commands>
 	<settings>
 		<admin>OCA\Cloud_Py_API\Settings\AdminSettings</admin>

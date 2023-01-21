@@ -42,7 +42,6 @@ class Application extends App implements IBootstrap {
 
 	/** @codeCoverageIgnore */
 	public function register(IRegistrationContext $context): void {
-		require_once __DIR__ . '/../../3rdparty/autoload.php';
 	}
 
 	/** @codeCoverageIgnore */

@@ -10,15 +10,11 @@
 	<projectFiles>
 		<directory name="lib" />
 		<ignoreFiles>
-			<directory name="lib/TProto" />
 			<directory name="vendor" />
-			<directory name="3rdparty" />
 		</ignoreFiles>
 	</projectFiles>
 	<extraFiles>
-		<directory name="lib/TProto" />
 		<directory name="vendor" />
-		<directory name="3rdparty" />
 	</extraFiles>
 	<issueHandlers>
 		<UndefinedClass>
