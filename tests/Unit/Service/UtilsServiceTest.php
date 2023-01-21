@@ -54,6 +54,9 @@ class UtilsServiceTest extends TestCase {
 	/** @var UtilsService|MockObject */
 	private $utils;
 
+	/** @var \Psr\Log\LoggerInterface */
+	private $logger;
+
 	public function setUp(): void {
 		parent::setUp();
 
@@ -61,12 +64,14 @@ class UtilsServiceTest extends TestCase {
 		$this->settingMapper = $this->createMock(\OCA\Cloud_Py_API\Db\SettingMapper::class);
 		$this->appManager = $this->createMock(\OCP\App\IAppManager::class);
 		$this->databaseStatistics = $this->createMock(\OCA\ServerInfo\DatabaseStatistics::class);
+		$this->logger = $this->createMock(\Psr\Log\LoggerInterface::class);
 
 		$this->utils = new UtilsService(
 			$this->config,
 			$this->settingMapper,
 			$this->appManager,
-			$this->databaseStatistics
+			$this->databaseStatistics,
+			$this->logger
 		);
 	}
 

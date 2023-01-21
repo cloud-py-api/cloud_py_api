@@ -32,6 +32,8 @@ use bantu\IniGetWrapper\IniGetWrapper;
 use OCP\IConfig;
 use OCP\App\IAppManager;
 
+use Psr\Log\LoggerInterface;
+
 use OCA\ServerInfo\DatabaseStatistics;
 
 use OCA\Cloud_Py_API\AppInfo\Application;
@@ -51,16 +53,21 @@ class UtilsService {
 	/** @var DatabaseStatistics */
 	private $databaseStatistics;
 
+	/** @var LoggerInterface */
+	private $logger;
+
 	public function __construct(
 		IConfig $config,
 		SettingMapper $settingMapper,
 		IAppManager $appManager,
-		?DatabaseStatistics $databaseStatistics
+		?DatabaseStatistics $databaseStatistics,
+		LoggerInterface $logger
 	) {
 		$this->config = $config;
 		$this->settingMapper = $settingMapper;
 		$this->appManager = $appManager;
 		$this->databaseStatistics = $databaseStatistics;
+		$this->logger = $logger;
 	}
 
 	public function getNCLogLevel(): string {
@@ -197,8 +204,11 @@ class UtilsService {
 		return false;
 	}
 
+	/**
+	 * @throws \OCA\Cloud_Py_API\Exception\UnknownMachineTypeException
+	 */
 	public function getOsArch(): string {
-		$arm64_names = array("aarch64", "armv8", "arm64");
+		$arm64_names = ["aarch64", "armv8", "arm64"];
 		$machineType = php_uname('m');
 		if (str_contains($machineType, 'x86_64')) {
 			return 'amd64';
@@ -208,7 +218,8 @@ class UtilsService {
 				return 'arm64';
 			}
 		}
-		return $machineType; // probably we should log here value or raise an exception
+		$this->logger->error('[' . self::class . '] Unknown machine type: ' . $machineType);
+		throw new \OCA\Cloud_Py_API\Exception\UnknownMachineTypeException();
 	}
 
 	public function getCustomAppsDirectory(): string {
