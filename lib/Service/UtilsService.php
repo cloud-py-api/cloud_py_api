@@ -106,7 +106,7 @@ class UtilsService {
 		static $cachedExecutable = null;
 
 		if ($cachedExecutable !== null) {
-			return $cachedExecutable; // @codeCoverageIgnore
+			return $cachedExecutable;
 		}
 
 		$basename = basename(PHP_BINARY);
@@ -118,7 +118,6 @@ class UtilsService {
 
 		// Otherwise, we might be running as mod_php, php-fpm, etc, where PHP_BINARY is not a
 		// usable PHP interpreter.  Try to find one with the same version as the current one.
-		// @codeCoverageIgnoreStart
 
 		$candidates = [
 			'php' . PHP_MAJOR_VERSION . '.' . PHP_MINOR_VERSION . '.' . PHP_RELEASE_VERSION,
@@ -145,7 +144,7 @@ class UtilsService {
 
 		// Fallback, if nothing else can be found
 		$cachedExecutable = 'php';
-		return $cachedExecutable; // @codeCoverageIgnoreEnd
+		return $cachedExecutable;
 	}
 
 	/**
@@ -157,7 +156,7 @@ class UtilsService {
 	 */
 	public function isFunctionEnabled($function_name) {
 		if (!function_exists($function_name)) {
-			return false; // @codeCoverageIgnore
+			return false;
 		}
 		/**
 		 * @psalm-suppress UndefinedClass
@@ -168,13 +167,13 @@ class UtilsService {
 		$disabled = explode(',', $ini->get('disable_functions') ?: '');
 		$disabled = array_map('trim', $disabled);
 		if (in_array($function_name, $disabled)) {
-			return false; // @codeCoverageIgnore
+			return false;
 		}
 		/** @psalm-suppress UndefinedDocblockClass */
 		$disabled = explode(',', $ini->get('suhosin.executor.func.blacklist') ?: '');
 		$disabled = array_map('trim', $disabled);
 		if (in_array($function_name, $disabled)) {
-			return false; // @codeCoverageIgnore
+			return false;
 		}
 		return true;
 	}
@@ -267,8 +266,6 @@ class UtilsService {
 	/**
 	 * Perform cURL download binary file request
 	 *
-	 * @codeCoverageIgnore
-	 *
 	 * @param string $url download url
 	 * @param array $binariesFolder appdata binaries folder
 	 * @param string $filename result binary name
@@ -325,8 +322,6 @@ class UtilsService {
 	}
 
 	/**
-	 * @codeCoverageIgnore
-	 *
 	 * Compare binary hash from release. If hash not exists return `true` (download anyway)
 	 *
 	 * @param string $url
@@ -349,8 +344,6 @@ class UtilsService {
 	/**
 	 * Perform cURL to get binary's sha256 sum
 	 *
-	 * @codeCoverageIgnore
-	 *
 	 * @param string $url url to the binary hashsum file
 	 *
 	 * @return array
@@ -371,8 +364,6 @@ class UtilsService {
 
 	/**
 	 * Ungzip target file
-	 *
-	 * @codeCoverageIgnore
 	 *
 	 * @param array $binariesFolder binaries folder
 	 * @param string $file_name target `.gz` file
@@ -395,8 +386,6 @@ class UtilsService {
 
 	/**
 	 * Add executable flag to the binary
-	 *
-	 * @codeCoverageIgnore
 	 *
 	 * @param array $binariesFolder binaries folder
 	 * @param string $file_name target binary filename
@@ -427,9 +416,6 @@ class UtilsService {
 		return $binaryName;
 	}
 
-	/**
-	 * @codeCoverageIgnore
-	 */
 	public function checkForSettingsUpdates($app_data) {
 		$settings = $this->settingMapper->findAll();
 		if (count($settings) > 0) {
@@ -439,9 +425,6 @@ class UtilsService {
 		}
 	}
 
-	/**
-	 * @codeCoverageIgnore
-	 */
 	private function checkForNewSettings(array $app_data, array $settings): void {
 		$currentSettingsKeys = array_map(function ($setting) {
 			return $setting->getName();
@@ -470,9 +453,6 @@ class UtilsService {
 		}
 	}
 
-	/**
-	 * @codeCoverageIgnore
-	 */
 	private function checkForDeletedSettings(array $app_data, array $settings): void {
 		$currentSettingsKeys = array_map(function ($setting) {
 			return $setting->getName();
@@ -494,9 +474,6 @@ class UtilsService {
 		}
 	}
 
-	/**
-	 * @codeCoverageIgnore
-	 */
 	private function updateSettingsTexts(array $app_data, array $settings) {
 		$newSettingsKeys = array_map(function ($setting) {
 			return $setting['name'];
