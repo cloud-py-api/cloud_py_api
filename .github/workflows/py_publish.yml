@@ -3,13 +3,7 @@ name: (Py)Build and Publish to PyPi
 on:
   workflow_dispatch:
 
-env:
-  TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
-  TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
-  TWINE_PYPI_ARGS: ""
-
 jobs:
-
   wheels:
     name: Build sdist and wheel
     runs-on: ubuntu-latest
@@ -53,7 +47,9 @@ jobs:
 
     - name: Publish wheels to PyPI
       run: |
-          python3 -m pip install twine
-          ls -la dist/
-          twine upload ${{ env.TWINE_PYPI_ARGS }} --skip-existing dist/*.whl
-          twine upload ${{ env.TWINE_PYPI_ARGS }} dist/*tar.gz
+        python3 -m pip install twine
+        python3 -m twine upload --verbose --skip-existing dist/*.whl
+        python3 -m twine upload --verbose --skip-existing dist/*tar.gz
+      env:
+        TWINE_USERNAME: __token__
+        TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN }}
