@@ -33,14 +33,6 @@
       <code>getValue</code>
     </UndefinedMagicMethod>
   </file>
-  <file src="lib/Service/ThriftService.php">
-    <InvalidReturnType occurrences="1">
-      <code>array</code>
-    </InvalidReturnType>
-    <TooManyArguments occurrences="1">
-      <code>new TTransportFactory($transport)</code>
-    </TooManyArguments>
-  </file>
   <file src="lib/Service/UtilsService.php">
     <RedundantCondition occurrences="1">
       <code>isset($setting)</code>

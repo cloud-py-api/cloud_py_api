@@ -20,4 +20,3 @@ lib/TProto/* binary
 
 # Files to exclude from GitHub Languages statistics
 *.Dockerfile linguist-vendored=true
-3rdparty/* linguist-vendored=true

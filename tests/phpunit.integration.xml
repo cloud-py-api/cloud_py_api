@@ -12,10 +12,6 @@
         <include>
             <directory suffix=".php">../lib</directory>
         </include>
-        <exclude>
-            <directory suffix=".php">../lib/TProto</directory>
-            <directory suffix=".php">../lib/THandler</directory>
-        </exclude>
         <report>
             <clover outputFile="./coverage/php/integration/clover.xml"/>
         </report>

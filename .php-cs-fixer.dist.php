@@ -14,7 +14,5 @@ $config
 	->notPath('l10n')
 	->notPath('src')
 	->notPath('vendor')
-	->notPath('3rdparty')
-	->notPath('lib/TProto')
 	->in(__DIR__);
 return $config;

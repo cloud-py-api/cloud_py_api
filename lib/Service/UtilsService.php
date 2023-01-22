@@ -32,6 +32,8 @@ use bantu\IniGetWrapper\IniGetWrapper;
 use OCP\IConfig;
 use OCP\App\IAppManager;
 
+use Psr\Log\LoggerInterface;
+
 use OCA\ServerInfo\DatabaseStatistics;
 
 use OCA\Cloud_Py_API\AppInfo\Application;
@@ -51,16 +53,21 @@ class UtilsService {
 	/** @var DatabaseStatistics */
 	private $databaseStatistics;
 
+	/** @var LoggerInterface */
+	private $logger;
+
 	public function __construct(
 		IConfig $config,
 		SettingMapper $settingMapper,
 		IAppManager $appManager,
-		?DatabaseStatistics $databaseStatistics
+		?DatabaseStatistics $databaseStatistics,
+		LoggerInterface $logger
 	) {
 		$this->config = $config;
 		$this->settingMapper = $settingMapper;
 		$this->appManager = $appManager;
 		$this->databaseStatistics = $databaseStatistics;
+		$this->logger = $logger;
 	}
 
 	public function getNCLogLevel(): string {
@@ -99,7 +106,7 @@ class UtilsService {
 		static $cachedExecutable = null;
 
 		if ($cachedExecutable !== null) {
-			return $cachedExecutable; // @codeCoverageIgnore
+			return $cachedExecutable;
 		}
 
 		$basename = basename(PHP_BINARY);
@@ -111,7 +118,6 @@ class UtilsService {
 
 		// Otherwise, we might be running as mod_php, php-fpm, etc, where PHP_BINARY is not a
 		// usable PHP interpreter.  Try to find one with the same version as the current one.
-		// @codeCoverageIgnoreStart
 
 		$candidates = [
 			'php' . PHP_MAJOR_VERSION . '.' . PHP_MINOR_VERSION . '.' . PHP_RELEASE_VERSION,
@@ -138,7 +144,7 @@ class UtilsService {
 
 		// Fallback, if nothing else can be found
 		$cachedExecutable = 'php';
-		return $cachedExecutable; // @codeCoverageIgnoreEnd
+		return $cachedExecutable;
 	}
 
 	/**
@@ -150,7 +156,7 @@ class UtilsService {
 	 */
 	public function isFunctionEnabled($function_name) {
 		if (!function_exists($function_name)) {
-			return false; // @codeCoverageIgnore
+			return false;
 		}
 		/**
 		 * @psalm-suppress UndefinedClass
@@ -161,13 +167,13 @@ class UtilsService {
 		$disabled = explode(',', $ini->get('disable_functions') ?: '');
 		$disabled = array_map('trim', $disabled);
 		if (in_array($function_name, $disabled)) {
-			return false; // @codeCoverageIgnore
+			return false;
 		}
 		/** @psalm-suppress UndefinedDocblockClass */
 		$disabled = explode(',', $ini->get('suhosin.executor.func.blacklist') ?: '');
 		$disabled = array_map('trim', $disabled);
 		if (in_array($function_name, $disabled)) {
-			return false; // @codeCoverageIgnore
+			return false;
 		}
 		return true;
 	}
@@ -197,8 +203,11 @@ class UtilsService {
 		return false;
 	}
 
+	/**
+	 * @throws \OCA\Cloud_Py_API\Exception\UnknownMachineTypeException
+	 */
 	public function getOsArch(): string {
-		$arm64_names = array("aarch64", "armv8", "arm64");
+		$arm64_names = ["aarch64", "armv8", "arm64"];
 		$machineType = php_uname('m');
 		if (str_contains($machineType, 'x86_64')) {
 			return 'amd64';
@@ -208,7 +217,8 @@ class UtilsService {
 				return 'arm64';
 			}
 		}
-		return $machineType; // probably we should log here value or raise an exception
+		$this->logger->error('[' . self::class . '] Unknown machine type: ' . $machineType);
+		throw new \OCA\Cloud_Py_API\Exception\UnknownMachineTypeException();
 	}
 
 	public function getCustomAppsDirectory(): string {
@@ -255,8 +265,6 @@ class UtilsService {
 
 	/**
 	 * Perform cURL download binary file request
-	 *
-	 * @codeCoverageIgnore
 	 *
 	 * @param string $url download url
 	 * @param array $binariesFolder appdata binaries folder
@@ -314,8 +322,6 @@ class UtilsService {
 	}
 
 	/**
-	 * @codeCoverageIgnore
-	 *
 	 * Compare binary hash from release. If hash not exists return `true` (download anyway)
 	 *
 	 * @param string $url
@@ -338,8 +344,6 @@ class UtilsService {
 	/**
 	 * Perform cURL to get binary's sha256 sum
 	 *
-	 * @codeCoverageIgnore
-	 *
 	 * @param string $url url to the binary hashsum file
 	 *
 	 * @return array
@@ -360,8 +364,6 @@ class UtilsService {
 
 	/**
 	 * Ungzip target file
-	 *
-	 * @codeCoverageIgnore
 	 *
 	 * @param array $binariesFolder binaries folder
 	 * @param string $file_name target `.gz` file
@@ -384,8 +386,6 @@ class UtilsService {
 
 	/**
 	 * Add executable flag to the binary
-	 *
-	 * @codeCoverageIgnore
 	 *
 	 * @param array $binariesFolder binaries folder
 	 * @param string $file_name target binary filename
@@ -416,9 +416,6 @@ class UtilsService {
 		return $binaryName;
 	}
 
-	/**
-	 * @codeCoverageIgnore
-	 */
 	public function checkForSettingsUpdates($app_data) {
 		$settings = $this->settingMapper->findAll();
 		if (count($settings) > 0) {
@@ -428,9 +425,6 @@ class UtilsService {
 		}
 	}
 
-	/**
-	 * @codeCoverageIgnore
-	 */
 	private function checkForNewSettings(array $app_data, array $settings): void {
 		$currentSettingsKeys = array_map(function ($setting) {
 			return $setting->getName();
@@ -459,9 +453,6 @@ class UtilsService {
 		}
 	}
 
-	/**
-	 * @codeCoverageIgnore
-	 */
 	private function checkForDeletedSettings(array $app_data, array $settings): void {
 		$currentSettingsKeys = array_map(function ($setting) {
 			return $setting->getName();
@@ -483,9 +474,6 @@ class UtilsService {
 		}
 	}
 
-	/**
-	 * @codeCoverageIgnore
-	 */
 	private function updateSettingsTexts(array $app_data, array $settings) {
 		$newSettingsKeys = array_map(function ($setting) {
 			return $setting['name'];

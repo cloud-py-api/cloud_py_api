@@ -26,25 +26,7 @@ declare(strict_types=1);
  *
  */
 
-namespace OCA\Cloud_Py_API\AppInfo;
+namespace OCA\Cloud_Py_API\Exception;
 
-use OCP\AppFramework\App;
-use OCP\AppFramework\Bootstrap\IBootContext;
-use OCP\AppFramework\Bootstrap\IBootstrap;
-use OCP\AppFramework\Bootstrap\IRegistrationContext;
-
-class Application extends App implements IBootstrap {
-	public const APP_ID = 'cloud_py_api';
-
-	public function __construct() {
-		parent::__construct(self::APP_ID);
-	}
-
-	/** @codeCoverageIgnore */
-	public function register(IRegistrationContext $context): void {
-	}
-
-	/** @codeCoverageIgnore */
-	public function boot(IBootContext $context): void {
-	}
+class UnknownMachineTypeException extends \Exception {
 }
