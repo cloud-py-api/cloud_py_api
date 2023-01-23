@@ -1,0 +1,6 @@
+{ "translations": {
+    "Error" : "ข้อผิดพลาด",
+    "Copy to clipboard" : "คัดลอกไปยังคลิปบอร์ด",
+    "Copied to clipboard" : "คัดลอกไปยังคลิปบอร์ดแล้ว"
+},"pluralForm" :"nplurals=1; plural=0;"
+}

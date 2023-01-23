@@ -1,0 +1,26 @@
+OC.L10N.register(
+    "cloud_py_api",
+    {
+    "Full path to python interpreter" : "Python yorumlayıcının tam yolu",
+    "Remote/Encrypted file size limit to process" : "İşlemi sınırlayacak uzak/şifrelenmiş dosya boyutu",
+    "Use path to PHP interpreter for Python from settings" : "Ayarlar bölümündeki Python için PHP yorumlayıcısı yolu kullanılsın",
+    "Determine whether to use path from settings or detect it automatically (may not work with some unusual PHP install locations). Used in Python part." : "Yolun ayarlar bölümünden mi kullanılacağını yoksa otomatik olarak mı algılanacağını belirleyin (bazı olağandışı PHP kurulum konumlarıyla çalışmayabilir). Python bölümünde kullanılır.",
+    "Full path to PHP interpreter for Python" : "Python için PHP yorumlayıcısının tam yolu",
+    "Absolute path to the PHP executable (e.g. \"/usr/bin/php7.4\"). Can be obtained by `which php` or `which php7.4` command" : "PHP yürütülebilir dosyasının mutlak yolu (Örnek: \"/usr/bin/php7.4\"). `which php` ya da `which php7.4` komutu ile öğrenilebilir",
+    "Use pre-compiled Python binaries" : "Önceden derlenmiş Python binary dosyaları kullanılsın",
+    "Use Python part in binary format (located in the appdata folder)" : "Python bölümü binary biçiminde kullanılsın (appdata klasöründeki)",
+    "Use PHP path from settings" : "Ayarlardaki PHP yolu kullanılsın",
+    "Error" : "Hata",
+    "Settings list is empty" : "Ayarlar listesi boş",
+    "Seems like database not initialized properly. Try to re-enable the app" : "Veritabanı doğru hazırlanmamış gibi görünüyor. Uygulamayı yeniden etkinleştirmeyi deneyin",
+    "Bug report" : "Hata bildirimi",
+    "Settings successfully updated" : "Ayarlar güncellendi",
+    "Some error occurred while updating settings" : "Ayarlar güncellenirken bir sorun çıktı",
+    "Collect non sensitive system info for bug report" : "Hata ayıkllaması için özel olmayan sistem bilgileri toplansın",
+    "Collect system info" : "Sistem bilgileri toplansın",
+    "System info" : "Sistem bilgileri",
+    "Copy to clipboard" : "Panoya kopyala",
+    "Copied to clipboard" : "Panoya kopyalandı",
+    "_Test text_::_Test texts_" : ["Deneme metni","Deneme metinleri"]
+},
+"nplurals=2; plural=(n > 1);");

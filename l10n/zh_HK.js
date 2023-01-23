@@ -1,0 +1,26 @@
+OC.L10N.register(
+    "cloud_py_api",
+    {
+    "Full path to python interpreter" : "Python 解釋器的完整路徑",
+    "Remote/Encrypted file size limit to process" : "要處理的遠端/加密檔案大小上限",
+    "Use path to PHP interpreter for Python from settings" : "從設置中使用 Python 的 PHP 解釋器的路徑",
+    "Determine whether to use path from settings or detect it automatically (may not work with some unusual PHP install locations). Used in Python part." : "確定是使用設置中的路徑還是自動檢測它（可能不適用於一些不尋常的 PHP 安裝）。在 Python 部分中使用。",
+    "Full path to PHP interpreter for Python" : "Python 的 PHP 解釋器的完整路徑",
+    "Absolute path to the PHP executable (e.g. \"/usr/bin/php7.4\"). Can be obtained by `which php` or `which php7.4` command" : "PHP 可執行文件的絕對路徑（例如 “/usr/bin/php7.4”）。這可以通過 `which php` 或 'which php7.4' 命令獲得。",
+    "Use pre-compiled Python binaries" : "使用預編譯的 Python 二進製文件",
+    "Use Python part in binary format (located in the appdata folder)" : "使用二進制格式的 Python 部分（位於 appdata 資料夾中）",
+    "Use PHP path from settings" : "使用設置中的 PHP 路徑",
+    "Error" : "錯誤",
+    "Settings list is empty" : "設定列表為空",
+    "Seems like database not initialized properly. Try to re-enable the app" : "好像數據庫沒有正確初始化。嘗試重新啟用該應用程式",
+    "Bug report" : "錯誤報告",
+    "Settings successfully updated" : "設定已成功更新",
+    "Some error occurred while updating settings" : "更新設定時發生錯誤",
+    "Collect non sensitive system info for bug report" : "為錯誤報告收集非敏感系統信息",
+    "Collect system info" : "收集系統資料",
+    "System info" : "系統資料",
+    "Copy to clipboard" : "複製到剪貼板",
+    "Copied to clipboard" : "已複製到剪貼板",
+    "_Test text_::_Test texts_" : ["測試文本"]
+},
+"nplurals=1; plural=0;");

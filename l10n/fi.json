@@ -1,0 +1,6 @@
+{ "translations": {
+    "Use pre-compiled Python binaries" : "Käytä esikäännettyjä Python-binääritiedostoja",
+    "System info" : "Järjestelmän tiedot",
+    "Copied to clipboard" : "Kopioitu leikepöydälle"
+},"pluralForm" :"nplurals=2; plural=(n != 1);"
+}

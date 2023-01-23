@@ -1,0 +1,6 @@
+{ "translations": {
+    "Error" : "Fel",
+    "Copy to clipboard" : "Kopiera till urklipp",
+    "Copied to clipboard" : "Kopierat till urklipp"
+},"pluralForm" :"nplurals=2; plural=(n != 1);"
+}
