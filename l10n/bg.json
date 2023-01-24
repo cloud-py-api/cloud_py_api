@@ -1,0 +1,24 @@
+{ "translations": {
+    "Full path to python interpreter" : "Пълен път до интерпретатора на python",
+    "Remote/Encrypted file size limit to process" : "Ограничение на размера на отдалечен/криптиран файл за обработка",
+    "Use path to PHP interpreter for Python from settings" : "Използване на пътя до PHP интерпретатора за Python от настройките",
+    "Determine whether to use path from settings or detect it automatically (may not work with some unusual PHP install locations). Used in Python part." : "Определя дали да се използва път от настройките или да се открива автоматично (може да не работи при някои необичайни места за инсталиране на PHP). Използвано в частта за Python.",
+    "Full path to PHP interpreter for Python" : "Пълен път до PHP интерпретатора за Python",
+    "Absolute path to the PHP executable (e.g. \"/usr/bin/php7.4\"). Can be obtained by `which php` or `which php7.4` command" : "Абсолютен път до изпълнимия интерпретатор на PHP (например „/usr/bin/php7.4“). Може да се получи чрез командата `which php` или `which php7.4`",
+    "Use pre-compiled Python binaries" : "Използване на предварително компилирани двоични файлове на Python",
+    "Use Python part in binary format (located in the appdata folder)" : "Използване на частта от Python в двоичен формат (разположена в папка appdata)",
+    "Use PHP path from settings" : "Използване на PHP път от настройките",
+    "Error" : "Грешка",
+    "Settings list is empty" : "Списъкът с настройки е празен",
+    "Seems like database not initialized properly. Try to re-enable the app" : "Изглежда, че базата данни не е инициализирана правилно. Опитайте се да активирате приложението отново",
+    "Bug report" : "Доклад за грешка",
+    "Settings successfully updated" : "Настройките са актуализирани успешно",
+    "Some error occurred while updating settings" : "Възникна грешка при актуализиране на настройките",
+    "Collect non sensitive system info for bug report" : "Събиране на нечувствителна системна информация за доклад за грешка",
+    "Collect system info" : "Събиране на системна информация",
+    "System info" : "Системна информация",
+    "Copy to clipboard" : "Копиране в клипборда",
+    "Copied to clipboard" : "Копирано в клипборда",
+    "_Test text_::_Test texts_" : ["Тестови текстове","Тестови текстове"]
+},"pluralForm" :"nplurals=2; plural=(n != 1);"
+}

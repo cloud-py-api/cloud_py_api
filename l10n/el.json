@@ -1,0 +1,6 @@
+{ "translations": {
+    "Error" : "Σφάλμα",
+    "Copy to clipboard" : "Αντιγραφή στο πρόχειρο",
+    "Copied to clipboard" : "Αντιγράφηκε στο πρόχειρο"
+},"pluralForm" :"nplurals=2; plural=(n != 1);"
+}

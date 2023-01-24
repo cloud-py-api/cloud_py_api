@@ -1,4 +1,32 @@
 { "translations": {
-    "Use pre-compiled Python binaries" : "Použít předkompilované spustitelné soubory v Python"
+    "Full path to python interpreter" : "Úplný popis umístění interpretu python",
+    "Absolute path to the python runnable (e.g. \"/usr/bin/python3\"). Can be obtained by `which python3` command. Used when pre-compiled binaries option is not selected." : "Úplný popis umístění spustitelného souboru s python (např. „/usr/bin/python3“). Lze zjistit příkazem `which python3`. Použito pokud není vybrána volba předkompilovaných spustitelných souborů.",
+    "Remote/Encrypted file size limit to process" : "Hranice velikosti nad kterou nezpracovávat soubory, které se nacházejí na vzdálených úložištích nebo jsou šifrované",
+    "Maximum file size (in GBytes) for requesting from php core. Used when file hosts on remote NC instance or have encrypted flag. Must be less then total available RAM size." : "Nejvyšší nastavená umožněná velikost (v gigabajtech) pro požadavky od paměti php. Použito pokud soubor hostuje na vzdálené instanci Nextcloud nebo má příznak šifrováno. Je třeba, aby bylo menší než celková dostupné velikost operační paměti.",
+    "Use path to PHP interpreter for Python from settings" : "Použít popis umístění interpretu PHP pro Python z nastavení",
+    "Determine whether to use path from settings or detect it automatically (may not work with some unusual PHP install locations). Used in Python part." : "Určuje zda použít popis umístění z nastavení nebo ho automaticky zjistit (nemusí zafungovat pro některé neobvyklé umístění instalace PHP). Používáno pro část v Pythonu.",
+    "Full path to PHP interpreter for Python" : "Úplný popis umístění interpretu PHP pro Python",
+    "Absolute path to the PHP executable (e.g. \"/usr/bin/php7.4\"). Can be obtained by `which php` or `which php7.4` command" : "Úplný popis umístění spustitelného souboru s PHP (např. „/usr/bin/php7.4“). Lze zjistit příkazem `which php` nebo `which php7.4`",
+    "Use pre-compiled Python binaries" : "Použít předkompilované spustitelné soubory v Python",
+    "Use Python part in binary format (located in the appdata folder)" : "Použít část v Python v binární podobě (nachází se ve složce appdata)",
+    "Framework loglevel" : "Úroveň podrobností zaznamenávání událostí ve frameworku",
+    "Used by apps, that using this Framework" : "Používáno aplikacemi, které používají tento framework",
+    "Cloud Python API" : "Python API pro cloud",
+    "Nextcloud Python API (Framework)" : "Python API pro Nextcloud (framwork)",
+    "Nextcloud Python API Framework\n\n| **Currently in development, all is in a design state**\n\n### Provides Convenient Functions for Python\n\n- Read & Write File System objects\n- Working with Database\n- Wrapper around `OCC` calls\n- Calling your python function from php part of app and return a result\n\n### Used by apps\n\n- [MediaDC](https://apps.nextcloud.com/apps/mediadc) - Nextcloud Media Duplicate Collector app\n\n### Support\n\nYou can support us in several ways:\n\n- ⭐ Star our work (it really motivates)\n- ❗ Create an Issue or feature request (bring to us an excellent idea)\n- 💁 Resolve some Issue or create a Pull Request (contribute to this project)\n- 🪙 Donate with any amount with one of the links below (fund this project)\n\n[![PayPal](https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif)](https://www.paypal.com/donate?hosted_button_id=H5PLJJMWLDNJQ)\n[![Liberapay](https://liberapay.com/assets/widgets/donate.svg)](https://liberapay.com/cloud_py_api/donate)" : "Python API framework pro Nextcloud\n\n| **V tuto chvíli ve vývoji – vše je ve stádiu návrhu**\n\n### Poskytuje pohodlné funkce pro Python\n\n- Čtení a zápis do objektů souborového systému\n- Práce s databází\n- Obalovací vrstva kolem volání `OCC`s\n- Volání vašich python funkcí z php části aplikace a vrácení výsledku\n\n### Používáno aplikacemi\n\n- [MediaDC](https://apps.nextcloud.com/apps/mediadc) - Nextcloud aplikací pro odstraňování duplicit\n\n### Podpora\n\nPodpořit nás můžete několika způsoby:\n\n- ⭐ Dát nám hvězdičku (toto opravdu motivuje)\n- ❗ Vytvořit hlášení chyby nebo požadavek na přidání funkce (přineste nám výborný nápad)\n- 💁 Vyřešte nějaké hlášení chyby nebo vytvořte požadavek na zařazení (přispějte prací do tohoto projektu)\n- 🪙 Darujte libovolnou částku prostřednictvím některého z níže uvedených odkazů (financujte tento projekt)\n\n[![PayPal](https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif)](https://www.paypal.com/donate?hosted_button_id=H5PLJJMWLDNJQ)\n[![Liberapay](https://liberapay.com/assets/widgets/donate.svg)](https://liberapay.com/cloud_py_api/donate)",
+    "Cloud Python API (Framework)" : "Python API pro cloud (framwork)",
+    "Use PHP path from settings" : "Použít popis umístění PHP z nastavení",
+    "Error" : "Chyba",
+    "Settings list is empty" : "Seznam nastavení je prázdný",
+    "Seems like database not initialized properly. Try to re-enable the app" : "Zdá se, že databáze není správně inicializována. Zkuste aplikaci znovu povolit",
+    "Bug report" : "Hlášení chyby",
+    "Settings successfully updated" : "Nastavení úspěšně zaktualizována",
+    "Some error occurred while updating settings" : "Při aktualizaci nastavení došlo k nějaké chybě",
+    "Collect non sensitive system info for bug report" : "Shromáždit informace o systému (neobsahuje žádné citlivé informace) pro účely nahlášení chyby",
+    "Collect system info" : "Shromáždit informace o systému",
+    "System info" : "Informace o systému",
+    "Copy to clipboard" : "Zkopírovat do schránky",
+    "Copied to clipboard" : "Zkopírováno do schránky",
+    "_Test text_::_Test texts_" : ["Testovací text","Testovací texty","Testovací texty","Testovací texty"]
 },"pluralForm" :"nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n >= 2 && n <= 4 && n % 1 == 0) ? 1: (n % 1 != 0 ) ? 2 : 3;"
 }

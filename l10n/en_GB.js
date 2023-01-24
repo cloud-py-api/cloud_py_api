@@ -1,0 +1,26 @@
+OC.L10N.register(
+    "cloud_py_api",
+    {
+    "Full path to python interpreter" : "Full path to python interpreter",
+    "Remote/Encrypted file size limit to process" : "Remote/Encrypted file size limit to process",
+    "Use path to PHP interpreter for Python from settings" : "Use path to PHP interpreter for Python from settings",
+    "Determine whether to use path from settings or detect it automatically (may not work with some unusual PHP install locations). Used in Python part." : "Determine whether to use path from settings or detect it automatically (may not work with some unusual PHP install locations). Used in Python part.",
+    "Full path to PHP interpreter for Python" : "Full path to PHP interpreter for Python",
+    "Absolute path to the PHP executable (e.g. \"/usr/bin/php7.4\"). Can be obtained by `which php` or `which php7.4` command" : "Absolute path to the PHP executable (e.g. \"/usr/bin/php7.4\"). Can be obtained by `which php` or `which php7.4` command",
+    "Use pre-compiled Python binaries" : "Use pre-compiled Python binaries",
+    "Use Python part in binary format (located in the appdata folder)" : "Use Python part in binary format (located in the appdata folder)",
+    "Use PHP path from settings" : "Use PHP path from settings",
+    "Error" : "Error",
+    "Settings list is empty" : "Settings list is empty",
+    "Seems like database not initialized properly. Try to re-enable the app" : "Seems like database not initialized properly. Try to re-enable the app",
+    "Bug report" : "Bug report",
+    "Settings successfully updated" : "Settings successfully updated",
+    "Some error occurred while updating settings" : "Some error occurred while updating settings",
+    "Collect non sensitive system info for bug report" : "Collect non sensitive system info for bug report",
+    "Collect system info" : "Collect system info",
+    "System info" : "System info",
+    "Copy to clipboard" : "Copy to clipboard",
+    "Copied to clipboard" : "Copied to clipboard",
+    "_Test text_::_Test texts_" : ["Test text","Test texts"]
+},
+"nplurals=2; plural=(n != 1);");

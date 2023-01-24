@@ -1,0 +1,24 @@
+{ "translations": {
+    "Full path to python interpreter" : "Ruta completa al intérprete python",
+    "Remote/Encrypted file size limit to process" : "Límite del tamaño de archivo Remoto/Cifrado a procesar",
+    "Use path to PHP interpreter for Python from settings" : "Utilizar la ruta al intérprete PHP para Python desde la configuración",
+    "Determine whether to use path from settings or detect it automatically (may not work with some unusual PHP install locations). Used in Python part." : "Determinar si se usa ya sea la ruta desde la configuración o si debe detectar automáticamente (podría no funcionar con algunas ubicaciones inusuales de instalación PHP). Utilizado en la parte Python.",
+    "Full path to PHP interpreter for Python" : "Ruta completa el intérprete PHP para Python",
+    "Absolute path to the PHP executable (e.g. \"/usr/bin/php7.4\"). Can be obtained by `which php` or `which php7.4` command" : "Ruta absoluta al ejecutable de PHP (p. ej. \"/usr/bin/php7.4\"). Puede obtenerse con el comando `which php` ó `which php7.4`",
+    "Use pre-compiled Python binaries" : "Utilizar binarios de Python pre-compilados",
+    "Use Python part in binary format (located in the appdata folder)" : "Utilizar la parte de Python en formato binario (ubicado en la carpeta appdata)",
+    "Use PHP path from settings" : "Utilizar la ruta de PHP desde la configuración",
+    "Error" : "Error",
+    "Settings list is empty" : "La lista de configuración está vacía",
+    "Seems like database not initialized properly. Try to re-enable the app" : "Al parecer la base de datos no fue inicializada apropiadamente, intente volver a habilitar la aplicación",
+    "Bug report" : "Reportar un bug",
+    "Settings successfully updated" : "Las configuraciones fueron actualizadas exitosamente",
+    "Some error occurred while updating settings" : "Ocurrió algún error mientras se actualizaban las configuraciones",
+    "Collect non sensitive system info for bug report" : "Recolectar información no sensible del sistema para reportar bug",
+    "Collect system info" : "Recolectar información del sistema",
+    "System info" : "Información del sistema",
+    "Copy to clipboard" : "Copiar al portapapeles",
+    "Copied to clipboard" : "Copiado al portapapeles",
+    "_Test text_::_Test texts_" : ["Texto de prueba","Textos de prueba","Textos de prueba"]
+},"pluralForm" :"nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;"
+}

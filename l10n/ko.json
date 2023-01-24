@@ -1,0 +1,6 @@
+{ "translations": {
+    "Error" : "오류",
+    "Copy to clipboard" : "클립보드로 복사",
+    "Copied to clipboard" : "클립보드로 복사됨"
+},"pluralForm" :"nplurals=1; plural=0;"
+}

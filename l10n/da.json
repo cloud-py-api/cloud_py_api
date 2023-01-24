@@ -1,0 +1,6 @@
+{ "translations": {
+    "Error" : "Fejl",
+    "Copy to clipboard" : "Kopier til udklipsholder",
+    "Copied to clipboard" : "Kopieret til udklipsholder"
+},"pluralForm" :"nplurals=2; plural=(n != 1);"
+}
