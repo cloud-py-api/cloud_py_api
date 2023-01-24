@@ -10,9 +10,9 @@ repos:
     -   id: check-toml
         exclude: (^3rdparty)
     -   id: end-of-file-fixer
-        exclude: (^3rdparty|^js|^proto)
+        exclude: (^3rdparty|^js|^proto|^l10n)
     -   id: trailing-whitespace
-        exclude: (^3rdparty|^js|^proto)
+        exclude: (^3rdparty|^js|^proto|^l10n)
     -   id: mixed-line-ending
         exclude: (^3rdparty|^js|^proto)
 
