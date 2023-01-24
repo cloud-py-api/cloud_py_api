@@ -334,8 +334,9 @@ class UtilsService {
 			$binaryData = file_get_contents($binaryPath);
 			$currentBinaryHash = hash('sha256', $binaryData);
 			$newBinaryHash = $this->downloadBinaryHash(str_replace('.gz', '.sha256', $url));
-			if ($newBinaryHash['success'] && strlen($newBinaryHash['binaryHash']) == 64) {
-				return $currentBinaryHash != $newBinaryHash['binaryHash'];
+			$newHash = substr($newBinaryHash['binaryHash'], 0, 64);
+			if ($newBinaryHash['success'] && strlen($newHash) == 64) {
+				return $currentBinaryHash != $newHash;
 			}
 		}
 		return true;
@@ -352,7 +353,8 @@ class UtilsService {
 		$cURL = curl_init($url);
 		curl_setopt_array($cURL, [
 			CURLOPT_RETURNTRANSFER => true,
-			CURLOPT_RANGE => 64,
+			CURLOPT_FOLLOWLOCATION => true,
+			CURLOPT_RANGE => '0-64',
 		]);
 		$binaryHash = curl_exec($cURL);
 		curl_close($cURL);
