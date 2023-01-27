@@ -30,6 +30,10 @@ class Tables:
         return CONFIG["dbtprefix"] + "mimetypes"
 
     @property
+    def users(self) -> str:
+        return CONFIG["dbtprefix"] + "users"
+
+    @property
     def settings(self) -> str:
         return CONFIG["dbtprefix"] + "cloud_py_api_settings"
 
