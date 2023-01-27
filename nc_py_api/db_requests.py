@@ -121,3 +121,18 @@ def get_non_direct_access_filesize_limit() -> int:
     if not result:
         return 256 * 1024 * 1024
     return int(result[0]["value"])
+
+
+def get_users() -> list[dict]:
+    """Returns `users` table as a list of dictionaries."""
+
+    return execute_fetchall(f"SELECT * FROM {TABLES.users};")
+
+
+def get_user(uid_lower: str) -> dict:
+    """Returns `user` table record as a dictionary."""
+
+    result = execute_fetchall(f"SELECT * FROM {TABLES.users} WHERE uid_lower='{uid_lower}';")
+    if result:
+        return result[0]
+    return {}

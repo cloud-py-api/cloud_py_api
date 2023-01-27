@@ -91,6 +91,7 @@ jobs:
           --admin-user admin --admin-pass adminpassword
           sed -i -e 's/${{ env.NC_dbname }}/xyz/g' config/config.php
           php occ config:system:set debug --value=true --type=boolean
+          OC_PASS=uSr1paSZsg php occ user:add --password-from-env --display-name="Test User" --group="users" user
           php -S localhost:8080 &
 
       - uses: actions/checkout@v3
@@ -111,6 +112,7 @@ jobs:
         env:
           SERVER_ROOT: "../.."
           CPA_LOGLEVEL: debug
+          USER_ID: admin
 
       - name: HTML coverage to artifacts
         uses: actions/upload-artifact@v3
@@ -183,6 +185,7 @@ jobs:
           --database-host=127.0.0.1 --database-user=root --database-pass=rootpassword \
           --admin-user admin --admin-pass adminpassword
           php occ config:system:set debug --value=true --type=boolean
+          OC_PASS=uSr1paSZsg php occ user:add --password-from-env --display-name="Test User" --group="users" user
           php -S localhost:8080 &
 
       - uses: actions/checkout@v3
@@ -203,6 +206,7 @@ jobs:
         env:
           SERVER_ROOT: "../.."
           CPA_LOGLEVEL: debug
+          USER_ID: admin
 
       - name: HTML coverage to artifacts
         uses: actions/upload-artifact@v3
@@ -275,6 +279,7 @@ jobs:
           --database-host=127.0.0.1 --database-user=root --database-pass=rootpassword \
           --admin-user admin --admin-pass adminpassword
           php occ config:system:set debug --value=true --type=boolean
+          OC_PASS=uSr1paSZsg php occ user:add --password-from-env --display-name="Test User" --group="users" user
           php -S localhost:8080 &
 
       - uses: actions/checkout@v3
@@ -295,6 +300,7 @@ jobs:
         env:
           SERVER_ROOT: "../.."
           CPA_LOGLEVEL: debug
+          USER_ID: admin
 
       - name: HTML coverage to artifacts
         uses: actions/upload-artifact@v3
@@ -356,6 +362,7 @@ jobs:
           --database-user=root --database-pass=root \
           --admin-user admin --admin-pass adminpassword
           php occ config:system:set debug --value=true --type=boolean
+          OC_PASS=uSr1paSZsg php occ user:add --password-from-env --display-name="Test User" --group="users" user
           php -S localhost:8080 &
 
       - uses: actions/checkout@v3
@@ -376,6 +383,7 @@ jobs:
         env:
           SERVER_ROOT: "../.."
           CPA_LOGLEVEL: debug
+          USER_ID: admin
 
       - name: HTML coverage to artifacts
         uses: actions/upload-artifact@v3
@@ -441,6 +449,7 @@ jobs:
           --database-user=username --database-pass=userpass \
           --admin-user admin --admin-pass adminpassword --database-host="/var/run/postgresql"
           php occ config:system:set debug --value=true --type=boolean
+          OC_PASS=uSr1paSZsg php occ user:add --password-from-env --display-name="Test User" --group="users" user
           php -S localhost:8080 &
 
       - uses: actions/checkout@v3
@@ -461,6 +470,7 @@ jobs:
         env:
           SERVER_ROOT: "../.."
           CPA_LOGLEVEL: debug
+          USER_ID: admin
 
       - name: HTML coverage to artifacts
         uses: actions/upload-artifact@v3
