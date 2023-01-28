@@ -52,18 +52,15 @@ ND_ACCESS_LIMIT = get_non_direct_access_filesize_limit()
 """A value from the config that defines the maximum file size allowed to be requested from php."""
 
 
-def fs_node_info(obj: Union[list[int], int, str], user_id=USER_ID) -> Union[list[FsNodeInfo], Optional[FsNodeInfo]]:
-    """Gets `FsNodeInfo` by list of ids, id or path.
+def fs_node_info(obj: Union[int, str], user_id=USER_ID) -> Optional[FsNodeInfo]:
+    """Gets `FsNodeInfo` by `fileid` or path.
 
-    :param obj: for the list of ints or one int it is a `fileid` value. For ``str`` type it is the
-    relative path to file/directory. `path` field from NC DB, without `files/` prefix.
+    :param obj: `fileid` value or ``str`` type if it is the
+    relative path to file/directory(`path` field from NC DB, without `files/` prefix).
     :param user_id: `uid` of user. Optional, in most cases you should not specify it.
 
-    :returns: list of :py:data:`FsNodeInfo`, :py:data:`FsNodeInfo` or None in case of error.
-     Depends on the type of `obj` parameter."""
+    :returns: :py:data:`FsNodeInfo` or None in case of error."""
 
-    if isinstance(obj, list):
-        return [db_record_to_fs_node(i) for i in get_fileids_info(obj)]
     if isinstance(obj, int):
         raw_result = get_fileid_info(obj)
     else:
@@ -75,6 +72,16 @@ def fs_node_info(obj: Union[list[int], int, str], user_id=USER_ID) -> Union[list
     if raw_result:
         return db_record_to_fs_node(raw_result)
     return None
+
+
+def fs_nodes_info(file_ids: list[int]) -> list[FsNodeInfo]:
+    """Gets list of `FsNodeInfo` by list of file ids.
+
+    :param file_ids: list of `fileid`s for which get info.
+
+    :returns: list of :py:data:`FsNodeInfo`."""
+
+    return [db_record_to_fs_node(i) for i in get_fileids_info(file_ids)]
 
 
 def fs_list_directory(file_id: Optional[Union[int, FsNodeInfo]] = None, user_id=USER_ID) -> list[FsNodeInfo]:
@@ -107,7 +114,11 @@ def fs_list_directory(file_id: Optional[Union[int, FsNodeInfo]] = None, user_id=
 
 
 def fs_apply_exclude_lists(fs_objs: list[FsNodeInfo], excl_file_ids: list[int], excl_mask: list[str]) -> None:
-    """Purge all records according to exclude_(mask/fileid) from `where_to_purge`(or from fs_records)."""
+    """Purge all records according to exclude_(mask/fileid).
+
+    :param fs_objs: list of :py:data:`FsNodeInfo` to which exclusion lists apply.
+    :param excl_file_ids: list of int, representing exclude masks fileids.
+    :param excl_mask: list of str, representing exclude masks. Comparison done using `fnmatch`."""
 
     indexes_to_purge = []
     for index, fs_obj in enumerate(fs_objs):
@@ -120,6 +131,11 @@ def fs_apply_exclude_lists(fs_objs: list[FsNodeInfo], excl_file_ids: list[int], 
 
 
 def fs_extract_sub_dirs(fs_objs: list[FsNodeInfo]) -> list[FsNodeInfo]:
+    """Extracts and return all records with ``mimetype`` equal to ``DIR``.
+
+    :param fs_objs: list of :py:data:`FsNodeInfo` from which extract directory records. Will be edite in place.
+    :return: list of :py:data:`FsNodeInfo` that are directories."""
+
     sub_dirs = []
     indexes_to_purge = []
     for index, fs_obj in enumerate(fs_objs):
@@ -132,6 +148,12 @@ def fs_extract_sub_dirs(fs_objs: list[FsNodeInfo]) -> list[FsNodeInfo]:
 
 
 def fs_apply_ignore_flags(fs_objs: list[FsNodeInfo]) -> None:
+    """Check for ``.noimage``/``.nomedia`` flag and removes all records with `mimetype` equal to ``IMAGE/VIDEO``.
+
+    The flag also will be removed. The list will be edited in place.
+
+    :param fs_objs: list of :py:data:`FsNodeInfo`."""
+
     ignore_flag = any(fs_obj["name"] in (".noimage", ".nomedia") for fs_obj in fs_objs)
     if ignore_flag:
         fs_filter_by(fs_objs, "mimepart", [mimetype.IMAGE, mimetype.VIDEO], reverse_filter=True)
@@ -139,6 +161,13 @@ def fs_apply_ignore_flags(fs_objs: list[FsNodeInfo]) -> None:
 
 
 def fs_filter_by(fs_objs: list[FsNodeInfo], field: FsNodeInfoField, values: list, reverse_filter=False) -> None:
+    """Filter elements in FS list(in-place) by specified mask.
+
+    :param fs_objs: directory listing returned by :py:func:`~nc_py_api.fs_list_directory`.
+    :param field: value from :py:data:`FsNodeInfoField` on which the filter will be applied.
+    :param values: list of values to compare.
+    :param reverse_filter: a boolean indicating that the entry should be filtered if the value is present."""
+
     indexes_to_purge = []
     if reverse_filter:
         for index, fs_obj in enumerate(fs_objs):
@@ -153,6 +182,11 @@ def fs_filter_by(fs_objs: list[FsNodeInfo], field: FsNodeInfoField, values: list
 
 
 def fs_sort_by_id(fs_objs: list[FsNodeInfo]) -> list[FsNodeInfo]:
+    """Helper function, to sort list of `FsNodeInfo` in ascending order by `fileid`.
+
+    :param fs_objs: list of :py:data:`FsNodeInfo`.
+    :return: list of :py:data:`FsNodeInfo`."""
+
     return sorted(fs_objs, key=lambda i: i["id"])
 
 
