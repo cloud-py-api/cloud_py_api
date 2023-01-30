@@ -13,6 +13,7 @@ from .files import (
     fs_filter_by,
     fs_list_directory,
     fs_node_info,
+    fs_nodes_info,
     fs_sort_by_id,
 )
 from .log import cpa_logger

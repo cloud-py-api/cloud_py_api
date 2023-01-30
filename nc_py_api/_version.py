@@ -1,3 +1,3 @@
 """ Version of Nc_Py_Api """
 
-__version__ = "0.0.10"
+__version__ = "0.0.11.dev0"
