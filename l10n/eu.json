@@ -11,8 +11,10 @@
     "Bug report" : "Bug txostena",
     "Settings successfully updated" : "Ezarpenak ongi eguneratu dira",
     "Some error occurred while updating settings" : "Errore bat gertatu da ezarpenak eguneratzean",
+    "Collect system info" : "Jaso sistemaren informazioa",
     "System info" : "Sistemaren informazioa",
     "Copy to clipboard" : "Kopiatu arbelera",
-    "Copied to clipboard" : "Kopiatu arbelera"
+    "Copied to clipboard" : "Kopiatu arbelera",
+    "_Test text_::_Test texts_" : ["Probatu testua","Probatu testuak"]
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }
