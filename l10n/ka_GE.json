@@ -1,5 +1,6 @@
 { "translations": {
     "Error" : "შეცდომა",
+    "Copy to clipboard" : "კოპირება ბუფერში",
     "Copied to clipboard" : "კოპირებულია კლიპბორდში"
 },"pluralForm" :"nplurals=2; plural=(n!=1);"
 }
