@@ -5,10 +5,14 @@ on:
     branches:
       - main
       - dev
+    paths-ignore:
+      - l10n/**
   pull_request:
     branches:
       - main
       - dev
+    paths-ignore:
+      - l10n/**
 
 env:
   APP_NAME: cloud_py_api
