@@ -89,14 +89,14 @@ class AppInitialData {
 		$this->l10n->t("Full path to python interpreter");
 		$this->l10n->t("Absolute path to the python runnable (e.g. \"/usr/bin/python3\"). Can be obtained by `which python3` command. Used when pre-compiled binaries option is not selected.");
 		$this->l10n->t("Remote/Encrypted file size limit to process");
-		$this->l10n->t("Maximum file size (in GBytes) for requesting from php core. Used when file hosts on remote NC instance or have encrypted flag. Must be less then total available RAM size.");
+		$this->l10n->t("Maximum file size (in GBytes) for requesting from php core. Used when file is hosted on remote NC instance or have encrypted flag. Must be less than total available RAM size.");
 		$this->l10n->t("Use path to PHP interpreter for Python from settings");
 		$this->l10n->t("Determine whether to use path from settings or detect it automatically (may not work with some unusual PHP install locations). Used in Python part.");
 		$this->l10n->t("Full path to PHP interpreter for Python");
 		$this->l10n->t("Absolute path to the PHP executable (e.g. \"/usr/bin/php7.4\"). Can be obtained by `which php` or `which php7.4` command");
 		$this->l10n->t("Use pre-compiled Python binaries");
 		$this->l10n->t("Use Python part in binary format (located in the appdata folder)");
-		$this->l10n->t("Framework loglevel");
-		$this->l10n->t("Used by apps, that using this Framework");
+		$this->l10n->t("Framework log level");
+		$this->l10n->t("Used by apps, that are using this framework");
 	}
 }
