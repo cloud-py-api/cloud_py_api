@@ -50,7 +50,7 @@ class AppInitialData {
 				"value" => 536870912,
 				"displayName" => "Remote/Encrypted file size limit to process",
 				"title" => "",
-				"description" => "Maximum file size (in GBytes) for requesting from php core. Used when file hosts on remote NC instance or have encrypted flag. Must be less then total available RAM size.",
+				"description" => "Maximum file size (in GBytes) for requesting from php core. Used when file is hosted on remote NC instance or have encrypted flag. Must be less than total available RAM size.",
 				"helpUrl" => "https://cloud-py-api.readthedocs.io/{todo-url:/settings/setting_name}"
 			],
 			[
@@ -72,8 +72,8 @@ class AppInitialData {
 			[
 				"name" => "cpa_loglevel",
 				"value" => "WARNING",
-				"displayName" => "Framework loglevel",
-				"description" => "Used by apps, that using this Framework",
+				"displayName" => "Framework log level",
+				"description" => "Used by apps, that are using this framework",
 				"title" => "",
 				"helpUrl" => "https://cloud-py-api.readthedocs.io/{todo-url:/settings/setting_name}"
 			],
