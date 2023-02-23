@@ -3,8 +3,6 @@ OC.L10N.register(
     {
     "Full path to python interpreter" : "Полный путь к интерпретатору python",
     "Use pre-compiled Python binaries" : "Используйте предварительно скомпилированные двоичные файлы Python",
-    "Framework loglevel" : "Уровень логирования фреймворка",
-    "Used by apps, that using this Framework" : "Используется приложениями, использующими этот фреймворк",
     "Error" : "Ошибка",
     "Settings list is empty" : "Список настроек пуст",
     "Bug report" : "Отчет об ошибке",

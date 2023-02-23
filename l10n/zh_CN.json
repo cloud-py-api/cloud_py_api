@@ -2,7 +2,6 @@
     "Full path to python interpreter" : "Python 解释器的完整路径",
     "Absolute path to the python runnable (e.g. \"/usr/bin/python3\"). Can be obtained by `which python3` command. Used when pre-compiled binaries option is not selected." : "Python 可执行文件的绝对路径（例如“/usr/bin/python3”）。 该路径可以通过 `which python3` 命令获得。该设置在未使用预编译二进制文件的情况下起作用。",
     "Remote/Encrypted file size limit to process" : "要处理的远程/加密文件的大小上限",
-    "Maximum file size (in GBytes) for requesting from php core. Used when file hosts on remote NC instance or have encrypted flag. Must be less then total available RAM size." : "从 PHP 核心请求的最大文件大小。当文件存储于远程 NC 实例上，或具有加密标识时使用。必须小于可用 RAM 的大小。",
     "Use pre-compiled Python binaries" : "使用预编译了的Python二进制文件",
     "Use PHP path from settings" : "使用设置中的PHP路径",
     "Error" : "错误",
