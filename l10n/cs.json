@@ -8,6 +8,8 @@
     "Absolute path to the PHP executable (e.g. \"/usr/bin/php7.4\"). Can be obtained by `which php` or `which php7.4` command" : "Úplný popis umístění spustitelného souboru s PHP (např. „/usr/bin/php7.4“). Lze zjistit příkazem `which php` nebo `which php7.4`",
     "Use pre-compiled Python binaries" : "Použít předkompilované spustitelné soubory v Python",
     "Use Python part in binary format (located in the appdata folder)" : "Použít část v Python v binární podobě (nachází se ve složce appdata)",
+    "Framework log level" : "Úroveň podrobností zaznamenávání událostí ve frameworku",
+    "Used by apps, that are using this framework" : "Používáno aplikacemi, které používají tento framework",
     "Cloud Python API" : "Python API pro cloud",
     "Nextcloud Python API (Framework)" : "Python API pro Nextcloud (framwork)",
     "Cloud Python API (Framework)" : "Python API pro cloud (framwork)",
