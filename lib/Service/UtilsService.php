@@ -416,7 +416,9 @@ class UtilsService {
 				'filename' => $filename
 			];
 		}
-		return false;
+		return [
+			'extracted' => false,
+		];
 	}
 
 	/**
@@ -453,9 +455,7 @@ class UtilsService {
 		string $url, array $binariesFolder, string $appId
 	): bool {
 		$currentBinaryHashes = $this->getCurrentBinaryDirHashes($binariesFolder, $appId);
-		$newBinaryHashes = $this->downloadBinaryDirHashes(
-			str_replace('.tar.gz', '.json', $url), $binariesFolder, $appId
-		);
+		$newBinaryHashes = $this->downloadBinaryDirHashes(str_replace('.tar.gz', '.json', $url));
 		if ($newBinaryHashes['success'] && $currentBinaryHashes['success']) {
 			// Skip hash check of archive file
 			$archiveFilename = $appId . '_' . $this->getBinaryName() . '.tar.gz';
