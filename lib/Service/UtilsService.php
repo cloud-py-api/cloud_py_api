@@ -343,6 +343,229 @@ class UtilsService {
 	}
 
 	/**
+	 * Perform cURL to download python binary (in directory format)
+	 *
+	 * @param string $url
+	 * @param array $binariesFolder appdata binaries folder
+	 * @param string $appId target Application::APP_ID
+	 * @param string $filename archive and extracted folder name
+	 * @param bool $update flag to determine whether to update already downloaded binary or not
+	 *
+	 * @return array
+	 */
+	public function downloadPythonBinaryDir(
+		string $url,
+		array $binariesFolder,
+		string $appId,
+		string $filename = 'main',
+		bool $update = false
+	): array {
+		if (isset($binariesFolder['success']) && $binariesFolder['success']) {
+			$dir = $binariesFolder['path'] . '/';
+		} else {
+			return $binariesFolder; // Return getAppDataFolder result
+		}
+		$file_name = $filename . '.tar.gz';
+		$save_file_loc = $dir . $file_name;
+		$shouldDownloadBinary = $this->compareBinaryDirectoryHashes($url, $binariesFolder, $appId);
+
+		if (!file_exists($dir . $filename) || ($update && $shouldDownloadBinary)) {
+			$cURL = curl_init($url);
+			$fp = fopen($save_file_loc, 'wb');
+			if ($fp) {
+				curl_setopt_array($cURL, [
+					CURLOPT_RETURNTRANSFER => true,
+					CURLOPT_FILE => $fp,
+					CURLOPT_FOLLOWLOCATION => true,
+				]);
+				curl_exec($cURL);
+				curl_close($cURL);
+				fclose($fp);
+				$unpacked = $this->unTarGz($binariesFolder, $filename . '.tar.gz');
+				unlink($save_file_loc);
+				return [
+					'downloaded' => true,
+					'unpacked' => $unpacked
+				];
+			}
+		}
+
+		return [
+			'downloaded' => true,
+			'unpacked' => true,
+		];
+	}
+
+	/**
+	 * Extract tar.gz file
+	 *
+	 * @param array $binariesFolder appdata binaries folder
+	 * @param string $src_filename source tar.gz file name
+	 *
+	 * @return array
+	 */
+	public function unTarGz(array $binariesFolder, string $src_filename): array {
+		if (isset($binariesFolder['success']) && $binariesFolder['success']) {
+			$dir = $binariesFolder['path'] . '/';
+			$src_file = $dir . $src_filename;
+			$phar = new \PharData($src_file);
+			$extracted = $phar->extractTo($dir, null, true);
+			$filename = $phar->getFilename();
+			return [
+				'extracted' => $extracted,
+				'filename' => $filename
+			];
+		}
+		return [
+			'extracted' => false,
+		];
+	}
+
+	/**
+	 * Perform cURL to get binary folder hashes sha256 sum
+	 *
+	 * @param string $url url to the binary hashsums file
+	 *
+	 * @return array
+	 */
+	public function downloadBinaryDirHashes(string $url): array {
+		$cURL = curl_init($url);
+		curl_setopt_array($cURL, [
+			CURLOPT_RETURNTRANSFER => true,
+			CURLOPT_FOLLOWLOCATION => true,
+		]);
+		$binaryHash = curl_exec($cURL);
+		curl_close($cURL);
+		return [
+			'success' => $binaryHash != false,
+			'binaryHash' => json_decode($binaryHash, true),
+		];
+	}
+
+	/**
+	 * Compare binary folder hashes from release.
+	 * If hash not exists return `true` (download anyway)
+	 *
+	 * @param string $url
+	 * @param array $binariesFolder
+	 *
+	 * @return bool
+	 */
+	public function compareBinaryDirectoryHashes(
+		string $url, array $binariesFolder, string $appId
+	): bool {
+		$currentBinaryHashes = $this->getCurrentBinaryDirHashes($binariesFolder, $appId);
+		$newBinaryHashes = $this->downloadBinaryDirHashes(str_replace('.tar.gz', '.json', $url));
+		if ($newBinaryHashes['success'] && $currentBinaryHashes['success']) {
+			// Skip hash check of archive file
+			$archiveFilename = $appId . '_' . $this->getBinaryName() . '.tar.gz';
+			if (isset($newBinaryHashes['binaryHashes'][$archiveFilename])) {
+				unset($newBinaryHashes['binaryHashes'][$archiveFilename]);
+			}
+			foreach ($newBinaryHashes['binaryHashes'] as $filename => $hash) {
+				$fileExists = !isset($currentBinaryHashes[$filename]);
+				$currentHash = $currentBinaryHashes['binaryHashes'][$filename];
+				$hashEqual = $currentHash == $hash;
+				if (!$fileExists || !$hashEqual) {
+					return true;
+				}
+			}
+			return false;
+		}
+		return true;
+	}
+
+	/**
+	 * Get current binary folder files hashes
+	 *
+	 * @param array $binariesFolder
+	 *
+	 * @return array
+	 */
+	public function getCurrentBinaryDirHashes(array $binariesFolder, string $appId): array {
+		$currentBinaryHashes = [];
+		$archiveFilename = $appId . '_' . $this->getBinaryName() . '.tar.gz';
+		if (file_exists($binariesFolder['path'] . '/' . $archiveFilename)) {
+			$currentBinaryHashes[$archiveFilename] = hash_file(
+				'sha256',
+				$binariesFolder['path'] . '/' . $archiveFilename
+			);
+		}
+		$extractedBinaryFolder = $binariesFolder['path'] . '/' . $appId . '_'.  $this->getBinaryName();
+		$files = scandir($extractedBinaryFolder);
+		if ($files !== false) {
+			foreach ($files as $file) {
+				if ($file != '.' && $file != '..') {
+					// Get sha256 hash of each file
+					// If file is directory, get sha256 hash of each file in directory
+					if (is_dir($extractedBinaryFolder . '/' . $file)) {
+						$dirFiles = scandir($extractedBinaryFolder . '/' . $file);
+						$currentBinaryHashes = $this->getFolderHashes(
+							$dirFiles,
+							$file,
+							$extractedBinaryFolder . '/' . $file,
+							$currentBinaryHashes,
+							$appId
+						);
+					} else {
+						$binaryFolderFilePath = $appId . '_' . $this->getBinaryName() . '/' . $file;
+						$currentBinaryHashes[$binaryFolderFilePath] = hash_file(
+							'sha256',
+							$extractedBinaryFolder . '/' . $file
+						);
+					}
+				}
+			}
+		}
+		return [
+			'success' => count($currentBinaryHashes) > 0,
+			'binaryHashes' => $currentBinaryHashes
+		];
+	}
+
+	/**
+	 * Get sha256 hashes of each file in binary folder
+	 * Recursive function call if file is directory
+	 *
+	 * @param array $files
+	 * @param string $folder
+	 * @param string $extractedBinaryFolder
+	 * @param array $currentBinaryHashes
+	 * @param string $appId
+	 *
+	 * @return array
+	 */
+	private function getFolderHashes(
+		array $files,
+		string $folder,
+		string $extractedBinaryFolder,
+		array $currentBinaryHashes,
+		string $appId
+	): array {
+		foreach ($files as $file) {
+			if ($file != '.' && $file != '..') {
+				// Get sha256 hash of each file
+				// If file is directory, get sha256 hash of each file in directory
+				if (is_dir($extractedBinaryFolder . '/' . $file)) {
+					$dirFiles = scandir($extractedBinaryFolder . '/' . $file);
+					$currentBinaryHashes = $this->getFolderHashes(
+						$dirFiles,
+						$folder. '/' . $file, $extractedBinaryFolder . '/' . $file,
+						$currentBinaryHashes, $appId
+					);
+				} else {
+					$binaryFolderFilePath = $appId . '_'
+						. $this->getBinaryName() . '/' . $folder . '/' . $file;
+					$currentBinaryHashes[$binaryFolderFilePath] = hash_file(
+						'sha256', $extractedBinaryFolder . '/' . $file
+					);
+				}
+			}
+		}
+		return $currentBinaryHashes;
+	}
+
+	/**
 	 * Perform cURL to get binary's sha256 sum
 	 *
 	 * @param string $url url to the binary hashsum file
