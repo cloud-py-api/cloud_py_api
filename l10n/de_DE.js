@@ -20,7 +20,7 @@ OC.L10N.register(
     "Use PHP path from settings" : "PHP-Pfad aus den Einstellungen verwenden",
     "Error" : "Fehler",
     "Settings list is empty" : "Einstellungsliste ist leer",
-    "Seems like database not initialized properly. Try to re-enable the app" : "Die Datenbank wurde wohl nicht richtig initialisiert. Versuchen Sie die App erneut zu aktivieren",
+    "Seems like database not initialized properly. Try to re-enable the app" : "Die Datenbank wurde wohl nicht richtig initialisiert. Versuchen Sie, die App erneut zu aktivieren",
     "Bug report" : "Fehlerbericht",
     "Settings successfully updated" : "Einstellungen erfolgreich aktualisiert",
     "Some error occurred while updating settings" : "Fehler beim Aktualisieren der Einstellungen",
