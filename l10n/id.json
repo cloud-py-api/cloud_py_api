@@ -1,5 +1,6 @@
 { "translations": {
     "Error" : "Galat",
+    "Copy to clipboard" : "Salin ke papan klip",
     "Copied to clipboard" : "Disalin ke papan klip"
 },"pluralForm" :"nplurals=1; plural=0;"
 }
