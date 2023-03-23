@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.6 - 2023-03-23]
+
+### Fixed
+
+- Fixed binary hashes check
+
 ## [0.1.5 - 2023-02-25]
 
 ### Changed
