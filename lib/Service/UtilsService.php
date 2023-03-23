@@ -434,11 +434,11 @@ class UtilsService {
 			CURLOPT_RETURNTRANSFER => true,
 			CURLOPT_FOLLOWLOCATION => true,
 		]);
-		$binaryHash = curl_exec($cURL);
+		$binaryHashes = curl_exec($cURL);
 		curl_close($cURL);
 		return [
-			'success' => $binaryHash != false,
-			'binaryHash' => json_decode($binaryHash, true),
+			'success' => $binaryHashes != false,
+			'binaryHashes' => json_decode($binaryHashes, true),
 		];
 	}
 
