@@ -198,7 +198,7 @@ class UtilsService {
 
 	public function isMuslLinux(): bool {
 		exec('ldd --version 2>&1', $output, $result_code);
-		if (count($output) > 0 && str_contains($output[0], 'musl')) {
+		if (count($output) > 0 && strpos($output[0], 'musl') !== false) {
 			return true;
 		}
 		return false;
@@ -210,11 +210,11 @@ class UtilsService {
 	public function getOsArch(): string {
 		$arm64_names = ["aarch64", "armv8", "arm64"];
 		$machineType = php_uname('m');
-		if (str_contains($machineType, 'x86_64')) {
+		if (strpos($machineType, 'x86_64') !== false) {
 			return 'amd64';
 		}
 		foreach ($arm64_names as $arm64_name) {
-			if (str_contains($machineType, $arm64_name)) {
+			if (strpos($machineType, $arm64_name) !== false) {
 				return 'arm64';
 			}
 		}
