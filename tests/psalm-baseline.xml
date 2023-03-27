@@ -37,18 +37,14 @@
     <RedundantCondition occurrences="1">
       <code>isset($setting)</code>
     </RedundantCondition>
-    <UndefinedClass occurrences="1">
+    <UndefinedClass occurrences="2">
       <code>?DatabaseStatistics</code>
+      <code>TAR</code>
     </UndefinedClass>
     <UndefinedDocblockClass occurrences="2">
       <code>$this-&gt;databaseStatistics</code>
       <code>DatabaseStatistics</code>
     </UndefinedDocblockClass>
-    <UndefinedFunction occurrences="3">
-      <code>str_contains($machineType, $arm64_name)</code>
-      <code>str_contains($machineType, 'x86_64')</code>
-      <code>str_contains($output[0], 'musl')</code>
-    </UndefinedFunction>
     <UndefinedMagicMethod occurrences="4">
       <code>getValue</code>
       <code>getValue</code>
