@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.7 - 2023-03-27]
+
+### Fixed
+
+- Fixed `str_contains` (only in PHP8) function usage to `strpos` (available in PHP7)
+- Fixed archive unpack on snap instances
+
 ## [0.1.6 - 2023-03-23]
 
 ### Fixed
