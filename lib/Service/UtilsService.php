@@ -29,6 +29,7 @@ declare(strict_types=1);
 namespace OCA\Cloud_Py_API\Service;
 
 use bantu\IniGetWrapper\IniGetWrapper;
+use OC\Archive\TAR;
 use OCP\IConfig;
 use OCP\App\IAppManager;
 
@@ -408,12 +409,10 @@ class UtilsService {
 		if (isset($binariesFolder['success']) && $binariesFolder['success']) {
 			$dir = $binariesFolder['path'] . '/';
 			$src_file = $dir . $src_filename;
-			$phar = new \PharData($src_file);
-			$extracted = $phar->extractTo($dir, null, true);
-			$filename = $phar->getFilename();
+			$archive = new TAR($src_file);
+			$extracted = $archive->extract($dir);
 			return [
 				'extracted' => $extracted,
-				'filename' => $filename
 			];
 		}
 		return [
