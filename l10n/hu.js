@@ -2,8 +2,8 @@ OC.L10N.register(
     "cloud_py_api",
     {
     "Error" : "Hiba",
-    "Settings successfully updated" : "Beállítások sikeresen frissítve",
-    "System info" : "Rendszerinformáció",
+    "Settings successfully updated" : "A beállítások sikeresen frissítve",
+    "System info" : "Rendszer-információ",
     "Copy to clipboard" : "Másolás a vágólapra",
     "Copied to clipboard" : "Vágólapra másolva"
 },
