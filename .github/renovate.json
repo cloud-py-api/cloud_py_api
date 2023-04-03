@@ -13,5 +13,6 @@
     "**/src/**",
     "**/templates/**",
     "**/tests/**"
-  ]
+  ],
+  "rangeStrategy": "replace"
 }
