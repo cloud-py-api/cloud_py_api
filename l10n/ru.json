@@ -1,5 +1,7 @@
 { "translations": {
     "Full path to python interpreter" : "Полный путь к интерпретатору python",
+    "Absolute path to the python runnable (e.g. \"/usr/bin/python3\"). Can be obtained by `which python3` command. Used when pre-compiled binaries option is not selected." : "Абсолютный путь к исполняемому файлу Python (например, \"/usr/bin/python3\"). Можно получить с помощью команды `which python3`. Используется, когда опция предварительно скомпилированных двоичных файлов не выбрана.",
+    "Remote/Encrypted file size limit to process" : "Ограничение размера удаленного/зашифрованного файла для обработки",
     "Use pre-compiled Python binaries" : "Используйте предварительно скомпилированные двоичные файлы Python",
     "Error" : "Ошибка",
     "Settings list is empty" : "Список настроек пуст",
