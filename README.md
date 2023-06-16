@@ -35,15 +35,3 @@ The Nextcloud `cloud_py_api` app supports Nextcloud version 25 and higher.
 ## Apps using this
 
 - [MediaDC](https://github.com/andrey18106/mediadc) - Nextcloud Media Duplicate collector app. Python part - core logics for duplicates search.
-
-## Support
-
-You can support us in several ways:
-
-- ⭐ Star our work (it really motivates)
-- ❗ Create an Issue or feature request (bring to us an excellent idea)
-- 💁 Resolve some Issue or create a Pull Request (contribute to this project)
-- 🪙 Donate with any amount with one of the links below (fund this project)
-
-[![PayPal](https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif)](https://www.paypal.com/donate?hosted_button_id=H5PLJJMWLDNJQ)
-[![Liberapay](https://liberapay.com/assets/widgets/donate.svg)](https://liberapay.com/cloud_py_api/donate)
