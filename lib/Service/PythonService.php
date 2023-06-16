@@ -68,24 +68,24 @@ class PythonService {
 	 * @param string $appId target Application::APP_ID
 	 * @param string $scriptName relative to cwd path to the Python script or binary
 	 * @param array $scriptParams params to script in array (`['-param1' => value1, '--param2' => value2]`)
-	 * @param boolean $nonBlocking flag that determines how to run Python script
+	 * @param bool $nonBlocking flag that determines how to run Python script
 	 * @param array $env environment variables for python script or binary
 	 * @param bool $binary flag to determine is python binary given or a python script
 	 *
 	 * @return array|void output, result_code, errors
 	 *
-	 * If `$nonBlocking = true` - function will not waiting for Python script output, return `void`.
+	 * If `$nonBlocking = true` - function will not wait for Python script output, return `void`.
 	 * If `$nonBlocking = false` - function will return array with the `result_code`,
 	 * `output` and `errors` of the script after Python finish executing.
 	 */
 	public function run(
-			$appId,
-			$scriptName,
-			$scriptParams = [],
-			$nonBlocking = false,
-			$env = [],
-			$binary = false
-		) {
+			string $appId,
+			string $scriptName,
+			array $scriptParams = [],
+			bool $nonBlocking = false,
+			array $env = [],
+			bool $binary = false
+	) {
 		if ($binary) {
 			$cwd = $this->ncDataFolder . '/appdata_' . $this->ncInstanceId . '/' . $appId . '/';
 		} else {

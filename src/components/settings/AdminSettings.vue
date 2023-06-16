@@ -26,13 +26,12 @@
 	<div class="admin-settings">
 		<div class="settings-heading">
 			<h2 style="padding: 30px 30px 0 30px; font-size: 24px;">
-				{{ t('cloud_py_api', 'Cloud Python API (Framework)') }}
+				{{ t('cloud_py_api', 'Cloud Python API') }}
 			</h2>
 		</div>
 		<div v-if="settings.length > 0" class="settings">
 			<NcSettingsSection :title="t('cloud_py_api', mappedSettings.python_command.display_name)"
-				:description="t('cloud_py_api', mappedSettings.python_command.description)"
-				:doc-url="mappedSettings.python_command.help_url">
+				:description="t('cloud_py_api', mappedSettings.python_command.description)">
 				<input id="python_command"
 					v-model="mappedSettings.python_command.value"
 					type="text"
@@ -41,8 +40,7 @@
 					@change="saveChanges">
 			</NcSettingsSection>
 			<NcSettingsSection :title="t('cloud_py_api', mappedSettings.remote_filesize_limit.display_name)"
-				:description="t('cloud_py_api', mappedSettings.remote_filesize_limit.description)"
-				:doc-url="mappedSettings.remote_filesize_limit.help_url">
+				:description="t('cloud_py_api', mappedSettings.remote_filesize_limit.description)">
 				<input id="remote_filesize_limit"
 					v-model="remote_filesize_limit"
 					type="number"
@@ -53,8 +51,7 @@
 					@change="saveChanges">
 			</NcSettingsSection>
 			<NcSettingsSection :title="t('cloud_py_api', mappedSettings.use_php_path_from_settings.display_name)"
-				:description="t('cloud_py_api', mappedSettings.use_php_path_from_settings.description)"
-				:doc-url="mappedSettings.use_php_path_from_settings.help_url">
+				:description="t('cloud_py_api', mappedSettings.use_php_path_from_settings.description)">
 				<NcCheckboxRadioSwitch :checked.sync="usePhpPathFromSettings" @update:checked="updateUsePhpPathFromSettings">
 					{{ t('cloud_py_api', 'Use PHP path from settings') }}
 				</NcCheckboxRadioSwitch>
@@ -71,8 +68,7 @@
 					@change="saveChanges">
 			</NcSettingsSection>
 			<NcSettingsSection :title="t('cloud_py_api', mappedSettings.cpa_loglevel.display_name)"
-				:description="t('cloud_py_api', mappedSettings.cpa_loglevel.description)"
-				:doc-url="mappedSettings.cpa_loglevel.help_url">
+				:description="t('cloud_py_api', mappedSettings.cpa_loglevel.description)">
 				<select id="cpa_loglevel"
 					v-model="cpaLoglevel"
 					name="cpa_loglevel"

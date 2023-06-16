@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.8 - 2023-06-19]
+
+Maintenance update to add Nextcloud Hub 5 (27) support.
+
+### Updated
+
+- Updated packages
+- Updated l10n
+
 ## [0.1.7 - 2023-03-27]
 
 ### Fixed
