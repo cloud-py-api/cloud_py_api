@@ -15,6 +15,7 @@ OC.L10N.register(
     "Used by apps, that are using this framework" : "A keretrendszert használó alkalmazások használják",
     "Cloud Python API" : "Felhős Python API",
     "Nextcloud Python API (Framework)" : "Nextcloud Python API (keretrendszer)",
+    "Nextcloud Python API Framework\n\n| **Currently in development, all is under design**\n\n### Provides convenient functions for Python\n\n- Read & write file system objects\n- Working with database\n- Wrapper around `OCC` calls\n- Calling your python function from php part of your app and return a result\n\n### Used by the following apps\n\n- [MediaDC](https://apps.nextcloud.com/apps/mediadc) - Nextcloud Media Duplicate Collector app" : "Nextcloud Python API keretrendszer\n\n| **Jelenleg fejlesztés alatt, minden tervezési fázisban**\n\n### Kényelmes függvényeket biztosít a Python számára\n\n- Fájlrendszer-objektumok olvasása és írása\n- Adatbázis kezelése\n- Burkolófüggvények az `OCC` hívásokhoz\n- A python függvény meghívása az alkalmazása PHP-s részéből, és az eredmény visszaadása\n\n### A következő alkalmazások használják\n\n- [MediaDC](https://apps.nextcloud.com/apps/mediadc) - Nextcloud Ismétlődő médiafájl-gyűjtő alkalmazás",
     "Use PHP path from settings" : "A beállításokban lévő PHP-útvonal használata",
     "Error" : "Hiba",
     "Settings list is empty" : "A beállítások listája üres",
