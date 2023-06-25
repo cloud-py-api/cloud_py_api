@@ -13,6 +13,7 @@
     "Used by apps, that are using this framework" : "由使用此框架的應用程式使用",
     "Cloud Python API" : "雲端 Python API",
     "Nextcloud Python API (Framework)" : "Nextcloud Python API (框架)",
+    "Nextcloud Python API Framework\n\n| **Currently in development, all is under design**\n\n### Provides convenient functions for Python\n\n- Read & write file system objects\n- Working with database\n- Wrapper around `OCC` calls\n- Calling your python function from php part of your app and return a result\n\n### Used by the following apps\n\n- [MediaDC](https://apps.nextcloud.com/apps/mediadc) - Nextcloud Media Duplicate Collector app" : "Nextcloud Python API 框架\n\n| **目前正在開發中，全部的東西都還在設計**\n\n### 提供方便的 Python 函式\n\n- 讀取與寫入檔案系統物件\n- 使用資料庫\n- 圍繞 `OCC` 呼叫形成的包裝函式\n- 從應用程式的 PHP 部份呼叫您的 Python 函式並回傳結果\n\n### 被以下應用程式使用\n\n- [MediaDC](https://apps.nextcloud.com/apps/mediadc) - Nextcloud 媒體重複蒐集器應用程式",
     "Use PHP path from settings" : "使用設置中的 PHP 路徑",
     "Error" : "錯誤",
     "Settings list is empty" : "設定列表為空",
