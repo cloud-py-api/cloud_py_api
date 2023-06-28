@@ -10,7 +10,10 @@ Framework(App) for Nextcloud to develop apps, that using Python.
 
 Consists of PHP part(**cloud_py_api app**) and a Python module(**nc-py-api**).
 
-| **Currently in development, all is in a design state**
+## Current state: Abandoned
+### Project was divided into two different repositories:
+### https://github.com/cloud-py-api/app_ecosystem_v2
+### https://github.com/cloud-py-api/nc_py_api
 
 ## Provides Convenient Functions for Python
 
