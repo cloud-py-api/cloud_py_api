@@ -29,6 +29,7 @@ declare(strict_types=1);
 namespace OCA\Cloud_Py_API\Service;
 
 use bantu\IniGetWrapper\IniGetWrapper;
+use OC\Archive\TAR;
 use OCP\IConfig;
 use OCP\App\IAppManager;
 
@@ -197,7 +198,7 @@ class UtilsService {
 
 	public function isMuslLinux(): bool {
 		exec('ldd --version 2>&1', $output, $result_code);
-		if (count($output) > 0 && str_contains($output[0], 'musl')) {
+		if (count($output) > 0 && strpos($output[0], 'musl') !== false) {
 			return true;
 		}
 		return false;
@@ -209,11 +210,11 @@ class UtilsService {
 	public function getOsArch(): string {
 		$arm64_names = ["aarch64", "armv8", "arm64"];
 		$machineType = php_uname('m');
-		if (str_contains($machineType, 'x86_64')) {
+		if (strpos($machineType, 'x86_64') !== false) {
 			return 'amd64';
 		}
 		foreach ($arm64_names as $arm64_name) {
-			if (str_contains($machineType, $arm64_name)) {
+			if (strpos($machineType, $arm64_name) !== false) {
 				return 'arm64';
 			}
 		}
@@ -408,12 +409,10 @@ class UtilsService {
 		if (isset($binariesFolder['success']) && $binariesFolder['success']) {
 			$dir = $binariesFolder['path'] . '/';
 			$src_file = $dir . $src_filename;
-			$phar = new \PharData($src_file);
-			$extracted = $phar->extractTo($dir, null, true);
-			$filename = $phar->getFilename();
+			$archive = new TAR($src_file);
+			$extracted = $archive->extract($dir);
 			return [
 				'extracted' => $extracted,
-				'filename' => $filename
 			];
 		}
 		return [

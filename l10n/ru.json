@@ -1,15 +1,30 @@
 { "translations": {
     "Full path to python interpreter" : "Полный путь к интерпретатору python",
+    "Absolute path to the python runnable (e.g. \"/usr/bin/python3\"). Can be obtained by `which python3` command. Used when pre-compiled binaries option is not selected." : "Абсолютный путь к исполняемому файлу Python (например, \"/usr/bin/python3\"). Можно получить с помощью команды `which python3`. Используется, когда не выбрана опция подключения прекомпилированных библиотек.",
+    "Remote/Encrypted file size limit to process" : "Ограничение размера удаленного/зашифрованного файла для обработки",
+    "Maximum file size (in GBytes) for requesting from php core. Used when file is hosted on remote NC instance or have encrypted flag. Must be less than total available RAM size." : "Максимальный размер файла (в ГБ) для запроса средствами php. Используется, когда файл находится на удаленном экземпляре NC или зашифрован. Параметр должен быть задан меньше доступного объема оперативной памяти.",
+    "Use path to PHP interpreter for Python from settings" : "Использовать указанный в настройках путь к интерпретатору PHP",
+    "Determine whether to use path from settings or detect it automatically (may not work with some unusual PHP install locations). Used in Python part." : "Задает - использовать ли указанный в настройках путь, или определять его автоматически (может не работать с  нетипичными местами установки PHP). Используется в Python.",
+    "Full path to PHP interpreter for Python" : "Полный путь к интерпретатору PHP",
+    "Absolute path to the PHP executable (e.g. \"/usr/bin/php7.4\"). Can be obtained by `which php` or `which php7.4` command" : "Абсолютный путь к исполняемому файлу PHP (например, \"/usr/bin/php7.4\"). Можно получить с помощью команды  `which php` или `which php7.4`",
     "Use pre-compiled Python binaries" : "Используйте предварительно скомпилированные двоичные файлы Python",
+    "Use Python part in binary format (located in the appdata folder)" : "Использовать встроенный Python (находится в каталоге appdata)",
+    "Framework log level" : "Уровень журнала фреймворка",
+    "Used by apps, that are using this framework" : "Предназначен для приложений использующих этот фреймворк",
+    "Cloud Python API" : "Cloud Python API",
+    "Nextcloud Python API (Framework)" : "Nextcloud Python API (Фреймворк)",
+    "Use PHP path from settings" : "Использовать указанный в настройках путь к PHP",
     "Error" : "Ошибка",
     "Settings list is empty" : "Список настроек пуст",
+    "Seems like database not initialized properly. Try to re-enable the app" : "Похоже, что база данных не создалась должным образом. Проверьте, соблюдены ли зависимости приложения. Попробуйте его переустановить.",
     "Bug report" : "Отчет об ошибке",
     "Settings successfully updated" : "Настройки обновлены",
-    "Some error occurred while updating settings" : "Произошла ошибка во время обновления настроек",
-    "Collect non sensitive system info for bug report" : "Сбор нечувствительной информации от системе для отчета об ошибке",
+    "Some error occurred while updating settings" : "При сохранении настроек произошла ошибка",
+    "Collect non sensitive system info for bug report" : "Сбор обезличенной информации о системе для отчета об ошибке",
     "Collect system info" : "Сбор информации о системе",
     "System info" : "Информация о системе",
     "Copy to clipboard" : "Копировать в буфер",
-    "Copied to clipboard" : "Скопировано в буфер обмена"
+    "Copied to clipboard" : "Скопировано в буфер обмена",
+    "_Test text_::_Test texts_" : ["Проверочный текст","Проверочных текста","Проверочных текстов","Проверочные тексты"]
 },"pluralForm" :"nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);"
 }
