@@ -15,6 +15,7 @@ OC.L10N.register(
     "Used by apps, that are using this framework" : "تستخدمه التطبيقات التي تستخدم إطار العمل هذا",
     "Cloud Python API" : "واجهة برمجة التطبيقات السجابية بالبايتون",
     "Nextcloud Python API (Framework)" : "واجهة برمجة تطبيقات نكست كلاود بالبايتون (إطار عمل)",
+    "Nextcloud Python API Framework\n\n| **Currently in development, all is under design**\n\n### Provides convenient functions for Python\n\n- Read & write file system objects\n- Working with database\n- Wrapper around `OCC` calls\n- Calling your python function from php part of your app and return a result\n\n### Used by the following apps\n\n- [MediaDC](https://apps.nextcloud.com/apps/mediadc) - Nextcloud Media Duplicate Collector app" : "إطار عمل واجهة برمجة تطبيقات نكست كلود بايثون\n\n|** قيد التطوير بالوقت الراهن، وجميعها قيد التصميم \n\n** ### يوفر وظائف متوافقة مع بايثون\n\n- قراءة وكتابة كائنات نظام خزن الملفات\n- العمل مع قاعدة البيانات\n- تغطية طلبات\" الاتصال التجاري المتعدد OCC\"\n- استدعاء وظيفة بايثون الخاصة بك من معالج النص التشعبي لتطبيقك وتقديم نتيجة\n\n### يستخدم من قبل التطبيقات التالية\n\n- [MediaDC] (https://apps.nextcloud.com/apps/mediadc) - تطبيق مجمع الوسائط المكرر نكست كلود Nextcloud Media Duplicate Collector",
     "Use PHP path from settings" : "استخدم مسار PHP من الإعدادات",
     "Error" : "خطأ",
     "Settings list is empty" : "قائمة الإعدادات فارغة",
