@@ -4,9 +4,9 @@ OC.L10N.register(
     "Full path to python interpreter" : "المسار الكامل لمترجم بايتون",
     "Absolute path to the python runnable (e.g. \"/usr/bin/python3\"). Can be obtained by `which python3` command. Used when pre-compiled binaries option is not selected." : "المسار المطلق لبايتون قيد التشغيل (مثلاً: \"/usr/bin/python3\"). يمكن الاستعلام عنه بالأمر 'which puthon3'. يُستعمل عندما لا يكون الخيار \"ملفات ثنائية مسبقة الترجمة\" pre-compiled binaries متخذاً.",
     "Remote/Encrypted file size limit to process" : "حد أقصى لحجم الملف المُشفّر encrypted / القصي remote بالنسبة للنظمة processـ",
-    "Maximum file size (in GBytes) for requesting from php core. Used when file is hosted on remote NC instance or have encrypted flag. Must be less than total available RAM size." : "أقصى حجم للملف (بالغيغا بايت) يمكن أن يُطلب من php core. يُستعمل عندما يكون الملف مستضافا على صورة قصيّة لنكست كلاود remote NC instance أو عندما  يكون شاخص التشفير encrypted flag مفعّلا.",
+    "Maximum file size (in GBytes) for requesting from php core. Used when file is hosted on remote NC instance or have encrypted flag. Must be less than total available RAM size." : "أقصى حجم للملف (بالغيغا بايت) يمكن أن يُطلب من php core. يُستعمل عندما يكون الملف مستضافا على صورة قصيّة لنكست كلاود remote NC instance أو عندما  يكون شاخص \"مُشفّر\" encrypted flag مُفعّلا.",
     "Use path to PHP interpreter for Python from settings" : "تحصيل المسار  إلى مترجم PHP من أجل بايتون من الإعدادات",
-    "Determine whether to use path from settings or detect it automatically (may not work with some unusual PHP install locations). Used in Python part." : "اختر هل سيتم تحصيل المسار من الإعدادات أو سيتم اكتشافه تلقائيّاً ( الأمر الذي يمكن ألّا ينجح في بعض الأحوال إذا ما كانت PHP مُنصّبة في غير الأماكن المعتادة). تُستخدم في جزء بايتون.",
+    "Determine whether to use path from settings or detect it automatically (may not work with some unusual PHP install locations). Used in Python part." : "إختر هل سيتم تحصيل المسار من الإعدادات أو سيتم اكتشافه تلقائيّاً ( الأمر الذي يمكن ألّا ينجح في بعض الأحوال إذا ما كانت PHP مُنصّبة في غير الأماكن المعتادة). تُستخدم في جزء بايتون.",
     "Full path to PHP interpreter for Python" : "المسار الكامل إلى مترجم PHP من أجل البايتون",
     "Absolute path to the PHP executable (e.g. \"/usr/bin/php7.4\"). Can be obtained by `which php` or `which php7.4` command" : "المسار المطلق إلى PHP  التنفيذي (مثلاً: \"/usr/bin/php7.4\"). يمكن الاستعلام عنه بالأمر 'which php' أو 'which php7.4'. ",
     "Use pre-compiled Python binaries" : "استخدام أكواد ثنائية مسبقة الترجمة من بايتون",
@@ -15,7 +15,7 @@ OC.L10N.register(
     "Used by apps, that are using this framework" : "تستخدمه التطبيقات التي تستخدم إطار العمل هذا",
     "Cloud Python API" : "واجهة برمجة التطبيقات السجابية بالبايتون",
     "Nextcloud Python API (Framework)" : "واجهة برمجة تطبيقات نكست كلاود بالبايتون (إطار عمل)",
-    "Nextcloud Python API Framework\n\n| **Currently in development, all is under design**\n\n### Provides convenient functions for Python\n\n- Read & write file system objects\n- Working with database\n- Wrapper around `OCC` calls\n- Calling your python function from php part of your app and return a result\n\n### Used by the following apps\n\n- [MediaDC](https://apps.nextcloud.com/apps/mediadc) - Nextcloud Media Duplicate Collector app" : "إطار عمل واجهة برمجة تطبيقات نكست كلود بايثون\n\n|** قيد التطوير بالوقت الراهن، وجميعها قيد التصميم \n\n** ### يوفر وظائف متوافقة مع بايثون\n\n- قراءة وكتابة كائنات نظام خزن الملفات\n- العمل مع قاعدة البيانات\n- تغطية طلبات\" الاتصال التجاري المتعدد OCC\"\n- استدعاء وظيفة بايثون الخاصة بك من معالج النص التشعبي لتطبيقك وتقديم نتيجة\n\n### يستخدم من قبل التطبيقات التالية\n\n- [MediaDC] (https://apps.nextcloud.com/apps/mediadc) - تطبيق مجمع الوسائط المكرر نكست كلود Nextcloud Media Duplicate Collector",
+    "Nextcloud Python API Framework\n\n| **Currently in development, all is under design**\n\n### Provides convenient functions for Python\n\n- Read & write file system objects\n- Working with database\n- Wrapper around `OCC` calls\n- Calling your python function from php part of your app and return a result\n\n### Used by the following apps\n\n- [MediaDC](https://apps.nextcloud.com/apps/mediadc) - Nextcloud Media Duplicate Collector app" : "إطار عمل واجهة برمجة تطبيقات نكست كلود بايثون\n\n|** قيد التطوير بالوقت الراهن \n\n** ### يوفر وظائف متوافقة مع بايثون\n\n- قراءة وكتابة كائنات نظام خزن الملفات\n- العمل مع قاعدة البيانات\n- تغطية طلبات\" الاتصال التجاري المتعدد OCC\"\n- استدعاء وظيفة بايثون الخاصة بك من معالج النص التشعبي لتطبيقك وتقديم نتيجة\n\n### يستخدم من قبل التطبيقات التالية\n\n- [MediaDC] (https://apps.nextcloud.com/apps/mediadc) - تطبيق مجمع الوسائط المكرر نكست كلود Nextcloud Media Duplicate Collector",
     "Use PHP path from settings" : "استخدم مسار PHP من الإعدادات",
     "Error" : "خطأ",
     "Settings list is empty" : "قائمة الإعدادات فارغة",
@@ -27,6 +27,6 @@ OC.L10N.register(
     "Collect system info" : "تحصيل معلومات النظام",
     "System info" : "معلومات النظام",
     "Copy to clipboard" : "نسخ الرابط",
-    "Copied to clipboard" : "تم النسخ إلى الحافظة"
+    "Copied to clipboard" : "تمّ النسخ إلى الحافظة"
 },
 "nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;");

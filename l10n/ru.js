@@ -15,6 +15,7 @@ OC.L10N.register(
     "Used by apps, that are using this framework" : "Предназначен для приложений использующих этот фреймворк",
     "Cloud Python API" : "Cloud Python API",
     "Nextcloud Python API (Framework)" : "Nextcloud Python API (Фреймворк)",
+    "Nextcloud Python API Framework\n\n| **Currently in development, all is under design**\n\n### Provides convenient functions for Python\n\n- Read & write file system objects\n- Working with database\n- Wrapper around `OCC` calls\n- Calling your python function from php part of your app and return a result\n\n### Used by the following apps\n\n- [MediaDC](https://apps.nextcloud.com/apps/mediadc) - Nextcloud Media Duplicate Collector app" : "Фреймворк Nextcloud Python API\n\n| **В настоящее время находится в разработке, все находится в стадии проектирования**\n\n### Предоставляет удобные функции для Python\n\n- Чтение & запись объектов файловой системы\n- Работа с базой данных\n- Обертка для вызовов `OCC` \n- Вызов ваших функций на Python внутри php-кода вашего приложения а возврат результата выполнения\n\n### Используется следующими приложениями\n\n- [MediaDC](https://apps.nextcloud.com/apps/mediadc) - Приложение для сбора дубликатов мультимедиа Nextcloud",
     "Use PHP path from settings" : "Использовать указанный в настройках путь к PHP",
     "Error" : "Ошибка",
     "Settings list is empty" : "Список настроек пуст",
