@@ -15,6 +15,7 @@ OC.L10N.register(
     "Used by apps, that are using this framework" : "Marko hau erabiltzen ari diren aplikazioak erabilia",
     "Cloud Python API" : "Cloud Python APIa",
     "Nextcloud Python API (Framework)" : "Nextcloud Python APIa (Markoa)",
+    "Nextcloud Python API Framework\n\n| **Currently in development, all is under design**\n\n### Provides convenient functions for Python\n\n- Read & write file system objects\n- Working with database\n- Wrapper around `OCC` calls\n- Calling your python function from php part of your app and return a result\n\n### Used by the following apps\n\n- [MediaDC](https://apps.nextcloud.com/apps/mediadc) - Nextcloud Media Duplicate Collector app" : "Nextcloud Python API markoa\n\n| **Gaur egun garapenean, dena diseinatzen ari da**\n\n### Pythonentzako funtzio erosoak eskaintzen ditu\n\n- Fitxategi-sistemako objektuak irakurri eta idaztea\n- Datu-baseekin lan egitea\n- `OCC` deien inguruko bilgarria\n- Zure python funtzioari deitzea zure aplikazioaren php-tik eta emaitza bat itzultzea\n\n### Ondorengo aplikazioek erabiltzen dute\n\n- [MediaDC](https://apps.nextcloud.com/apps/mediadc) - Nextcloud Media Duplicate Collector aplikazioa",
     "Use PHP path from settings" : "Erabili ezarpenetako PHP bide-izena",
     "Error" : "Errorea",
     "Settings list is empty" : "Ezarpenen zerrenda hutsik dago",
