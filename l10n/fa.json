@@ -1,6 +1,31 @@
 { "translations": {
+    "Full path to python interpreter" : "Full path to python interpreter",
+    "Absolute path to the python runnable (e.g. \"/usr/bin/python3\"). Can be obtained by `which python3` command. Used when pre-compiled binaries option is not selected." : "Absolute path to the python runnable (e.g. \"/usr/bin/python3\"). Can be obtained by `which python3` command. Used when pre-compiled binaries option is not selected.",
+    "Remote/Encrypted file size limit to process" : "Remote/Encrypted file size limit to process",
+    "Maximum file size (in GBytes) for requesting from php core. Used when file is hosted on remote NC instance or have encrypted flag. Must be less than total available RAM size." : "Maximum file size (in GBytes) for requesting from php core. Used when file is hosted on remote NC instance or have encrypted flag. Must be less than total available RAM size.",
+    "Use path to PHP interpreter for Python from settings" : "Use path to PHP interpreter for Python from settings",
+    "Determine whether to use path from settings or detect it automatically (may not work with some unusual PHP install locations). Used in Python part." : "Determine whether to use path from settings or detect it automatically (may not work with some unusual PHP install locations). Used in Python part.",
+    "Full path to PHP interpreter for Python" : "Full path to PHP interpreter for Python",
+    "Absolute path to the PHP executable (e.g. \"/usr/bin/php7.4\"). Can be obtained by `which php` or `which php7.4` command" : "Absolute path to the PHP executable (e.g. \"/usr/bin/php7.4\"). Can be obtained by `which php` or `which php7.4` command",
+    "Use pre-compiled Python binaries" : "Use pre-compiled Python binaries",
+    "Use Python part in binary format (located in the appdata folder)" : "Use Python part in binary format (located in the appdata folder)",
+    "Framework log level" : "Framework log level",
+    "Used by apps, that are using this framework" : "Used by apps, that are using this framework",
+    "Cloud Python API" : "Cloud Python API",
+    "Nextcloud Python API (Framework)" : "Nextcloud Python API (Framework)",
+    "Nextcloud Python API Framework\n\n| **Currently in development, all is under design**\n\n### Provides convenient functions for Python\n\n- Read & write file system objects\n- Working with database\n- Wrapper around `OCC` calls\n- Calling your python function from php part of your app and return a result\n\n### Used by the following apps\n\n- [MediaDC](https://apps.nextcloud.com/apps/mediadc) - Nextcloud Media Duplicate Collector app" : "Nextcloud Python API Framework\n\n| **Currently in development, all is under design**\n\n### Provides convenient functions for Python\n\n- Read & write file system objects\n- Working with database\n- Wrapper around `OCC` calls\n- Calling your python function from php part of your app and return a result\n\n### Used by the following apps\n\n- [MediaDC](https://apps.nextcloud.com/apps/mediadc) - Nextcloud Media Duplicate Collector app",
+    "Use PHP path from settings" : "Use PHP path from settings",
     "Error" : "خطا",
+    "Settings list is empty" : "Settings list is empty",
+    "Seems like database not initialized properly. Try to re-enable the app" : "Seems like database not initialized properly. Try to re-enable the app",
+    "Bug report" : "Bug report",
+    "Settings successfully updated" : "Settings successfully updated",
+    "Some error occurred while updating settings" : "Some error occurred while updating settings",
+    "Collect non sensitive system info for bug report" : "Collect non sensitive system info for bug report",
+    "Collect system info" : "Collect system info",
+    "System info" : "System info",
     "Copy to clipboard" : "رونوشت به تخته‌گیره",
-    "Copied to clipboard" : "در حافظه رونویسی شد"
+    "Copied to clipboard" : "در حافظه رونویسی شد",
+    "_Test text_::_Test texts_" : ["Test text","Test texts"]
 },"pluralForm" :"nplurals=2; plural=(n > 1);"
 }
