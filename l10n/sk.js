@@ -2,6 +2,7 @@ OC.L10N.register(
     "cloud_py_api",
     {
     "Error" : "Chyba",
+    "Settings list is empty" : "Zoznam nastavení je prázdny",
     "Copy to clipboard" : "Skopírovať do schránky",
     "Copied to clipboard" : "Skopírované do schránky"
 },
