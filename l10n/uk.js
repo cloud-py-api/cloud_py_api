@@ -1,8 +1,14 @@
 OC.L10N.register(
     "cloud_py_api",
     {
+    "Use pre-compiled Python binaries" : "Використовуйте попередньо скомпільовані двійкові файли Python",
     "Error" : "Помилка",
+    "Settings list is empty" : "Список налаштувань порожній",
+    "Seems like database not initialized properly. Try to re-enable the app" : "Схоже, база даних не ініціалізована належним чином. Спробуйте увімкнути програму повторно",
     "Bug report" : "Звіт про недолік",
+    "Settings successfully updated" : "Налаштування успішно оновлено",
+    "Some error occurred while updating settings" : "Виникла помилка під час оновлення налаштувань",
+    "System info" : "Інформація про систему",
     "Copy to clipboard" : "Копіювати до буферу обміну",
     "Copied to clipboard" : "Скопійовано"
 },
