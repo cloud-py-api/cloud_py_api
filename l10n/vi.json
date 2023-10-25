@@ -1,5 +1,6 @@
 { "translations": {
     "Error" : "Lỗi",
+    "Copy to clipboard" : "Sao chép vào clipboard",
     "Copied to clipboard" : "Đã sao chép vào bộ nhớ tạm"
 },"pluralForm" :"nplurals=1; plural=0;"
 }
