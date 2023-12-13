@@ -37,7 +37,7 @@ Nextcloud Python API Framework
 	<repository type="git">https://github.com/cloud-py-api/cloud_py_api</repository>
 	<dependencies>
 		<php min-version="7.4" min-int-size="64" />
-		<nextcloud min-version="25" max-version="28" />
+		<nextcloud min-version="28" max-version="29" />
 	</dependencies>
 	<repair-steps>
 		<post-migration>
