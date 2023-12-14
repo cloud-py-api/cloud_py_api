@@ -30,7 +30,7 @@
 			</h2>
 		</div>
 		<div v-if="settings.length > 0" class="settings">
-			<NcSettingsSection :title="t('cloud_py_api', mappedSettings.python_command.display_name)"
+			<NcSettingsSection :name="t('cloud_py_api', mappedSettings.python_command.display_name)"
 				:description="t('cloud_py_api', mappedSettings.python_command.description)">
 				<input id="python_command"
 					v-model="mappedSettings.python_command.value"
@@ -39,7 +39,7 @@
 					style="width: fit-content;"
 					@change="saveChanges">
 			</NcSettingsSection>
-			<NcSettingsSection :title="t('cloud_py_api', mappedSettings.remote_filesize_limit.display_name)"
+			<NcSettingsSection :name="t('cloud_py_api', mappedSettings.remote_filesize_limit.display_name)"
 				:description="t('cloud_py_api', mappedSettings.remote_filesize_limit.description)">
 				<input id="remote_filesize_limit"
 					v-model="remote_filesize_limit"
@@ -50,13 +50,13 @@
 					@input="updateRemoteFilesizeLimit"
 					@change="saveChanges">
 			</NcSettingsSection>
-			<NcSettingsSection :title="t('cloud_py_api', mappedSettings.use_php_path_from_settings.display_name)"
+			<NcSettingsSection :name="t('cloud_py_api', mappedSettings.use_php_path_from_settings.display_name)"
 				:description="t('cloud_py_api', mappedSettings.use_php_path_from_settings.description)">
 				<NcCheckboxRadioSwitch :checked.sync="usePhpPathFromSettings" @update:checked="updateUsePhpPathFromSettings">
 					{{ t('cloud_py_api', 'Use PHP path from settings') }}
 				</NcCheckboxRadioSwitch>
 			</NcSettingsSection>
-			<NcSettingsSection :title="t('cloud_py_api', mappedSettings.php_path.display_name)"
+			<NcSettingsSection :name="t('cloud_py_api', mappedSettings.php_path.display_name)"
 				:description="t('cloud_py_api', mappedSettings.php_path.description)"
 				:doc-url="mappedSettings.php_path.help_url">
 				<input id="php_path"
@@ -67,7 +67,7 @@
 					style="width: fit-content;"
 					@change="saveChanges">
 			</NcSettingsSection>
-			<NcSettingsSection :title="t('cloud_py_api', mappedSettings.cpa_loglevel.display_name)"
+			<NcSettingsSection :name="t('cloud_py_api', mappedSettings.cpa_loglevel.display_name)"
 				:description="t('cloud_py_api', mappedSettings.cpa_loglevel.description)">
 				<select id="cpa_loglevel"
 					v-model="cpaLoglevel"
@@ -80,7 +80,7 @@
 			</NcSettingsSection>
 		</div>
 		<div v-else>
-			<NcSettingsSection :title="t('cloud_py_api', 'Error')">
+			<NcSettingsSection :name="t('cloud_py_api', 'Error')">
 				<NcEmptyContent style="margin-top: 0;"
 					:title="t('cloud_py_api', 'Settings list is empty')"
 					:description="t('cloud_py_api', 'Seems like database not initialized properly. Try to re-enable the app')">
@@ -90,7 +90,7 @@
 				</NcEmptyContent>
 			</NcSettingsSection>
 		</div>
-		<NcSettingsSection :title="t('cloud_py_api', 'Bug report')">
+		<NcSettingsSection :name="t('cloud_py_api', 'Bug report')">
 			<BugReport />
 		</NcSettingsSection>
 	</div>
