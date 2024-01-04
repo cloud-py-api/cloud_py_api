@@ -1,0 +1,8 @@
+OC.L10N.register(
+    "cloud_py_api",
+    {
+    "Error" : "Error",
+    "Copy to clipboard" : "Copy to clipboard",
+    "Copied to clipboard" : "Copied to clipboard"
+},
+"nplurals=2; plural=(n!=1);");
