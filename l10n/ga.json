@@ -1,6 +1,31 @@
 { "translations": {
+    "Full path to python interpreter" : "Conair iomlán chuig ateangaire python",
+    "Absolute path to the python runnable (e.g. \"/usr/bin/python3\"). Can be obtained by `which python3` command. Used when pre-compiled binaries option is not selected." : "Conair iomlán chuig an python inrite (m.sh. \"/usr/bin/python3\"). Is féidir é a fháil trí ordú `cén python3`. Úsáidtear é nuair nach roghnaítear rogha dénártha réamh-thiomsaithe.",
+    "Remote/Encrypted file size limit to process" : "Teorainn méid comhaid cianda/criptithe le próiseáil",
+    "Maximum file size (in GBytes) for requesting from php core. Used when file is hosted on remote NC instance or have encrypted flag. Must be less than total available RAM size." : "Uasmhéid comhaid (i GBytes) le hiarratas a dhéanamh ó chroí php. Úsáidtear é nuair a dhéantar an comhad a óstáil ar chás iargúlta an NC nó nuair a bhíonn bratach criptithe agat. Ní mór go mbeadh sé níos lú ná méid iomlán an RAM atá ar fáil.",
+    "Use path to PHP interpreter for Python from settings" : "Úsáid cosán chuig ateangaire PHP do Python ó na socruithe",
+    "Determine whether to use path from settings or detect it automatically (may not work with some unusual PHP install locations). Used in Python part." : "Déan amach cé acu an n-úsáidfear cosán ó shocruithe nó lena bhrath go huathoibríoch (b'fhéidir nach n-oibreoidh sé le roinnt suíomhanna suiteála PHP neamhghnácha). Úsáidtear i gcuid Python.",
+    "Full path to PHP interpreter for Python" : "Conair iomlán chuig ateangaire PHP do Python",
+    "Absolute path to the PHP executable (e.g. \"/usr/bin/php7.4\"). Can be obtained by `which php` or `which php7.4` command" : "Conair iomlán chuig an inrite PHP (m.sh. \"/usr/bin/php7.4\"). Is féidir é a fháil leis an ordú `cén php` nó `cén php7.4`",
+    "Use pre-compiled Python binaries" : "Bain úsáid as dénártha réamh-thiomsaithe Python",
+    "Use Python part in binary format (located in the appdata folder)" : "Úsáid an chuid Python i bhformáid dhénártha (suite san fhillteán appdata)",
+    "Framework log level" : "Leibhéal loga an chreata",
+    "Used by apps, that are using this framework" : "In úsáid ag apps, atá ag baint úsáide as an gcreat seo",
+    "Cloud Python API" : "API Scamall Python",
+    "Nextcloud Python API (Framework)" : "Nextcloud Python API (Creat)",
+    "Nextcloud Python API Framework\n\n| **Currently in development, all is under design**\n\n### Provides convenient functions for Python\n\n- Read & write file system objects\n- Working with database\n- Wrapper around `OCC` calls\n- Calling your python function from php part of your app and return a result\n\n### Used by the following apps\n\n- [MediaDC](https://apps.nextcloud.com/apps/mediadc) - Nextcloud Media Duplicate Collector app" : "Creat API Python Nextcloud\n\n| **Tá gach rud á dhearadh faoi láthair **\n\n### Soláthraíonn sé feidhmeanna áisiúla do Python\n\n- Léamh agus scríobh rudaí córais comhaid\n- Ag obair le bunachar sonraí\n- Timfhilleadh timpeall glaonna `OCC`\n- Ag glaoch ar d'fheidhm python ó chuid php de d'app agus toradh a thabhairt ar ais\n\n### Úsáidte ag na haipeanna seo a leanas\n\n- [MediaDC](https://apps.nextcloud.com/apps/mediadc) - aip Bhailitheora Dúblach Nextcloud Media",
+    "Use PHP path from settings" : "Úsáid cosán PHP ó na socruithe",
     "Error" : "Earráid",
+    "Settings list is empty" : "Tá an liosta socruithe folamh",
+    "Seems like database not initialized properly. Try to re-enable the app" : "Is cosúil nach bhfuil an bunachar sonraí tosaithe i gceart. Déan iarracht an aip a athchumasú",
+    "Bug report" : "Tuairisc ar fhabht",
+    "Settings successfully updated" : "D'éirigh le nuashonrú na socruithe",
+    "Some error occurred while updating settings" : "Tharla earráid agus na socruithe á nuashonrú",
+    "Collect non sensitive system info for bug report" : "Bailigh faisnéis chórais neamhíogair le haghaidh tuairisce ar fhabht",
+    "Collect system info" : "Bailigh eolas córais",
+    "System info" : "Eolas córais",
     "Copy to clipboard" : "Cóipeáil chuig an ngearrthaisce",
-    "Copied to clipboard" : "Cóipeáladh chuig an ngearrthaisce"
+    "Copied to clipboard" : "Cóipeáladh chuig an ngearrthaisce",
+    "_Test text_::_Test texts_" : ["Téacs tástála","Téacsanna tástála","Téacsanna tástála","Téacsanna tástála","Téacsanna tástála"]
 },"pluralForm" :"nplurals=5; plural=(n==1 ? 0 : n==2 ? 1 : n<7 ? 2 : n<11 ? 3 : 4);"
 }
