@@ -27,7 +27,7 @@ OC.L10N.register(
     "Collect system info" : "Recoller información do sistema",
     "System info" : "Información do sistema",
     "Copy to clipboard" : "Copiar no portapapeis.",
-    "Copied to clipboard" : "Copiado no portapapeis.",
+    "Copied to clipboard" : "Copiado no portapapeis",
     "_Test text_::_Test texts_" : ["Texto de proba","Textos de proba"]
 },
 "nplurals=2; plural=(n != 1);");
