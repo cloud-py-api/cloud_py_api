@@ -3,8 +3,8 @@ OC.L10N.register(
     {
     "Full path to python interpreter" : "المسار الكامل لمترجم بايتون",
     "Absolute path to the python runnable (e.g. \"/usr/bin/python3\"). Can be obtained by `which python3` command. Used when pre-compiled binaries option is not selected." : "المسار المطلق لبايتون قيد التشغيل (مثلاً: \"/usr/bin/python3\"). يمكن الاستعلام عنه بالأمر 'which puthon3'. يُستعمل عندما لا يكون الخيار \"ملفات ثنائية مسبقة الترجمة\" pre-compiled binaries متخذاً.",
-    "Remote/Encrypted file size limit to process" : "حد أقصى لحجم الملف المُشفّر encrypted / القصي remote بالنسبة للنظمة processـ",
-    "Maximum file size (in GBytes) for requesting from php core. Used when file is hosted on remote NC instance or have encrypted flag. Must be less than total available RAM size." : "أقصى حجم للملف (بالغيغا بايت) يمكن أن يُطلب من php core. يُستعمل عندما يكون الملف مستضافا على صورة قصيّة لنكست كلاود remote NC instance أو عندما  يكون شاخص \"مُشفّر\" encrypted flag مُفعّلا.",
+    "Remote/Encrypted file size limit to process" : "حد أقصى لحجم الملف المُشفّر encrypted / البعيد remote بالنسبة للعملية processـ",
+    "Maximum file size (in GBytes) for requesting from php core. Used when file is hosted on remote NC instance or have encrypted flag. Must be less than total available RAM size." : "أقصى حجم للملف (بالغيغا بايت) يمكن أن يُطلب من php core. يُستعمل عندما يكون الملف مستضافا على خادم بعيد لنكست كلاود remote NC instance أو عندما  يكون شاخص \"مُشفّر\" encrypted flag مُفعّلا.",
     "Use path to PHP interpreter for Python from settings" : "تحصيل المسار  إلى مترجم PHP من أجل بايتون من الإعدادات",
     "Determine whether to use path from settings or detect it automatically (may not work with some unusual PHP install locations). Used in Python part." : "إختر هل سيتم تحصيل المسار من الإعدادات أو سيتم اكتشافه تلقائيّاً ( الأمر الذي يمكن ألّا ينجح في بعض الأحوال إذا ما كانت PHP مُنصّبة في غير الأماكن المعتادة). تُستخدم في جزء بايتون.",
     "Full path to PHP interpreter for Python" : "المسار الكامل إلى مترجم PHP من أجل البايتون",
