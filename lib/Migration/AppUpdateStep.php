@@ -35,11 +35,9 @@ use OCA\Cloud_Py_API\Migration\data\AppInitialData;
 use OCA\Cloud_Py_API\Service\UtilsService;
 
 class AppUpdateStep implements IRepairStep {
-	/** @var UtilsService */
-	private $utils;
-
-	public function __construct(UtilsService $utils) {
-		$this->utils = $utils;
+	public function __construct(
+		private readonly UtilsService $utils,
+	) {
 	}
 
 	public function getName(): string {

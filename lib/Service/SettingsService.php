@@ -35,11 +35,9 @@ use OCA\Cloud_Py_API\Db\Setting;
 use OCA\Cloud_Py_API\Db\SettingMapper;
 
 class SettingsService {
-	/** @var SettingMapper */
-	private $mapper;
-
-	public function __construct(SettingMapper $settingMapper) {
-		$this->mapper = $settingMapper;
+	public function __construct(
+		private readonly SettingMapper $mapper
+	) {
 	}
 
 	/**

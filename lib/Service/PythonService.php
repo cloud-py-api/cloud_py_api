@@ -32,24 +32,19 @@ use OCP\IConfig;
 
 use OCA\Cloud_Py_API\Db\SettingMapper;
 use OCP\AppFramework\Db\DoesNotExistException;
+use OCP\ITempManager;
 
 class PythonService {
-	/** @var string */
-	private $pythonCommand;
-
-	/** @var string */
-	private $ncInstanceId;
-
-	/** @var string */
-	private $ncDataFolder;
-
-	/** @var UtilsService */
-	private $utils;
+	private string $pythonCommand;
+	private string $ncInstanceId;
+	private string $ncDataFolder;
+	private bool $isObjectStorage;
 
 	public function __construct(
-		IConfig $config,
+		private readonly IConfig $config,
 		SettingMapper $settingMapper,
-		UtilsService $utils
+		private readonly UtilsService $utils,
+		private readonly ITempManager $tempManager,
 	) {
 		try {
 			$pythonCommand = $settingMapper->findByName('python_command');
@@ -57,9 +52,9 @@ class PythonService {
 		} catch (DoesNotExistException $e) {
 			$this->pythonCommand = '/usr/bin/python3';
 		}
-		$this->utils = $utils;
-		$this->ncInstanceId = $config->getSystemValue('instanceid');
-		$this->ncDataFolder = $config->getSystemValue('datadirectory');
+		$this->ncInstanceId = $this->config->getSystemValue('instanceid');
+		$this->ncDataFolder = $this->config->getSystemValue('datadirectory');
+		$this->isObjectStorage = $this->config->getSystemValue('objectstore', null) !== null;
 	}
 
 	/**
@@ -84,10 +79,14 @@ class PythonService {
 			array $scriptParams = [],
 			bool $nonBlocking = false,
 			array $env = [],
-			bool $binary = false
+			bool $binary = false,
 	) {
 		if ($binary) {
-			$cwd = $this->ncDataFolder . '/appdata_' . $this->ncInstanceId . '/' . $appId . '/';
+			if ($this->isObjectStorage) {
+				$cwd = ''; // scriptName should already include absolute path (/tmp/...)
+			} else {
+				$cwd = $this->ncDataFolder . '/appdata_' . $this->ncInstanceId . '/' . $appId . '/';
+			}
 		} else {
 			$cwd = $this->utils->getCustomAppsDirectory() . $appId . '/';
 		}
@@ -111,7 +110,15 @@ class PythonService {
 		}
 		if ($nonBlocking) {
 			if ($binary) {
-				$logFile = $cwd . 'logs/' . date('d-m-Y_H-i-s', time()) . '.log';
+				if (!$this->isObjectStorage) {
+					$logFile = $cwd . 'logs/' . date('d-m-Y_H-i-s', time()) . '.log';
+				} else {
+					$tempLogsDir = $this->tempManager->getTempBaseDir() . '/' . $appId . '/logs/';
+					if (!file_exists($tempLogsDir)) {
+						mkdir($tempLogsDir, 0700, true);
+					}
+					$logFile = $tempLogsDir . $appId . '_' . date('d-m-Y_H-i-s', time()) . '.log';
+				}
 			} else {
 				$appDataDir = $this->ncDataFolder . '/appdata_' . $this->ncInstanceId . '/' . $appId . '/';
 				$pyBitecodeEnvVar = 'PYTHONBYTECODEBASE="' . $appDataDir . '" ';

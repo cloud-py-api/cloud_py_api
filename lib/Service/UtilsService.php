@@ -30,9 +30,15 @@ namespace OCA\Cloud_Py_API\Service;
 
 use bantu\IniGetWrapper\IniGetWrapper;
 use OC\Archive\TAR;
+use OCP\Files\AppData\IAppDataFactory;
+use OCP\Files\NotFoundException;
+use OCP\Files\NotPermittedException;
+use OCP\Files\SimpleFS\ISimpleFile;
+use OCP\Files\SimpleFS\ISimpleFolder;
 use OCP\IConfig;
 use OCP\App\IAppManager;
 
+use OCP\ITempManager;
 use Psr\Log\LoggerInterface;
 
 use OCA\ServerInfo\DatabaseStatistics;
@@ -42,33 +48,15 @@ use OCA\Cloud_Py_API\Db\Setting;
 use OCA\Cloud_Py_API\Db\SettingMapper;
 
 class UtilsService {
-	/** @var IConfig */
-	private $config;
-
-	/** @var SettingMapper */
-	private $settingMapper;
-
-	/** @var IAppManager */
-	private $appManager;
-
-	/** @var DatabaseStatistics */
-	private $databaseStatistics;
-
-	/** @var LoggerInterface */
-	private $logger;
-
 	public function __construct(
-		IConfig $config,
-		SettingMapper $settingMapper,
-		IAppManager $appManager,
-		?DatabaseStatistics $databaseStatistics,
-		LoggerInterface $logger
+		private readonly IConfig $config,
+		private readonly SettingMapper $settingMapper,
+		private readonly IAppManager $appManager,
+		private readonly ?DatabaseStatistics $databaseStatistics,
+		private readonly LoggerInterface $logger,
+		private readonly IAppDataFactory $appDataFactory,
+		private readonly ITempManager $tempManager,
 	) {
-		$this->config = $config;
-		$this->settingMapper = $settingMapper;
-		$this->appManager = $appManager;
-		$this->databaseStatistics = $databaseStatistics;
-		$this->logger = $logger;
 	}
 
 	public function getNCLogLevel(): string {
@@ -361,14 +349,58 @@ class UtilsService {
 		string $filename = 'main',
 		bool $update = false
 	): array {
+		$isObjectStore = $this->config->getSystemValue('objectstore', null) !== null;
 		if (isset($binariesFolder['success']) && $binariesFolder['success']) {
 			$dir = $binariesFolder['path'] . '/';
 		} else {
-			return $binariesFolder; // Return getAppDataFolder result
+			if ($isObjectStore) {
+				$appDataFolder = $this->appDataFactory->get($appId)->getFolder($binariesFolder['folderName']);
+				/** @var ISimpleFolder|ISimpleFile $nodes */
+				$nodes = $appDataFolder->getDirectoryListing();
+				$binariesTempFolder = $this->tempManager->getTemporaryFolder($appId . $binariesFolder['folderName']);
+				$dir = $binariesTempFolder;
+				$binariesFolder['path'] = $dir;
+				$binaryArchiveName = $appId . '_' . $this->getBinaryName() . '.tar.gz';
+				foreach ($nodes as $node) {
+					if ($node instanceof ISimpleFile && $node->getName() === $binaryArchiveName) {
+						// Copy archive to temp folder
+						try {
+							$handle = $node->read();
+							if ($handle === false) {
+								return ['success' => false, 'error' => 'Failed to read python binary file'];
+							}
+
+							$binariesArchiveFile = fopen($dir . '/' . $binaryArchiveName, 'wb');
+							if ($binariesArchiveFile === false) {
+								return ['success' => false, 'error' => 'Failed to write python binary file'];
+							}
+							while (!feof($handle)) {
+								$chunk = fread($handle, 4 * 1024 * 1024);
+								if ($chunk === false) {
+									return ['success' => false, 'error' => 'Failed to read python binary file'];
+								}
+								fwrite($binariesArchiveFile, $chunk);
+							}
+							fclose($handle);
+							fclose($binariesArchiveFile);
+							$this->unTarGz($binariesFolder, $binaryArchiveName, true);
+						} catch (NotPermittedException $e) {
+							return ['success' => false, 'error' => $e->getMessage()];
+						}
+					}
+				}
+				$shouldDownloadBinary = !file_exists($dir . '/' . $binaryArchiveName);
+			} else {
+				return $binariesFolder; // Return getAppDataFolder result
+			}
 		}
 		$file_name = $filename . '.tar.gz';
 		$save_file_loc = $dir . $file_name;
-		$shouldDownloadBinary = $this->compareBinaryDirectoryHashes($url, $binariesFolder, $appId);
+		if (isset($shouldDownloadBinary) && !$shouldDownloadBinary) {
+			$shouldDownloadBinary = $this->compareBinaryDirectoryHashes($url, $binariesFolder, $appId);
+		} else {
+			$shouldDownloadBinary = true;
+		}
 
 		if (!file_exists($dir . $filename) || ($update && $shouldDownloadBinary)) {
 			$cURL = curl_init($url);
@@ -382,7 +414,21 @@ class UtilsService {
 				curl_exec($cURL);
 				curl_close($cURL);
 				fclose($fp);
-				$unpacked = $this->unTarGz($binariesFolder, $filename . '.tar.gz');
+				$unpacked = $this->unTarGz($binariesFolder, $filename . '.tar.gz', $isObjectStore);
+				if ($isObjectStore) {
+					// Save binaries archive to AppData (object storage)
+					$appDataFolder = $this->appDataFactory->get($appId)->getFolder($binariesFolder['folderName']);
+					$handle = fopen($save_file_loc, 'rb');
+					if ($handle === false) {
+						return ['success' => false, 'error' => 'Failed to read python binary file'];
+					}
+					try {
+						$appDataArchiveFile = $appDataFolder->newFile($binaryArchiveName);
+						$appDataArchiveFile->putContent($handle);
+					} catch (NotPermittedException|NotFoundException $e) {
+						return ['success' => false, 'error' => $e->getMessage()];
+					}
+				}
 				unlink($save_file_loc);
 				return [
 					'downloaded' => true,
@@ -397,6 +443,62 @@ class UtilsService {
 		];
 	}
 
+	public function prefetchAppDataFile(
+		string $appId,
+		string $folderName,
+		string $fileName,
+	) {
+		$appDataFolder = $this->appDataFactory->get($appId)->getFolder($folderName);
+		/** @var ISimpleFolder|ISimpleFile $nodes */
+		$nodes = $appDataFolder->getDirectoryListing();
+//		$tempFolder = $this->tempManager->getTemporaryFolder($appId . $folderName);
+		$tempFolder = $this->tempManager->getTempBaseDir() . '/' . $appId . '/' . $folderName;
+		if (!file_exists($tempFolder)) {
+			mkdir($tempFolder, 0700, true);
+		}
+		if (file_exists($tempFolder . '/' . $fileName)) {
+			return [
+				'success' => true,
+				'path' => $this->tempManager->getTempBaseDir() . '/' . $appId . '/',
+			];
+		}
+		foreach ($nodes as $node) {
+			if ($node instanceof ISimpleFile && $node->getName() === $fileName) {
+				// Copy archive to temp folder
+				try {
+					$handle = $node->read();
+					if ($handle === false) {
+						return ['success' => false, 'error' => 'Failed to read python binary file'];
+					}
+
+					$binariesArchiveFile = fopen($tempFolder . '/' . $fileName, 'wb');
+					if ($binariesArchiveFile === false) {
+						return ['success' => false, 'error' => 'Failed to write python binary file'];
+					}
+					while (!feof($handle)) {
+						$chunk = fread($handle, 4 * 1024 * 1024);
+						if ($chunk === false) {
+							return ['success' => false, 'error' => 'Failed to read python binary file'];
+						}
+						fwrite($binariesArchiveFile, $chunk);
+					}
+					fclose($handle);
+					fclose($binariesArchiveFile);
+					$this->unTarGz([
+						'success' => true,
+						'path' => $tempFolder,
+					], $fileName, true);
+				} catch (NotPermittedException $e) {
+					return ['success' => false, 'error' => $e->getMessage()];
+				}
+			}
+		}
+		return [
+			'success' => true,
+			'path' => $tempFolder,
+		];
+	}
+
 	/**
 	 * Extract tar.gz file
 	 *
@@ -405,8 +507,8 @@ class UtilsService {
 	 *
 	 * @return array
 	 */
-	public function unTarGz(array $binariesFolder, string $src_filename): array {
-		if (isset($binariesFolder['success']) && $binariesFolder['success']) {
+	public function unTarGz(array $binariesFolder, string $src_filename, bool $objectStore = false): array {
+		if (isset($binariesFolder['success']) && $binariesFolder['success'] || $objectStore) {
 			$dir = $binariesFolder['path'] . '/';
 			$src_file = $dir . $src_filename;
 			$archive = new TAR($src_file);

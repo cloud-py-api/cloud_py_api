@@ -45,17 +45,11 @@ class GetFileContentsCommand extends Command {
 	public const ARGUMENT_FILE_ID = 'fileid';
 	public const ARGUMENT_USER_ID = 'userid';
 
-	/** @var IRootFolder */
-	private $rootFolder;
-
-	/** @var LoggerInterface */
-	private $logger;
-
-	public function __construct(IRootFolder $rootFolder, LoggerInterface $logger) {
+	public function __construct(
+		private readonly IRootFolder $rootFolder,
+		private readonly LoggerInterface $logger
+	) {
 		parent::__construct();
-
-		$this->rootFolder = $rootFolder;
-		$this->logger = $logger;
 	}
 
 	protected function configure(): void {

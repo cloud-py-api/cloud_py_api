@@ -44,7 +44,7 @@ class SettingMapper extends QBMapper {
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException if more than one result
 	 */
-	public function find(int $id): Entity {
+	public function find(int $id): Setting {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->select('*')

@@ -28,6 +28,8 @@ declare(strict_types=1);
 
 namespace OCA\Cloud_Py_API\Controller;
 
+use OCP\AppFramework\Http\Attribute\NoAdminRequired;
+use OCP\AppFramework\Http\Attribute\PasswordConfirmationRequired;
 use OCP\IRequest;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http;
@@ -38,80 +40,37 @@ use OCA\Cloud_Py_API\Service\SettingsService;
 use OCA\Cloud_Py_API\Service\UtilsService;
 
 class SettingsController extends Controller {
-	/** @var SettingsService */
-	private $service;
-
-	/** @var UtilsService */
-	private $utils;
-
 	public function __construct(
 		IRequest $request,
-		SettingsService $service,
-		UtilsService $utils
+		private readonly SettingsService $service,
+		private readonly UtilsService $utils
 	) {
 		parent::__construct(Application::APP_ID, $request);
-
-		$this->service = $service;
-		$this->utils = $utils;
 	}
 
-	/**
-	 * @NoAdminRequired
-	 * @NoCSRFRequired
-	 *
-	 * @return JSONResponse array of all settings
-	 */
-	public function index() {
+	#[NoAdminRequired]
+	public function index(): JSONResponse {
 		return new JSONResponse($this->service->getSettings(), Http::STATUS_OK);
 	}
 
-	/**
-	 * @NoCSRFRequired
-	 *
-	 * @param array $settings
-	 *
-	 * @return JSONResponse
-	 */
-	public function update($settings) {
+	#[PasswordConfirmationRequired]
+	public function update(array $settings): JSONResponse {
 		return new JSONResponse($this->service->updateSettings($settings), Http::STATUS_OK);
 	}
 
-	/**
-	 * @NoCSRFRequired
-	 *
-	 * @param array $setting
-	 *
-	 * @return JSONResponse
-	 */
-	public function updateSetting($setting) {
+	#[PasswordConfirmationRequired]
+	public function updateSetting(array $setting): JSONResponse {
 		return new JSONResponse($this->service->updateSetting($setting), Http::STATUS_OK);
 	}
 
-	/**
-	 * @NoAdminRequired
-	 * @NoCSRFRequired
-	 *
-	 * @param int $id
-	 */
-	public function getSettingById($id): JSONResponse {
+	public function getSettingById(int $id): JSONResponse {
 		return new JSONResponse($this->service->getSettingById($id), Http::STATUS_OK);
 	}
 
-	/**
-	 * @NoAdminRequired
-	 * @NoCSRFRequired
-	 *
-	 * @param string $name
-	 */
 	public function getSettingByName($name): JSONResponse {
 		return new JSONResponse($this->service->getSettingByName($name), Http::STATUS_OK);
 	}
 
-	/**
-	 * @NoCSRFRequired
-	 *
-	 * @return JSONResponse array of system configuration
-	 */
 	public function systemInfo() {
 		return new JSONResponse($this->utils->getSystemInfo(), Http::STATUS_OK);
 	}

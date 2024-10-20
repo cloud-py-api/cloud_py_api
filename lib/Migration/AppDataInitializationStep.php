@@ -37,15 +37,10 @@ use OCA\Cloud_Py_API\Migration\data\AppInitialData;
 use OCA\Cloud_Py_API\Service\UtilsService;
 
 class AppDataInitializationStep implements IRepairStep {
-	/** @var SettingsMapper */
-	private $settingMapper;
-
-	/** @var UtilsService */
-	private $utils;
-
-	public function __construct(SettingMapper $settingMapper, UtilsService $utils) {
-		$this->settingMapper = $settingMapper;
-		$this->utils = $utils;
+	public function __construct(
+		private readonly SettingMapper $settingMapper,
+		private readonly UtilsService $utils,
+	) {
 	}
 
 	public function getName(): string {
