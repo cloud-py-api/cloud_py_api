@@ -28,9 +28,9 @@ declare(strict_types=1);
 
 namespace OCA\Cloud_Py_API\Tests\Integration\Db;
 
-use PHPUnit\Framework\TestCase;
-
 use OCA\Cloud_Py_API\Db\SettingMapper;
+
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \OCA\Cloud_Py_API\Db\SettingMapper

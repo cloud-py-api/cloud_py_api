@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.2.0 - 2024-10-20]
+
+Maintenance update. Update NC versions to support NC30+ only.
+
+### Added
+
+- Added basic ObjectStorage support (/tmp folder used to execute binary scripts)
+
 ## [0.1.9 - 2023-12-14]
 
 Maintenance update.

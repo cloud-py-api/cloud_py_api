@@ -28,8 +28,8 @@ declare(strict_types=1);
 
 namespace OCA\Cloud_Py_API\Tests\Unit\AppInfo;
 
-use PHPUnit\Framework\TestCase;
 use OCA\Cloud_Py_API\AppInfo\Application;
+use PHPUnit\Framework\TestCase;
 
 class ApplicationTest extends TestCase {
 	public function testConstructor() {

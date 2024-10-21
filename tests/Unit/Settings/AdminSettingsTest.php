@@ -28,10 +28,10 @@ declare(strict_types=1);
 
 namespace OCA\Cloud_Py_API\Tests\Unit\Settings;
 
-use PHPUnit\Framework\TestCase;
-
 use OCA\Cloud_Py_API\Settings\AdminSettings;
+
 use OCP\AppFramework\Http\TemplateResponse;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \OCA\Cloud_Py_API\Settings\AdminSettings

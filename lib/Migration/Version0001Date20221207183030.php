@@ -28,11 +28,12 @@ declare(strict_types=1);
 
 namespace OCA\Cloud_Py_API\Migration;
 
+use Closure;
+use OCA\Cloud_Py_API\AppInfo\Application;
 use OCP\DB\ISchemaWrapper;
-use OCP\Migration\SimpleMigrationStep;
 use OCP\Migration\IOutput;
 
-use OCA\Cloud_Py_API\AppInfo\Application;
+use OCP\Migration\SimpleMigrationStep;
 
 class Version0001Date20221207183030 extends SimpleMigrationStep {
 	/**
@@ -41,7 +42,7 @@ class Version0001Date20221207183030 extends SimpleMigrationStep {
 	 * @param array $options
 	 * @return null|ISchemaWrapper
 	 */
-	public function changeSchema(IOutput $output, \Closure $schemaClosure, array $options) {
+	public function changeSchema(IOutput $output, Closure $schemaClosure, array $options) {
 		/** @var ISchemaWrapper $schema */
 		$schema = $schemaClosure();
 
@@ -54,26 +55,26 @@ class Version0001Date20221207183030 extends SimpleMigrationStep {
 			]);
 			$table->addColumn('name', 'string', [
 				'notnull' => true,
-				'default' => ""
+				'default' => ''
 			]);
 			$table->addColumn('value', 'json', [
 				'notnull' => true
 			]);
 			$table->addColumn('display_name', 'string', [
 				'notnull' => true,
-				'default' => ""
+				'default' => ''
 			]);
 			$table->addColumn('title', 'string', [
 				'notnull' => true,
-				'default' => ""
+				'default' => ''
 			]);
 			$table->addColumn('description', 'string', [
 				'notnull' => true,
-				'default' => ""
+				'default' => ''
 			]);
 			$table->addColumn('help_url', 'string', [
 				'notnull' => true,
-				'default' => ""
+				'default' => ''
 			]);
 
 			$table->setPrimaryKey(['id']);

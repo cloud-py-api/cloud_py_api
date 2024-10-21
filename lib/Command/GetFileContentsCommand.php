@@ -28,15 +28,15 @@ declare(strict_types=1);
 
 namespace OCA\Cloud_Py_API\Command;
 
+use OCP\Files\File;
+use OCP\Files\IRootFolder;
+use OCP\Files\NotPermittedException;
+use OCP\Lock\LockedException;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use OCP\Files\IRootFolder;
-use OCP\Files\File;
-use OCP\Files\NotPermittedException;
-use OCP\Lock\LockedException;
-use Psr\Log\LoggerInterface;
 
 /**
  * Temporal command to get file contents
@@ -45,22 +45,16 @@ class GetFileContentsCommand extends Command {
 	public const ARGUMENT_FILE_ID = 'fileid';
 	public const ARGUMENT_USER_ID = 'userid';
 
-	/** @var IRootFolder */
-	private $rootFolder;
-
-	/** @var LoggerInterface */
-	private $logger;
-
-	public function __construct(IRootFolder $rootFolder, LoggerInterface $logger) {
+	public function __construct(
+		private readonly IRootFolder $rootFolder,
+		private readonly LoggerInterface $logger,
+	) {
 		parent::__construct();
-
-		$this->rootFolder = $rootFolder;
-		$this->logger = $logger;
 	}
 
 	protected function configure(): void {
-		$this->setName("cloud_py_api:getfilecontents");
-		$this->setDescription("Returns file binary data");
+		$this->setName('cloud_py_api:getfilecontents');
+		$this->setDescription('Returns file binary data');
 		$this->addArgument(self::ARGUMENT_FILE_ID, InputArgument::REQUIRED);
 		$this->addArgument(self::ARGUMENT_USER_ID, InputArgument::REQUIRED);
 	}
@@ -78,7 +72,7 @@ class GetFileContentsCommand extends Command {
 				try {
 					$output->write($file->getContent(), false, OutputInterface::OUTPUT_RAW);
 					return 0;
-				} catch (NotPermittedException | LockedException $e) {
+				} catch (NotPermittedException|LockedException $e) {
 					$this->logger->error($e->getMessage());
 					return -1;
 				}

@@ -28,10 +28,10 @@ declare(strict_types=1);
 
 namespace OCA\Cloud_Py_API\Tests\Unit\Settings;
 
-use PHPUnit\Framework\TestCase;
+use OCA\Cloud_Py_API\Settings\AdminSection;
 use PHPUnit\Framework\MockObject\MockObject;
 
-use OCA\Cloud_Py_API\Settings\AdminSection;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \OCA\Cloud_Py_API\Settings\AdminSection

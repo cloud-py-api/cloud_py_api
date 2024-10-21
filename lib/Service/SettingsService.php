@@ -28,18 +28,16 @@ declare(strict_types=1);
 
 namespace OCA\Cloud_Py_API\Service;
 
-use OCP\AppFramework\Db\DoesNotExistException;
-use OCP\AppFramework\Db\MultipleObjectsReturnedException;
-
 use OCA\Cloud_Py_API\Db\Setting;
 use OCA\Cloud_Py_API\Db\SettingMapper;
 
-class SettingsService {
-	/** @var SettingMapper */
-	private $mapper;
+use OCP\AppFramework\Db\DoesNotExistException;
+use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 
-	public function __construct(SettingMapper $settingMapper) {
-		$this->mapper = $settingMapper;
+class SettingsService {
+	public function __construct(
+		private readonly SettingMapper $mapper,
+	) {
 	}
 
 	/**
@@ -57,7 +55,7 @@ class SettingsService {
 	public function getSettingById($id) {
 		try {
 			return $this->mapper->find($id);
-		} catch (DoesNotExistException | MultipleObjectsReturnedException $e) {
+		} catch (DoesNotExistException|MultipleObjectsReturnedException $e) {
 			return [
 				'success' => false,
 				'message' => 'Not found'
@@ -76,7 +74,7 @@ class SettingsService {
 				'success' => true,
 				'setting' => $this->mapper->findByName($name)
 			];
-		} catch (DoesNotExistException | MultipleObjectsReturnedException $e) {
+		} catch (DoesNotExistException|MultipleObjectsReturnedException $e) {
 			return [
 				'success' => false,
 				'message' => 'Not found'

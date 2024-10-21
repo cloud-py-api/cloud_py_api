@@ -28,22 +28,20 @@ declare(strict_types=1);
 
 namespace OCA\Cloud_Py_API\Migration;
 
-use OCP\Migration\IOutput;
-use OCP\Migration\IRepairStep;
-
 use OCA\Cloud_Py_API\Migration\data\AppInitialData;
 use OCA\Cloud_Py_API\Service\UtilsService;
 
-class AppUpdateStep implements IRepairStep {
-	/** @var UtilsService */
-	private $utils;
+use OCP\Migration\IOutput;
+use OCP\Migration\IRepairStep;
 
-	public function __construct(UtilsService $utils) {
-		$this->utils = $utils;
+class AppUpdateStep implements IRepairStep {
+	public function __construct(
+		private readonly UtilsService $utils,
+	) {
 	}
 
 	public function getName(): string {
-		return "Updating Cloud_Py_API data";
+		return 'Updating Cloud_Py_API data';
 	}
 
 	public function run(IOutput $output) {

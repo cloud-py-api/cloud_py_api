@@ -22,7 +22,7 @@ Nextcloud Python API Framework
 - [MediaDC](https://apps.nextcloud.com/apps/mediadc) - Nextcloud Media Duplicate Collector app
 	]]>
 	</description>
-	<version>0.1.9</version>
+	<version>0.2.0</version>
 	<licence>agpl</licence>
 	<author mail="andrey18106x@gmail.com" homepage="https://github.com/andrey18106">Andrey Borysenko</author>
 	<author mail="bigcat88@icloud.com" homepage="https://github.com/bigcat88">Alexander Piskun</author>
@@ -37,7 +37,7 @@ Nextcloud Python API Framework
 	<repository type="git">https://github.com/cloud-py-api/cloud_py_api</repository>
 	<dependencies>
 		<php min-version="7.4" min-int-size="64" />
-		<nextcloud min-version="28" max-version="29" />
+		<nextcloud min-version="30" max-version="31" />
 	</dependencies>
 	<repair-steps>
 		<post-migration>

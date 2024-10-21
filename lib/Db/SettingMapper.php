@@ -28,13 +28,16 @@ declare(strict_types=1);
 
 namespace OCA\Cloud_Py_API\Db;
 
-use OCP\IDBConnection;
+use OCA\Cloud_Py_API\AppInfo\Application;
 use OCP\AppFramework\Db\Entity;
 use OCP\AppFramework\Db\QBMapper;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 
-use OCA\Cloud_Py_API\AppInfo\Application;
+use OCP\IDBConnection;
 
+/**
+ * @template-extends QBMapper<Setting>
+ */
 class SettingMapper extends QBMapper {
 	public function __construct(IDBConnection $db) {
 		parent::__construct($db, Application::APP_ID . '_settings');
@@ -44,7 +47,7 @@ class SettingMapper extends QBMapper {
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException if more than one result
 	 */
-	public function find(int $id): Entity {
+	public function find(int $id): Setting {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->select('*')

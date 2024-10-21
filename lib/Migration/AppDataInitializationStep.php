@@ -28,28 +28,23 @@ declare(strict_types=1);
 
 namespace OCA\Cloud_Py_API\Migration;
 
+use OCA\Cloud_Py_API\Db\Setting;
+use OCA\Cloud_Py_API\Db\SettingMapper;
+
+use OCA\Cloud_Py_API\Migration\data\AppInitialData;
+use OCA\Cloud_Py_API\Service\UtilsService;
 use OCP\Migration\IOutput;
 use OCP\Migration\IRepairStep;
 
-use OCA\Cloud_Py_API\Db\Setting;
-use OCA\Cloud_Py_API\Db\SettingMapper;
-use OCA\Cloud_Py_API\Migration\data\AppInitialData;
-use OCA\Cloud_Py_API\Service\UtilsService;
-
 class AppDataInitializationStep implements IRepairStep {
-	/** @var SettingsMapper */
-	private $settingMapper;
-
-	/** @var UtilsService */
-	private $utils;
-
-	public function __construct(SettingMapper $settingMapper, UtilsService $utils) {
-		$this->settingMapper = $settingMapper;
-		$this->utils = $utils;
+	public function __construct(
+		private readonly SettingMapper $settingMapper,
+		private readonly UtilsService $utils,
+	) {
 	}
 
 	public function getName(): string {
-		return "Initializing Cloud_Py_API data";
+		return 'Initializing Cloud_Py_API data';
 	}
 
 	public function run(IOutput $output) {

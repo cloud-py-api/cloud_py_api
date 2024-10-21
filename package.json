@@ -1,7 +1,7 @@
 {
 	"name": "cloud_py_api",
 	"description": "Nextcloud Python API (Framework)",
-	"version": "0.1.9",
+	"version": "0.2.0",
 	"keywords": [
 		"nextcloud",
 		"python",
@@ -40,32 +40,33 @@
 		"extends @nextcloud/browserslist-config"
 	],
 	"dependencies": {
-		"@nextcloud/auth": "^2.2.1",
-		"@nextcloud/axios": "^2.4.0",
-		"@nextcloud/dialogs": "^5.0.3",
-		"@nextcloud/initial-state": "^2.1.0",
-		"@nextcloud/l10n": "^2.2.0",
-		"@nextcloud/moment": "^1.2.2",
-		"@nextcloud/router": "^2.2.0",
-		"@nextcloud/vue": "^8.3.0",
+		"@nextcloud/auth": "^2.4.0",
+		"@nextcloud/axios": "^2.5.1",
+		"@nextcloud/dialogs": "^5.3.7",
+		"@nextcloud/initial-state": "^2.2.0",
+		"@nextcloud/l10n": "^3.1.0",
+		"@nextcloud/moment": "^1.3.1",
+		"@nextcloud/password-confirmation": "^5.1.1",
+		"@nextcloud/router": "^3.0.1",
+		"@nextcloud/vue": "^8.19.0",
 		"vue": "^2.7.14",
-		"vuex": "^3.6.2",
+		"vue-material-design-icons": "^5.3.0",
 		"vue-router": "^3.5.3",
-		"vue-template-compiler": "^2.7.15",
-		"vuex-router-sync": "^5.0.0",
-		"vue-material-design-icons": "^5.2.0"
+		"vue-template-compiler": "^2.7.16",
+		"vuex": "^3.6.2",
+		"vuex-router-sync": "^5.0.0"
 	},
 	"devDependencies": {
-		"@nextcloud/babel-config": "^1.0.0",
-		"@nextcloud/browserslist-config": "^3.0.0",
-		"@nextcloud/eslint-config": "^8.3.0",
-		"@nextcloud/stylelint-config": "^2.3.1",
-		"@nextcloud/webpack-vue-config": "^6.0.0",
-		"eslint-webpack-plugin": "^4.0.1",
-		"stylelint-webpack-plugin": "^4.1.1"
+		"@nextcloud/babel-config": "^1.2.0",
+		"@nextcloud/browserslist-config": "^3.0.1",
+		"@nextcloud/eslint-config": "^8.4.1",
+		"@nextcloud/stylelint-config": "^3.0.1",
+		"@nextcloud/webpack-vue-config": "^6.1.1",
+		"eslint-webpack-plugin": "^4.2.0",
+		"stylelint-webpack-plugin": "^5.0.1"
 	},
 	"engines": {
-		"node": ">=16.0.0",
-		"npm": "^7.0.0 || ^8.0.0"
+		"node": ">=20.0.0",
+		"npm": "^10.0.0"
 	}
 }

@@ -28,15 +28,15 @@ declare(strict_types=1);
 
 namespace OCA\Cloud_Py_API\Tests\Unit\Command;
 
-use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\MockObject\MockObject;
-
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
-use OCP\Files\NotPermittedException;
-use OCP\Lock\LockedException;
-
 use OCA\Cloud_Py_API\Command\GetFileContentsCommand;
+use OCP\Files\NotPermittedException;
+
+use OCP\Lock\LockedException;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use Symfony\Component\Console\Input\InputInterface;
+
+use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * @covers \OCA\Cloud_Py_API\Command\GetFileContentsCommand

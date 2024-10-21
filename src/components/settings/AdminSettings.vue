@@ -29,7 +29,8 @@
 				{{ t('cloud_py_api', 'Cloud Python API') }}
 			</h2>
 		</div>
-		<div v-if="settings.length > 0" class="settings">
+		<NcLoadingIcon v-if="loadingSettings" :size="48" />
+		<div v-if="settings.length > 0 && !loadingSettings" class="settings">
 			<NcSettingsSection :name="t('cloud_py_api', mappedSettings.python_command.display_name)"
 				:description="t('cloud_py_api', mappedSettings.python_command.description)">
 				<input id="python_command"
@@ -79,7 +80,7 @@
 				</select>
 			</NcSettingsSection>
 		</div>
-		<div v-else>
+		<div v-if="settings.length === 0 && !loadingSettings">
 			<NcSettingsSection :name="t('cloud_py_api', 'Error')">
 				<NcEmptyContent style="margin-top: 0;"
 					:title="t('cloud_py_api', 'Settings list is empty')"
@@ -90,7 +91,7 @@
 				</NcEmptyContent>
 			</NcSettingsSection>
 		</div>
-		<NcSettingsSection :name="t('cloud_py_api', 'Bug report')">
+		<NcSettingsSection v-if="!loadingSettings" :name="t('cloud_py_api', 'Bug report')">
 			<BugReport />
 		</NcSettingsSection>
 	</div>
@@ -100,9 +101,14 @@
 import axios from '@nextcloud/axios'
 import { generateUrl } from '@nextcloud/router'
 import { showError, showSuccess } from '@nextcloud/dialogs'
-import NcSettingsSection from '@nextcloud/vue/dist/Components/NcSettingsSection.js'
-import NcCheckboxRadioSwitch from '@nextcloud/vue/dist/Components/NcCheckboxRadioSwitch.js'
-import NcEmptyContent from '@nextcloud/vue/dist/Components/NcEmptyContent.js'
+import { confirmPassword } from '@nextcloud/password-confirmation'
+import {
+	NcSettingsSection,
+	NcCheckboxRadioSwitch,
+	NcEmptyContent,
+	NcLoadingIcon,
+} from '@nextcloud/vue'
+
 import AlertCircleOutline from 'vue-material-design-icons/AlertCircleOutline.vue'
 
 import BugReport from './BugReport.vue'
@@ -113,11 +119,13 @@ export default {
 		NcSettingsSection,
 		NcCheckboxRadioSwitch,
 		NcEmptyContent,
+		NcLoadingIcon,
 		BugReport,
 		AlertCircleOutline,
 	},
 	data() {
 		return {
+			loadingSettings: false,
 			settings: [],
 			mappedSettings: {},
 			remote_filesize_limit: null,
@@ -142,6 +150,7 @@ export default {
 			})
 		},
 		_getSettings() {
+			this.loadingSettings = true
 			axios.get(generateUrl('/apps/cloud_py_api/api/v1/settings')).then(res => {
 				this.settings = res.data
 				this.settings.forEach(setting => {
@@ -150,18 +159,23 @@ export default {
 				this.remote_filesize_limit = this.fromBytesToGBytes(Number(this.mappedSettings.remote_filesize_limit.value))
 				this.usePhpPathFromSettings = JSON.parse(this.mappedSettings.use_php_path_from_settings.value)
 				this.cpaLoglevel = JSON.parse(this.mappedSettings.cpa_loglevel.value)
+			}).finally(() => {
+				this.loadingSettings = false
 			})
 		},
 		saveChanges() {
-			this._updateSettings(this.settings).then(res => {
-				if (res.data.success) {
-					showSuccess(this.t('cloud_py_api', 'Settings successfully updated'))
-				}
-			})
-				.catch(err => {
+			confirmPassword().then(() => {
+				this._updateSettings(this.settings).then(res => {
+					if (res.data.success) {
+						showSuccess(this.t('cloud_py_api', 'Settings successfully updated'))
+					}
+				}).catch(err => {
 					console.debug(err)
 					showError(this.t('cloud_py_api', 'Some error occurred while updating settings'))
 				})
+			}).catch(() => {
+				showError(this.t('cloud_py_api', 'Password confirmation failed'))
+			})
 		},
 		fromBytesToGBytes(bytes) {
 			return (bytes / Math.pow(1024, 3)).toFixed(1)

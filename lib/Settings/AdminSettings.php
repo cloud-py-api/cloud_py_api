@@ -28,10 +28,10 @@ declare(strict_types=1);
 
 namespace OCA\Cloud_Py_API\Settings;
 
-use OCP\AppFramework\Http\TemplateResponse;
-use OCP\Settings\ISettings;
-
 use OCA\Cloud_Py_API\AppInfo\Application;
+use OCP\AppFramework\Http\TemplateResponse;
+
+use OCP\Settings\ISettings;
 
 class AdminSettings implements ISettings {
 	public function __construct() {
