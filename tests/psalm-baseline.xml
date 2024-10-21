@@ -1,64 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<files psalm-version="4.x-dev@">
+<files psalm-version="5.26.1@d747f6500b38ac4f7dfc5edbcae6e4b637d7add0">
   <file src="lib/Command/GetFileContentsCommand.php">
-    <MissingDependency occurrences="3">
-      <code>$this-&gt;rootFolder</code>
-      <code>IRootFolder</code>
-      <code>IRootFolder</code>
-    </MissingDependency>
-  </file>
-  <file src="lib/Migration/AppDataInitializationStep.php">
-    <InvalidPropertyAssignmentValue occurrences="1">
-      <code>$settingMapper</code>
-    </InvalidPropertyAssignmentValue>
-    <UndefinedDocblockClass occurrences="3">
-      <code>$this-&gt;settingMapper</code>
-      <code>$this-&gt;settingMapper</code>
-      <code>SettingsMapper</code>
-    </UndefinedDocblockClass>
-  </file>
-  <file src="lib/Migration/Version0001Date20221207183030.php">
-    <ImplementedParamTypeMismatch occurrences="1">
-      <code>$schemaClosure</code>
-    </ImplementedParamTypeMismatch>
-    <MismatchingDocblockParamType occurrences="1">
-      <code>Closure</code>
-    </MismatchingDocblockParamType>
-    <UndefinedDocblockClass occurrences="1">
-      <code>Closure</code>
-    </UndefinedDocblockClass>
+    <UndefinedClass>
+      <code><![CDATA[Command]]></code>
+    </UndefinedClass>
   </file>
   <file src="lib/Service/PythonService.php">
-    <UndefinedMagicMethod occurrences="1">
-      <code>getValue</code>
+    <InvalidArrayAccess>
+      <code><![CDATA[$output[0]]]></code>
+      <code><![CDATA[$output[0]]]></code>
+    </InvalidArrayAccess>
+    <UndefinedMagicMethod>
+      <code><![CDATA[getValue]]></code>
     </UndefinedMagicMethod>
   </file>
   <file src="lib/Service/UtilsService.php">
-    <RedundantCondition occurrences="1">
-      <code>isset($setting)</code>
+    <InvalidArrayAccess>
+      <code><![CDATA[$output[0]]]></code>
+      <code><![CDATA[$output[0]]]></code>
+    </InvalidArrayAccess>
+    <NoValue>
+      <code><![CDATA[$basename]]></code>
+    </NoValue>
+    <RedundantCondition>
+      <code><![CDATA[$basename === 'php']]></code>
+      <code><![CDATA[isset($setting)]]></code>
     </RedundantCondition>
-    <UndefinedClass occurrences="2">
-      <code>?DatabaseStatistics</code>
-      <code>TAR</code>
+    <UndefinedClass>
+      <code><![CDATA[$this->databaseStatistics]]></code>
+      <code><![CDATA[TAR]]></code>
+      <code><![CDATA[private]]></code>
     </UndefinedClass>
-    <UndefinedDocblockClass occurrences="2">
-      <code>$this-&gt;databaseStatistics</code>
-      <code>DatabaseStatistics</code>
-    </UndefinedDocblockClass>
-    <UndefinedMagicMethod occurrences="4">
-      <code>getValue</code>
-      <code>getValue</code>
-      <code>getValue</code>
-      <code>getValue</code>
+    <UndefinedMagicMethod>
+      <code><![CDATA[getValue]]></code>
+      <code><![CDATA[getValue]]></code>
+      <code><![CDATA[getValue]]></code>
+      <code><![CDATA[getValue]]></code>
     </UndefinedMagicMethod>
   </file>
   <file src="lib/Settings/AdminSection.php">
-    <UndefinedClass occurrences="1">
-      <code>URLGenerator</code>
+    <UndefinedClass>
+      <code><![CDATA[$this->urlGenerator]]></code>
+      <code><![CDATA[private]]></code>
     </UndefinedClass>
-    <UndefinedDocblockClass occurrences="2">
-      <code>$this-&gt;urlGenerator</code>
-      <code>UrlGenerator</code>
-    </UndefinedDocblockClass>
   </file>
 </files>

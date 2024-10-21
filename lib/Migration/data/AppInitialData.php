@@ -38,44 +38,44 @@ class AppInitialData {
 	public static $INITIAL_DATA = [
 		'settings' => [
 			[
-				"name" => "python_command",
-				"value" => "/usr/bin/python3",
-				"displayName" => "Full path to python interpreter",
-				"title" => "",
-				"description" => "Absolute path to the python runnable (e.g. \"/usr/bin/python3\"). Can be obtained by `which python3` command. Used when pre-compiled binaries option is not selected.",
-				"helpUrl" => "https://cloud-py-api.readthedocs.io/{todo-url:/settings/setting_name}"
+				'name' => 'python_command',
+				'value' => '/usr/bin/python3',
+				'displayName' => 'Full path to python interpreter',
+				'title' => '',
+				'description' => 'Absolute path to the python runnable (e.g. "/usr/bin/python3"). Can be obtained by `which python3` command. Used when pre-compiled binaries option is not selected.',
+				'helpUrl' => 'https://cloud-py-api.readthedocs.io/{todo-url:/settings/setting_name}'
 			],
 			[
-				"name" => "remote_filesize_limit",
-				"value" => 536870912,
-				"displayName" => "Remote/Encrypted file size limit to process",
-				"title" => "",
-				"description" => "Maximum file size (in GBytes) for requesting from php core. Used when file is hosted on remote NC instance or have encrypted flag. Must be less than total available RAM size.",
-				"helpUrl" => "https://cloud-py-api.readthedocs.io/{todo-url:/settings/setting_name}"
+				'name' => 'remote_filesize_limit',
+				'value' => 536870912,
+				'displayName' => 'Remote/Encrypted file size limit to process',
+				'title' => '',
+				'description' => 'Maximum file size (in GBytes) for requesting from php core. Used when file is hosted on remote NC instance or have encrypted flag. Must be less than total available RAM size.',
+				'helpUrl' => 'https://cloud-py-api.readthedocs.io/{todo-url:/settings/setting_name}'
 			],
 			[
-				"name" => "use_php_path_from_settings",
-				"value" => false,
-				"displayName" => "Use path to PHP interpreter for Python from settings",
-				"title" => "",
-				"description" => "Determine whether to use path from settings or detect it automatically (may not work with some unusual PHP install locations). Used in Python part.",
-				"helpUrl" => "https://cloud-py-api.readthedocs.io/{todo-url:/settings/setting_name}"
+				'name' => 'use_php_path_from_settings',
+				'value' => false,
+				'displayName' => 'Use path to PHP interpreter for Python from settings',
+				'title' => '',
+				'description' => 'Determine whether to use path from settings or detect it automatically (may not work with some unusual PHP install locations). Used in Python part.',
+				'helpUrl' => 'https://cloud-py-api.readthedocs.io/{todo-url:/settings/setting_name}'
 			],
 			[
-				"name" => "php_path",
-				"value" => "/usr/bin/php",
-				"displayName" => "Full path to PHP interpreter for Python",
-				"title" => "",
-				"description" => "Absolute path to the PHP executable (e.g. \"/usr/bin/php7.4\"). Can be obtained by `which php` or `which php7.4` command",
-				"helpUrl" => "https://cloud-py-api.readthedocs.io/{todo-url:/settings/setting_name}"
+				'name' => 'php_path',
+				'value' => '/usr/bin/php',
+				'displayName' => 'Full path to PHP interpreter for Python',
+				'title' => '',
+				'description' => 'Absolute path to the PHP executable (e.g. "/usr/bin/php7.4"). Can be obtained by `which php` or `which php7.4` command',
+				'helpUrl' => 'https://cloud-py-api.readthedocs.io/{todo-url:/settings/setting_name}'
 			],
 			[
-				"name" => "cpa_loglevel",
-				"value" => "WARNING",
-				"displayName" => "Framework log level",
-				"description" => "Used by apps, that are using this framework",
-				"title" => "",
-				"helpUrl" => "https://cloud-py-api.readthedocs.io/{todo-url:/settings/setting_name}"
+				'name' => 'cpa_loglevel',
+				'value' => 'WARNING',
+				'displayName' => 'Framework log level',
+				'description' => 'Used by apps, that are using this framework',
+				'title' => '',
+				'helpUrl' => 'https://cloud-py-api.readthedocs.io/{todo-url:/settings/setting_name}'
 			],
 		]
 	];
@@ -86,17 +86,17 @@ class AppInitialData {
 
 	private function _stringsForL10N(): void {
 		// TRANSLATORS Admin settings strings for localization (Eng versions stored in the database and translated on front-end)
-		$this->l10n->t("Full path to python interpreter");
-		$this->l10n->t("Absolute path to the python runnable (e.g. \"/usr/bin/python3\"). Can be obtained by `which python3` command. Used when pre-compiled binaries option is not selected.");
-		$this->l10n->t("Remote/Encrypted file size limit to process");
-		$this->l10n->t("Maximum file size (in GBytes) for requesting from php core. Used when file is hosted on remote NC instance or have encrypted flag. Must be less than total available RAM size.");
-		$this->l10n->t("Use path to PHP interpreter for Python from settings");
-		$this->l10n->t("Determine whether to use path from settings or detect it automatically (may not work with some unusual PHP install locations). Used in Python part.");
-		$this->l10n->t("Full path to PHP interpreter for Python");
-		$this->l10n->t("Absolute path to the PHP executable (e.g. \"/usr/bin/php7.4\"). Can be obtained by `which php` or `which php7.4` command");
-		$this->l10n->t("Use pre-compiled Python binaries");
-		$this->l10n->t("Use Python part in binary format (located in the appdata folder)");
-		$this->l10n->t("Framework log level");
-		$this->l10n->t("Used by apps, that are using this framework");
+		$this->l10n->t('Full path to python interpreter');
+		$this->l10n->t('Absolute path to the python runnable (e.g. "/usr/bin/python3"). Can be obtained by `which python3` command. Used when pre-compiled binaries option is not selected.');
+		$this->l10n->t('Remote/Encrypted file size limit to process');
+		$this->l10n->t('Maximum file size (in GBytes) for requesting from php core. Used when file is hosted on remote NC instance or have encrypted flag. Must be less than total available RAM size.');
+		$this->l10n->t('Use path to PHP interpreter for Python from settings');
+		$this->l10n->t('Determine whether to use path from settings or detect it automatically (may not work with some unusual PHP install locations). Used in Python part.');
+		$this->l10n->t('Full path to PHP interpreter for Python');
+		$this->l10n->t('Absolute path to the PHP executable (e.g. "/usr/bin/php7.4"). Can be obtained by `which php` or `which php7.4` command');
+		$this->l10n->t('Use pre-compiled Python binaries');
+		$this->l10n->t('Use Python part in binary format (located in the appdata folder)');
+		$this->l10n->t('Framework log level');
+		$this->l10n->t('Used by apps, that are using this framework');
 	}
 }

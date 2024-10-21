@@ -28,22 +28,22 @@ declare(strict_types=1);
 
 namespace OCA\Cloud_Py_API\Controller;
 
-use OCP\AppFramework\Http\Attribute\NoAdminRequired;
-use OCP\AppFramework\Http\Attribute\PasswordConfirmationRequired;
-use OCP\IRequest;
-use OCP\AppFramework\Controller;
-use OCP\AppFramework\Http;
-use OCP\AppFramework\Http\JSONResponse;
-
 use OCA\Cloud_Py_API\AppInfo\Application;
 use OCA\Cloud_Py_API\Service\SettingsService;
 use OCA\Cloud_Py_API\Service\UtilsService;
+use OCP\AppFramework\Controller;
+use OCP\AppFramework\Http;
+use OCP\AppFramework\Http\Attribute\NoAdminRequired;
+
+use OCP\AppFramework\Http\Attribute\PasswordConfirmationRequired;
+use OCP\AppFramework\Http\JSONResponse;
+use OCP\IRequest;
 
 class SettingsController extends Controller {
 	public function __construct(
 		IRequest $request,
 		private readonly SettingsService $service,
-		private readonly UtilsService $utils
+		private readonly UtilsService $utils,
 	) {
 		parent::__construct(Application::APP_ID, $request);
 	}

@@ -30,22 +30,22 @@ namespace OCA\Cloud_Py_API\Service;
 
 use bantu\IniGetWrapper\IniGetWrapper;
 use OC\Archive\TAR;
-use OCP\Files\AppData\IAppDataFactory;
-use OCP\Files\NotFoundException;
-use OCP\Files\NotPermittedException;
-use OCP\Files\SimpleFS\ISimpleFile;
-use OCP\Files\SimpleFS\ISimpleFolder;
-use OCP\IConfig;
-use OCP\App\IAppManager;
-
-use OCP\ITempManager;
-use Psr\Log\LoggerInterface;
-
-use OCA\ServerInfo\DatabaseStatistics;
-
 use OCA\Cloud_Py_API\AppInfo\Application;
 use OCA\Cloud_Py_API\Db\Setting;
 use OCA\Cloud_Py_API\Db\SettingMapper;
+use OCA\ServerInfo\DatabaseStatistics;
+use OCP\App\IAppManager;
+use OCP\Files\AppData\IAppDataFactory;
+use OCP\Files\NotFoundException;
+
+use OCP\Files\NotPermittedException;
+use OCP\Files\SimpleFS\ISimpleFile;
+
+use OCP\Files\SimpleFS\ISimpleFolder;
+
+use OCP\IConfig;
+use OCP\ITempManager;
+use Psr\Log\LoggerInterface;
 
 class UtilsService {
 	public function __construct(
@@ -196,7 +196,7 @@ class UtilsService {
 	 * @throws \OCA\Cloud_Py_API\Exception\UnknownMachineTypeException
 	 */
 	public function getOsArch(): string {
-		$arm64_names = ["aarch64", "armv8", "arm64"];
+		$arm64_names = ['aarch64', 'armv8', 'arm64'];
 		$machineType = php_uname('m');
 		if (strpos($machineType, 'x86_64') !== false) {
 			return 'amd64';
@@ -212,7 +212,7 @@ class UtilsService {
 
 	public function getCustomAppsDirectory(): string {
 		$apps_directory = $this->config->getSystemValue('apps_paths');
-		if ($apps_directory !== "" && is_array($apps_directory) && count($apps_directory) > 0) {
+		if ($apps_directory !== '' && is_array($apps_directory) && count($apps_directory) > 0) {
 			foreach ($apps_directory as $custom_apps_dir) {
 				$appDir = $custom_apps_dir['path'] . '/' . Application::APP_ID;
 				if (
@@ -266,7 +266,7 @@ class UtilsService {
 		string $url,
 		array $binariesFolder,
 		string $filename = 'main',
-		bool $update = false
+		bool $update = false,
 	): array {
 		if (isset($binariesFolder['success']) && $binariesFolder['success']) {
 			$dir = $binariesFolder['path'] . '/';
@@ -347,7 +347,7 @@ class UtilsService {
 		array $binariesFolder,
 		string $appId,
 		string $filename = 'main',
-		bool $update = false
+		bool $update = false,
 	): array {
 		$isObjectStore = $this->config->getSystemValue('objectstore', null) !== null;
 		if (isset($binariesFolder['success']) && $binariesFolder['success']) {
@@ -451,7 +451,7 @@ class UtilsService {
 		$appDataFolder = $this->appDataFactory->get($appId)->getFolder($folderName);
 		/** @var ISimpleFolder|ISimpleFile $nodes */
 		$nodes = $appDataFolder->getDirectoryListing();
-//		$tempFolder = $this->tempManager->getTemporaryFolder($appId . $folderName);
+		//		$tempFolder = $this->tempManager->getTemporaryFolder($appId . $folderName);
 		$tempFolder = $this->tempManager->getTempBaseDir() . '/' . $appId . '/' . $folderName;
 		if (!file_exists($tempFolder)) {
 			mkdir($tempFolder, 0700, true);
@@ -553,7 +553,7 @@ class UtilsService {
 	 * @return bool
 	 */
 	public function compareBinaryDirectoryHashes(
-		string $url, array $binariesFolder, string $appId
+		string $url, array $binariesFolder, string $appId,
 	): bool {
 		$currentBinaryHashes = $this->getCurrentBinaryDirHashes($binariesFolder, $appId);
 		$newBinaryHashes = $this->downloadBinaryDirHashes(str_replace('.tar.gz', '.json', $url));
@@ -592,7 +592,7 @@ class UtilsService {
 				$binariesFolder['path'] . '/' . $archiveFilename
 			);
 		}
-		$extractedBinaryFolder = $binariesFolder['path'] . '/' . $appId . '_'.  $this->getBinaryName();
+		$extractedBinaryFolder = $binariesFolder['path'] . '/' . $appId . '_' . $this->getBinaryName();
 		$files = scandir($extractedBinaryFolder);
 		if ($files !== false) {
 			foreach ($files as $file) {
@@ -641,7 +641,7 @@ class UtilsService {
 		string $folder,
 		string $extractedBinaryFolder,
 		array $currentBinaryHashes,
-		string $appId
+		string $appId,
 	): array {
 		foreach ($files as $file) {
 			if ($file != '.' && $file != '..') {
@@ -651,7 +651,7 @@ class UtilsService {
 					$dirFiles = scandir($extractedBinaryFolder . '/' . $file);
 					$currentBinaryHashes = $this->getFolderHashes(
 						$dirFiles,
-						$folder. '/' . $file, $extractedBinaryFolder . '/' . $file,
+						$folder . '/' . $file, $extractedBinaryFolder . '/' . $file,
 						$currentBinaryHashes, $appId
 					);
 				} else {

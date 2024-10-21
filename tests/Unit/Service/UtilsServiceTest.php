@@ -28,10 +28,10 @@ declare(strict_types=1);
 
 namespace OCA\Cloud_Py_API\Tests\Unit\Service;
 
-use PHPUnit\Framework\TestCase;
+use OCA\Cloud_Py_API\Service\UtilsService;
 use PHPUnit\Framework\MockObject\MockObject;
 
-use OCA\Cloud_Py_API\Service\UtilsService;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \OCA\Cloud_Py_API\Service\UtilsService
@@ -239,9 +239,9 @@ class UtilsServiceTest extends TestCase {
 		$appsPaths = [
 			[
 				// test default apps folder
-				"path" => dirname(getcwd()),
-				"url" => "/apps",
-				"writable" => true
+				'path' => dirname(getcwd()),
+				'url' => '/apps',
+				'writable' => true
 			]
 		];
 		$this->config->expects($this->once())

@@ -28,13 +28,16 @@ declare(strict_types=1);
 
 namespace OCA\Cloud_Py_API\Db;
 
-use OCP\IDBConnection;
+use OCA\Cloud_Py_API\AppInfo\Application;
 use OCP\AppFramework\Db\Entity;
 use OCP\AppFramework\Db\QBMapper;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 
-use OCA\Cloud_Py_API\AppInfo\Application;
+use OCP\IDBConnection;
 
+/**
+ * @template-extends QBMapper<Setting>
+ */
 class SettingMapper extends QBMapper {
 	public function __construct(IDBConnection $db) {
 		parent::__construct($db, Application::APP_ID . '_settings');

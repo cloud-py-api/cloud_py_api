@@ -18,10 +18,10 @@
 	"require-dev": {
 		"nextcloud/ocp": "dev-master",
 		"roave/security-advisories": "dev-master",
-		"psalm/phar": "4.30.0",
+		"psalm/phar": "^5.15",
 		"phpunit/phpunit": "^9.5",
-		"nextcloud/coding-standard": "^1.0",
-		"friendsofphp/php-cs-fixer": "^3.13",
+		"nextcloud/coding-standard": "^1.1",
+		"friendsofphp/php-cs-fixer": "^3.16",
 		"php-mock/php-mock-phpunit": "^2.6"
 	},
 	"scripts": {
@@ -42,7 +42,7 @@
 		"optimize-autoloader": true,
 		"classmap-authoritative": true,
 		"platform": {
-			"php": "7.4"
+			"php": "8.1"
 		}
 	}
 }

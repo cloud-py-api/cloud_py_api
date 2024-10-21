@@ -28,10 +28,10 @@ declare(strict_types=1);
 
 namespace OCA\Cloud_Py_API\Tests\Unit\Migration;
 
-use PHPUnit\Framework\TestCase;
+use OCA\Cloud_Py_API\Migration\Version0001Date20221207183030;
 use PHPUnit\Framework\MockObject\MockObject;
 
-use \OCA\Cloud_Py_API\Migration\Version0001Date20221207183030;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \OCA\Cloud_Py_API\Migration\Version0001Date20221207183030
@@ -67,26 +67,26 @@ class Version0001Date20221207183030Test extends TestCase {
 				]],
 				['name', 'string', [
 					'notnull' => true,
-					'default' => ""
+					'default' => ''
 				]],
 				['value', 'json', [
 					'notnull' => true
 				]],
 				['display_name', 'string', [
 					'notnull' => true,
-					'default' => ""
+					'default' => ''
 				]],
 				['title', 'string', [
 					'notnull' => true,
-					'default' => ""
+					'default' => ''
 				]],
 				['description', 'string', [
 					'notnull' => true,
-					'default' => ""
+					'default' => ''
 				]],
 				['help_url', 'string', [
 					'notnull' => true,
-					'default' => ""
+					'default' => ''
 				]]
 			);
 		$table->expects($this->once())

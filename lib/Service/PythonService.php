@@ -28,10 +28,10 @@ declare(strict_types=1);
 
 namespace OCA\Cloud_Py_API\Service;
 
-use OCP\IConfig;
-
 use OCA\Cloud_Py_API\Db\SettingMapper;
+
 use OCP\AppFramework\Db\DoesNotExistException;
+use OCP\IConfig;
 use OCP\ITempManager;
 
 class PythonService {
@@ -74,12 +74,12 @@ class PythonService {
 	 * `output` and `errors` of the script after Python finish executing.
 	 */
 	public function run(
-			string $appId,
-			string $scriptName,
-			array $scriptParams = [],
-			bool $nonBlocking = false,
-			array $env = [],
-			bool $binary = false,
+		string $appId,
+		string $scriptName,
+		array $scriptParams = [],
+		bool $nonBlocking = false,
+		array $env = [],
+		bool $binary = false,
 	) {
 		if ($binary) {
 			if ($this->isObjectStorage) {

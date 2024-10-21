@@ -28,14 +28,14 @@ declare(strict_types=1);
 
 namespace OCA\Cloud_Py_API\Tests\Integration\Service;
 
-use OCP\AppFramework\App;
-use OCP\AppFramework\Http\JSONResponse;
-
-use PHPUnit\Framework\TestCase;
-
 use OCA\Cloud_Py_API\Controller\SettingsController;
 use OCA\Cloud_Py_API\Db\Setting;
+
 use OCA\Cloud_Py_API\Db\SettingMapper;
+
+use OCP\AppFramework\App;
+use OCP\AppFramework\Http\JSONResponse;
+use PHPUnit\Framework\TestCase;
 
 class SettingsControllerIntegrationTest extends TestCase {
 	/** @var SettingsController */

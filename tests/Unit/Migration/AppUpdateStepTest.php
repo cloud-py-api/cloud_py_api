@@ -28,11 +28,11 @@ declare(strict_types=1);
 
 namespace OCA\Cloud_Py_API\Tests\Unit\Migration;
 
-use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\MockObject\MockObject;
-
 use OCA\Cloud_Py_API\Migration\AppUpdateStep;
 use OCA\Cloud_Py_API\Migration\data\AppInitialData;
+
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \OCA\Cloud_Py_API\Migration\AppUpdateStep
