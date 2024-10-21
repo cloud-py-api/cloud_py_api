@@ -38,16 +38,14 @@ jobs:
           xml-schema-file: ./info.xsd
 
   php-lint:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
+    name: php-lint
     strategy:
       matrix:
         php-versions: ["8.1", "8.2"]
 
-    name: php-lint
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
 
       - name: Set up php ${{ matrix.php-versions }}
         uses: shivammathur/setup-php@v2
@@ -59,17 +57,19 @@ jobs:
         run: composer run lint
 
   php-cs:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     name: php-cs
+    strategy:
+      matrix:
+        php-versions: [ "8.1", "8.2" ]
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
 
       - name: Set up php ${{ matrix.php-versions }}
         uses: shivammathur/setup-php@v2
         with:
-          php-version: 8.1
+          php-version: ${{ matrix.php-versions }}
           coverage: none
 
       - name: Install dependencies
@@ -79,32 +79,50 @@ jobs:
         run: composer run cs:check || ( echo 'Please run `composer run cs:fix` to format your code' && exit 1 )
 
   php-psalm-analysis:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     strategy:
       matrix:
-        php-versions: ["8.1", "8.2"]
-        ocp-version: ['dev-master']
+        php-versions: [ "8.1", "8.2" ]
+        server-versions: [ '30' ]
     name: php-psalm-analysis
 
     steps:
+      - name: Cache nextcloud server
+        id: nextcloud_setup
+        uses: actions/cache@v3
+        with:
+          path: nextcloud-${{ matrix.server-versions }}.zip
+          key: ${{ matrix.server-versions }}
+
+      - name: Download nextcloud ${{ matrix.server-versions }}
+        if: steps.nextcloud_setup.outputs.cache-hit != 'true'
+        continue-on-error: true
+        id: server-checkout
+        run: |
+          NCVERSION=${{ matrix.server-versions }}
+          wget --quiet https://download.nextcloud.com/server/releases/latest-$NCVERSION.zip
+          unzip latest-$NCVERSION.zip
+
       - uses: actions/checkout@v3
+
       - name: Set up php ${{ matrix.php-versions }}
         uses: shivammathur/setup-php@v2
         with:
-          php-version: 7.4
+          php-version: ${{ matrix.php-versions }}
           coverage: none
 
       - name: Install dependencies
         run: composer i
 
-      - name: Install nextcloud/ocp
-        run: composer require --dev nextcloud/ocp:${{ matrix.ocp-version }}
-
       - name: Run coding standards check
         run: composer run psalm
 
   php-security-analysis:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: read
+      actions: read
+      security-events: write
     name: security analysis
     steps:
       - uses: actions/checkout@v3
@@ -124,11 +142,11 @@ jobs:
           sarif_file: results.sarif
 
   js-eslint:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     name: eslint
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
       - name: Install dependencies
         run: npm ci
 
@@ -136,12 +154,12 @@ jobs:
         run: npm run lint
 
   stylelint:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
 
     name: stylelint
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
       - name: Install dependencies
         run: npm ci
 
