@@ -44,5 +44,15 @@
 		"platform": {
 			"php": "8.1"
 		}
+	},
+	"autoload": {
+		"psr-4": {
+			"OCA\\Cloud_Py_API\\": "lib/"
+		}
+	},
+	"autoload-dev": {
+		"psr-4": {
+			"OCP\\": "vendor/nextcloud/ocp/OCP"
+		}
 	}
 }

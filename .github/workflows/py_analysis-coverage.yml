@@ -43,7 +43,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        nextcloud: [ "30" ]
+        nextcloud: [ "30.0.0" ]
         php-version: [ "8.1", "8.2" ]
         pgsql-version: [ "13", "15" ]
     env:
@@ -141,7 +141,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        nextcloud: [ "30" ]
+        nextcloud: [ "30.0.0" ]
         php-version: [ "8.1", "8.2" ]
         mysql-version: [ "8" ]
 
@@ -235,7 +235,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        nextcloud: [ "30" ]
+        nextcloud: [ "30.0.0" ]
         php-version: [ "8.1", "8.2" ]
         mariadb-version: [ "10.3", "10.10" ]
 
@@ -329,7 +329,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        nextcloud: [ "30" ]
+        nextcloud: [ "30.0.0" ]
         php-version: [ "8.1", "8.2" ]
 
     steps:
@@ -412,7 +412,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        nextcloud: [ "30" ]
+        nextcloud: [ "30.0.0" ]
         php-version: [ "8.1" ]
 
     steps:
