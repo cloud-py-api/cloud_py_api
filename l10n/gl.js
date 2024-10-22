@@ -23,6 +23,7 @@ OC.L10N.register(
     "Bug report" : "Informe de fallos",
     "Settings successfully updated" : "Os axustes actualizáronse satisfactoriamente",
     "Some error occurred while updating settings" : "Produciuse algún erro ao actualizar os axustes.",
+    "Password confirmation failed" : "Produciuse un fallo ao confirmar o contrasinal",
     "Collect non sensitive system info for bug report" : "Recoller información non sensíbel do sistema para o informe de fallos",
     "Collect system info" : "Recoller información do sistema",
     "System info" : "Información do sistema",

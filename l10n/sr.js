@@ -23,6 +23,7 @@ OC.L10N.register(
     "Bug report" : "Извештај о багу",
     "Settings successfully updated" : "Подешавања су успешно ажурирана",
     "Some error occurred while updating settings" : "Јавила се грешка током ажурирања ваших подешавања.",
+    "Password confirmation failed" : "Није успело потврђивање лозинке",
     "Collect non sensitive system info for bug report" : "Прикупи за извештај о багу податке о систему који нису осетљиви.",
     "Collect system info" : "Прикупи информације о систему",
     "System info" : "Информације о систему",

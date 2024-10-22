@@ -21,6 +21,7 @@
     "Bug report" : "Отчет об ошибке",
     "Settings successfully updated" : "Настройки обновлены",
     "Some error occurred while updating settings" : "При сохранении настроек произошла ошибка",
+    "Password confirmation failed" : "Подтверждение пароля не удалось",
     "Collect non sensitive system info for bug report" : "Сбор обезличенной информации о системе для отчета об ошибке",
     "Collect system info" : "Сбор информации о системе",
     "System info" : "Информация о системе",

@@ -21,6 +21,7 @@
     "Bug report" : "錯誤報告",
     "Settings successfully updated" : "設定已成功更新",
     "Some error occurred while updating settings" : "更新設定時發生錯誤",
+    "Password confirmation failed" : "密碼確認失敗",
     "Collect non sensitive system info for bug report" : "為錯誤報告收集非敏感系統信息",
     "Collect system info" : "收集系統資料",
     "System info" : "系統資料",

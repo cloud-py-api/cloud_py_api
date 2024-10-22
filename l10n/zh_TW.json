@@ -21,6 +21,7 @@
     "Bug report" : "臭蟲回報",
     "Settings successfully updated" : "設定已成功更新",
     "Some error occurred while updating settings" : "更新設定時發生錯誤",
+    "Password confirmation failed" : "密碼確認失敗",
     "Collect non sensitive system info for bug report" : "為臭蟲回報蒐集不包含敏感資訊的系統資訊",
     "Collect system info" : "蒐集系統資訊",
     "System info" : "系統資訊",

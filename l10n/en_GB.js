@@ -23,6 +23,7 @@ OC.L10N.register(
     "Bug report" : "Bug report",
     "Settings successfully updated" : "Settings successfully updated",
     "Some error occurred while updating settings" : "Some error occurred while updating settings",
+    "Password confirmation failed" : "Password confirmation failed",
     "Collect non sensitive system info for bug report" : "Collect non sensitive system info for bug report",
     "Collect system info" : "Collect system info",
     "System info" : "System info",

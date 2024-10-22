@@ -21,6 +21,7 @@
     "Bug report" : "Signaler une anomalie",
     "Settings successfully updated" : "Paramètres mis à jour avec succès",
     "Some error occurred while updating settings" : "Une erreur est survenue pendant la mise à jour des paramètres",
+    "Password confirmation failed" : "Échec de la confirmation du mot de passe",
     "Collect non sensitive system info for bug report" : "Collecter des informations systèmes non sensibles pour les rapports d'anomalies",
     "Collect system info" : "Collecter les informations système",
     "System info" : "Informations systèmes",

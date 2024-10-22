@@ -23,6 +23,7 @@ OC.L10N.register(
     "Bug report" : "Feilrapport",
     "Settings successfully updated" : "Innstillinger ble oppdatert",
     "Some error occurred while updating settings" : "Det oppstod en feil under oppdatering av innstillinger",
+    "Password confirmation failed" : "Passordbekreftelse feilet",
     "Collect non sensitive system info for bug report" : "Samle ikke-sensitiv systeminformasjon for feilrapport",
     "Collect system info" : "Samle systeminformasjon",
     "System info" : "Systeminformasjon",

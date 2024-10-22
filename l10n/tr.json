@@ -21,6 +21,7 @@
     "Bug report" : "Hata bildirimi",
     "Settings successfully updated" : "Ayarlar güncellendi",
     "Some error occurred while updating settings" : "Ayarlar güncellenirken bir sorun çıktı",
+    "Password confirmation failed" : "Parola doğrulanamadı",
     "Collect non sensitive system info for bug report" : "Hata ayıkllaması için özel olmayan sistem bilgileri toplansın",
     "Collect system info" : "Sistem bilgileri toplansın",
     "System info" : "Sistem bilgileri",

@@ -23,6 +23,7 @@ OC.L10N.register(
     "Bug report" : "تقرير بالأخطاء",
     "Settings successfully updated" : "تمّ تحديث الإعدادات بنجاح",
     "Some error occurred while updating settings" : "حدثت بعض الأخطاء أثناء تحديث الإعدادات",
+    "Password confirmation failed" : "فشل في تأكيد كلمة المرور",
     "Collect non sensitive system info for bug report" : "تحصيل معلومات غير حساسة عن النظام لتقريرالتنقيح",
     "Collect system info" : "تحصيل معلومات النظام",
     "System info" : "معلومات النظام",

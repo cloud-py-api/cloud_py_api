@@ -23,6 +23,7 @@ OC.L10N.register(
     "Bug report" : "Tuairisc ar fhabht",
     "Settings successfully updated" : "D'éirigh le nuashonrú na socruithe",
     "Some error occurred while updating settings" : "Tharla earráid agus na socruithe á nuashonrú",
+    "Password confirmation failed" : "Theip ar dheimhniú an phasfhocail",
     "Collect non sensitive system info for bug report" : "Bailigh faisnéis chórais neamhíogair le haghaidh tuairisce ar fhabht",
     "Collect system info" : "Bailigh eolas córais",
     "System info" : "Eolas córais",

@@ -22,6 +22,7 @@ OC.L10N.register(
     "Bug report" : "Hlášení chyby",
     "Settings successfully updated" : "Nastavení úspěšně zaktualizována",
     "Some error occurred while updating settings" : "Při aktualizaci nastavení došlo k nějaké chybě",
+    "Password confirmation failed" : "Potvrzení hesla se nezdařilo",
     "Collect non sensitive system info for bug report" : "Shromáždit informace o systému (neobsahuje žádné citlivé informace) pro účely nahlášení chyby",
     "Collect system info" : "Shromáždit informace o systému",
     "System info" : "Informace o systému",
