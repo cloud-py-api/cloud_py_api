@@ -2,7 +2,7 @@ OC.L10N.register(
     "cloud_py_api",
     {
     "Full path to python interpreter" : "Python yorumlayıcısının tam yolu",
-    "Absolute path to the python runnable (e.g. \"/usr/bin/python3\"). Can be obtained by `which python3` command. Used when pre-compiled binaries option is not selected." : "Çalıştırılabilir Python dosyasının mutlak yolu (Örnek: \"/usr/bin/python3\"). `which python3` komutu ile öğrenilebilir. Önceden derlenmiş Python binary dosyaları kullanılsın seçeneği etkinleştirilmediğinde kullanılır.",
+    "Absolute path to the python runnable (e.g. \"/usr/bin/python3\"). Can be obtained by `which python3` command. Used when pre-compiled binaries option is not selected." : "Çalıştırılabilir Python dosyasının mutlak yolu (Örnek: \"/usr/bin/python3\"). `which python3` komutu ile öğrenilebilir. Önceden derlenmiş Python binary dosyaları kullanılsın seçeneği kullanıma alınmadığında kullanılır.",
     "Remote/Encrypted file size limit to process" : "İşlemi sınırlayacak uzak/şifrelenmiş dosya boyutu",
     "Maximum file size (in GBytes) for requesting from php core. Used when file is hosted on remote NC instance or have encrypted flag. Must be less than total available RAM size." : "PHP çekirdeğinden istenecek en fazla dosya boyutu (Gbayt olarak). Dosya uzak Nextcloud kopyasında barındırıldığında ya da şifrelenmiş işaretini taşıdığında kullanılır. Toplam kullanılabilir RAM boyutundan daha az olmalıdır.",
     "Use path to PHP interpreter for Python from settings" : "Ayarlar bölümündeki Python için PHP yorumlayıcısı yolu kullanılsın",
@@ -19,7 +19,7 @@ OC.L10N.register(
     "Use PHP path from settings" : "Ayarlardaki PHP yolu kullanılsın",
     "Error" : "Hata",
     "Settings list is empty" : "Ayarlar listesi boş",
-    "Seems like database not initialized properly. Try to re-enable the app" : "Veri tabanı doğru hazırlanmamış gibi görünüyor. Uygulamayı yeniden etkinleştirmeyi deneyin",
+    "Seems like database not initialized properly. Try to re-enable the app" : "Veri tabanı doğru hazırlanmamış gibi görünüyor. Uygulamayı yeniden kullanıma almayı deneyin",
     "Bug report" : "Hata bildirimi",
     "Settings successfully updated" : "Ayarlar güncellendi",
     "Some error occurred while updating settings" : "Ayarlar güncellenirken bir sorun çıktı",
