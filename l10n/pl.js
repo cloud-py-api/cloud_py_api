@@ -2,6 +2,7 @@ OC.L10N.register(
     "cloud_py_api",
     {
     "Error" : "Błąd",
+    "Password confirmation failed" : "Potwierdzenie hasła nie powiodło się",
     "Copy to clipboard" : "Kopiuj do schowka",
     "Copied to clipboard" : "Kopiuj do schowka"
 },
