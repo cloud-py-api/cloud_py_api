@@ -23,6 +23,7 @@ OC.L10N.register(
     "Bug report" : "Bug txostena",
     "Settings successfully updated" : "Ezarpenak ongi eguneratu dira",
     "Some error occurred while updating settings" : "Errore bat gertatu da ezarpenak eguneratzean",
+    "Password confirmation failed" : "Pasahitzaren berrespenak huts egin du",
     "Collect non sensitive system info for bug report" : "Bildu kontuzkoa ez den sistemaren informazioa akatsen txostena egiteko",
     "Collect system info" : "Jaso sistemaren informazioa",
     "System info" : "Sistemaren informazioa",
