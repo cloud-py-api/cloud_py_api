@@ -1,7 +1,32 @@
 { "translations": {
+    "Full path to python interpreter" : "Plná cesta k interpretru jazyka Python",
+    "Absolute path to the python runnable (e.g. \"/usr/bin/python3\"). Can be obtained by `which python3` command. Used when pre-compiled binaries option is not selected." : "Absolútna cesta k spustiteľnému pythonu (napr. „/usr/bin/python3“). Dá sa získať príkazom ` which python3`. Používa sa, keď nie je vybratá možnosť predkompilovaných binárnych súborov.",
+    "Remote/Encrypted file size limit to process" : "Obmedzenie veľkosti vzdialeného/šifrovaného súboru pre spracovanie",
+    "Maximum file size (in GBytes) for requesting from php core. Used when file is hosted on remote NC instance or have encrypted flag. Must be less than total available RAM size." : "Maximálna veľkosť súboru (v GB) na získanie od jadra php. Používa sa, keď je súbor hosťovaný na vzdialenej inštancii NC alebo má príznak šifrovania. Musí byť menšie ako celá veľkosť pamäte RAM.",
+    "Use path to PHP interpreter for Python from settings" : "Použiž cestu k PHP interpretru pre Python z nastavení",
+    "Determine whether to use path from settings or detect it automatically (may not work with some unusual PHP install locations). Used in Python part." : "Rozhodnite sa, či sa má použiť cesta z nastavení alebo či sa má cesta zistiť automaticky (nemusí fungovať s niektorými nezvyčajnými umiestneniami inštalácie PHP). Používa sa v časti Python.",
+    "Full path to PHP interpreter for Python" : "Úplná cesta k interpreteru PHP pre Python",
+    "Absolute path to the PHP executable (e.g. \"/usr/bin/php7.4\"). Can be obtained by `which php` or `which php7.4` command" : "Absolútna cesta k spustiteľnému súboru PHP (napr. \"/usr/bin/php7.4\"). Dá sa získať príkazom `which php` alebo `which php7.4`",
+    "Use pre-compiled Python binaries" : "Použiť predkompilované binárky Pythonu",
+    "Use Python part in binary format (located in the appdata folder)" : "Použiť Python v binárnom formáte (nachádza sa v adresári appdata)",
+    "Framework log level" : "Úroveň logovania frameworku",
+    "Used by apps, that are using this framework" : "Aplikácie, ktoré používajú tento framework",
+    "Cloud Python API" : "Cloud Python API",
+    "Nextcloud Python API (Framework)" : "Nextcloud Python API (Framework)",
+    "Nextcloud Python API Framework\n\n| **Currently in development, all is under design**\n\n### Provides convenient functions for Python\n\n- Read & write file system objects\n- Working with database\n- Wrapper around `OCC` calls\n- Calling your python function from php part of your app and return a result\n\n### Used by the following apps\n\n- [MediaDC](https://apps.nextcloud.com/apps/mediadc) - Nextcloud Media Duplicate Collector app" : "Nextcloud Python API Framework\n\n| **Momentálne vo vývoji, všetko je v štádiu návrhu**\n\n### Poskytuje funkcie API pre Python\n\n- Čítanie a zápis objektov súborového systému\n- Práca s databázou\n- Rozhranie okolo príkazu `OCC`\n- Volanie funkcie python z časti php vašej aplikácie a vrátenie výsledku\n\n### Používajú nasledujúce aplikácie\n\n– [MediaDC](https://apps.nextcloud.com/apps/mediadc) – Aplikácia Nextcloud Media Duplicate Collector",
+    "Use PHP path from settings" : "Použiť cestu k PHP z nastavení",
     "Error" : "Chyba",
     "Settings list is empty" : "Zoznam nastavení je prázdny",
+    "Seems like database not initialized properly. Try to re-enable the app" : "Zdá sa, že databáza nie je správne inicializovaná. Skúste aplikáciu povoliť znova",
+    "Bug report" : "Reportovanie chyby",
+    "Settings successfully updated" : "Nastavenia boli úspešne aktualizované",
+    "Some error occurred while updating settings" : "Pri aktualizácii nastavení sa vyskytla chyba",
+    "Password confirmation failed" : "Overenie hesla zlyhalo",
+    "Collect non sensitive system info for bug report" : "Zhromažďuje necitlivé systémové informácie pre hlásenie chyby",
+    "Collect system info" : "Zhromažďovanie infromácii o systéme",
+    "System info" : "Infromácie o systéme",
     "Copy to clipboard" : "Skopírovať do schránky",
-    "Copied to clipboard" : "Skopírované do schránky"
+    "Copied to clipboard" : "Skopírované do schránky",
+    "_Test text_::_Test texts_" : ["Testovací text","Testovacie texty","Testovacie texty","Testovacie texty"]
 },"pluralForm" :"nplurals=4; plural=(n % 1 == 0 && n == 1 ? 0 : n % 1 == 0 && n >= 2 && n <= 4 ? 1 : n % 1 != 0 ? 2: 3);"
 }
