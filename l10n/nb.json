@@ -14,19 +14,19 @@
     "Cloud Python API" : "Cloud Python API",
     "Nextcloud Python API (Framework)" : "Nextcloud Python API (rammeverk)",
     "Nextcloud Python API Framework\n\n| **Currently in development, all is under design**\n\n### Provides convenient functions for Python\n\n- Read & write file system objects\n- Working with database\n- Wrapper around `OCC` calls\n- Calling your python function from php part of your app and return a result\n\n### Used by the following apps\n\n- [MediaDC](https://apps.nextcloud.com/apps/mediadc) - Nextcloud Media Duplicate Collector app" : "Nextcloud Python API Framework\n\n| **For tiden under utvikling, alt er under designing**\n\n### Gir praktiske funksjoner for Python\n\n- Les og skriv filsystemobjekter\n- Arbeide med database\n- Innpakning rundt `OCC`-kall\n- Kaller python-funksjonen din fra php en del av appen din og returnerer et resultat\n\n### Brukes av følgende apper\n\n- [MediaDC](https://apps.nextcloud.com/apps/mediadc) - Nextcloud Media Duplicate Collector app",
+    "Settings successfully updated" : "Innstillinger ble oppdatert",
+    "Some error occurred while updating settings" : "Det oppstod en feil under oppdatering av innstillinger",
+    "Password confirmation failed" : "Passordbekreftelse feilet",
     "Use PHP path from settings" : "Bruk PHP-sti fra innstillinger",
     "Error" : "Feil",
     "Settings list is empty" : "Innstillingslisten er tom",
     "Seems like database not initialized properly. Try to re-enable the app" : "Ser ut til at databasen ikke er initialisert riktig. Prøv å reaktivere appen",
     "Bug report" : "Feilrapport",
-    "Settings successfully updated" : "Innstillinger ble oppdatert",
-    "Some error occurred while updating settings" : "Det oppstod en feil under oppdatering av innstillinger",
-    "Password confirmation failed" : "Passordbekreftelse feilet",
+    "Copied to clipboard" : "Kopiert til utklippstavlen",
     "Collect non sensitive system info for bug report" : "Samle ikke-sensitiv systeminformasjon for feilrapport",
     "Collect system info" : "Samle systeminformasjon",
     "System info" : "Systeminformasjon",
     "Copy to clipboard" : "Kopiert til utklippstavlen",
-    "Copied to clipboard" : "Kopiert til utklippstavlen",
     "_Test text_::_Test texts_" : ["Testtekst","Testtekster"]
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

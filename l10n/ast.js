@@ -6,15 +6,15 @@ OC.L10N.register(
     "Use pre-compiled Python binaries" : "Usar binarios de Python precompilaos",
     "Framework log level" : "Nivel de rexistru del framework",
     "Used by apps, that are using this framework" : "Opción usada poles aplicacoines que usen esti framework",
+    "Settings successfully updated" : "La configuración anovóse correutamente",
+    "Some error occurred while updating settings" : "Prodúxose dalgún error mentanto s'anovaba la configuración",
     "Use PHP path from settings" : "Usar el camín PHP de la configuración",
     "Error" : "Error",
     "Settings list is empty" : "La llista d'opciones ta balera",
     "Bug report" : "Informe de fallos",
-    "Settings successfully updated" : "La configuración anovóse correutamente",
-    "Some error occurred while updating settings" : "Prodúxose dalgún error mentanto s'anovaba la configuración",
+    "Copied to clipboard" : "Copióse nel cartafueyu",
     "System info" : "Información del sistema",
     "Copy to clipboard" : "Copiar nel cartafueyu",
-    "Copied to clipboard" : "Copióse nel cartafueyu",
     "_Test text_::_Test texts_" : ["Testu de prueba","Testos de prueba"]
 },
 "nplurals=2; plural=(n != 1);");

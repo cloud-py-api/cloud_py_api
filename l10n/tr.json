@@ -14,19 +14,19 @@
     "Cloud Python API" : "Bulut Python API",
     "Nextcloud Python API (Framework)" : "Nextcloud Python API (Framework)",
     "Nextcloud Python API Framework\n\n| **Currently in development, all is under design**\n\n### Provides convenient functions for Python\n\n- Read & write file system objects\n- Working with database\n- Wrapper around `OCC` calls\n- Calling your python function from php part of your app and return a result\n\n### Used by the following apps\n\n- [MediaDC](https://apps.nextcloud.com/apps/mediadc) - Nextcloud Media Duplicate Collector app" : "Nextcloud Python API çatısı\n\n| **Şu anda geliştirme aşamasındadır, her şey tasarlanıyor**\n\n### Python için uygun işlevler sağlar\n\n- Dosya sistemi nesnelerini okuma ve yazma\n- Veri tabanı ile çalışma\n- \"OCC\" çağrılarını sarmalayıcı\n- Python işlevinizi uygulamanızın PHP bölümünden çağırma ve bir sonuç döndürme\n\n### Aşağıdaki uygulamalar tarafından kullanılır\n\n- [MediaDC](https://apps.nextcloud.com/apps/mediadc) - Nextcloud çift ortamları derleme uygulaması",
+    "Settings successfully updated" : "Ayarlar güncellendi",
+    "Some error occurred while updating settings" : "Ayarlar güncellenirken bir sorun çıktı",
+    "Password confirmation failed" : "Parola doğrulanamadı",
     "Use PHP path from settings" : "Ayarlardaki PHP yolu kullanılsın",
     "Error" : "Hata",
     "Settings list is empty" : "Ayarlar listesi boş",
     "Seems like database not initialized properly. Try to re-enable the app" : "Veri tabanı doğru hazırlanmamış gibi görünüyor. Uygulamayı yeniden kullanıma almayı deneyin",
     "Bug report" : "Hata bildirimi",
-    "Settings successfully updated" : "Ayarlar güncellendi",
-    "Some error occurred while updating settings" : "Ayarlar güncellenirken bir sorun çıktı",
-    "Password confirmation failed" : "Parola doğrulanamadı",
+    "Copied to clipboard" : "Panoya kopyalandı",
     "Collect non sensitive system info for bug report" : "Hata ayıkllaması için özel olmayan sistem bilgileri toplansın",
     "Collect system info" : "Sistem bilgileri toplansın",
     "System info" : "Sistem bilgileri",
     "Copy to clipboard" : "Panoya kopyala",
-    "Copied to clipboard" : "Panoya kopyalandı",
     "_Test text_::_Test texts_" : ["Deneme metni","Deneme metinleri"]
 },"pluralForm" :"nplurals=2; plural=(n > 1);"
 }

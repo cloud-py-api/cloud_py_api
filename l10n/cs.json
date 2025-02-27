@@ -13,19 +13,19 @@
     "Used by apps, that are using this framework" : "Používáno aplikacemi, které používají tento framework",
     "Cloud Python API" : "Python API pro cloud",
     "Nextcloud Python API (Framework)" : "Python API pro Nextcloud (framwork)",
+    "Settings successfully updated" : "Nastavení úspěšně zaktualizována",
+    "Some error occurred while updating settings" : "Při aktualizaci nastavení došlo k nějaké chybě",
+    "Password confirmation failed" : "Potvrzení hesla se nezdařilo",
     "Use PHP path from settings" : "Použít popis umístění PHP z nastavení",
     "Error" : "Chyba",
     "Settings list is empty" : "Seznam nastavení je prázdný",
     "Seems like database not initialized properly. Try to re-enable the app" : "Zdá se, že databáze není správně inicializována. Zkuste aplikaci znovu povolit",
     "Bug report" : "Hlášení chyby",
-    "Settings successfully updated" : "Nastavení úspěšně zaktualizována",
-    "Some error occurred while updating settings" : "Při aktualizaci nastavení došlo k nějaké chybě",
-    "Password confirmation failed" : "Potvrzení hesla se nezdařilo",
+    "Copied to clipboard" : "Zkopírováno do schránky",
     "Collect non sensitive system info for bug report" : "Shromáždit informace o systému (neobsahuje žádné citlivé informace) pro účely nahlášení chyby",
     "Collect system info" : "Shromáždit informace o systému",
     "System info" : "Informace o systému",
     "Copy to clipboard" : "Zkopírovat do schránky",
-    "Copied to clipboard" : "Zkopírováno do schránky",
     "_Test text_::_Test texts_" : ["Testovací text","Testovací texty","Testovací texty","Testovací texty"]
 },"pluralForm" :"nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n >= 2 && n <= 4 && n % 1 == 0) ? 1: (n % 1 != 0 ) ? 2 : 3;"
 }

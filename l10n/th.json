@@ -1,6 +1,6 @@
 { "translations": {
     "Error" : "ข้อผิดพลาด",
-    "Copy to clipboard" : "คัดลอกไปยังคลิปบอร์ด",
-    "Copied to clipboard" : "คัดลอกไปยังคลิปบอร์ดแล้ว"
+    "Copied to clipboard" : "คัดลอกไปยังคลิปบอร์ดแล้ว",
+    "Copy to clipboard" : "คัดลอกไปยังคลิปบอร์ด"
 },"pluralForm" :"nplurals=1; plural=0;"
 }

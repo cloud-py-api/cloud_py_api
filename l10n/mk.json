@@ -1,6 +1,6 @@
 { "translations": {
     "Error" : "Грешка",
-    "Copy to clipboard" : "Копирај во клипборд",
-    "Copied to clipboard" : "Копирано во клипборд"
+    "Copied to clipboard" : "Копирано во клипборд",
+    "Copy to clipboard" : "Копирај во клипборд"
 },"pluralForm" :"nplurals=2; plural=(n % 10 == 1 && n % 100 != 11) ? 0 : 1;"
 }

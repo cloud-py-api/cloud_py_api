@@ -4,15 +4,15 @@
     "Full path to PHP interpreter for Python" : "Python用のPHPインタプリタへのフルパス",
     "Absolute path to the PHP executable (e.g. \"/usr/bin/php7.4\"). Can be obtained by `which php` or `which php7.4` command" : "PHP実行ファイルへの絶対パス。(例. \"/usr/bin/php7.4\")\n`which php` か `which php7.4`コマンドで確認することができます。",
     "Use pre-compiled Python binaries" : "プリコンパイルされたPython実行ファイルを使用する",
+    "Settings successfully updated" : "設定が更新されました。",
+    "Some error occurred while updating settings" : "設定の更新中にエラーが発生しました。",
     "Error" : "エラー",
     "Settings list is empty" : "設定リストが空です",
     "Seems like database not initialized properly. Try to re-enable the app" : "データベースが正しく初期化されていないようです。\nアプリを再度有効化してみてください。",
     "Bug report" : "バグレポート",
-    "Settings successfully updated" : "設定が更新されました。",
-    "Some error occurred while updating settings" : "設定の更新中にエラーが発生しました。",
+    "Copied to clipboard" : "クリップボードにコピーされました",
     "Collect system info" : "システム情報を収集する",
     "System info" : "システム情報",
-    "Copy to clipboard" : "クリップボードにコピー",
-    "Copied to clipboard" : "クリップボードにコピーされました"
+    "Copy to clipboard" : "クリップボードにコピー"
 },"pluralForm" :"nplurals=1; plural=0;"
 }

@@ -14,19 +14,19 @@
     "Cloud Python API" : "Cloud Python API",
     "Nextcloud Python API (Framework)" : "Nextcloud Python API (Фреймворк)",
     "Nextcloud Python API Framework\n\n| **Currently in development, all is under design**\n\n### Provides convenient functions for Python\n\n- Read & write file system objects\n- Working with database\n- Wrapper around `OCC` calls\n- Calling your python function from php part of your app and return a result\n\n### Used by the following apps\n\n- [MediaDC](https://apps.nextcloud.com/apps/mediadc) - Nextcloud Media Duplicate Collector app" : "Фреймворк Nextcloud Python API\n\n| **В настоящее время находится в разработке, все находится в стадии проектирования**\n\n### Предоставляет удобные функции для Python\n\n- Чтение & запись объектов файловой системы\n- Работа с базой данных\n- Обертка для вызовов `OCC` \n- Вызов ваших функций на Python внутри php-кода вашего приложения а возврат результата выполнения\n\n### Используется следующими приложениями\n\n- [MediaDC](https://apps.nextcloud.com/apps/mediadc) - Приложение для сбора дубликатов мультимедиа Nextcloud",
+    "Settings successfully updated" : "Настройки обновлены",
+    "Some error occurred while updating settings" : "При сохранении настроек произошла ошибка",
+    "Password confirmation failed" : "Подтверждение пароля не удалось",
     "Use PHP path from settings" : "Использовать указанный в настройках путь к PHP",
     "Error" : "Ошибка",
     "Settings list is empty" : "Список настроек пуст",
     "Seems like database not initialized properly. Try to re-enable the app" : "Похоже, что база данных не создалась должным образом. Проверьте, соблюдены ли зависимости приложения. Попробуйте его переустановить.",
     "Bug report" : "Отчет об ошибке",
-    "Settings successfully updated" : "Настройки обновлены",
-    "Some error occurred while updating settings" : "При сохранении настроек произошла ошибка",
-    "Password confirmation failed" : "Подтверждение пароля не удалось",
+    "Copied to clipboard" : "Скопировано в буфер обмена",
     "Collect non sensitive system info for bug report" : "Сбор обезличенной информации о системе для отчета об ошибке",
     "Collect system info" : "Сбор информации о системе",
     "System info" : "Информация о системе",
     "Copy to clipboard" : "Копировать в буфер",
-    "Copied to clipboard" : "Скопировано в буфер обмена",
     "_Test text_::_Test texts_" : ["Проверочный текст","Проверочных текста","Проверочных текстов","Проверочные тексты"]
 },"pluralForm" :"nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);"
 }

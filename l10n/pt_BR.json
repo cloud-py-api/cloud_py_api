@@ -14,19 +14,19 @@
     "Cloud Python API" : "API Cloud Python",
     "Nextcloud Python API (Framework)" : "Nextcloud Python API (Framework)",
     "Nextcloud Python API Framework\n\n| **Currently in development, all is under design**\n\n### Provides convenient functions for Python\n\n- Read & write file system objects\n- Working with database\n- Wrapper around `OCC` calls\n- Calling your python function from php part of your app and return a result\n\n### Used by the following apps\n\n- [MediaDC](https://apps.nextcloud.com/apps/mediadc) - Nextcloud Media Duplicate Collector app" : "Nextcloud Python API Framework\n\n| **Currently in development, all is under design**\n\n### Provides convenient functions for Python\n\n- Read & write file system objects\n- Working with database\n- Wrapper around `OCC` calls\n- Calling your python function from php part of your app and return a result\n\n### Used by the following apps\n\n- [MediaDC](https://apps.nextcloud.com/apps/mediadc) - Nextcloud Media Duplicate Collector app",
+    "Settings successfully updated" : "Configurações atualizadas com sucesso",
+    "Some error occurred while updating settings" : "Ocorreu algum erro ao atualizar as configurações",
+    "Password confirmation failed" : "Falha na confirmação da senha",
     "Use PHP path from settings" : "Use o caminho PHP das configurações",
     "Error" : "Erro",
     "Settings list is empty" : "A lista de configurações está vazia",
     "Seems like database not initialized properly. Try to re-enable the app" : "Parece que o banco de dados não foi inicializado corretamente. Tente reativar o aplicativo",
     "Bug report" : "Relatório de erro",
-    "Settings successfully updated" : "Configurações atualizadas com sucesso",
-    "Some error occurred while updating settings" : "Ocorreu algum erro ao atualizar as configurações",
-    "Password confirmation failed" : "Falha na confirmação da senha",
+    "Copied to clipboard" : "Copiado para a área de transferência",
     "Collect non sensitive system info for bug report" : "Colete informações não confidenciais do sistema para relatório de bug",
     "Collect system info" : "Coletar informações do sistema",
     "System info" : "Informação do sistema",
     "Copy to clipboard" : "Copiar para área de transferência",
-    "Copied to clipboard" : "Copiado para a área de transferência",
     "_Test text_::_Test texts_" : ["Textos de teste","Textos de teste","Textos de teste"]
 },"pluralForm" :"nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;"
 }

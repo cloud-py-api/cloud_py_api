@@ -14,18 +14,18 @@
     "Cloud Python API" : "Cloud Python API",
     "Nextcloud Python API (Framework)" : "Nextcloud Python API (Framework)",
     "Nextcloud Python API Framework\n\n| **Currently in development, all is under design**\n\n### Provides convenient functions for Python\n\n- Read & write file system objects\n- Working with database\n- Wrapper around `OCC` calls\n- Calling your python function from php part of your app and return a result\n\n### Used by the following apps\n\n- [MediaDC](https://apps.nextcloud.com/apps/mediadc) - Nextcloud Media Duplicate Collector app" : "Nextcloud Python API رامكىسى\n\n| ** ھازىر تەرەققىي قىلىۋاتىدۇ ، ھەممىسى لايىھەلىنىۋاتىدۇ **\n\n### Python ئۈچۈن قۇلايلىق ئىقتىدارلار بىلەن تەمىنلەيدۇ\n\n- ھۆججەت سىستېمىسى ئوبيېكتلىرىنى ئوقۇش ۋە يېزىش\n- ساندان بىلەن ئىشلەش\n- `OCC` چاقىرىشلىرىنى چۆرىدىگەن\n- بوغما يىلان ئىقتىدارىڭىزنى ئەپنىڭ php قىسمىدىن چاقىرىپ نەتىجىنى قايتۇرۇڭ\n\n### تۆۋەندىكى ئەپلەر تەرىپىدىن ئىشلىتىلىدۇ\n\n- [MediaDC] (https://apps.nextcloud.com/apps/mediadc) - Nextcloud Media كۆپەيتىلگەن يىغىپ ساقلاش دېتالى",
+    "Settings successfully updated" : "تەڭشەكلەر مۇۋەپپەقىيەتلىك يېڭىلاندى",
+    "Some error occurred while updating settings" : "تەڭشەكلەرنى يېڭىلىغاندا بەزى خاتالىقلار يۈز بەردى",
+    "Password confirmation failed" : "پارول جەزملەشتۈرۈش مەغلۇب بولدى",
     "Use PHP path from settings" : "تەڭشەكتىن PHP يولىنى ئىشلىتىڭ",
     "Error" : "خاتالىق",
     "Settings list is empty" : "تەڭشەك تىزىملىكى قۇرۇق",
     "Seems like database not initialized properly. Try to re-enable the app" : "ساندان توغرا باشلانمىغاندەك قىلىدۇ. ئەپنى قايتا قوزغىتىپ بېقىڭ",
     "Bug report" : "Bug report",
-    "Settings successfully updated" : "تەڭشەكلەر مۇۋەپپەقىيەتلىك يېڭىلاندى",
-    "Some error occurred while updating settings" : "تەڭشەكلەرنى يېڭىلىغاندا بەزى خاتالىقلار يۈز بەردى",
-    "Password confirmation failed" : "پارول جەزملەشتۈرۈش مەغلۇب بولدى",
+    "Copied to clipboard" : "چاپلاش تاختىسىغا كۆچۈرۈلدى",
     "Collect non sensitive system info for bug report" : "خاتالىق دوكلاتى ئۈچۈن سەزگۈر بولمىغان سىستېما ئۇچۇرلىرىنى توپلاڭ",
     "Collect system info" : "سىستېما ئۇچۇرلىرىنى توپلاڭ",
     "System info" : "سىستېما ئۇچۇرى",
-    "Copy to clipboard" : "چاپلاش تاختىسىغا كۆچۈرۈڭ",
-    "Copied to clipboard" : "چاپلاش تاختىسىغا كۆچۈرۈلدى"
+    "Copy to clipboard" : "چاپلاش تاختىسىغا كۆچۈرۈڭ"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

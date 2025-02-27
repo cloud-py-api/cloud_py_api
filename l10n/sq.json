@@ -1,6 +1,6 @@
 { "translations": {
     "Error" : "Gabim",
-    "Copy to clipboard" : "Kopjo në dërrasë ",
-    "Copied to clipboard" : "U kopjua në clipboard"
+    "Copied to clipboard" : "U kopjua në clipboard",
+    "Copy to clipboard" : "Kopjo në dërrasë "
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }
