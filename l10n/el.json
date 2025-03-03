@@ -1,6 +1,32 @@
 { "translations": {
+    "Full path to python interpreter" : "Πλήρης διαδρομή για τον διερμηνέα Python",
+    "Absolute path to the python runnable (e.g. \"/usr/bin/python3\"). Can be obtained by `which python3` command. Used when pre-compiled binaries option is not selected." : "Απόλυτη διαδρομή για το εκτελέσιμο Python (π.χ. \"/usr/bin/python3\"). Μπορεί να ληφθεί με την εντολή `which python3`. Χρησιμοποιείται όταν δεν επιλέγεται η επιλογή προ-μεταγλωττισμένων δυαδικών.",
+    "Remote/Encrypted file size limit to process" : "Όριο μεγέθους αρχείου για απομακρυσμένα/κρυπτογραφημένα αρχεία",
+    "Maximum file size (in GBytes) for requesting from php core. Used when file is hosted on remote NC instance or have encrypted flag. Must be less than total available RAM size." : "Μέγιστο μέγεθος αρχείου (σε GB) για αίτηση από τον πυρήνα PHP. Χρησιμοποιείται όταν το αρχείο φιλοξενείται σε απομακρυσμένη εγκατάσταση NC ή έχει σημαία κρυπτογράφησης. Πρέπει να είναι μικρότερο από το συνολικό διαθέσιμο μέγεθος RAM.",
+    "Use path to PHP interpreter for Python from settings" : "Χρήση διαδρομής για τον διερμηνέα PHP για Python από τις ρυθμίσεις",
+    "Determine whether to use path from settings or detect it automatically (may not work with some unusual PHP install locations). Used in Python part." : "Καθορίζει αν θα χρησιμοποιηθεί η διαδρομή από τις ρυθμίσεις ή αν θα εντοπιστεί αυτόματα (μπορεί να μην λειτουργεί με ορισμένες ασυνήθιστες θέσεις εγκατάστασης PHP). Χρησιμοποιείται στο τμήμα Python.",
+    "Full path to PHP interpreter for Python" : "Πλήρης διαδρομή για τον διερμηνέα PHP για Python",
+    "Absolute path to the PHP executable (e.g. \"/usr/bin/php7.4\"). Can be obtained by `which php` or `which php7.4` command" : "Απόλυτη διαδρομή για το εκτελέσιμο PHP (π.χ. \"/usr/bin/php7.4\"). Μπορεί να ληφθεί με την εντολή `which php` ή `which php7.4`.",
+    "Use pre-compiled Python binaries" : "Χρήση προ-μεταγλωττισμένων δυαδικών Python",
+    "Use Python part in binary format (located in the appdata folder)" : "Χρήση του τμήματος Python σε δυαδική μορφή (βρίσκεται στον φάκελο appdata)",
+    "Framework log level" : "Επίπεδο καταγραφής πλαισίου",
+    "Used by apps, that are using this framework" : "Χρησιμοποιείται από εφαρμογές που χρησιμοποιούν αυτό το πλαίσιο",
+    "Cloud Python API" : "Cloud Python API",
+    "Nextcloud Python API (Framework)" : "Nextcloud Python API (Πλαίσιο)",
+    "Nextcloud Python API Framework\n\n| **Currently in development, all is under design**\n\n### Provides convenient functions for Python\n\n- Read & write file system objects\n- Working with database\n- Wrapper around `OCC` calls\n- Calling your python function from php part of your app and return a result\n\n### Used by the following apps\n\n- [MediaDC](https://apps.nextcloud.com/apps/mediadc) - Nextcloud Media Duplicate Collector app" : "Πλαίσιο Nextcloud Python API\n\n| **Αυτή τη στιγμή υπό ανάπτυξη, όλα βρίσκονται υπό σχεδιασμό**\n\n### Παρέχει βολικές λειτουργίες για Python\n\n- Ανάγνωση και εγγραφή αντικειμένων συστήματος αρχείων\n- Εργασία με βάση δεδομένων\n- Περιτύλιγμα γύρω από κλήσεις `OCC`\n- Κλήση της συνάρτησης Python σας από το τμήμα PHP της εφαρμογής σας και επιστροφή αποτελέσματος\n\n### Χρησιμοποιείται από τις ακόλουθες εφαρμογές\n\n- [MediaDC](https://apps.nextcloud.com/apps/mediadc) - Εφαρμογή συλλογής διπλότυπων πολυμέσων Nextcloud",
+    "Settings successfully updated" : "Οι ρυθμίσεις ενημερώθηκαν με επιτυχία",
+    "Some error occurred while updating settings" : "Παρουσιάστηκε κάποιο σφάλμα κατά την ενημέρωση των ρυθμίσεων",
+    "Password confirmation failed" : "Η επιβεβαίωση του κωδικού πρόσβασης απέτυχε",
+    "Use PHP path from settings" : "Χρήση διαδρομής PHP από τις ρυθμίσεις",
     "Error" : "Σφάλμα",
+    "Settings list is empty" : "Η λίστα ρυθμίσεων είναι κενή",
+    "Seems like database not initialized properly. Try to re-enable the app" : "Φαίνεται ότι η βάση δεδομένων δεν αρχικοποιήθηκε σωστά. Δοκιμάστε να ενεργοποιήσετε ξανά την εφαρμογή",
+    "Bug report" : "Αναφορά σφάλματος",
     "Copied to clipboard" : "Αντιγράφηκε στο πρόχειρο",
-    "Copy to clipboard" : "Αντιγραφή στο πρόχειρο"
+    "Collect non sensitive system info for bug report" : "Συλλογή μη ευαίσθητων πληροφοριών συστήματος για αναφορά σφάλματος",
+    "Collect system info" : "Συλλογή πληροφοριών συστήματος",
+    "System info" : "Πληροφορίες συστήματος",
+    "Copy to clipboard" : "Αντιγραφή στο πρόχειρο",
+    "_Test text_::_Test texts_" : ["Δοκιμαστικό κείμενο","Δοκιμαστικά κείμενα"]
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }
