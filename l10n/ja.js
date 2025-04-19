@@ -8,6 +8,7 @@ OC.L10N.register(
     "Use pre-compiled Python binaries" : "プリコンパイルされたPython実行ファイルを使用する",
     "Settings successfully updated" : "設定が更新されました。",
     "Some error occurred while updating settings" : "設定の更新中にエラーが発生しました。",
+    "Password confirmation failed" : "パスワードの確認に失敗しました",
     "Error" : "エラー",
     "Settings list is empty" : "設定リストが空です",
     "Seems like database not initialized properly. Try to re-enable the app" : "データベースが正しく初期化されていないようです。\nアプリを再度有効化してみてください。",
