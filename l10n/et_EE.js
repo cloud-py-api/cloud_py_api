@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Settings successfully updated" : "Seadistused edukalt uuendatud",
     "Some error occurred while updating settings" : "Seadistuste uuendamisel ilmnes mingi viga",
+    "Password confirmation failed" : "Salasõna kinnitamine ei õnnestunud",
     "Error" : "Viga",
     "Settings list is empty" : "Seadete loend on tühi",
     "Seems like database not initialized properly. Try to re-enable the app" : "Tundub, et andmebaas ei ole korralikult initsialiseeritud. Proovige rakendust uuesti aktiveerida",
