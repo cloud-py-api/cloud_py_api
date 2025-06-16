@@ -1,6 +1,7 @@
 OC.L10N.register(
     "cloud_py_api",
     {
+    "Use pre-compiled Python binaries" : "Kasuta varemkompileeritud Pythoni käivitusprogramme",
     "Settings successfully updated" : "Seadistused edukalt uuendatud",
     "Some error occurred while updating settings" : "Seadistuste uuendamisel ilmnes mingi viga",
     "Password confirmation failed" : "Salasõna kinnitamine ei õnnestunud",
