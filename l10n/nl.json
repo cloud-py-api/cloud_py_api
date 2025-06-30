@@ -1,10 +1,32 @@
 { "translations": {
     "Full path to python interpreter" : "Pad naar Python interpreter",
+    "Absolute path to the python runnable (e.g. \"/usr/bin/python3\"). Can be obtained by `which python3` command. Used when pre-compiled binaries option is not selected." : "Absoluut pad naar de python die kan worden uitgevoerd (bijv. \"/usr/bin/python3\"). Kan worden verkregen door de opdracht `which python3`. Wordt gebruikt wanneer de optie voor voorgecompileerde binaire bestanden niet is geselecteerd.",
+    "Remote/Encrypted file size limit to process" : "Max. grootte van te verwerken bestand (extern/versleuteld)",
+    "Maximum file size (in GBytes) for requesting from php core. Used when file is hosted on remote NC instance or have encrypted flag. Must be less than total available RAM size." : "Maximale bestandsgrootte (in GBytes) voor het aanvragen van php core. Gebruikt wanneer bestand wordt gehost op externe NC-instantie of een gecodeerde vlag heeft. Moet kleiner zijn dan de totale beschikbare RAM-grootte.",
+    "Use path to PHP interpreter for Python from settings" : "Pad naar PHP-interpreter voor Python gebruiken vanuit instellingen",
+    "Determine whether to use path from settings or detect it automatically (may not work with some unusual PHP install locations). Used in Python part." : "Bepalen of pad uit instellingen moet worden gebruikt of automatisch moet worden gedetecteerd (werkt mogelijk niet met een aantal ongebruikelijke PHP-installatielocaties). Gebruikt in Python-onderdeel.",
+    "Full path to PHP interpreter for Python" : "Volledig pad naar PHP-interpreter voor Python",
+    "Absolute path to the PHP executable (e.g. \"/usr/bin/php7.4\"). Can be obtained by `which php` or `which php7.4` command" : "Absoluut pad naar het uitvoerbare PHP-bestand (bijv. \"/usr/bin/php7.4\"). Kan worden verkregen door de opdracht `which php` of `which php7.4`",
+    "Use pre-compiled Python binaries" : "Vooraf gecompileerde Python-binaire bestanden gebruiken",
     "Use Python part in binary format (located in the appdata folder)" : "Gebruik het Python-gedeelte in binair formaat (gelegen in de appdata-map)",
+    "Framework log level" : "Framework logboekniveau",
+    "Used by apps, that are using this framework" : "Gebruikt door apps die dit raamwerk gebruiken",
+    "Cloud Python API" : "Cloud Python API",
+    "Nextcloud Python API (Framework)" : "Nextcloud Python API (Framework)",
+    "Nextcloud Python API Framework\n\n| **Currently in development, all is under design**\n\n### Provides convenient functions for Python\n\n- Read & write file system objects\n- Working with database\n- Wrapper around `OCC` calls\n- Calling your python function from php part of your app and return a result\n\n### Used by the following apps\n\n- [MediaDC](https://apps.nextcloud.com/apps/mediadc) - Nextcloud Media Duplicate Collector app" : "Nextcloud Python API Framework\n\n| **Currently in development, all is under design**\n\n### Biedt handige functies voor Python\n\n- Bestandssysteemobjecten lezen & schrijven\n- Werken met database\n- Wrapper rond `OCC` calls\n- Je python-functie aanroepen vanuit php-gedeelte van je app en een resultaat retourneren\n\n### Gebruikt door de volgende apps\n\n- [MediaDC](https://apps.nextcloud.com/apps/mediadc) - Nextcloud Media Duplicate Collector-app",
+    "Settings successfully updated" : "Instellingen succesvol bijgewerkt",
+    "Some error occurred while updating settings" : "Er is een fout opgetreden tijdens het bijwerken van de instellingen",
     "Password confirmation failed" : "Wachtwoordbevestiging niet gelukt",
+    "Use PHP path from settings" : "PHP-pad gebruiken vanuit instellingen",
     "Error" : "Fout",
+    "Settings list is empty" : "Instellingenlijst is leeg",
     "Seems like database not initialized properly. Try to re-enable the app" : "Lijkt erop dat database niet goed geïnitialiseerd is. Probeer de app opnieuw in te schakelen",
+    "Bug report" : "Foutrapportage",
     "Copied to clipboard" : "Gekopieerd naar het klembord",
-    "Copy to clipboard" : "Kopiëren naar het klembord"
+    "Collect non sensitive system info for bug report" : "Niet-gevoelige systeeminformatie verzamelen voor foutrapportage",
+    "Collect system info" : "Systeeminformatie verzamelen",
+    "System info" : "Systeeminformatie",
+    "Copy to clipboard" : "Kopiëren naar het klembord",
+    "_Test text_::_Test texts_" : ["Tekst testen","Teksten testen"]
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

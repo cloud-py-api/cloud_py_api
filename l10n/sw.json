@@ -1,5 +1,6 @@
 { "translations": {
     "Error" : "Hitilafu",
+    "Copied to clipboard" : "Nakili katika ubao wa kunakili",
     "Copy to clipboard" : "Nakili kwenye ubao wa kunakili"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }
