@@ -1,6 +1,32 @@
 { "translations": {
+    "Full path to python interpreter" : "Njia kamili kwa mkalimani wa python",
+    "Absolute path to the python runnable (e.g. \"/usr/bin/python3\"). Can be obtained by `which python3` command. Used when pre-compiled binaries option is not selected." : "Njia kabisa ya python inayoendeshwa (kwa mfano \"/usr/bin/python3\"). Inaweza kupatikana kwa amri ya `python3` ipi. Inatumika wakati chaguo la jozi zilizokusanywa mapema halijachaguliwa.",
+    "Remote/Encrypted file size limit to process" : "Kikomo cha ukubwa wa faili ya mbali/Iliyosimbwa kwa njia fiche ili kuchakatwa",
+    "Maximum file size (in GBytes) for requesting from php core. Used when file is hosted on remote NC instance or have encrypted flag. Must be less than total available RAM size." : "Kiwango cha juu cha ukubwa  wa faili (katika GBytes) kwa ombi kutoka kwa msingi wa php. Inatumika wakati faili imepangishwa kwenye mfano wa NC wa mbali au ina bendera iliyosimbwa. Lazima iwe chini ya saizi ya RAM inayopatikana.",
+    "Use path to PHP interpreter for Python from settings" : " Tumia njia ya mkalimani wa PHP kwa Python kutoka kwa mipangilio",
+    "Determine whether to use path from settings or detect it automatically (may not work with some unusual PHP install locations). Used in Python part." : "Amua ikiwa utatumia njia kutoka kwa mipangilio au uitambue kiotomatiki (huenda isifanye kazi na maeneo yasiyo ya kawaida ya usakinishaji wa PHP). Inatumika katika sehemu ya Python.",
+    "Full path to PHP interpreter for Python" : "Njia kamili ya mkalimani wa PHP kwa Python",
+    "Absolute path to the PHP executable (e.g. \"/usr/bin/php7.4\"). Can be obtained by `which php` or `which php7.4` command" : "Njia kamili ya PHP inayoweza kutekelezwa (k.m. \"/usr/bin/php7.4\"). Inaweza kupatikana kwa `php gani` au `ambayo php7.4` amri",
+    "Use pre-compiled Python binaries" : "Tumia jozi za Python zilizokusanywa mapema",
+    "Use Python part in binary format (located in the appdata folder)" : "Tumia sehemu ya Python katika umbizo la binary (iko kwenye folda ya appdata)",
+    "Framework log level" : "Kiwango cha kumbukumbu ya mfumo",
+    "Used by apps, that are using this framework" : "Inatumiwa na programu zinazotumia mfumo huu",
+    "Cloud Python API" : "API ya Cloud Python",
+    "Nextcloud Python API (Framework)" : "Nextcloud Python API (Mfumo)",
+    "Nextcloud Python API Framework\n\n| **Currently in development, all is under design**\n\n### Provides convenient functions for Python\n\n- Read & write file system objects\n- Working with database\n- Wrapper around `OCC` calls\n- Calling your python function from php part of your app and return a result\n\n### Used by the following apps\n\n- [MediaDC](https://apps.nextcloud.com/apps/mediadc) - Nextcloud Media Duplicate Collector app" : "Mfumo wa API wa Nextcloud Python\n\n| ** Hivi sasa katika maendeleo, yote yapo chini ya muundo **\n\n### Hutoa huduma zinazofaa kwa Python\n\n- Soma na uandike vitu vya mfumo wa faili\n- Kufanya kazi na hifadhidata\n- Wrapper karibu na simu za `OCC`\n- Kuita kazi yako ya python kutoka php sehemu ya programu yako na kurudisha matokeo\n\n### Inatumiwa na programu zifuatazo\n\n- [MediaDC](https://apps.nextcloud.com/apps/mediadc) - Programu ya Nextcloud Media Duplicate Collector",
+    "Settings successfully updated" : "Mipangilio imesasishwa kikamilifu",
+    "Some error occurred while updating settings" : "Hitilafu fulani imetokea wakati wa kusasisha mipangilio",
+    "Password confirmation failed" : "Uthibitishaji wa nenosiri umeshindikana",
+    "Use PHP path from settings" : "Tumia njia ya PHP kutoka katika mipangilio",
     "Error" : "Hitilafu",
+    "Settings list is empty" : "Orodha ya mipangilio ni tupu",
+    "Seems like database not initialized properly. Try to re-enable the app" : "Inaonekana kama hifadhidata haijaanzishwa ipasavyo. Jaribu kuwezesha tena programu",
+    "Bug report" : " Ripoti ya hitilafu",
     "Copied to clipboard" : "Nakili katika ubao wa kunakili",
-    "Copy to clipboard" : "Nakili kwenye ubao wa kunakili"
+    "Collect non sensitive system info for bug report" : "Kusanya maelezo yasiyo nyeti ya mfumo kwa ripoti ya hitilafu",
+    "Collect system info" : "Kusanya maelezo ya mfumo",
+    "System info" : "Maelezo ya mfumo",
+    "Copy to clipboard" : "Nakili kwenye ubao wa kunakili",
+    "_Test text_::_Test texts_" : ["Test text","Jaribu maandishi"]
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }
