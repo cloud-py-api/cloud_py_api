@@ -1,8 +1,22 @@
 { "translations": {
     "Full path to python interpreter" : "Повний шлях до інтерпретатора Python",
+    "Absolute path to the python runnable (e.g. \"/usr/bin/python3\"). Can be obtained by `which python3` command. Used when pre-compiled binaries option is not selected." : "Абсолютний шлях до виконуваного файлу Python (наприклад, «/usr/bin/python3»). Можна отримати за допомогою команди `which python3`. Використовується, коли опція попередньо скомпільованих бінарних файлів не вибрана.",
+    "Remote/Encrypted file size limit to process" : "Обмеження на розмір віддаленого/зашифрованого файлу для обробки",
+    "Maximum file size (in GBytes) for requesting from php core. Used when file is hosted on remote NC instance or have encrypted flag. Must be less than total available RAM size." : "Максимальний розмір файлу (у ГБ) для запиту з ядра php. Використовується, коли файл розміщений на віддаленому екземплярі NC або має прапорець шифрування. Повинен бути меншим за загальний розмір доступної оперативної пам'яті.",
+    "Use path to PHP interpreter for Python from settings" : "Використовуйте шлях до інтерпретатора PHP для Python з налаштувань",
+    "Determine whether to use path from settings or detect it automatically (may not work with some unusual PHP install locations). Used in Python part." : "Визначте, чи використовувати шлях із налаштувань, чи виявляти його автоматично (може не працювати з деякими незвичайними місцями встановлення PHP). Використовується в частині Python.",
+    "Full path to PHP interpreter for Python" : "Повний шлях до інтерпретатора PHP для Python",
+    "Absolute path to the PHP executable (e.g. \"/usr/bin/php7.4\"). Can be obtained by `which php` or `which php7.4` command" : "Абсолютний шлях до виконуваного файлу PHP (наприклад, \"/usr/bin/php7.4\"). Можна отримати командою `which php` або `which php7.4`.",
     "Use pre-compiled Python binaries" : "Використовуйте попередньо скомпільовані двійкові файли Python",
+    "Use Python part in binary format (located in the appdata folder)" : "Використовуйте частину Python у двійковому форматі (знаходиться в папці appdata)",
+    "Framework log level" : "Рівень журналу фреймворку",
+    "Used by apps, that are using this framework" : "Використовується програмами, які використовують цей фреймворк",
+    "Cloud Python API" : "Хмарний API Python",
+    "Nextcloud Python API (Framework)" : "Nextcloud Python API (Framework)",
+    "Nextcloud Python API Framework\n\n| **Currently in development, all is under design**\n\n### Provides convenient functions for Python\n\n- Read & write file system objects\n- Working with database\n- Wrapper around `OCC` calls\n- Calling your python function from php part of your app and return a result\n\n### Used by the following apps\n\n- [MediaDC](https://apps.nextcloud.com/apps/mediadc) - Nextcloud Media Duplicate Collector app" : "Nextcloud Python API Framework\n\n| **Наразі в розробці, все знаходиться на стадії проектування**\n\n### Надає зручні функції для Python\n\n- Читання та запис об'єктів файлової системи\n- Робота з базою даних\n- Обгортка навколо викликів `OCC`\n- Виклик вашої функції Python з php-частини вашого додатку та повернення результату\n\n### Використовується в таких додатках\n\n- [MediaDC](https://apps.nextcloud.com/apps/mediadc) - Додаток Nextcloud Media Duplicate Collector",
     "Settings successfully updated" : "Налаштування успішно оновлено",
     "Some error occurred while updating settings" : "Виникла помилка під час оновлення налаштувань",
+    "Password confirmation failed" : "Не вдалося підтвердити пароль",
     "Use PHP path from settings" : "Використовувати шлях до PHP з налаштувань",
     "Error" : "Помилка",
     "Settings list is empty" : "Список налаштувань порожній",
@@ -12,6 +26,7 @@
     "Collect non sensitive system info for bug report" : "Збирати нечутливі системні дані для звіту про помилку",
     "Collect system info" : "Збирати інформацію про систему",
     "System info" : "Інформація про систему",
-    "Copy to clipboard" : "Копіювати до буферу обміну"
+    "Copy to clipboard" : "Копіювати до буферу обміну",
+    "_Test text_::_Test texts_" : ["Тестовий текст","Тестові тексти","Тестові тексти","Тестові тексти"]
 },"pluralForm" :"nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != 11 ? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || (n % 100 >=11 && n % 100 <=14 )) ? 2: 3);"
 }
