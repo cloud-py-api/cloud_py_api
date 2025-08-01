@@ -1,10 +1,15 @@
 OC.L10N.register(
     "cloud_py_api",
     {
+    "Full path to python interpreter" : "Fullständig sökväg till python-tolk",
     "Absolute path to the python runnable (e.g. \"/usr/bin/python3\"). Can be obtained by `which python3` command. Used when pre-compiled binaries option is not selected." : "Absolut sökväg till körbara Python (dvs. \"/usr/bin/python3\"). Kan erhållas med  kommandot `which python3`. Används då alternativet pre-compiles binaries inte valts.",
     "Remote/Encrypted file size limit to process" : "Fjärr/krypterad filstorleksgräns att hantera",
     "Error" : "Fel",
+    "Bug report" : "Felrapport",
     "Copied to clipboard" : "Kopierat till urklipp",
-    "Copy to clipboard" : "Kopiera till urklipp"
+    "Collect system info" : "Samla in systeminfo",
+    "System info" : "Systeminfo",
+    "Copy to clipboard" : "Kopiera till urklipp",
+    "_Test text_::_Test texts_" : ["Testtext","Testtexter"]
 },
 "nplurals=2; plural=(n != 1);");
