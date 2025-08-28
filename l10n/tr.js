@@ -29,6 +29,6 @@ OC.L10N.register(
     "Collect system info" : "Sistem bilgileri toplansın",
     "System info" : "Sistem bilgileri",
     "Copy to clipboard" : "Panoya kopyala",
-    "_Test text_::_Test texts_" : ["Deneme metni","Deneme metinleri"]
+    "_Test text_::_Test texts_" : ["Deneme yazısı","Deneme yazıları"]
 },
 "nplurals=2; plural=(n > 1);");
