@@ -13,10 +13,20 @@
     "Used by apps, that are using this framework" : "Używane przez aplikacje, które korzystają z tego frameworka",
     "Cloud Python API" : "Cloud Python API",
     "Nextcloud Python API (Framework)" : "Nextcloud Python API (Framework)",
+    "Nextcloud Python API Framework\n\n| **Currently in development, all is under design**\n\n### Provides convenient functions for Python\n\n- Read & write file system objects\n- Working with database\n- Wrapper around `OCC` calls\n- Calling your python function from php part of your app and return a result\n\n### Used by the following apps\n\n- [MediaDC](https://apps.nextcloud.com/apps/mediadc) - Nextcloud Media Duplicate Collector app" : "Nextcloud Python API Framework\n\n| **Obecnie w fazie rozwoju, wszystko jest w trakcie projektowania**\n\n### Zapewnia wygodne funkcje dla Pythona:\n\n- Odczyt i zapis obiektów systemu plików\n- Praca z bazą danych\n- Wrapper wokół wywołań OCC\n- Wywoływanie funkcji Pythona z części PHP aplikacji i zwracanie wyników\n\n### Używane przez następujące aplikacje:\n\n- [MediaDC](https://apps.nextcloud.com/apps/mediadc) - aplikacja Nextcloud Media Duplicate Collector ",
+    "Settings successfully updated" : "Ustawienia pomyślnie zaktualizowane",
+    "Some error occurred while updating settings" : "Wystąpił błąd podczas aktualizacji ustawień",
     "Password confirmation failed" : "Potwierdzenie hasła nie powiodło się",
+    "Use PHP path from settings" : "Użyj ścieżki PHP z ustawień",
     "Error" : "Błąd",
+    "Settings list is empty" : "Lista ustawień jest pusta",
+    "Seems like database not initialized properly. Try to re-enable the app" : "Wygląda na to, że baza danych nie została poprawnie zainicjalizowana. Spróbuj ponownie włączyć aplikację",
+    "Bug report" : "Raport błędu",
     "Copied to clipboard" : "Kopiuj do schowka",
+    "Collect non sensitive system info for bug report" : "Zbierz niesensytywne informacje o systemie do raportu błędu",
+    "Collect system info" : "Zbierz informacje o systemie",
     "System info" : "Informacje o systemie",
-    "Copy to clipboard" : "Kopiuj do schowka"
+    "Copy to clipboard" : "Kopiuj do schowka",
+    "_Test text_::_Test texts_" : ["Tekst testowy","Teksty testowych","Tekstów testowych","Teksty testowe"]
 },"pluralForm" :"nplurals=4; plural=(n==1 ? 0 : (n%10>=2 && n%10<=4) && (n%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && n%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);"
 }
