@@ -3,6 +3,6 @@ OC.L10N.register(
     {
     "Error" : "Erreur",
     "Copied to clipboard" : "Aḍris yettwanγel γef afus",
-    "Copy to clipboard" : "Copier dans le presse-papiers"
+    "Copy to clipboard" : "Nɣel-it ar tecfawit"
 },
 "nplurals=2; plural=(n != 1);");
