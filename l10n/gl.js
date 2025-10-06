@@ -22,7 +22,7 @@ OC.L10N.register(
     "Use PHP path from settings" : "Usa a ruta PHP desde os axustes",
     "Error" : "Erro",
     "Settings list is empty" : "A lista de axustes está baleira",
-    "Seems like database not initialized properly. Try to re-enable the app" : "Semella que a base de datos non se iniciou correctamente. Tente activar de novo a aplicación",
+    "Seems like database not initialized properly. Try to re-enable the app" : "Semella que a base de datos non se preparou correctamente. Tente activar de novo a aplicación",
     "Bug report" : "Informe de fallos",
     "Copied to clipboard" : "Copiado no portapapeis",
     "Collect non sensitive system info for bug report" : "Recoller información non sensíbel do sistema para o informe de fallos",
